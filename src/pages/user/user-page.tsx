@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { BackButton } from '@shared/components';
 import { Card, Table } from 'antd';
-import { CallHistory, UserProfile } from './components';
+import { CallsHistoryTable, UserProfile } from './components';
+import { fetchCallHistory } from '@store/index';
 
 export const UserPage = () => {
   const { id } = useParams();
@@ -13,13 +14,14 @@ export const UserPage = () => {
     { title: 'Date', dataIndex: 'date', key: 'date' },
     { title: 'Address', dataIndex: 'address', key: 'address' },
   ];
+  
 
   //TODO: рефакторинг верстки, перейти на flex gap, tailwind css
   return (
     <div style={{ margin: 10 }}>
       <BackButton style={{ marginBottom: 20 }} />
       <UserProfile />
-      <CallHistory />
+      <CallsHistoryTable fetchMethod={fetchCallHistory}/>
     </div>
   );
 };

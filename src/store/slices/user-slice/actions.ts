@@ -3,8 +3,8 @@ import { ErrorResponse } from '@shared/index';
 import { api } from '@store/middleware';
 import axios from 'axios';
 import {
-  CallHistoryParams,
-  CallHistoryRecord,
+  CallsTableParams,
+  CallsTableRecord,
   SearchRequestParams,
   SearchResponse,
   User,
@@ -140,8 +140,8 @@ export const fetchUsers = createAsyncThunk<
 });
 
 export const fetchCallHistory = createAsyncThunk<
-  SearchResponse<CallHistoryRecord>,
-  CallHistoryParams,
+  SearchResponse<CallsTableRecord>,
+  CallsTableParams,
   { rejectValue: ErrorResponse }
 >('callHistory/fetchCallHistory', async (params, thunkAPI) => {
   try {
@@ -153,9 +153,35 @@ export const fetchCallHistory = createAsyncThunk<
       order: params.order || 'asc',
     }).toString();
 
-    const response = await api.get<SearchResponse<CallHistoryRecord>>(
+    const response = await api.get<SearchResponse<CallsTableRecord>>(
       `/users/${params.userId}/callHistory?${queryString}`,
     );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Assuming your ErrorResponse is structured this way
+      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+    } else {
+      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+    }
+  }
+});
+
+export const fetchActiveCalls = createAsyncThunk<
+  SearchResponse<CallsTableRecord>,
+  CallsTableParams,
+  { rejectValue: ErrorResponse }
+>('callHistory/fetchActiveCalls', async (params, thunkAPI) => {
+  try {
+    const queryString = new URLSearchParams({
+      page: String(params.page || 1),
+      limit: String(params.limit || 10),
+      search: params.search || '',
+      sort: params.sort || '',
+      order: params.order || 'asc',
+    }).toString();
+
+    const response = await api.get<SearchResponse<CallsTableRecord>>(`/activeCalls?${queryString}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

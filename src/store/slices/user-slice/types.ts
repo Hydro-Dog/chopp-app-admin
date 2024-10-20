@@ -21,11 +21,11 @@ export type SearchRequestParams = {
   order?: 'asc' | 'desc';
 };
 
-export type CallHistoryParams = SearchRequestParams & {
+export type CallsTableParams = SearchRequestParams & {
   userId: string; // Add a userId to the parameters
 };
 
-export type CallHistoryRecord = {
+export type CallsTableRecord = {
   date: string;
   status: string;
   address: string;

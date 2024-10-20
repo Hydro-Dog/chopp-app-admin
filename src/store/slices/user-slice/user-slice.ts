@@ -9,8 +9,9 @@ import {
   fetchUsers,
   fetchCallHistory,
   fetchUser,
+  fetchActiveCalls,
 } from './actions';
-import { CallHistoryRecord, SearchResponse, User, UserAuthorization } from './types';
+import { CallsTableRecord, SearchResponse, User, UserAuthorization } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type UserState = {
@@ -31,9 +32,12 @@ export type UserState = {
   users: SearchResponse<User> | null;
   fetchUsersStatus: FETCH_STATUS;
   fetchUsersError: ErrorResponse | null;
-  callHistory: SearchResponse<CallHistoryRecord> | null;
+  callHistory: SearchResponse<CallsTableRecord> | null;
   fetchCallHistoryStatus: FETCH_STATUS;
   fetchCallHistoryError: ErrorResponse | null;
+  activeCalls: SearchResponse<CallsTableRecord> | null;
+  fetchActiveCallsStatus: FETCH_STATUS;
+  fetchActiveCallsError: ErrorResponse | null;
 };
 
 const initialState: UserState = {
@@ -57,6 +61,9 @@ const initialState: UserState = {
   callHistory: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
   fetchCallHistoryStatus: FETCH_STATUS.IDLE,
   fetchCallHistoryError: null,
+  activeCalls: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
+  fetchActiveCallsStatus: FETCH_STATUS.IDLE,
+  fetchActiveCallsError: null,
 };
 
 export const userSlice = createSlice({
@@ -175,9 +182,25 @@ export const userSlice = createSlice({
           totalRecords: action.payload.totalRecords,
         };
       })
-      .addCase(fetchCallHistory.rejected, (state, action) => {
-        state.fetchCallHistoryStatus = FETCH_STATUS.ERROR;
+      .addCase(fetchActiveCalls.rejected, (state, action) => {
+        state.fetchActiveCallsStatus = FETCH_STATUS.ERROR;
         state.fetchCallHistoryError = action.payload ?? { errorMessage: 'Failed to fetch users' };
+      })
+      .addCase(fetchActiveCalls.pending, (state) => {
+        state.fetchActiveCallsStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(fetchActiveCalls.fulfilled, (state, action) => {
+        state.fetchActiveCallsStatus = FETCH_STATUS.SUCCESS;
+        state.activeCalls = {
+          items: action.payload.items,
+          pageNumber: action.payload.pageNumber,
+          totalPages: action.payload.totalPages,
+          totalRecords: action.payload.totalRecords,
+        };
+      })
+      .addCase(fetchCallHistory.rejected, (state, action) => {
+        state.fetchActiveCallsStatus = FETCH_STATUS.ERROR;
+        state.fetchActiveCallsError = action.payload ?? { errorMessage: 'Failed to fetch users' };
       });
   },
 });

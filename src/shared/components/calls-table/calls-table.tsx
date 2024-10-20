@@ -1,8 +1,12 @@
 import { Pagination } from '@shared/types';
+import { truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/index';
 import { Card, Input, Table, TablePaginationConfig, Tooltip } from 'antd';
 import { AnyObject } from 'antd/es/_util/type';
+import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { FilterValue, SorterResult, TableCurrentDataSource } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
+import { useDebounceCallback } from 'usehooks-ts';
 
 type Props = {
   data?: CallsTableRecord[];
@@ -15,11 +19,28 @@ type Props = {
     extra?: TableCurrentDataSource<AnyObject>,
   ) => void;
   title: string;
+  size?: SizeType;
 };
 
-export const CallsTable = ({ data, pagination, handleSearch, handleTableChange, title }: Props) => {
+export const CallsTable = ({
+  data,
+  pagination,
+  handleSearch,
+  handleTableChange,
+  title,
+  size = 'small',
+}: Props) => {
+  const debounced = useDebounceCallback(({ target: { value } }) => {
+    handleSearch(value);
+  }, 1500);
   const callsHistoryColumns = [
-    { title: 'Date', dataIndex: 'date', key: 'date', sorter: true },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      sorter: true,
+      render: (text) => dayjs(text).format('DD.MM.YYYY HH:mm'),
+    },
     {
       title: 'Status',
       dataIndex: 'status',
@@ -53,26 +74,23 @@ export const CallsTable = ({ data, pagination, handleSearch, handleTableChange, 
       sorter: true,
       render: (text) => (
         <Tooltip title={text}>
-          <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </div>
+          <div>{truncateText(text, 100)}</div>
         </Tooltip>
       ),
     },
   ];
 
-  console.log('handleSearch: ', handleSearch);
-
   return (
     <Card title={title}>
       <Input.Search
-        placeholder="Search call history"
-        // TODO: добавить поиск по change с дебаунсом, добавить кнопку очистки поля
-        onSearch={handleSearch}
-        style={{ marginBottom: 16 }}
+        // TODO: перевод
+        placeholder="Поиск"
+        onChange={debounced}
+        allowClear
+        className="mb-2"
       />
       <Table
-        size="small"
+        size={size}
         columns={callsHistoryColumns}
         dataSource={data}
         pagination={pagination}

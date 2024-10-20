@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchCallHistory, RootState } from '@store/index'; // Update the path as necessary
-import { Table, Input, Card, Tooltip } from 'antd'; // Import Tooltip from antd
+import { CallsTable } from '@shared/components';
 import { Pagination } from '@shared/types';
-import { CallsTable } from '@shared/index';
+import { fetchCallHistory, RootState } from '@store/index'; // Update the path as necessary
 
 export const CallsHistoryTable = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,6 @@ export const CallsHistoryTable = () => {
   }, [callHistory?.totalPages]);
 
   const handleSearch = (value: string) => {
-    console.log(';handleSearch: ', value)
     setSearchTerm(value);
   };
 
@@ -52,21 +50,4 @@ export const CallsHistoryTable = () => {
       handleTableChange={handleTableChange}
     />
   );
-  // return (
-  //   <Card title="Calls History">
-  //     <Input.Search
-  //       placeholder="Search call history"
-  //       onSearch={handleSearch}
-  //       style={{ marginBottom: 16 }}
-  //     />
-  //     <Table
-  //       size="small"
-  //       columns={callsHistoryColumns}
-  //       dataSource={callHistory?.items}
-  //       pagination={pagination}
-  //       onChange={handleTableChange}
-  //       rowKey="id"
-  //     />
-  //   </Card>
-  // );
 };

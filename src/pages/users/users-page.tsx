@@ -90,6 +90,7 @@ export const UsersPage = () => {
         style={{ marginBottom: 16, width: 300 }}
       />
       <Table
+        size="small"
         columns={columns}
         dataSource={users?.items}
         loading={fetchUsersStatus === FETCH_STATUS.LOADING}

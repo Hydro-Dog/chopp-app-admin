@@ -5,6 +5,7 @@ import { SCREEN_SIZE } from '@shared/enum/screen-size';
 import { Modal } from 'antd';
 import { useWindowSize } from 'usehooks-ts';
 import { ResponsiveModal } from '../mobile-modal';
+import OpenWithIcon from '@mui/icons-material/OpenWith';
 
 type Props = {
   open: boolean;
@@ -57,10 +58,6 @@ export const DraggableModal = ({
         mask={false}
         title={
           <div
-            style={{
-              width: '90%',
-              cursor: 'move',
-            }}
             onMouseOver={() => {
               if (disabled) {
                 setDisabled(false);
@@ -69,7 +66,12 @@ export const DraggableModal = ({
             onMouseOut={() => {
               setDisabled(true);
             }}>
-            {title}
+            <div className="flex gap-1 w-full cursor-move mr-10 items-center -mt-1">
+              {/* <div>
+                <OpenWithIcon fontSize="small" color='disabled'/>
+              </div> */}
+              <div>{title}</div>
+            </div>
           </div>
         }
         open={open}
@@ -81,7 +83,7 @@ export const DraggableModal = ({
             bounds={bounds}
             nodeRef={draggleRef}
             onStart={(event, uiData) => onStart(event, uiData)}>
-            <div ref={draggleRef} className="h-40">
+            <div ref={draggleRef} className="max-w-xl">
               {modal}
             </div>
           </Draggable>

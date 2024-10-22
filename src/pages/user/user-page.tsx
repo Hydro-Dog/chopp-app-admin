@@ -1,27 +1,12 @@
-import { useParams } from 'react-router-dom';
 import { BackButton } from '@shared/components';
-import { Card, Table } from 'antd';
 import { CallsHistoryTable, UserProfile } from './components';
-import { fetchCallHistory } from '@store/index';
 
 export const UserPage = () => {
-  const { id } = useParams();
-  const userData = {}; // Получить данные пользователя по ID
-  const callHistory = []; // Получить историю вызовов
-
-  const historyColumns = [
-    { title: 'Status', dataIndex: 'status', key: 'status' },
-    { title: 'Date', dataIndex: 'date', key: 'date' },
-    { title: 'Address', dataIndex: 'address', key: 'address' },
-  ];
-  
-
-  //TODO: рефакторинг верстки, перейти на flex gap, tailwind css
   return (
-    <div style={{ margin: 10 }}>
-      <BackButton style={{ marginBottom: 20 }} />
+    <div className='flex flex-col gap-4'>
+      <BackButton />
       <UserProfile />
-      <CallsHistoryTable fetchMethod={fetchCallHistory}/>
+      <CallsHistoryTable />
     </div>
   );
 };

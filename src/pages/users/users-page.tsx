@@ -1,24 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@shared/enum';
-import { FETCH_STATUS, fetchUsers, RootState } from '@store/index';
-import { Table, Input, Typography } from 'antd';
+import { Sorter } from '@shared/index';
+import { Pagination } from '@shared/types';
+import { calcTableRowsNumberByScreenHeight } from '@shared/utils/calc-table-rows-number-by-screen-height';
+import { AppDispatch, FETCH_STATUS, fetchUsers, RootState, User } from '@store/index';
+import { Table, Input, Typography, Card, TablePaginationConfig, TableProps } from 'antd';
+import { ColumnsType, FilterValue } from 'antd/es/table/interface';
+import { useDebounceCallback, useWindowSize } from 'usehooks-ts';
 
 const { Title } = Typography;
-const { Search } = Input;
 
 export const UsersPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { users, fetchUsersStatus } = useSelector((state: RootState) => state.user);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
-  const [sorter, setSorter] = useState({ field: 'fullName', order: 'ascend' });
-  console.log('users; ', users);
-  
+  const { height = 0 } = useWindowSize();
+  const [pagination, setPagination] = useState<Partial<Pagination>>({
+    current: 1,
+    pageSize: calcTableRowsNumberByScreenHeight(height - 150),
+  });
+
+  const [sorter, setSorter] = useState<Sorter>({ field: 'fullName', order: 'ascend' });
+
   useEffect(() => {
     dispatch(
       fetchUsers({
@@ -32,33 +40,38 @@ export const UsersPage = () => {
   }, [searchTerm, pagination, sorter, dispatch]);
 
   useEffect(() => {
-    if (users?.totalPages) {
-      setPagination((prev) => ({ ...prev, total: users?.totalPages * 10 }));
+    if (users?.totalRecords) {
+      setPagination((prev) => ({ ...prev, total: users?.totalRecords }));
     }
-  }, [users?.totalPages]);
+  }, [users?.totalPages, users?.totalRecords]);
 
-  const handleSearch = (value) => {
+  const handleSearch = (value: string) => {
     setSearchTerm(value);
   };
 
-  const handleTableChange = (pagination, filters, sorter) => {
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: Sorter,
+  ) => {
     setPagination(pagination);
     setSorter(sorter);
   };
 
-  const handleRowClick = (record) => {
-    console.log('record: ', record);
+  const handleRowClick = (record: User) => {
     navigate(`${ROUTES.USERS}/${record.id}`);
   };
 
-  const columns = [
+  const columns: ColumnsType<User> = [
     {
       // TODO: Перевод
       title: t('Name'),
       dataIndex: 'fullName',
       key: 'fullName',
       sorter: true,
-      sortOrder: sorter.field === 'fullName' && sorter.order,
+      className: 'cursor-pointer',
+      sortOrder: sorter.field === 'fullName' ? sorter.order : null,
+      render: (text) => <a>{text}</a>,
     },
     {
       // TODO: Перевод
@@ -66,7 +79,8 @@ export const UsersPage = () => {
       dataIndex: 'email',
       key: 'email',
       sorter: true,
-      sortOrder: sorter.field === 'email' && sorter.order,
+      className: 'cursor-pointer',
+      sortOrder: sorter.field === 'email' ? sorter.order : null,
     },
     {
       // TODO: Перевод
@@ -74,33 +88,41 @@ export const UsersPage = () => {
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       sorter: true,
-      sortOrder: sorter.field === 'phoneNumber' && sorter.order,
+      className: 'cursor-pointer',
+      sortOrder: sorter.field === 'phoneNumber' ? sorter.order : null,
     },
   ];
+
+  const debounced = useDebounceCallback(({ target: { value } }) => {
+    handleSearch(value);
+  }, 300);
 
   return (
     <div>
       {/* TODO: Перевод */}
       <Title level={2}>{t('Users')}</Title>
-      <Search
-        // TODO: Перевод
-        placeholder={t('Search users')}
-        onSearch={handleSearch}
-        enterButton
-        style={{ marginBottom: 16, width: 300 }}
-      />
-      <Table
-        size="small"
-        columns={columns}
-        dataSource={users?.items}
-        loading={fetchUsersStatus === FETCH_STATUS.LOADING}
-        onChange={handleTableChange}
-        pagination={pagination}
-        rowKey="email"
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record),
-        })}
-      />
+      {/* TODO: вынести структуру card + search + table в shared таблицу */}
+      <Card size="small">
+        <Input.Search
+          // TODO: перевод
+          placeholder="Поиск"
+          onChange={debounced}
+          allowClear
+          className="mb-2"
+        />
+        <Table
+          size="small"
+          columns={columns}
+          dataSource={users?.items}
+          loading={fetchUsersStatus === FETCH_STATUS.LOADING}
+          onChange={handleTableChange as TableProps<User>['onChange']}
+          pagination={pagination}
+          rowKey="email"
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+          })}
+        />
+      </Card>
     </div>
   );
 };

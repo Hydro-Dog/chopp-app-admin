@@ -1,3 +1,5 @@
+import { ActivityTable } from "./components";
+
 export const ActivityPage = () => {
-  return <div>ChatsPage</div>;
+  return <ActivityTable />;
 };

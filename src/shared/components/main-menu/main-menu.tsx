@@ -4,7 +4,9 @@ import { MainMenuWidget } from '@widgets/index';
 export const MainMenu = () => {
   return (
     <MainMenuWidget>
-      <Outlet />
+      <div className="mx-6 my-4">
+        <Outlet />
+      </div>
     </MainMenuWidget>
   );
 };

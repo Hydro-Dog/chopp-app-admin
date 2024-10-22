@@ -5,17 +5,22 @@ import { Button } from 'antd';
 
 type Props = {
   style?: CSSProperties;
+  className?: string;
 };
 
-export const BackButton = ({ style }: Props) => {
+export const BackButton = ({ style, className }: Props) => {
   const navigate = useNavigate();
 
   const goBack = () => {
-    navigate(-1); // Вернуться на один шаг назад в истории браузера
+    navigate(-1);
   };
 
   return (
-    <Button onClick={goBack} icon={<LeftOutlined />} style={{ width: 'fit-content', ...style }}>
+    <Button
+      onClick={goBack}
+      icon={<LeftOutlined />}
+      className={className}
+      style={{ width: 'fit-content', ...style }}>
       {/* TODO: перевод */}
       Назад
     </Button>

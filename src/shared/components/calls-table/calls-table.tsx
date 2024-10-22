@@ -1,23 +1,23 @@
+import { useState } from 'react';
+import { useTheme } from '@shared/index';
 import { Pagination } from '@shared/types';
 import { truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/index';
-import { Card, Input, Table, TablePaginationConfig, Tooltip } from 'antd';
+import { Card, Input, Table, TablePaginationConfig, TableProps, Tooltip, Typography } from 'antd';
 import { AnyObject } from 'antd/es/_util/type';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { FilterValue, SorterResult, TableCurrentDataSource } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
-import { useDebounceCallback } from 'usehooks-ts';
+import { useBoolean, useDebounceCallback } from 'usehooks-ts';
+import { DraggableModal } from '../draggable-modal';
+
+const { Text } = Typography;
 
 type Props = {
   data?: CallsTableRecord[];
-  pagination: Pagination;
+  pagination: Partial<Pagination>;
   handleSearch: (value: string) => void;
-  handleTableChange?: (
-    pagination?: TablePaginationConfig,
-    filters?: Record<string, FilterValue | null>,
-    sorter?: SorterResult<AnyObject> | SorterResult<AnyObject>[],
-    extra?: TableCurrentDataSource<AnyObject>,
-  ) => void;
+  handleTableChange?: TableProps<any>['onChange'];
   title: string;
   size?: SizeType;
 };
@@ -30,9 +30,13 @@ export const CallsTable = ({
   title,
   size = 'small',
 }: Props) => {
+  const { theme } = useTheme();
+  const { value: isModalOpen, setTrue: openModal, setFalse: closeModal } = useBoolean();
+  const [activeRowIndex, setActiveRowIndex] = useState<number>();
+  const [modalData, setModalData] = useState<CallsTableRecord>();
   const debounced = useDebounceCallback(({ target: { value } }) => {
     handleSearch(value);
-  }, 1500);
+  }, 300);
   const callsHistoryColumns = [
     {
       title: 'Date',
@@ -81,22 +85,70 @@ export const CallsTable = ({
   ];
 
   return (
-    <Card title={title}>
-      <Input.Search
+    <div>
+      {/* TODO: вынести структуру card + search + table в shared таблицу */}
+      <Card size="small" title={title}>
+        <Input.Search
+          // TODO: перевод
+          placeholder="Поиск"
+          onChange={debounced}
+          allowClear
+          className="mb-2"
+        />
+        <Table
+          className="!p-0 wowowo"
+          size={size}
+          columns={callsHistoryColumns}
+          dataSource={data}
+          pagination={pagination}
+          onChange={handleTableChange}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: () => {
+                setActiveRowIndex(rowIndex);
+                setModalData(record);
+                openModal();
+              },
+            };
+          }}
+          rowClassName={(_record, index) => {
+            return index === activeRowIndex
+              ? theme === 'dark'
+                ? 'bg-neutral-800'
+                : 'bg-neutral-100'
+              : '';
+          }}
+          rowKey="id"
+        />
+      </Card>
+      <DraggableModal
         // TODO: перевод
-        placeholder="Поиск"
-        onChange={debounced}
-        allowClear
-        className="mb-2"
-      />
-      <Table
-        size={size}
-        columns={callsHistoryColumns}
-        dataSource={data}
-        pagination={pagination}
-        onChange={handleTableChange}
-        rowKey="id"
-      />
-    </Card>
+        title={`Вызов №: ${modalData?.id}`}
+        open={isModalOpen}
+        onOk={() => {
+          closeModal();
+          setModalData();
+          setActiveRowIndex();
+        }}
+        onCancel={() => {
+          closeModal();
+          setModalData();
+          setActiveRowIndex();
+        }}>
+        <div className="flex flex-col gap-2">
+          {Object.entries<string>(modalData || {})
+            .filter(([key]) => key !== 'id')
+            .map(([key, value]) => {
+              return (
+                <div key={key} className="flex flex-col gap-1">
+                  {/* TODO: перевод key */}
+                  <Text strong>{key}: </Text>
+                  <Text>{value}</Text>
+                </div>
+              );
+            })}
+        </div>
+      </DraggableModal>
+    </div>
   );
 };

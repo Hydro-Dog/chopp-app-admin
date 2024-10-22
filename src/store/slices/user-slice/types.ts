@@ -26,6 +26,7 @@ export type CallsTableParams = SearchRequestParams & {
 };
 
 export type CallsTableRecord = {
+  id: string;
   date: string;
   status: string;
   address: string;

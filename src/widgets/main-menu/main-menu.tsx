@@ -67,13 +67,13 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       onClick: () => onMenuItemClick(ROUTES.ROOT),
     },
     {
-      key: 'activity',
+      key: ROUTES.ACTIVITY,
       icon: <AssistantPhotoRoundedIcon />,
       label: t('ACTIVITY'),
       onClick: () => onMenuItemClick(ROUTES.ACTIVITY),
     },
     {
-      key: 'chats',
+      key: ROUTES.CHATS,
       icon: <ChatRoundedIcon />,
       label: t('CHATS'),
       onClick: () => onMenuItemClick(ROUTES.CHATS),
@@ -93,9 +93,9 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
         collapsible={width > SCREEN_SIZE.SM}
         collapsed={width > SCREEN_SIZE.SM ? collapsed : true}
         onCollapse={(value) => setCollapsed(value)}>
-        <div className="flex flex-col justify-between h-full">
+        <div className="mt-3 flex flex-col justify-between h-full">
           <Menu
-            // mode="horizontal"
+            style={{ border: 'none' }}
             selectedKeys={selectedMenuKeys}
             mode="inline"
             items={menuItems}
@@ -103,7 +103,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
           {!collapsed && (
             <Tooltip title={t('COPYRIGHT', { ns: 'phrases' })}>
-              <Text type="secondary" className="w-full text-center">
+              <Text type="secondary" className="w-full text-center mb-5">
                 ©2024
               </Text>
             </Tooltip>

@@ -66,6 +66,7 @@ export const CallsHistoryTable = () => {
       pagination={pagination}
       handleSearch={handleSearch}
       handleTableChange={handleTableChange as TableProps<CallsTableRecord>['onChange']}
+      columns={['date', 'status', 'address', 'comment']}
     />
   );
 };

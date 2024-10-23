@@ -1,17 +1,21 @@
 import { useState } from 'react';
+import { DownOutlined } from '@ant-design/icons';
 import { useTheme } from '@shared/index';
 import { Pagination } from '@shared/types';
 import { truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/index';
-import { Card, Input, Table, TablePaginationConfig, TableProps, Tooltip, Typography } from 'antd';
-import { AnyObject } from 'antd/es/_util/type';
+import { Card, Dropdown, Input, Table, TableProps, Tooltip, Typography } from 'antd';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
-import { FilterValue, SorterResult, TableCurrentDataSource } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
 import { useBoolean, useDebounceCallback } from 'usehooks-ts';
 import { DraggableModal } from '../draggable-modal';
 
 const { Text } = Typography;
+
+const items = [
+  { key: '1', label: 'Action 1' },
+  { key: '2', label: 'Action 2' },
+];
 
 type Props = {
   data?: CallsTableRecord[];
@@ -20,7 +24,78 @@ type Props = {
   handleTableChange?: TableProps<any>['onChange'];
   title: string;
   size?: SizeType;
+  columns?: string[];
 };
+
+const DEFAULT_COLUMNS = [
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    sorter: true,
+    className: 'cursor-pointer',
+    render: (text: string) => dayjs(text).format('DD.MM.YYYY HH:mm'),
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    sorter: true,
+    className: 'cursor-pointer',
+    render: (text: string) => (
+      <Tooltip title={text}>
+        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {text}
+        </div>
+      </Tooltip>
+    ),
+  },
+  {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+    sorter: true,
+    className: 'cursor-pointer',
+    render: (text: string) => (
+      <Tooltip title={text}>
+        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          {text}
+        </div>
+      </Tooltip>
+    ),
+  },
+  {
+    title: 'Comment',
+    dataIndex: 'comment',
+    key: 'comment',
+    sorter: true,
+    className: 'cursor-pointer',
+    render: (text: string) => (
+      <Tooltip title={text}>
+        <div>{truncateText(text, 100)}</div>
+      </Tooltip>
+    ),
+  },
+  {
+    title: 'User',
+    dataIndex: 'userFullName',
+    key: 'userFullName',
+    sorter: true,
+    className: 'cursor-pointer',
+    render: (text: string) => <a>{text}</a>,
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: () => (
+      <Dropdown menu={{ items }}>
+        <a>
+          More <DownOutlined />
+        </a>
+      </Dropdown>
+    ),
+  },
+];
 
 export const CallsTable = ({
   data,
@@ -29,6 +104,7 @@ export const CallsTable = ({
   handleTableChange,
   title,
   size = 'small',
+  columns = ['date', 'status', 'address', 'comment', 'userFullName'],
 }: Props) => {
   const { theme } = useTheme();
   const { value: isModalOpen, setTrue: openModal, setFalse: closeModal } = useBoolean();
@@ -37,52 +113,8 @@ export const CallsTable = ({
   const debounced = useDebounceCallback(({ target: { value } }) => {
     handleSearch(value);
   }, 300);
-  const callsHistoryColumns = [
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-      sorter: true,
-      render: (text) => dayjs(text).format('DD.MM.YYYY HH:mm'),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      sorter: true,
-      render: (text) => (
-        <Tooltip title={text}>
-          <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </div>
-        </Tooltip>
-      ),
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      sorter: true,
-      render: (text) => (
-        <Tooltip title={text}>
-          <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </div>
-        </Tooltip>
-      ),
-    },
-    {
-      title: 'Comment',
-      dataIndex: 'comment',
-      key: 'comment',
-      sorter: true,
-      render: (text) => (
-        <Tooltip title={text}>
-          <div>{truncateText(text, 100)}</div>
-        </Tooltip>
-      ),
-    },
-  ];
+
+  const visibleColumns = DEFAULT_COLUMNS.filter((item) => columns.includes(item.key));
 
   return (
     <div>
@@ -98,7 +130,7 @@ export const CallsTable = ({
         <Table
           className="!p-0 wowowo"
           size={size}
-          columns={callsHistoryColumns}
+          columns={visibleColumns}
           dataSource={data}
           pagination={pagination}
           onChange={handleTableChange}

@@ -21,22 +21,31 @@ export const CallsHistoryTable = () => {
   const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'ascend' });
   const { id } = useParams();
 
-  console.log('pagination: ', pagination)
+  const fetchData = ({ search, page, limit, sort, order, userId }) => {
+    console.log('fetchData order: ', order)
+    dispatch(
+      fetchCallHistory({
+        search,
+        page,
+        limit,
+        sort,
+        order,
+        userId,
+      }),
+    )};
 
   useEffect(() => {
     if (id) {
-      dispatch(
-        fetchCallHistory({
-          search: searchTerm,
-          page: pagination.current,
-          limit: pagination.pageSize,
-          sort: sorter.field,
-          order: sorter.order === 'ascend' ? 'asc' : 'desc',
-          userId: id,
-        }),
-      );
+      fetchData({
+        search: searchTerm,
+        page: pagination.current,
+        limit: pagination.pageSize,
+        sort: sorter.field,
+        order: sorter.order ? (sorter.order === 'ascend' ? 'asc' : 'desc') : undefined,
+        userId: id,
+      });
     }
-  }, [searchTerm, pagination, sorter, dispatch, id]);
+  }, [id]);
 
   useEffect(() => {
     if (callHistory?.totalRecords) {
@@ -46,6 +55,14 @@ export const CallsHistoryTable = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    fetchData({
+      search: value,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : (sorter.order === 'ascend' ? 'asc' : 'desc'),
+      userId: id,
+    });
   };
 
   const handleTableChange = (
@@ -53,20 +70,28 @@ export const CallsHistoryTable = () => {
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
   ) => {
+    console.log('sorter: ', sorter)
     setPagination(pagination);
     setSorter(sorter);
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : (sorter.order === 'ascend' ? 'asc' : 'desc'),
+      userId: id,
+    });
   };
 
-  console.log('callHistory: ', callHistory)
-
+  //TODO: При стирании поля поиска на calls history выстреливает несколько fetch запросов
   return (
     <CallsTable
       title={'Calls History'}
       data={callHistory?.items}
-      pagination={pagination}
+      searchParams={{ pagination, sorter, search: searchTerm, userId: id }}
       handleSearch={handleSearch}
       handleTableChange={handleTableChange as TableProps<CallsTableRecord>['onChange']}
-      columns={['date', 'status', 'address', 'comment']}
+      columns={['date', 'status', 'address', 'comment', 'action']}
     />
   );
 };

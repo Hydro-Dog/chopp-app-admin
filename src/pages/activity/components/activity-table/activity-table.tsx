@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { CallsTable } from '@shared/components';
-import { Pagination } from '@shared/types';
+import { Pagination, Sorter } from '@shared/types';
 import { calcTableRowsNumberByScreenHeight } from '@shared/utils';
 import { AppDispatch, fetchCallHistory, RootState } from '@store/index'; // Update the path as necessary
-import { Typography } from 'antd';
+import { TablePaginationConfig, Typography } from 'antd';
 import { useWindowSize } from 'usehooks-ts';
+import { FilterValue } from 'antd/es/table/interface';
 
 const { Title } = Typography;
 
@@ -48,9 +49,13 @@ export const ActivityTable = () => {
     setSearchTerm(value);
   };
 
-  const handleTableChange = (newPagination: Pagination, newSorter) => {
-    setPagination(newPagination);
-    setSorter(newSorter);
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: Sorter,
+  ) => {
+    setPagination(pagination);
+    setSorter(sorter);
   };
 
   return (
@@ -58,7 +63,7 @@ export const ActivityTable = () => {
       <Title level={2}>{t('Activity')}</Title>
       <CallsTable
         data={callHistory?.items}
-        pagination={pagination}
+        searchParams={{ pagination, sorter, search: searchTerm, userId: id }}
         handleSearch={handleSearch}
         handleTableChange={handleTableChange}
       />

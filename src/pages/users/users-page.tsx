@@ -25,19 +25,30 @@ export const UsersPage = () => {
     pageSize: calcTableRowsNumberByScreenHeight(height - 150),
   });
 
-  const [sorter, setSorter] = useState<Sorter>({ field: 'fullName', order: 'ascend' });
+  const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'ascend' });
 
-  useEffect(() => {
+  const fetchData = ({ search, page, limit, sort, order }) => {
+    console.log('fetchData order: ', order);
     dispatch(
       fetchUsers({
-        search: searchTerm,
-        page: pagination.current,
-        limit: pagination.pageSize,
-        sort: sorter.field,
-        order: sorter.order === 'ascend' ? 'asc' : 'desc',
+        search,
+        page,
+        limit,
+        sort,
+        order,
       }),
     );
-  }, [searchTerm, pagination, sorter, dispatch]);
+  };
+
+  useEffect(() => {
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter.field,
+      order: sorter.order === 'ascend' ? 'asc' : 'desc',
+    });
+  }, [dispatch]);
 
   useEffect(() => {
     if (users?.totalRecords) {
@@ -47,6 +58,13 @@ export const UsersPage = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    fetchData({
+      search: value,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+    });
   };
 
   const handleTableChange = (
@@ -54,8 +72,16 @@ export const UsersPage = () => {
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
   ) => {
+    console.log('sorter: ', sorter);
     setPagination(pagination);
     setSorter(sorter);
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+    });
   };
 
   const handleRowClick = (record: User) => {
@@ -69,8 +95,8 @@ export const UsersPage = () => {
       dataIndex: 'fullName',
       key: 'fullName',
       sorter: true,
-      className: 'cursor-pointer',
       sortOrder: sorter.field === 'fullName' ? sorter.order : null,
+      className: 'cursor-pointer',
       render: (text) => <a>{text}</a>,
     },
     {
@@ -79,8 +105,8 @@ export const UsersPage = () => {
       dataIndex: 'email',
       key: 'email',
       sorter: true,
-      className: 'cursor-pointer',
       sortOrder: sorter.field === 'email' ? sorter.order : null,
+      className: 'cursor-pointer',
     },
     {
       // TODO: Перевод
@@ -88,8 +114,8 @@ export const UsersPage = () => {
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       sorter: true,
-      className: 'cursor-pointer',
       sortOrder: sorter.field === 'phoneNumber' ? sorter.order : null,
+      className: 'cursor-pointer',
     },
   ];
 

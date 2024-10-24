@@ -1,10 +1,23 @@
 import { useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import { useTheme } from '@shared/index';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { CALL_STATUS, ConfirmModal, ROUTES, useTheme } from '@shared/index';
 import { Pagination } from '@shared/types';
-import { truncateText } from '@shared/utils';
-import { CallsTableRecord } from '@store/index';
-import { Card, Dropdown, Input, Table, TableProps, Tooltip, Typography } from 'antd';
+import { getChangeStatusDropdownItems, truncateText } from '@shared/utils';
+import { AppDispatch, CallsTableRecord, fetchCallHistory, updateCallStatus } from '@store/index';
+import {
+  Button,
+  Card,
+  Dropdown,
+  Input,
+  MenuProps,
+  Space,
+  Table,
+  TableProps,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 import dayjs from 'dayjs';
 import { useBoolean, useDebounceCallback } from 'usehooks-ts';
@@ -12,14 +25,45 @@ import { DraggableModal } from '../draggable-modal';
 
 const { Text } = Typography;
 
-const items = [
-  { key: '1', label: 'Action 1' },
-  { key: '2', label: 'Action 2' },
+const menuItems: MenuProps['items'] = [
+  {
+    label: '1st menu item',
+    key: '1',
+    icon: <UserOutlined />,
+  },
+  {
+    label: '2nd menu item',
+    key: '2',
+    icon: <UserOutlined />,
+  },
+  {
+    label: '3rd menu item',
+    key: '3',
+    icon: <UserOutlined />,
+    danger: true,
+  },
+  {
+    label: '4rd menu item',
+    key: '4',
+    icon: <UserOutlined />,
+    danger: true,
+    disabled: true,
+  },
 ];
+
+const menuProps = {
+  items: menuItems,
+  onClick: console.log,
+};
 
 type Props = {
   data?: CallsTableRecord[];
-  pagination: Partial<Pagination>;
+  searchParams?: {
+    pagination: Partial<Pagination>;
+    sorter: { field: string; order: 'ascend' | 'descend' };
+    search: string;
+    userId: string;
+  };
   handleSearch: (value: string) => void;
   handleTableChange?: TableProps<any>['onChange'];
   title: string;
@@ -27,94 +71,166 @@ type Props = {
   columns?: string[];
 };
 
-const DEFAULT_COLUMNS = [
-  {
-    title: 'Date',
-    dataIndex: 'date',
-    key: 'date',
-    sorter: true,
-    className: 'cursor-pointer',
-    render: (text: string) => dayjs(text).format('DD.MM.YYYY HH:mm'),
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    sorter: true,
-    className: 'cursor-pointer',
-    render: (text: string) => (
-      <Tooltip title={text}>
-        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {text}
-        </div>
-      </Tooltip>
-    ),
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-    sorter: true,
-    className: 'cursor-pointer',
-    render: (text: string) => (
-      <Tooltip title={text}>
-        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {text}
-        </div>
-      </Tooltip>
-    ),
-  },
-  {
-    title: 'Comment',
-    dataIndex: 'comment',
-    key: 'comment',
-    sorter: true,
-    className: 'cursor-pointer',
-    render: (text: string) => (
-      <Tooltip title={text}>
-        <div>{truncateText(text, 100)}</div>
-      </Tooltip>
-    ),
-  },
-  {
-    title: 'User',
-    dataIndex: 'userFullName',
-    key: 'userFullName',
-    sorter: true,
-    className: 'cursor-pointer',
-    render: (text: string) => <a>{text}</a>,
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: () => (
-      <Dropdown menu={{ items }}>
-        <a>
-          More <DownOutlined />
-        </a>
-      </Dropdown>
-    ),
-  },
-];
-
 export const CallsTable = ({
   data,
-  pagination,
   handleSearch,
   handleTableChange,
+  searchParams,
   title,
   size = 'small',
-  columns = ['date', 'status', 'address', 'comment', 'userFullName'],
+  columns = ['date', 'status', 'address', 'comment', 'userFullName', 'action'],
 }: Props) => {
   const { theme } = useTheme();
-  const { value: isModalOpen, setTrue: openModal, setFalse: closeModal } = useBoolean();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const [activeRowIndex, setActiveRowIndex] = useState<number>();
-  const [modalData, setModalData] = useState<CallsTableRecord>();
+  const {
+    value: isDetailsModalOpen,
+    setTrue: openDetailsModal,
+    setFalse: closeDetailsModal,
+  } = useBoolean();
+  const [detailsModalData, setDetailsModalData] = useState<CallsTableRecord>();
+  const {
+    value: isChangeStatusModalOpen,
+    setTrue: openChangeStatusModal,
+    setFalse: closeChangeStatusModal,
+  } = useBoolean();
+  const [changeStatusModalData, setChangeStatusModalData] = useState<{
+    item: CallsTableRecord;
+    newStatus: CALL_STATUS;
+  }>();
   const debounced = useDebounceCallback(({ target: { value } }) => {
     handleSearch(value);
   }, 300);
 
+  const onRowClick = (record, index) => {
+    setActiveRowIndex(index);
+    setDetailsModalData(record);
+    openDetailsModal();
+  };
+
+  const onUserClick = (record, index) => {
+    console.log('record: ', record, `${ROUTES.USERS}/${record.userId}`);
+    navigate(`${ROUTES.USERS}/${record.userId}`);
+  };
+
+  const DEFAULT_COLUMNS = [
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      sorter: true,
+      sortOrder: searchParams?.sorter.field === 'date' ? searchParams?.sorter.order : null,
+      className: 'cursor-pointer',
+      render: (text: string, record, index) => (
+        <div onClick={() => onRowClick(record, index)}>
+          {dayjs(text).format('DD.MM.YYYY HH:mm')}
+        </div>
+      ),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: true,
+      sortOrder: searchParams?.sorter.field === 'status' ? searchParams?.sorter.order : null,
+      className: 'cursor-pointer',
+      onClick: onRowClick,
+      render: (text: string, record, index) => (
+        <Tooltip title={text}>
+          <div
+            onClick={() => onRowClick(record, index)}
+            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {text}
+          </div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+      sortOrder: searchParams?.sorter.field === 'address' ? searchParams?.sorter.order : null,
+      className: 'cursor-pointer',
+      sorter: true,
+      onClick: onRowClick,
+      render: (text: string, record, index) => (
+        <Tooltip title={text}>
+          <div
+            onClick={() => onRowClick(record, index)}
+            style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {text}
+          </div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Comment',
+      dataIndex: 'comment',
+      key: 'comment',
+      sorter: true,
+      sortOrder: searchParams?.sorter.field === 'comment' ? searchParams?.sorter.order : null,
+      className: 'cursor-pointer',
+      onClick: onRowClick,
+      render: (text: string, record, index) => (
+        <Tooltip title={text}>
+          <div onClick={() => onRowClick(record, index)}>{truncateText(text, 100)}</div>
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'User',
+      dataIndex: 'userFullName',
+      key: 'userFullName',
+      sorter: true,
+      sortOrder: searchParams?.sorter.field === 'userFullName' ? searchParams?.sorter.order : null,
+      className: 'cursor-pointer',
+      onClick: onUserClick,
+      render: (text: string, record, index) => <a onClick={() => onUserClick(record)}>{text}</a>,
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text: string, record: CallsTableRecord) => (
+        <Dropdown
+          trigger={['click']}
+          menu={{
+            items: getChangeStatusDropdownItems(record.status),
+            onClick: (value) => {
+              setChangeStatusModalData({ item: record, newStatus: value.key });
+              openChangeStatusModal();
+            },
+          }}>
+          <a>
+            Изменить статус <DownOutlined />
+          </a>
+        </Dropdown>
+      ),
+    },
+  ];
+
   const visibleColumns = DEFAULT_COLUMNS.filter((item) => columns.includes(item.key));
+
+  const updateStatus = (id = '', newStatus: CALL_STATUS) => {
+    console.log('updateStatus searchParams: ', searchParams);
+    dispatch(updateCallStatus({ id, newStatus })).then(() =>
+      dispatch(
+        fetchCallHistory({
+          userId: searchParams?.userId,
+          search: searchParams?.search,
+          page: searchParams?.pagination.current,
+          limit: searchParams?.pagination.pageSize,
+          userId: id,
+          sort: searchParams.sorter.field,
+          order: searchParams.sorter.order
+            ? searchParams.sorter.order === 'ascend'
+              ? 'asc'
+              : 'desc'
+            : undefined,
+        }),
+      ),
+    );
+  };
 
   return (
     <div>
@@ -132,17 +248,8 @@ export const CallsTable = ({
           size={size}
           columns={visibleColumns}
           dataSource={data}
-          pagination={pagination}
+          pagination={searchParams.pagination}
           onChange={handleTableChange}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: () => {
-                setActiveRowIndex(rowIndex);
-                setModalData(record);
-                openModal();
-              },
-            };
-          }}
           rowClassName={(_record, index) => {
             return index === activeRowIndex
               ? theme === 'dark'
@@ -153,22 +260,38 @@ export const CallsTable = ({
           rowKey="id"
         />
       </Card>
+      {/* TODO: вынести модалку в отдельный компонент  */}
       <DraggableModal
         // TODO: перевод
-        title={`Вызов №: ${modalData?.id}`}
-        open={isModalOpen}
+        title={`Вызов №: ${detailsModalData?.id}`}
+        footer={null}
+        open={isDetailsModalOpen}
         onOk={() => {
-          closeModal();
-          setModalData();
+          closeDetailsModal();
+          setDetailsModalData();
           setActiveRowIndex();
         }}
         onCancel={() => {
-          closeModal();
-          setModalData();
+          closeDetailsModal();
+          setDetailsModalData();
           setActiveRowIndex();
         }}>
         <div className="flex flex-col gap-2">
-          {Object.entries<string>(modalData || {})
+          <div>
+            <div className="flex gap-1">
+              <Text strong>Status: </Text>
+              <Dropdown menu={menuProps}>
+                <a>
+                  <Space>
+                    {detailsModalData?.status}
+                    <DownOutlined />
+                  </Space>
+                </a>
+              </Dropdown>
+            </div>
+            <Button disabled>Изменить статус</Button>
+          </div>
+          {Object.entries<string>(detailsModalData || {})
             .filter(([key]) => key !== 'id')
             .map(([key, value]) => {
               return (
@@ -181,6 +304,21 @@ export const CallsTable = ({
             })}
         </div>
       </DraggableModal>
+      <ConfirmModal
+        title="Изменить статус?"
+        open={isChangeStatusModalOpen}
+        onOk={() => {
+          updateStatus(changeStatusModalData?.item.id, changeStatusModalData?.newStatus);
+          closeChangeStatusModal();
+          setChangeStatusModalData(null);
+        }}
+        onCancel={() => {
+          closeChangeStatusModal();
+          setChangeStatusModalData(null);
+        }}>
+        Изменить статус заказа {changeStatusModalData?.item.id} с{' '}
+        {changeStatusModalData?.item.status} на {changeStatusModalData?.newStatus}
+      </ConfirmModal>
     </div>
   );
 };

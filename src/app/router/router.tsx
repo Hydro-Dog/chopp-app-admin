@@ -46,8 +46,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '*', // Wildcard route for unknown paths
-    element: <Navigate to={ROUTES.USERS} replace />,
-  },
+  // {
+  //   path: '*', // Wildcard route for unknown paths
+  //   element: <Navigate to={ROUTES.USERS} replace />,
+  // },
 ]);

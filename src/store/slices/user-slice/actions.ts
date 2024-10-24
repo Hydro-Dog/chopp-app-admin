@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/index';
+import { CALL_STATUS, ErrorResponse } from '@shared/index';
 import { api } from '@store/middleware';
 import axios from 'axios';
 import {
@@ -150,7 +150,7 @@ export const fetchCallHistory = createAsyncThunk<
       limit: String(params.limit || 10),
       search: params.search || '',
       sort: params.sort || '',
-      order: params.order || 'asc',
+      order: params.order || '',
     }).toString();
 
     const response = await api.get<SearchResponse<CallsTableRecord>>(
@@ -182,6 +182,26 @@ export const fetchActiveCalls = createAsyncThunk<
     }).toString();
 
     const response = await api.get<SearchResponse<CallsTableRecord>>(`/activeCalls?${queryString}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Assuming your ErrorResponse is structured this way
+      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+    } else {
+      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+    }
+  }
+});
+
+export const updateCallStatus = createAsyncThunk<
+  SearchResponse<CallsTableRecord>,
+  { id: string; newStatus: CALL_STATUS },
+  { rejectValue: ErrorResponse }
+>('call/updateStatus', async (params, thunkAPI) => {
+  try {
+    const response = await api.patch<SearchResponse<CallsTableRecord>>(`/call/${params.id}`, {
+      status: params.newStatus,
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

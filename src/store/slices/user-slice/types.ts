@@ -1,3 +1,5 @@
+import { CALL_STATUS } from "@shared/enum";
+
 export type User = {
   id: number;
   fullName: string;
@@ -28,7 +30,7 @@ export type CallsTableParams = SearchRequestParams & {
 export type CallsTableRecord = {
   id: string;
   date: string;
-  status: string;
+  status: CALL_STATUS;
   address: string;
   comment: string;
 };

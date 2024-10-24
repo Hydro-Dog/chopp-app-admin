@@ -87,7 +87,8 @@ export const DraggableModal = ({
               {modal}
             </div>
           </Draggable>
-        )}>
+        )}
+        {...props}>
         {children}
       </Dialog>
     </>

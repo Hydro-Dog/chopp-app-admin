@@ -23,21 +23,31 @@ export const ActivityTable = () => {
     pageSize: calcTableRowsNumberByScreenHeight(height - 150),
   });
   const [sorter, setSorter] = useState({ field: 'date', order: 'ascend' });
-  const { id } = useParams();
+  const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
+  const fetchData = ({ search, page, limit, sort, order, userId, filter }) => {
     dispatch(
-      // TODO: сделать экшн для получения активности, в объекте активности джоинить юзера, который сделал вызов
       fetchCallHistory({
-        search: searchTerm,
-        page: pagination.current,
-        limit: pagination.pageSize,
-        sort: sorter.field,
-        order: sorter.order === 'ascend' ? 'asc' : 'desc',
-        userId: id,
+        search,
+        page,
+        limit,
+        sort,
+        order,
+        filter,
+        userId,
       }),
     );
-  }, [searchTerm, pagination, sorter, dispatch, id]);
+  };
+
+  useEffect(() => {
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter.field,
+      order: sorter.order ? (sorter.order === 'ascend' ? 'asc' : 'desc') : undefined,
+    });
+  }, [dispatch]);
 
   useEffect(() => {
     if (callHistory?.totalPages) {
@@ -47,6 +57,14 @@ export const ActivityTable = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    fetchData({
+      search: value,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+      filter,
+    });
   };
 
   const handleTableChange = (
@@ -56,6 +74,26 @@ export const ActivityTable = () => {
   ) => {
     setPagination(pagination);
     setSorter(sorter);
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+      filter,
+    });
+  };
+
+  const handleFilterChange = (value: string) => {
+    setFilter(value)
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+      filter: value,
+    });
   };
 
   return (
@@ -63,8 +101,9 @@ export const ActivityTable = () => {
       <Title level={2}>{t('Activity')}</Title>
       <CallsTable
         data={callHistory?.items}
-        searchParams={{ pagination, sorter, search: searchTerm, userId: id }}
+        searchParams={{ pagination, sorter, search: searchTerm, filter }}
         handleSearch={handleSearch}
+        handleFilterChange={handleFilterChange}
         handleTableChange={handleTableChange}
       />
     </>

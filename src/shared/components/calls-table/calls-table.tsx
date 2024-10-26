@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { CALL_STATUS, ConfirmModal, ROUTES, useTheme } from '@shared/index';
 import { Pagination } from '@shared/types';
-import { getChangeStatusDropdownItems, truncateText } from '@shared/utils';
+import { getChangeStatusDropdownItems, statusMenuItems, truncateText } from '@shared/utils';
 import { AppDispatch, CallsTableRecord, fetchCallHistory, updateCallStatus } from '@store/index';
 import {
   Button,
@@ -63,6 +63,7 @@ type Props = {
     sorter: { field: string; order: 'ascend' | 'descend' };
     search: string;
     userId: string;
+    filter: string;
   };
   handleSearch: (value: string) => void;
   handleTableChange?: TableProps<any>['onChange'];
@@ -75,6 +76,7 @@ export const CallsTable = ({
   data,
   handleSearch,
   handleTableChange,
+  handleFilterChange,
   searchParams,
   title,
   size = 'small',
@@ -110,7 +112,6 @@ export const CallsTable = ({
   };
 
   const onUserClick = (record, index) => {
-    console.log('record: ', record, `${ROUTES.USERS}/${record.userId}`);
     navigate(`${ROUTES.USERS}/${record.userId}`);
   };
 
@@ -212,7 +213,6 @@ export const CallsTable = ({
   const visibleColumns = DEFAULT_COLUMNS.filter((item) => columns.includes(item.key));
 
   const updateStatus = (id = '', newStatus: CALL_STATUS) => {
-    console.log('updateStatus searchParams: ', searchParams);
     dispatch(updateCallStatus({ id, newStatus })).then(() =>
       dispatch(
         fetchCallHistory({
@@ -232,10 +232,37 @@ export const CallsTable = ({
     );
   };
 
+  const getStatusMenuItems = (currentFilter: string) =>
+    [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) =>
+      item.key === currentFilter ? { ...item, disabled: true } : item,
+    );
+
   return (
     <div>
       {/* TODO: вынести структуру card + search + table в shared таблицу */}
       <Card size="small" title={title}>
+        <div className="flex gap-2 items-center mb-1">
+          <Typography>Статус</Typography>
+          <Dropdown
+            menu={{
+              items: getStatusMenuItems(searchParams?.filter),
+              onClick: (value) => {
+                console.log('value: ', value);
+                handleFilterChange(value.key);
+              },
+            }}>
+            <a>
+              <Space>
+                {
+                  getStatusMenuItems(searchParams?.filter).find(
+                    (item) => item.key === searchParams?.filter,
+                  )?.label
+                }
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </div>
         <Input.Search
           // TODO: перевод
           placeholder="Поиск"

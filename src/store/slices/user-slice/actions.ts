@@ -151,6 +151,7 @@ export const fetchCallHistory = createAsyncThunk<
       search: params.search || '',
       sort: params.sort || '',
       order: params.order || '',
+      filter: params.filter || '',
     }).toString();
 
     const response = await api.get<SearchResponse<CallsTableRecord>>(

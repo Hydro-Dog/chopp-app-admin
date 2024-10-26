@@ -1,6 +1,6 @@
 import { CALL_STATUS } from '@shared/enum';
 
-const items = [
+export const statusMenuItems = [
   { key: CALL_STATUS.PROCESSING, label: CALL_STATUS.PROCESSING },
   { key: CALL_STATUS.ACCEPTED, label: CALL_STATUS.ACCEPTED },
   { key: CALL_STATUS.ON_THE_WAY, label: CALL_STATUS.ON_THE_WAY },
@@ -10,4 +10,4 @@ const items = [
 ];
 
 export const getChangeStatusDropdownItems = (status: CALL_STATUS) =>
-  items.map((item) => (item.key === status ? { ...item, disabled: true } : item));
+  statusMenuItems.map((item) => (item.key === status ? { ...item, disabled: true } : item));

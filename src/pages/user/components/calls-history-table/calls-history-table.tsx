@@ -19,10 +19,10 @@ export const CallsHistoryTable = () => {
     pageSize: calcTableRowsNumberByScreenHeight(height - 320),
   });
   const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'ascend' });
+  const [filter, setFilter] = useState('all');
   const { id } = useParams();
 
   const fetchData = ({ search, page, limit, sort, order, userId }) => {
-    console.log('fetchData order: ', order)
     dispatch(
       fetchCallHistory({
         search,
@@ -83,13 +83,26 @@ export const CallsHistoryTable = () => {
     });
   };
 
+  const handleFilterChange = (value: string) => {
+    setFilter(value)
+    fetchData({
+      search: searchTerm,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      sort: sorter?.column?.dataIndex,
+      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+      filter: value,
+    });
+  };
+
   //TODO: При стирании поля поиска на calls history выстреливает несколько fetch запросов
   return (
     <CallsTable
       title={'Calls History'}
       data={callHistory?.items}
-      searchParams={{ pagination, sorter, search: searchTerm, userId: id }}
+      searchParams={{ pagination, sorter, search: searchTerm, userId: id, filter }}
       handleSearch={handleSearch}
+      handleFilterChange={handleFilterChange}
       handleTableChange={handleTableChange as TableProps<CallsTableRecord>['onChange']}
       columns={['date', 'status', 'address', 'comment', 'action']}
     />

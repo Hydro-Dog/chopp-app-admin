@@ -21,6 +21,7 @@ export type SearchRequestParams = {
   search?: string;
   sort?: string;
   order?: 'asc' | 'desc';
+  filter?: string;
 };
 
 export type CallsTableParams = SearchRequestParams & {

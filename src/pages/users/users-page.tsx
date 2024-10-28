@@ -56,7 +56,7 @@ export const UsersPage = () => {
     }
   }, [users?.totalPages, users?.totalRecords]);
 
-  const handleSearch = (value: string) => {
+  const onSearch = (value: string) => {
     setSearchTerm(value);
     fetchData({
       search: value,
@@ -67,7 +67,7 @@ export const UsersPage = () => {
     });
   };
 
-  const handleTableChange = (
+  const onTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
@@ -120,7 +120,7 @@ export const UsersPage = () => {
   ];
 
   const debounced = useDebounceCallback(({ target: { value } }) => {
-    handleSearch(value);
+    onSearch(value);
   }, 300);
 
   return (
@@ -141,7 +141,7 @@ export const UsersPage = () => {
           columns={columns}
           dataSource={users?.items}
           loading={fetchUsersStatus === FETCH_STATUS.LOADING}
-          onChange={handleTableChange as TableProps<User>['onChange']}
+          onChange={onTableChange as TableProps<User>['onChange']}
           pagination={pagination}
           rowKey="email"
           onRow={(record) => ({

@@ -3,6 +3,7 @@ import { Modal } from 'antd';
 export const ConfirmModal = ({open, onOk, onCancel, title, children}) => {
   return (
     <Modal
+    zIndex={1000}
       open={open}
       title={title}
       onOk={onOk}

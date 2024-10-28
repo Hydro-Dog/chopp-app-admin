@@ -16,11 +16,11 @@ export const ActivityTable = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { callHistory } = useSelector((state: RootState) => state.user);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
   const { height = 0 } = useWindowSize();
   const [pagination, setPagination] = useState<Partial<Pagination>>({
     current: 1,
-    pageSize: calcTableRowsNumberByScreenHeight(height - 150),
+    pageSize: calcTableRowsNumberByScreenHeight(height - 250),
   });
   const [sorter, setSorter] = useState({ field: 'date', order: 'ascend' });
   const [filter, setFilter] = useState('all');
@@ -41,7 +41,7 @@ export const ActivityTable = () => {
 
   useEffect(() => {
     fetchData({
-      search: searchTerm,
+      search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter.field,
@@ -55,8 +55,8 @@ export const ActivityTable = () => {
     }
   }, [callHistory?.totalPages]);
 
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
+  const onSearch = (value: string) => {
+    setSearch(value);
     fetchData({
       search: value,
       page: pagination.current,
@@ -67,7 +67,7 @@ export const ActivityTable = () => {
     });
   };
 
-  const handleTableChange = (
+  const onTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
@@ -75,7 +75,7 @@ export const ActivityTable = () => {
     setPagination(pagination);
     setSorter(sorter);
     fetchData({
-      search: searchTerm,
+      search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
@@ -84,10 +84,10 @@ export const ActivityTable = () => {
     });
   };
 
-  const handleFilterChange = (value: string) => {
-    setFilter(value)
+  const onFilterChange = (value: string) => {
+    setFilter(value);
     fetchData({
-      search: searchTerm,
+      search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
@@ -96,15 +96,31 @@ export const ActivityTable = () => {
     });
   };
 
+  const onReset = () => {
+    setPagination({ current: 1, pageSize: calcTableRowsNumberByScreenHeight(height - 150) });
+    setSorter({ field: 'date', order: 'ascend' });
+    setFilter('all');
+    setSearch('')
+    fetchData({
+      search: '',
+      page: 1,
+      limit: calcTableRowsNumberByScreenHeight(height - 150),
+      sort: 'date',
+      order: 'ascend',
+      filter: 'all',
+    });
+  };
+
   return (
     <>
       <Title level={2}>{t('Activity')}</Title>
       <CallsTable
         data={callHistory?.items}
-        searchParams={{ pagination, sorter, search: searchTerm, filter }}
-        handleSearch={handleSearch}
-        handleFilterChange={handleFilterChange}
-        handleTableChange={handleTableChange}
+        searchParams={{ pagination, sorter, search, filter }}
+        onSearch={onSearch}
+        onFilterChange={onFilterChange}
+        onTableChange={onTableChange}
+        onReset={onReset}
       />
     </>
   );

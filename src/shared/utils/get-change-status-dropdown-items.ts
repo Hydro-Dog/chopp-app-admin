@@ -9,5 +9,5 @@ export const statusMenuItems = [
   { key: CALL_STATUS.CANCELED, label: CALL_STATUS.CANCELED },
 ];
 
-export const getChangeStatusDropdownItems = (status: CALL_STATUS) =>
+export const getChangeStatusDropdownItems = (status?: CALL_STATUS) =>
   statusMenuItems.map((item) => (item.key === status ? { ...item, disabled: true } : item));

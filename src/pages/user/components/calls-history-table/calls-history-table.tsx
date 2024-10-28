@@ -12,11 +12,11 @@ import { useWindowSize } from 'usehooks-ts';
 export const CallsHistoryTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { callHistory } = useSelector((state: RootState) => state.user);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
   const { height = 0 } = useWindowSize();
   const [pagination, setPagination] = useState<Partial<Pagination>>({
     current: 1,
-    pageSize: calcTableRowsNumberByScreenHeight(height - 320),
+    pageSize: calcTableRowsNumberByScreenHeight(height - 350),
   });
   const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'ascend' });
   const [filter, setFilter] = useState('all');
@@ -37,7 +37,7 @@ export const CallsHistoryTable = () => {
   useEffect(() => {
     if (id) {
       fetchData({
-        search: searchTerm,
+        search: search,
         page: pagination.current,
         limit: pagination.pageSize,
         sort: sorter.field,
@@ -53,8 +53,8 @@ export const CallsHistoryTable = () => {
     }
   }, [callHistory?.totalRecords]);
 
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
+  const onSearch = (value: string) => {
+    setSearch(value);
     fetchData({
       search: value,
       page: pagination.current,
@@ -65,7 +65,7 @@ export const CallsHistoryTable = () => {
     });
   };
 
-  const handleTableChange = (
+  const onTableChange = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
@@ -74,7 +74,7 @@ export const CallsHistoryTable = () => {
     setPagination(pagination);
     setSorter(sorter);
     fetchData({
-      search: searchTerm,
+      search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
@@ -83,10 +83,10 @@ export const CallsHistoryTable = () => {
     });
   };
 
-  const handleFilterChange = (value: string) => {
+  const onFilterChange = (value: string) => {
     setFilter(value)
     fetchData({
-      search: searchTerm,
+      search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
@@ -95,15 +95,31 @@ export const CallsHistoryTable = () => {
     });
   };
 
+  const onReset = () => {
+    setPagination({ current: 1, pageSize: calcTableRowsNumberByScreenHeight(height - 150) });
+    setSorter({ field: 'date', order: 'ascend' });
+    setFilter('all');
+    setSearch('')
+    fetchData({
+      search: '',
+      page: 1,
+      limit: calcTableRowsNumberByScreenHeight(height - 150),
+      sort: 'date',
+      order: 'ascend',
+      filter: 'all',
+    });
+  };
+
   //TODO: При стирании поля поиска на calls history выстреливает несколько fetch запросов
   return (
     <CallsTable
       title={'Calls History'}
       data={callHistory?.items}
-      searchParams={{ pagination, sorter, search: searchTerm, userId: id, filter }}
-      handleSearch={handleSearch}
-      handleFilterChange={handleFilterChange}
-      handleTableChange={handleTableChange as TableProps<CallsTableRecord>['onChange']}
+      searchParams={{ pagination, sorter, search, userId: id, filter }}
+      onSearch={onSearch}
+      onFilterChange={onFilterChange}
+      onTableChange={onTableChange as TableProps<CallsTableRecord>['onChange']}
+      onReset={onReset}
       columns={['date', 'status', 'address', 'comment', 'action']}
     />
   );

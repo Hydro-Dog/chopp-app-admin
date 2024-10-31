@@ -23,6 +23,7 @@ import { router } from './router/router';
 import 'dayjs/locale/ru';
 
 import './index.css';
+import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -53,7 +54,7 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   // @ts-ignore
   useEffect(() => {
     // @ts-ignore
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('accessToken')) {
       dispatch(
         wsConnect({
           url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem('token')}`,
@@ -73,7 +74,12 @@ export const App = () => {
     algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
-  const { openNotification, NotificationContext: NotificationCtx } = useNotification();
+  const {
+    openNotification,
+    closeNotification,
+    closeAllNotifications,
+    NotificationContext: NotificationCtx,
+  } = useNotification();
   const [lang, setLang] = useState(LANG.RU);
 
   return (
@@ -81,7 +87,11 @@ export const App = () => {
       <StoreProvider store={store}>
         <WsWrapper />
         <ConfigProvider theme={themeConfig} locale={lang === LANG.RU ? ruRU : enUS}>
-          <NotificationContextProvider openNotification={openNotification}>
+          <NotificationContextProvider
+            openNotification={openNotification}
+            closeNotification={closeNotification}
+            closeAllNotifications={closeAllNotifications}>
+            <ActivityNotifications />
             <div className="w-full h-full overflow-hidden">
               <div className={theme === 'dark' ? 'bg-black' : 'bg-white'}>
                 <Switch

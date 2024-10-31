@@ -1,11 +1,6 @@
-type Args = Record<string, any> & {
-  type: string;
-  code: string;
-  message?: string;
-  payload?: Record<string, any>;
-};
+import { WsMessage } from '@shared/types/ws-message';
 
-export const createWsMessage = ({ type, code, message, payload }: Args) => ({
+export const createWsMessage = ({ type, code, message, payload }: WsMessage) => ({
   type,
   code,
   message,

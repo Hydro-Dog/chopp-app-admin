@@ -1,9 +1,10 @@
 import { Pagination } from './pagination';
+import { Sorter } from './sorter';
 
 export type TableSearchParams = {
   pagination: Partial<Pagination>;
-  sorter: { field: string; order: 'ascend' | 'descend' };
+  sorter: Sorter;
   search: string;
-  userId: string;
+  userId?: string;
   filter: string;
 };

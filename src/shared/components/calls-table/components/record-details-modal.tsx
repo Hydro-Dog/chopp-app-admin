@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { CALL_STATUS, DraggableModal, getChangeStatusDropdownItems } from '@shared/index';
 import { CallsTableRecord } from '@store/index';
-import { Button, Dropdown, Space, Typography } from 'antd';
+import { Button, Dropdown, Modal, Space, Typography } from 'antd';
 
 const { Text } = Typography;
 
 type Props = {
   data?: CallsTableRecord;
   open: boolean;
-  currentStatus: CALL_STATUS;
+  currentStatus?: CALL_STATUS;
   onOk: () => void;
   onCancel: () => void;
   onStatusChange: (newStatus?: CALL_STATUS) => void;
@@ -35,7 +35,8 @@ export const RecordDetailsModal = ({
   const [currentStatusValue, setCurrentStatusValue] = useState<CALL_STATUS>();
 
   return (
-    <DraggableModal
+    <Modal
+      zIndex={1}
       // TODO: перевод
       title={`Вызов №: ${data?.id}`}
       // @ts-ignore
@@ -75,6 +76,6 @@ export const RecordDetailsModal = ({
             );
           })}
       </div>
-    </DraggableModal>
+    </Modal>
   );
 };

@@ -1,12 +1,14 @@
-import { Button, Modal } from 'antd';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
+import { Modal } from 'antd';
 
 type Props = {
   open: boolean;
   title?: ReactNode;
   width?: string | number;
+  loading?: boolean;
   onOk: () => void;
   onCancel: () => void;
+  zIndex?: number;
 };
 
 export const BasicModal = ({
@@ -19,7 +21,7 @@ export const BasicModal = ({
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <Modal title={title} loading={loading} open={open} onOk={onOk} onCancel={onCancel}>
+    <Modal title={title} loading={loading} open={open} onOk={onOk} onCancel={onCancel} {...props}>
       <p>Some contents...</p>
       <p>Some contents...</p>
       <p>Some contents...</p>

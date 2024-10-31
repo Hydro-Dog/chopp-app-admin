@@ -1,42 +1,45 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { ROUTES } from '@shared/enum';
+import { CALL_STATUS, ROUTES } from '@shared/enum';
 import { SCREEN_SIZE } from '@shared/enum/screen-size';
-import { useNotificationContext, useTheme } from '@shared/index';
-import { logoutUser, setLogoutStatus } from '@store/slices';
+import {
+  createWsMessage,
+  useFilterWsMessages,
+  useNotificationContext,
+  useTheme,
+} from '@shared/index';
+import { logoutUser, setLogoutStatus, wsSend } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types/fetch-status';
-import { Layout, Menu, Tooltip, Typography } from 'antd';
+import { Badge, Layout, Menu, Tooltip, Typography } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useWindowSize } from 'usehooks-ts';
+import { useGetCurrentRoot } from './hooks';
+import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
 const { Sider } = Layout;
 const { Text } = Typography;
 
 export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any>>) => {
-  const { width } = useWindowSize();
-
+  // const { width } = useWindowSize();
   const dispatch = useDispatch<AppDispatch>();
-  const { logoutStatus } = useSelector((state: RootState) => state.user);
-  const [collapsed, setCollapsed] = useState(width < SCREEN_SIZE.MD);
-  const [selectedMenuKeys, setSelectedMenuKeys] = useState<ROUTES[]>([]);
   const { theme } = useTheme();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { openNotification } = useNotificationContext();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  // const [collapsed, setCollapsed] = useState(width < SCREEN_SIZE.MD);
+  const { wsConnected } = useSelector((state: RootState) => state.ws);
+  const { logoutStatus } = useSelector((state: RootState) => state.user);
+  const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<CALL_STATUS, number>>(
+    WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
+  );
 
-  //TODO: вынести в хук useGetCurrentRoot
-  const getFirstPathSegment = (pathname: string): ROUTES => {
-    const segments = pathname.split('/').filter(Boolean);
-    return (segments.length ? segments[0] : '') as ROUTES;
-  };
+  const { openNotification } = useNotificationContext();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -45,6 +48,8 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const onLogout = () => {
     dispatch(logoutUser());
   };
+
+  const { selectedMenuKeys } = useGetCurrentRoot();
 
   useEffect(() => {
     if (logoutStatus === FETCH_STATUS.ERROR) {
@@ -56,8 +61,16 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   }, [dispatch, logoutStatus, navigate, openNotification]);
 
   useEffect(() => {
-    setSelectedMenuKeys([getFirstPathSegment(location.pathname)]);
-  }, [location.pathname]);
+    if (wsConnected) {
+      dispatch(
+        wsSend(
+          createWsMessage({
+            type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
+          }),
+        ),
+      );
+    }
+  }, [dispatch, wsConnected]);
 
   const menuItems = [
     {
@@ -68,8 +81,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
     {
       key: ROUTES.ACTIVITY,
-      icon: <AssistantPhotoRoundedIcon />,
-      label: t('ACTIVITY'),
+      icon: <AssistantPhotoRoundedIcon color="primary" />,
+      label: (
+        <Tooltip title={JSON.stringify(callHistoryStats?.payload)}>
+          <Badge offset={[12, 0]} size="default" count={callHistoryStats?.payload?.idle}>
+            <div>{t('ACTIVITY')}</div>
+          </Badge>
+        </Tooltip>
+      ),
       onClick: () => onMenuItemClick(ROUTES.ACTIVITY),
     },
     {
@@ -90,9 +109,10 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
         theme={theme as SiderTheme}
-        collapsible={width > SCREEN_SIZE.SM}
-        collapsed={width > SCREEN_SIZE.SM ? collapsed : true}
-        onCollapse={(value) => setCollapsed(value)}>
+        // collapsible={width > SCREEN_SIZE.SM}
+        // collapsed={width > SCREEN_SIZE.SM ? collapsed : true}
+        // onCollapse={(value) => setCollapsed(value)}
+      >
         <div className="mt-3 flex flex-col justify-between h-full">
           <Menu
             style={{ border: 'none' }}
@@ -101,13 +121,11 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
             items={menuItems}
           />
 
-          {!collapsed && (
-            <Tooltip title={t('COPYRIGHT', { ns: 'phrases' })}>
-              <Text type="secondary" className="w-full text-center mb-5">
-                ©2024
-              </Text>
-            </Tooltip>
-          )}
+          <Tooltip title={t('COPYRIGHT', { ns: 'phrases' })}>
+            <Text type="secondary" className="w-full text-center mb-5">
+              ©2024
+            </Text>
+          </Tooltip>
         </div>
       </Sider>
       <Layout>{children}</Layout>

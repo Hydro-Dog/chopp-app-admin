@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,9 @@ type Props = {
   onSearch: (value: string) => void;
   onTableChange?: TableProps<any>['onChange'];
   onReset: () => void;
-  title: string;
+  onRefresh?: () => void;
+  refreshDisabled: boolean;
+  title?: string;
   size?: SizeType;
   columns?: string[];
   onFilterChange: any;
@@ -32,6 +35,8 @@ export const CallsTable = ({
   onTableChange,
   onFilterChange,
   onReset,
+  onRefresh,
+  refreshDisabled,
   searchParams,
   title,
   size = 'small',
@@ -97,7 +102,7 @@ export const CallsTable = ({
     }
   };
 
-  const getStatusMenuItems = (currentFilter: string) =>
+  const getStatusMenuItems = (currentFilter?: string) =>
     [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) =>
       item.key === currentFilter ? { ...item, disabled: true } : item,
     );
@@ -141,6 +146,15 @@ export const CallsTable = ({
               </a>
             </Dropdown>
           </div>
+          {onRefresh && (
+            <Button
+              disabled={refreshDisabled}
+              onClick={() => {
+                onRefresh();
+              }}>
+              Refresh
+            </Button>
+          )}
           <Button
             onClick={() => {
               onReset();
@@ -160,6 +174,7 @@ export const CallsTable = ({
         <Table
           className="!p-0"
           size={size}
+          // @ts-ignore
           columns={visibleColumns}
           dataSource={data}
           pagination={searchParams?.pagination}
@@ -189,7 +204,7 @@ export const CallsTable = ({
           setActiveRowIndex(undefined);
         }}
         onStatusChange={(newStatus) => {
-          setChangeStatusModalData({ item: detailsModalData!, newStatus });
+          setChangeStatusModalData({ item: detailsModalData!, newStatus: newStatus! });
           openConfirmStatusModal();
         }}
       />

@@ -4,7 +4,13 @@ import { useParams } from 'react-router-dom';
 import { CallsTable } from '@shared/components';
 import { Pagination, Sorter } from '@shared/types';
 import { calcTableRowsNumberByScreenHeight } from '@shared/utils/calc-table-rows-number-by-screen-height';
-import { AppDispatch, CallsTableRecord, fetchCallHistory, RootState } from '@store/index'; // Update the path as necessary
+import {
+  AppDispatch,
+  CallsTableParams,
+  CallsTableRecord,
+  fetchCallHistory,
+  RootState,
+} from '@store/index';
 import { TableProps } from 'antd';
 import { FilterValue, TablePaginationConfig } from 'antd/es/table/interface';
 import { useWindowSize } from 'usehooks-ts';
@@ -18,11 +24,11 @@ export const CallsHistoryTable = () => {
     current: 1,
     pageSize: calcTableRowsNumberByScreenHeight(height - 350),
   });
-  const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'ascend' });
+  const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'descend' });
   const [filter, setFilter] = useState('all');
   const { id } = useParams();
 
-  const fetchData = ({ search, page, limit, sort, order, userId }) => {
+  const fetchData = ({ search, page, limit, sort, order, userId }: CallsTableParams) => {
     dispatch(
       fetchCallHistory({
         search,
@@ -32,7 +38,8 @@ export const CallsHistoryTable = () => {
         order,
         userId,
       }),
-    )};
+    );
+  };
 
   useEffect(() => {
     if (id) {
@@ -60,8 +67,8 @@ export const CallsHistoryTable = () => {
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
-      order: !sorter.order ? sorter.order : (sorter.order === 'ascend' ? 'asc' : 'desc'),
-      userId: id,
+      order: !sorter.order ? undefined : sorter.order === 'ascend' ? 'asc' : 'desc',
+      userId: id!,
     });
   };
 
@@ -70,7 +77,6 @@ export const CallsHistoryTable = () => {
     _filters: Record<string, FilterValue | null>,
     sorter: Sorter,
   ) => {
-    console.log('sorter: ', sorter)
     setPagination(pagination);
     setSorter(sorter);
     fetchData({
@@ -78,19 +84,19 @@ export const CallsHistoryTable = () => {
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
-      order: !sorter.order ? sorter.order : (sorter.order === 'ascend' ? 'asc' : 'desc'),
-      userId: id,
+      order: !sorter.order ? undefined : sorter.order === 'ascend' ? 'asc' : 'desc',
+      userId: id!,
     });
   };
 
   const onFilterChange = (value: string) => {
-    setFilter(value)
+    setFilter(value);
     fetchData({
       search: search,
       page: pagination.current,
       limit: pagination.pageSize,
       sort: sorter?.column?.dataIndex,
-      order: !sorter.order ? sorter.order : sorter.order === 'ascend' ? 'asc' : 'desc',
+      order: !sorter.order ? undefined : sorter.order === 'ascend' ? 'asc' : 'desc',
       filter: value,
     });
   };
@@ -99,13 +105,13 @@ export const CallsHistoryTable = () => {
     setPagination({ current: 1, pageSize: calcTableRowsNumberByScreenHeight(height - 150) });
     setSorter({ field: 'date', order: 'ascend' });
     setFilter('all');
-    setSearch('')
+    setSearch('');
     fetchData({
       search: '',
       page: 1,
       limit: calcTableRowsNumberByScreenHeight(height - 150),
       sort: 'date',
-      order: 'ascend',
+      order: 'asc',
       filter: 'all',
     });
   };

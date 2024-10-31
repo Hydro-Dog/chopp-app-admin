@@ -25,7 +25,7 @@ export type SearchRequestParams = {
 };
 
 export type CallsTableParams = SearchRequestParams & {
-  userId: string;
+  userId?: string;
 };
 
 export type CallsTableRecord = {

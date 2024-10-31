@@ -28,8 +28,18 @@ export const useNotification = () => {
     });
   };
 
+  const closeNotification = (key: string) => {
+    api.destroy(key);
+  };
+
+  const closeAllNotifications = () => {
+    api.destroy();
+  };
+
   return {
     openNotification,
+    closeNotification,
+    closeAllNotifications,
     NotificationContext: () => (
       <Context.Provider value={{ name: 'snackbar_context' }}>{contextHolder}</Context.Provider>
     ),

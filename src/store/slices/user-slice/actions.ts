@@ -17,7 +17,7 @@ export const fetchCurrentUser = createAsyncThunk<User, void, { rejectValue: Erro
   '/fetchCurrentUser',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get<User>('/user');
+      const response = await api.get<User>('/currentUser');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

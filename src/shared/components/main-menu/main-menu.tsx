@@ -4,7 +4,7 @@ import { MainMenuWidget } from '@widgets/index';
 export const MainMenu = () => {
   return (
     <MainMenuWidget>
-      <div className="mx-6 my-4">
+      <div className="h-screen">
         <Outlet />
       </div>
     </MainMenuWidget>

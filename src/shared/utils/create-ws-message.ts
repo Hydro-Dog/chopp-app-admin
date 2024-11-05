@@ -1,6 +1,11 @@
 import { WsMessage } from '@shared/types/ws-message';
 
-export const createWsMessage = ({ type, code, message, payload }: WsMessage) => ({
+export const createWsMessage = ({
+  type,
+  code,
+  message,
+  payload,
+}: Omit<WsMessage, 'timeStamp'>) => ({
   type,
   code,
   message,

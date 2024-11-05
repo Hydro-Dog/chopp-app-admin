@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@shared/enum';
-import { Sorter } from '@shared/index';
+import { Sorter, TitlePage } from '@shared/index';
 import { Pagination } from '@shared/types';
 import { calcTableRowsNumberByScreenHeight } from '@shared/utils/calc-table-rows-number-by-screen-height';
 import { AppDispatch, FETCH_STATUS, fetchUsers, RootState, User } from '@store/index';
@@ -124,9 +124,7 @@ export const UsersPage = () => {
   }, 300);
 
   return (
-    <div>
-      {/* TODO: Перевод */}
-      <Title level={2}>{t('Users')}</Title>
+    <TitlePage title={t('Users')}>
       {/* TODO: вынести структуру card + search + table в shared таблицу */}
       <Card size="small">
         <Input.Search
@@ -149,6 +147,6 @@ export const UsersPage = () => {
           })}
         />
       </Card>
-    </div>
+    </TitlePage>
   );
 };

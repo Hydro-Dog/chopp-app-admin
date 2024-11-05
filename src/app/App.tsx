@@ -10,7 +10,7 @@ import {
   PropsWithChildrenOnly,
   NotificationContextProvider,
 } from '@shared/index';
-import { AppDispatch, store, wsConnect, wsDisconnect } from '@store/index';
+import { AppDispatch, fetchCurrentUser, store, wsConnect, wsDisconnect } from '@store/index';
 import { ConfigProvider, Switch, theme as antTheme } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import ruRU from 'antd/lib/locale/ru_RU';
@@ -55,6 +55,8 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   useEffect(() => {
     // @ts-ignore
     if (localStorage.getItem('accessToken')) {
+      dispatch(fetchCurrentUser());
+
       dispatch(
         wsConnect({
           url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem('token')}`,
@@ -92,7 +94,7 @@ export const App = () => {
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />
-            <div className="w-full h-full overflow-hidden">
+            <div className="w-full h-screen overflow-hidden">
               <div className={theme === 'dark' ? 'bg-black' : 'bg-white'}>
                 <Switch
                   className="absolute right-10 bottom-10"

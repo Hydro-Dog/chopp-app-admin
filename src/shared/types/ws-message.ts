@@ -5,5 +5,6 @@ export type WsMessage<T = Record<string, any>> = {
   // TODO: code удалить, не используется
   code?: string;
   message?: string;
+  timeStamp: number;
   payload?: T; // Использование T для поля payload
 };

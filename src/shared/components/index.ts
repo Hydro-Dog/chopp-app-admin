@@ -5,4 +5,6 @@ export * from './cursor-eye-follower';
 export * from './mobile-modal';
 export * from './back-button';
 export * from './calls-table';
-export * from './confirm-modal'
+export * from './confirm-modal';
+export * from './title-page';
+export * from './main-container';

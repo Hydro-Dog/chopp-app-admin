@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { CallsTable } from '@shared/components';
+import { CallsTable, TitlePage } from '@shared/components';
 import { useFilterWsMessages } from '@shared/hooks';
 import { Pagination, Sorter } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
@@ -32,13 +32,13 @@ export const ActivityTable = () => {
   const [sorter, setSorter] = useState<Sorter>({ field: 'date', order: 'descend' });
   const [filter, setFilter] = useState('all');
   const [refreshDisabled, setRefreshDisabled] = useState(true);
-  
+
   const { lastMessage: newActivityMessage, messages } = useFilterWsMessages<CallsTableRecord>(
     WS_MESSAGE_TYPE.NEW_ACTIVITY,
   );
-  const [totalActivityMessageCounter, setTotalActivityMessageCounter] = useState(messages.length );
+  const [totalActivityMessageCounter, setTotalActivityMessageCounter] = useState(messages.length);
 
-  console.log('messages: ', messages.length)
+  console.log('messages: ', messages.length);
 
   const fetchData = ({ search, page, limit, sort, order, userId, filter }: CallsTableParams) => {
     dispatch(
@@ -65,17 +65,17 @@ export const ActivityTable = () => {
     });
   }, [dispatch]);
 
-  console.log('newActivityMessage: ', newActivityMessage)
-  console.log('activityMessageCounter: ', totalActivityMessageCounter)
+  console.log('newActivityMessage: ', newActivityMessage);
+  console.log('activityMessageCounter: ', totalActivityMessageCounter);
 
   useEffect(() => {
     // if (newActivityMessage) {
     //   setTotalActivityMessageCounter((val) => val + 1);
     // }
 
-    if(messages.length > totalActivityMessageCounter) {
-      setRefreshDisabled(false)
-      setTotalActivityMessageCounter(messages.length)
+    if (messages.length > totalActivityMessageCounter) {
+      setRefreshDisabled(false);
+      setTotalActivityMessageCounter(messages.length);
     }
   }, [newActivityMessage]);
 
@@ -142,7 +142,7 @@ export const ActivityTable = () => {
   };
 
   const onRefresh = () => {
-    setRefreshDisabled(true)
+    setRefreshDisabled(true);
     fetchData({
       search: search,
       page: pagination.current,
@@ -154,8 +154,7 @@ export const ActivityTable = () => {
   };
 
   return (
-    <>
-      <Title level={2}>{t('Activity')}</Title>
+    <TitlePage title={t('Activity')}>
       <CallsTable
         data={callHistory?.items}
         searchParams={{ pagination, sorter, search, filter }}
@@ -166,6 +165,6 @@ export const ActivityTable = () => {
         onRefresh={onRefresh}
         refreshDisabled={refreshDisabled}
       />
-    </>
+    </TitlePage>
   );
 };

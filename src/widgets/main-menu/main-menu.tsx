@@ -9,35 +9,35 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { CALL_STATUS, ROUTES } from '@shared/enum';
 import { SCREEN_SIZE } from '@shared/enum/screen-size';
 import {
+  ChatMessagePayload,
+  ChatsData,
   createWsMessage,
   useFilterWsMessages,
   useNotificationContext,
   useTheme,
 } from '@shared/index';
+import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { logoutUser, setLogoutStatus, wsSend } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types/fetch-status';
 import { Badge, Layout, Menu, Tooltip, Typography } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
-import { useWindowSize } from 'usehooks-ts';
 import { useGetCurrentRoot } from './hooks';
-import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
 const { Sider } = Layout;
 const { Text } = Typography;
 
 export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any>>) => {
-  // const { width } = useWindowSize();
   const dispatch = useDispatch<AppDispatch>();
   const { theme } = useTheme();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  // const [collapsed, setCollapsed] = useState(width < SCREEN_SIZE.MD);
   const { wsConnected } = useSelector((state: RootState) => state.ws);
   const { logoutStatus } = useSelector((state: RootState) => state.user);
   const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<CALL_STATUS, number>>(
     WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
   );
+  const { lastMessage: chatsData } = useFilterWsMessages<ChatsData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
 
   const { openNotification } = useNotificationContext();
 
@@ -69,8 +69,26 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
           }),
         ),
       );
+      dispatch(
+        wsSend(
+          createWsMessage({
+            type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
+          }),
+        ),
+      );
     }
   }, [dispatch, wsConnected]);
+
+  const getChatsStats = () => {
+    const unread = chatsData?.payload?.filter((item) => item.hasUnreadMessages).length || 0;
+    const total = chatsData?.payload?.length || 0;
+
+    return {
+      total,
+      read: total - unread,
+      unread,
+    };
+  };
 
   const menuItems = [
     {
@@ -84,9 +102,10 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       icon: <AssistantPhotoRoundedIcon color="primary" />,
       label: (
         <Tooltip title={JSON.stringify(callHistoryStats?.payload)}>
-          <Badge offset={[12, 0]} size="default" count={callHistoryStats?.payload?.idle}>
+          <div className="flex items-center gap-1">
             <div>{t('ACTIVITY')}</div>
-          </Badge>
+            <Badge size="default" count={callHistoryStats?.payload?.idle} />
+          </div>
         </Tooltip>
       ),
       onClick: () => onMenuItemClick(ROUTES.ACTIVITY),
@@ -94,7 +113,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.CHATS,
       icon: <ChatRoundedIcon />,
-      label: t('CHATS'),
+      label: (
+        <Tooltip title={`Total: ${getChatsStats().total}; Unread: ${getChatsStats().unread}`}>
+          <div className="flex items-center gap-1">
+            <div>{t('CHATS')}</div>
+            <Badge size="default" count={getChatsStats().unread} />
+          </div>
+        </Tooltip>
+      ),
       onClick: () => onMenuItemClick(ROUTES.CHATS),
     },
     {
@@ -106,14 +132,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout>
       <Sider
         theme={theme as SiderTheme}
         // collapsible={width > SCREEN_SIZE.SM}
         // collapsed={width > SCREEN_SIZE.SM ? collapsed : true}
         // onCollapse={(value) => setCollapsed(value)}
       >
-        <div className="mt-3 flex flex-col justify-between h-full">
+        <div className="mt-3 flex flex-col justify-between h-screen">
           <Menu
             style={{ border: 'none' }}
             selectedKeys={selectedMenuKeys}

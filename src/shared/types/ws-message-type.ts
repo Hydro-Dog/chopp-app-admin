@@ -12,6 +12,7 @@ export enum WS_MESSAGE_TYPE {
   CHAT_MESSAGES_HISTORY = 'chatMessagesHistory',
   // USER_MESSAGE = "userMessage",
   // SUPPORT_MESSAGE = "supportMessage",
-  MESSAGE = 'message',
+  NEW_MESSAGE = 'newMessage',
   TYPING = 'typing',
+  MESSAGE_READ = 'messageRead',
 }

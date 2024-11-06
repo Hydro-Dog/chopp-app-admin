@@ -38,8 +38,6 @@ export const ActivityTable = () => {
   );
   const [totalActivityMessageCounter, setTotalActivityMessageCounter] = useState(messages.length);
 
-  console.log('messages: ', messages.length);
-
   const fetchData = ({ search, page, limit, sort, order, userId, filter }: CallsTableParams) => {
     dispatch(
       fetchCallHistory({

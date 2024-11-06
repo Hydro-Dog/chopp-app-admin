@@ -3,7 +3,7 @@ import { WsMessage } from './ws-message';
 
 export type ChatsData = {
   userId: string;
-  userName: string;
+  fullName: string;
   hasUnreadMessages: boolean;
   lastMessage: WsMessage<ChatMessagePayload>;
 };

@@ -41,7 +41,6 @@ export const ChatInput = () => {
       setText(''); // Очистка TextArea после отправки сообщения
       //Обновить открытые сообщения
       setMessages((prev) => {
-        console.log('[...prev, newMessage.payload]: ', [...prev, newMessage.payload]);
         return [...prev, newMessage.payload];
       });
       //Обновить превью чатов сообщения

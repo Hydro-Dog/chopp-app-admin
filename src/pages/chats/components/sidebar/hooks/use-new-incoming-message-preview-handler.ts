@@ -27,7 +27,6 @@ export const useNewIncomingMessagePreviewHandler = () => {
 
         return item.chatId === newMessage?.payload?.chatId ? { ...item, lastMessage } : item;
       });
-      console.log('c: ', c);
 
       return c;
     });

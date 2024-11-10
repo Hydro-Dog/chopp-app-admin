@@ -31,7 +31,7 @@ export const ChatsPage = () => {
   useClearChatMessagesStoreOnLeave();
   useFetchMessages();
   useReadAllChatMessages();
-  useNewIncomingMessageChatHandler({ setMessages });
+  useNewIncomingMessageChatHandler();
 
   useEffect(() => {
     if (chatMessages) {
@@ -40,30 +40,19 @@ export const ChatsPage = () => {
   }, [chatMessages]);
 
   const getCardContainerClasses = (isUserMessage: boolean, isNewMessage = false) =>
-    classNames('flex', isUserMessage ? 'justify-end' : 'justify-start', {
+    classNames('flex', !isUserMessage ? 'justify-end' : 'justify-start', {
       'bg-slate-200': isNewMessage,
     });
 
   const getCardClasses = (isUserMessage: boolean) =>
     classNames('max-w-xs p-2 rounded-lg', {
-      'bg-blue-500 text-white': !isUserMessage,
-      'bg-gray-300 text-black': isUserMessage,
+      'bg-blue-500 text-white': isUserMessage,
+      'bg-gray-300 text-black': !isUserMessage,
     });
 
   const [searchParams] = useSearchParams();
   const currentChatId = searchParams.get('id');
 
-  useEffect(() => {
-    if (currentChatId === messages?.[messages?.length - 1]?.chatId) {
-      setMessages((prev) =>
-        prev.map((item) =>
-          item.wasReadBy.includes(currentUser?.id)
-            ? item
-            : { ...item, wasReadBy: [...item.wasReadBy, currentUser.id] },
-        ),
-      );
-    }
-  }, [messages]);
 
   return (
     <TitlePage title={t('Chat')}>

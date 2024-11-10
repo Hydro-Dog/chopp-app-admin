@@ -27,8 +27,6 @@ export const useMarkChatAsRead = () => {
           : item;
       });
 
-      console.log('a: ', a);
-
       return a;
     });
   }, [currentChatId, currentUser?.id, setChats, chats?.length]);

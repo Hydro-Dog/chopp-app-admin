@@ -1,31 +1,38 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ChatMessagePayload, ChatsData, ErrorResponse } from '@shared/index';
+import { ChatData, ErrorResponse } from '@shared/index';
+import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
-import { fetchChatMessages, fetchChatPreviews } from './actions';
+import { fetchChatMessages, fetchChatData } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ChatState = {
-  chatMessages: WsMessage<ChatMessagePayload>[] | null;
+  chatMessages: WsMessage<ChatMessage>[] | null;
   fetchChatMessagesStatus: FETCH_STATUS;
   fetchChatMessagesError: ErrorResponse | null;
-  chatPreviews: ChatsData[] | null;
-  fetchChatPreviewsStatus: FETCH_STATUS;
-  fetchChatPreviewsError: ErrorResponse | null;
+  chatsData: ChatData[] | null;
+  fetchChatsStatus: FETCH_STATUS;
+  fetchChatError: ErrorResponse | null;
 };
 
 const initialState: ChatState = {
   chatMessages: null,
   fetchChatMessagesStatus: FETCH_STATUS.IDLE,
   fetchChatMessagesError: null,
-  chatPreviews: null,
-  fetchChatPreviewsStatus: FETCH_STATUS.IDLE,
-  fetchChatPreviewsError: null,
+  chatsData: null,
+  fetchChatsStatus: FETCH_STATUS.IDLE,
+  fetchChatError: null,
 };
 
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
-  reducers: {},
+  reducers: {
+    clearChatMessages: (state) => {
+      state.chatMessages = null;
+      state.fetchChatMessagesStatus = FETCH_STATUS.IDLE;
+      state.fetchChatMessagesError = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchChatMessages.pending, (state) => {
@@ -33,7 +40,7 @@ export const chatSlice = createSlice({
       })
       .addCase(
         fetchChatMessages.fulfilled,
-        (state, action: PayloadAction<WsMessage<ChatMessagePayload>[]>) => {
+        (state, action: PayloadAction<WsMessage<ChatMessage>[]>) => {
           state.fetchChatMessagesStatus = FETCH_STATUS.SUCCESS;
           state.chatMessages = action.payload;
         },
@@ -44,18 +51,20 @@ export const chatSlice = createSlice({
           errorMessage: 'Failed to fetch chat information',
         };
       })
-      .addCase(fetchChatPreviews.pending, (state) => {
-        state.fetchChatPreviewsStatus = FETCH_STATUS.LOADING;
+      .addCase(fetchChatData.pending, (state) => {
+        state.fetchChatsStatus = FETCH_STATUS.LOADING;
       })
-      .addCase(fetchChatPreviews.fulfilled, (state, action: PayloadAction<ChatsData[]>) => {
-        state.fetchChatPreviewsStatus = FETCH_STATUS.SUCCESS;
-        state.chatPreviews = action.payload;
+      .addCase(fetchChatData.fulfilled, (state, action: PayloadAction<ChatData[]>) => {
+        state.fetchChatsStatus = FETCH_STATUS.SUCCESS;
+        state.chatsData = action.payload;
       })
-      .addCase(fetchChatPreviews.rejected, (state, action) => {
-        state.fetchChatPreviewsStatus = FETCH_STATUS.ERROR;
-        state.fetchChatPreviewsError = action.payload ?? {
+      .addCase(fetchChatData.rejected, (state, action) => {
+        state.fetchChatsStatus = FETCH_STATUS.ERROR;
+        state.fetchChatError = action.payload ?? {
           errorMessage: 'Failed to fetch chat information',
         };
       });
   },
 });
+
+export const { clearChatMessages } = chatSlice.actions;

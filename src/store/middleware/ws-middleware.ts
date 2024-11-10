@@ -55,6 +55,7 @@ export const wsMiddleware: Middleware = (store) => {
 
       case wsSend.toString():
         if (socket !== null) {
+          console.log('action.payload: ', action.payload)
           socket.send(JSON.stringify(action.payload));
         }
 

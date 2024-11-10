@@ -9,6 +9,6 @@ export const createWsMessage = ({
   type,
   code,
   message,
-  timeStamp: new Date().valueOf(),
+  // timeStamp: new Date().valueOf(),
   payload,
 });

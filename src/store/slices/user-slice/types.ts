@@ -1,7 +1,7 @@
 import { CALL_STATUS } from "@shared/enum";
 
 export type User = {
-  id: number;
+  id: string;
   fullName: string;
   phoneNumber: string;
   email: string;

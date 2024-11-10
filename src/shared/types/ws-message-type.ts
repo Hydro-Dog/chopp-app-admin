@@ -13,6 +13,7 @@ export enum WS_MESSAGE_TYPE {
   // USER_MESSAGE = "userMessage",
   // SUPPORT_MESSAGE = "supportMessage",
   NEW_MESSAGE = 'newMessage',
+  MESSAGE = 'message',
   TYPING = 'typing',
   MESSAGE_READ = 'messageRead',
 }

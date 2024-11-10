@@ -1,9 +1,8 @@
-import { ChatMessagePayload } from './chat-message-payload';
-import { WsMessage } from './ws-message';
+import { ChatMessage } from './chat-message';
 
-export type ChatsData = {
+export type ChatData = {
+  chatId: string;
   userId: string;
   fullName: string;
-  hasUnreadMessages: boolean;
-  lastMessage: WsMessage<ChatMessagePayload>;
+  lastMessage: ChatMessage;
 };

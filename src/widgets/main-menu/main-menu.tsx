@@ -9,8 +9,8 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { CALL_STATUS, ROUTES } from '@shared/enum';
 import { SCREEN_SIZE } from '@shared/enum/screen-size';
 import {
-  ChatMessagePayload,
-  ChatsData,
+  ChatMessage,
+  ChatData,
   createWsMessage,
   useFilterWsMessages,
   useNotificationContext,
@@ -37,7 +37,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<CALL_STATUS, number>>(
     WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
   );
-  const { lastMessage: chatsData } = useFilterWsMessages<ChatsData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
+  const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
 
   const { openNotification } = useNotificationContext();
 

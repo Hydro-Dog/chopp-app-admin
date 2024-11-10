@@ -15,24 +15,17 @@ import {
   useReadAllChatMessages,
 } from './components/hooks';
 import { ChatInput, Sidebar } from './components/index';
+import { useChatsContext } from './chats-context';
 
 const { Item } = Form;
 const { Text } = Typography;
 
 export const ChatsPage = () => {
   const themeToken = useThemeToken();
-
+  const { messages, setMessages } = useChatsContext();
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentChatId = searchParams.get('id');
-
-  const { wsConnected } = useSelector((state: RootState) => state.ws);
   const { chatMessages } = useSelector((state: RootState) => state.chat);
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { lastMessage: newMessage } = useFilterWsMessages<ChatMessage>(WS_MESSAGE_TYPE.MESSAGE);
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   //Очистка стора при уходе из компонента чата
   useClearChatMessagesStoreOnLeave();
@@ -53,9 +46,24 @@ export const ChatsPage = () => {
 
   const getCardClasses = (isUserMessage: boolean) =>
     classNames('max-w-xs p-2 rounded-lg', {
-      'bg-blue-500 text-white': isUserMessage,
-      'bg-gray-300 text-black': !isUserMessage,
+      'bg-blue-500 text-white': !isUserMessage,
+      'bg-gray-300 text-black': isUserMessage,
     });
+
+  const [searchParams] = useSearchParams();
+  const currentChatId = searchParams.get('id');
+
+  useEffect(() => {
+    if (currentChatId === messages?.[messages?.length - 1]?.chatId) {
+      setMessages((prev) =>
+        prev.map((item) =>
+          item.wasReadBy.includes(currentUser?.id)
+            ? item
+            : { ...item, wasReadBy: [...item.wasReadBy, currentUser.id] },
+        ),
+      );
+    }
+  }, [messages]);
 
   return (
     <TitlePage title={t('Chat')}>
@@ -74,7 +82,7 @@ export const ChatsPage = () => {
                     key={message?.messageId}
                     className={getCardContainerClasses(
                       isUserMessage,
-                      message?.wasReadBy?.includes(currentUser?.id),
+                      !message?.wasReadBy?.includes(currentUser?.id),
                     )}>
                     <Card className={getCardClasses(isUserMessage)}>
                       <Text>{message?.text}</Text>
@@ -87,7 +95,7 @@ export const ChatsPage = () => {
               })}
             </div>
 
-            <ChatInput setMessages={setMessages} />
+            <ChatInput />
           </div>
         </Splitter.Panel>
       </Splitter>

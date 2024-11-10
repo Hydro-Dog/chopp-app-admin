@@ -15,5 +15,5 @@ export enum WS_MESSAGE_TYPE {
   NEW_MESSAGE = 'newMessage',
   MESSAGE = 'message',
   TYPING = 'typing',
-  MESSAGE_READ = 'messageRead',
+  MESSAGES_READ = 'messagesRead',
 }

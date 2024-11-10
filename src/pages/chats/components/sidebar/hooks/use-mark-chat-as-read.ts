@@ -3,13 +3,10 @@ import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { ChatData } from '@shared/types';
 import { RootState } from '@store/index';
+import { useChatsContext } from '@pages/chats/chats-context';
 
-type Args = {
-  chats: ChatData[]
-  setChats: (value: SetStateAction<ChatData[]>) => void;
-};
-
-export const useMarkChatAsRead = ({ setChats, chats }: Args) => {
+export const useMarkChatAsRead = () => {
+  const { chats, setChats } = useChatsContext();
   const [searchParams] = useSearchParams();
   const currentChatId = searchParams.get('id');
   const { currentUser } = useSelector((state: RootState) => state.user);

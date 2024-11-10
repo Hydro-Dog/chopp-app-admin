@@ -8,17 +8,20 @@ import { RootState, AppDispatch } from '@store/index';
 import { wsSend } from '@store/slices';
 import TextArea from 'antd/es/input/TextArea';
 import { timeStamp } from 'console';
+import { useChatsContext } from '@pages/chats/chats-context';
+import { ChatMessage } from '@shared/types';
 
-type Props = {
-  setMessages: any;
-};
-
-export const ChatInput = ({ setMessages }: Props) => {
+export const ChatInput = () => {
   const { t } = useTranslation();
-  const [searchParams] = useSearchParams();
+
   const [text, setText] = useState('');
   const { currentUser } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+  const { setMessages, setChats } = useChatsContext();
+
+  //TODO: вынести в отдельный хук, повторяются эти две строчки
+  const [searchParams] = useSearchParams();
+  const currentChatId = searchParams.get('id');
 
   const handleSendMessage = () => {
     if (text.trim()) {
@@ -29,13 +32,24 @@ export const ChatInput = ({ setMessages }: Props) => {
           timeStamp: Date.now(),
           text,
           senderId: currentUser?.id,
-          receiverId: searchParams.get('id'),
-        },
+          chatId: currentChatId,
+          wasReadBy: [currentUser?.id],
+        } as ChatMessage,
       };
+
       dispatch(wsSend(newMessage));
       setText(''); // Очистка TextArea после отправки сообщения
       //Обновить открытые сообщения
-      setMessages((prev) => [...prev, newMessage.payload]);
+      setMessages((prev) => {
+        console.log('[...prev, newMessage.payload]: ', [...prev, newMessage.payload]);
+        return [...prev, newMessage.payload];
+      });
+      //Обновить превью чатов сообщения
+      setChats((prev) =>
+        prev.map((item) =>
+          item.chatId === currentChatId ? { ...item, lastMessage: newMessage.payload } : item,
+        ),
+      );
     }
   };
 

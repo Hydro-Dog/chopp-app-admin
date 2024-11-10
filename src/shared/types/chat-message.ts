@@ -3,7 +3,7 @@ export type ChatMessage = {
   receiverId: string;
   senderId: string;
   text: string;
-  timeStamp?: string;
+  timeStamp?: number;
   wasReadBy: string[];
   chatId: string;
 };

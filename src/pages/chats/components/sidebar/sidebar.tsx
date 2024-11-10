@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { ChatData } from '@shared/index';
+import { useChatsContext } from '@pages/chats/chats-context';
 import { AppDispatch, fetchChatData, RootState } from '@store/index';
 import { Card, Badge, Typography } from 'antd';
 import { useMarkChatAsRead } from './hooks';
@@ -9,12 +9,11 @@ import { useNewIncomingMessagePreviewHandler } from './hooks/use-new-incoming-me
 const { Title, Text } = Typography;
 
 export const Sidebar = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [_, setSearchParams] = useSearchParams();
   const { chatsData } = useSelector((state: RootState) => state.chat);
   const { currentUser } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
-
-  const [chats, setChats] = useState<ChatData[]>([]);
+  const { chats, setChats } = useChatsContext();
 
   useEffect(() => {
     dispatch(fetchChatData());

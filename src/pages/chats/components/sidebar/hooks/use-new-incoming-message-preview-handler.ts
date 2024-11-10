@@ -1,16 +1,14 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { useChatsContext } from '@pages/chats/chats-context';
 import { useFilterWsMessages } from '@shared/hooks';
-import { ChatData, ChatMessage } from '@shared/types';
+import { ChatMessage } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { RootState } from '@store/index';
-import { useSelector } from 'react-redux';
 
-type Args = {
-  setChats: (val: ChatData[]) => ChatData[];
-};
-
-export const useNewIncomingMessagePreviewHandler = ({ setChats }: Args) => {
+export const useNewIncomingMessagePreviewHandler = () => {
+  const { setChats } = useChatsContext();
   const [searchParams] = useSearchParams();
   const currentChatId = searchParams.get('id');
   const { currentUser } = useSelector((state: RootState) => state.user);

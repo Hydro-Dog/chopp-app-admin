@@ -20,10 +20,10 @@ export const useNewIncomingMessagePreviewHandler = () => {
         const lastMessage =
           currentChatId === item.chatId
             ? {
-                ...newMessage.payload,
+                ...newMessage?.payload,
                 wasReadBy: [...(newMessage.payload?.wasReadBy || []), currentUser?.id],
               }
-            : newMessage.payload;
+            : newMessage?.payload;
 
         return item.chatId === newMessage?.payload?.chatId ? { ...item, lastMessage } : item;
       });

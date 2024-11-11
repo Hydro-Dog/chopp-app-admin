@@ -1,15 +1,14 @@
+import { timeStamp } from 'console';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { useChatsContext } from '@pages/chats/chats-context';
+import { ChatMessage } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
-import { createWsMessage } from '@shared/utils';
 import { RootState, AppDispatch } from '@store/index';
 import { wsSend } from '@store/slices';
 import TextArea from 'antd/es/input/TextArea';
-import { timeStamp } from 'console';
-import { useChatsContext } from '@pages/chats/chats-context';
-import { ChatMessage } from '@shared/types';
 
 export const ChatInput = () => {
   const { t } = useTranslation();

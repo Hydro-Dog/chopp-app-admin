@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { TitlePage } from '@shared/components';
-import { ChatMessage, useFilterWsMessages, useThemeToken } from '@shared/index';
-import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
-import { AppDispatch, RootState } from '@store/index';
+import { useThemeToken } from '@shared/index';
+import { RootState } from '@store/index';
 import { Card, Form, Splitter, Typography } from 'antd';
 import classNames from 'classnames';
+import { useChatsContext } from './chats-context';
+import { ChatInput, Sidebar } from './components/index';
 import {
   useClearChatMessagesStoreOnLeave,
   useFetchMessages,
   useNewIncomingMessageChatHandler,
   useReadAllChatMessages,
-} from './components/hooks';
-import { ChatInput, Sidebar } from './components/index';
-import { useChatsContext } from './chats-context';
+} from '../../shared/hooks/index';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -52,7 +51,6 @@ export const ChatsPage = () => {
 
   const [searchParams] = useSearchParams();
   const currentChatId = searchParams.get('id');
-
 
   return (
     <TitlePage title={t('Chat')}>

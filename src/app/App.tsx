@@ -24,6 +24,7 @@ import 'dayjs/locale/ru';
 
 import './index.css';
 import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
+import { ChatsContextProvider } from '@pages/chats/chats-context';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -113,7 +114,9 @@ export const App = () => {
                           onChange={() => setLang((prev) => (prev === LANG.EN ? LANG.RU : LANG.EN))}
                         />
                       </div> */}
-              <RouterProvider router={router} />
+              <ChatsContextProvider>
+                <RouterProvider router={router} />
+              </ChatsContextProvider>
             </div>
             <NotificationCtx />
           </NotificationContextProvider>

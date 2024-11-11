@@ -35,11 +35,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.CHATS,
-        element: (
-          <ChatsContextProvider>
-            <ChatsPage />
-          </ChatsContextProvider>
-        ),
+        element: <ChatsPage />,
       },
       {
         path: ROUTES.ACTIVITY,

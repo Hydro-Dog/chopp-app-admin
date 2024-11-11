@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ChatData, ErrorResponse } from '@shared/index';
+import { ChatData, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
 import { api } from '@store/middleware';
@@ -33,6 +33,24 @@ export const fetchChatData = createAsyncThunk<ChatData[], void, { rejectValue: E
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
         return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      }
+    }
+  },
+);
+
+export const fetchChatStats = createAsyncThunk<ChatStats, string, { rejectValue: ErrorResponse }>(
+  '/fetchChatStats',
+  async (chatId, thunkAPI) => {
+    try {
+      const response = await api.get<ChatStats>(`/chats/${chatId}/stats`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+      } else {
+        return thunkAPI.rejectWithValue({
+          errorMessage: 'An unknown error occurred',
+        });
       }
     }
   },

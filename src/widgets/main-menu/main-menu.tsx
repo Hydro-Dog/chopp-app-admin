@@ -22,7 +22,9 @@ import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types/fetch-status';
 import { Badge, Layout, Menu, Tooltip, Typography } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
-import { useGetCurrentRoot } from './hooks';
+import { useGetCurrentRoot } from './hooks/index';
+import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
+import { useChatsContext } from '@pages/chats/chats-context';
 
 const { Sider } = Layout;
 const { Text } = Typography;
@@ -79,16 +81,10 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     }
   }, [dispatch, wsConnected]);
 
-  const getChatsStats = () => {
-    const unread = chatsData?.payload?.filter((item) => item.hasUnreadMessages).length || 0;
-    const total = chatsData?.payload?.length || 0;
+  useFetchChatStats()
+  const { chatsStats } = useChatsContext();
 
-    return {
-      total,
-      read: total - unread,
-      unread,
-    };
-  };
+  console.log('chatsStats: ', chatsStats)
 
   const menuItems = [
     {
@@ -114,10 +110,10 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       key: ROUTES.CHATS,
       icon: <ChatRoundedIcon />,
       label: (
-        <Tooltip title={`Total: ${getChatsStats().total}; Unread: ${getChatsStats().unread}`}>
+        <Tooltip title={JSON.stringify(chatsStats)}>
           <div className="flex items-center gap-1">
             <div>{t('CHATS')}</div>
-            <Badge size="default" count={getChatsStats().unread} />
+            <Badge size="default" count={chatsStats.unRead} />
           </div>
         </Tooltip>
       ),

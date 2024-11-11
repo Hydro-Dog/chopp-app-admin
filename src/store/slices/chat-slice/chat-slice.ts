@@ -1,17 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ChatData, ErrorResponse } from '@shared/index';
+import { ChatData, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
-import { fetchChatMessages, fetchChatData } from './actions';
+import { fetchChatMessages, fetchChatData, fetchChatStats } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ChatState = {
-  chatMessages: WsMessage<ChatMessage>[] | null;
+  chatMessages: ChatMessage[] | null;
   fetchChatMessagesStatus: FETCH_STATUS;
   fetchChatMessagesError: ErrorResponse | null;
   chatsData: ChatData[] | null;
   fetchChatsStatus: FETCH_STATUS;
   fetchChatError: ErrorResponse | null;
+  chatsStats: ChatStats | null;
+  fetchChatsStatsStatus: FETCH_STATUS;
+  fetchChatStatsError: ErrorResponse | null;
 };
 
 const initialState: ChatState = {
@@ -21,6 +24,9 @@ const initialState: ChatState = {
   chatsData: null,
   fetchChatsStatus: FETCH_STATUS.IDLE,
   fetchChatError: null,
+  chatsStats: null,
+  fetchChatsStatsStatus: FETCH_STATUS.IDLE,
+  fetchChatStatsError: null,
 };
 
 export const chatSlice = createSlice({
@@ -61,6 +67,19 @@ export const chatSlice = createSlice({
       .addCase(fetchChatData.rejected, (state, action) => {
         state.fetchChatsStatus = FETCH_STATUS.ERROR;
         state.fetchChatError = action.payload ?? {
+          errorMessage: 'Failed to fetch chat information',
+        };
+      })
+      .addCase(fetchChatStats.pending, (state) => {
+        state.fetchChatsStatsStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(fetchChatStats.fulfilled, (state, action: PayloadAction<ChatStats>) => {
+        state.fetchChatsStatsStatus = FETCH_STATUS.SUCCESS;
+        state.chatsStats = action.payload;
+      })
+      .addCase(fetchChatStats.rejected, (state, action) => {
+        state.fetchChatsStatsStatus = FETCH_STATUS.ERROR;
+        state.fetchChatStatsError = action.payload ?? {
           errorMessage: 'Failed to fetch chat information',
         };
       });

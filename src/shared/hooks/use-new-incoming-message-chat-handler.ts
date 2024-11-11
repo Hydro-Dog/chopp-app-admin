@@ -15,5 +15,6 @@ export const useNewIncomingMessageChatHandler = () => {
     if (currentChatId === newMessage?.payload?.chatId) {
       setMessages((prev) => [...prev, newMessage?.payload]);
     }
+
   }, [currentChatId, newMessage]);
 };

@@ -5,3 +5,4 @@ export * from './sorter';
 export * from './call-status-counter';
 export * from './chat-message';
 export * from './chat-data';
+export * from './chat-stats';

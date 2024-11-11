@@ -14,9 +14,7 @@ export const useReadAllChatMessages = () => {
   const { setMessages, messages } = useChatsContext();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
-  console.log('--------messages:+', messages)
   useEffect(() => {
-    console.log('READ ALL')
     if (currentChatId === messages?.[messages?.length - 1]?.chatId) {
       setMessages((prev) =>
         prev.map((item) =>
@@ -26,7 +24,7 @@ export const useReadAllChatMessages = () => {
         ),
       );
     }
-  }, [messages?.length]);
+  }, [messages?.length, messages?.[0]]);
 
   const sendMessagesRead = () => {
     if (wsConnected) {

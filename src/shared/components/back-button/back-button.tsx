@@ -2,6 +2,7 @@ import { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   style?: CSSProperties;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export const BackButton = ({ style, className }: Props) => {
+  const {t} = useTranslation()
   const navigate = useNavigate();
 
   const goBack = () => {
@@ -21,8 +23,7 @@ export const BackButton = ({ style, className }: Props) => {
       icon={<LeftOutlined />}
       className={className}
       style={{ width: 'fit-content', ...style }}>
-      {/* TODO: перевод */}
-      Назад
+      {t('BACK')}
     </Button>
   );
 };

@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
 import { CALL_STATUS, ROUTES, useTheme } from '@shared/index';
 import { TableSearchParams } from '@shared/types/table-search-params';
-import { statusMenuItems } from '@shared/utils';
+import { getChangeStatusDropdownItems, statusMenuItems } from '@shared/utils';
 import { AppDispatch, CallsTableRecord, fetchCallHistory, updateCallStatus } from '@store/index';
 import { Button, Card, Dropdown, Input, Space, Table, TableProps, Typography } from 'antd';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
@@ -43,6 +44,7 @@ export const CallsTable = ({
   columns = ['date', 'status', 'address', 'comment', 'userFullName', 'action'],
 }: Props) => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [activeRowIndex, setActiveRowIndex] = useState<number>();
@@ -120,27 +122,35 @@ export const CallsTable = ({
     debounced(search);
   }, [search]);
 
+  console.log('searchParams?.filter: ', searchParams?.filter);
+
   return (
     <div>
       <Card size="small" title={title}>
         <div className="flex  items-center justify-between mb-2">
           <div className="flex gap-2 items-center ">
-            <Typography>Статус</Typography>
+            <Typography>{t('STATUS')}</Typography>
             <Dropdown
               menu={{
-                items: getStatusMenuItems(searchParams?.filter),
+                items: getChangeStatusDropdownItems(searchParams?.filter || '').map((item) => ({
+                  ...item,
+                  label: t(`ACTIVITY_STATUS.${item.label}`),
+                })),
                 onClick: (value) => {
-                  console.log('value: ', value);
                   onFilterChange(value.key);
                 },
               }}>
               <a>
                 <Space>
-                  {
-                    getStatusMenuItems(searchParams?.filter).find(
-                      (item) => item.key === searchParams?.filter,
-                    )?.label
-                  }
+                  {searchParams?.filter === 'all'
+                    ? t('ALL')
+                    : t(
+                        `ACTIVITY_STATUS.${
+                          getChangeStatusDropdownItems(searchParams?.filter || '').find(
+                            (item) => item.key === searchParams?.filter,
+                          )?.label
+                        }`,
+                      )}
                   <DownOutlined />
                 </Space>
               </a>
@@ -152,7 +162,7 @@ export const CallsTable = ({
               onClick={() => {
                 onRefresh();
               }}>
-              Refresh
+              {t('REFRESH')}
             </Button>
           )}
           <Button
@@ -160,13 +170,12 @@ export const CallsTable = ({
               onReset();
               setSearch('');
             }}>
-            onReset
+            {t('RESET')}
           </Button>
         </div>
         <Input.Search
-          // TODO: перевод
           value={search}
-          placeholder="Поиск"
+          placeholder={t('SEARCH')}
           onChange={(e) => setSearch(e.target.value)}
           allowClear
           className="mb-2"

@@ -10,7 +10,6 @@ import {
 import { ROUTES } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
-import { ChatsContextProvider } from '@pages/chats/chats-context';
 
 export const router = createBrowserRouter([
   {

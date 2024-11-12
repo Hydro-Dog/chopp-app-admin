@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { CALL_STATUS, DraggableModal, getChangeStatusDropdownItems } from '@shared/index';
+import { CALL_STATUS, getChangeStatusDropdownItems, toScreamingSnakeCase } from '@shared/index';
 import { CallsTableRecord } from '@store/index';
 import { Button, Dropdown, Modal, Space, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
@@ -23,22 +24,25 @@ export const RecordDetailsModal = ({
   onCancel,
   onStatusChange,
 }: Props) => {
+  const { t } = useTranslation();
   useEffect(() => {
-    setCurrentStatusValue(currentStatus);
+    setCurrentStatusValue(currentStatus || '');
   }, [currentStatus]);
 
   const menuProps = {
-    items: getChangeStatusDropdownItems(data?.status),
+    items: getChangeStatusDropdownItems(data?.status).map((item) => ({
+      ...item,
+      label: t(`ACTIVITY_STATUS.${item.label}`),
+    })),
     onClick: ({ key }: { key: CALL_STATUS }) => setCurrentStatusValue(key),
   };
 
-  const [currentStatusValue, setCurrentStatusValue] = useState<CALL_STATUS>();
+  const [currentStatusValue, setCurrentStatusValue] = useState<CALL_STATUS>('');
 
   return (
     <Modal
       zIndex={1}
-      // TODO: перевод
-      title={`Вызов №: ${data?.id}`}
+      title={`${t('CALL')} №: ${data?.id}`}
       // @ts-ignore
       footer={null}
       open={open}
@@ -47,12 +51,12 @@ export const RecordDetailsModal = ({
       <div className="flex flex-col gap-2">
         <div>
           <div className="flex gap-1">
-            <Text strong>Status: </Text>
+            <Text strong>{t('STATUS')}: </Text>
             {/* @ts-ignore */}
             <Dropdown menu={menuProps}>
               <a>
                 <Space>
-                  {currentStatusValue}
+                  {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(currentStatusValue)}`)}
                   <DownOutlined value={currentStatusValue} />
                 </Space>
               </a>
@@ -61,7 +65,7 @@ export const RecordDetailsModal = ({
           <Button
             disabled={currentStatusValue === data?.status}
             onClick={() => onStatusChange(currentStatusValue)}>
-            Изменить статус
+            {t('CHANGE_STATUS')}
           </Button>
         </div>
         {Object.entries<string>(data || {})

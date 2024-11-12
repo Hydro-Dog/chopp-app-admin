@@ -1,4 +1,5 @@
 import { CALL_STATUS } from '@shared/enum';
+import { toScreamingSnakeCase } from './to-screaming-snake-case';
 
 export const statusMenuItems = [
   { key: CALL_STATUS.PROCESSING, label: CALL_STATUS.PROCESSING },
@@ -10,4 +11,8 @@ export const statusMenuItems = [
 ];
 
 export const getChangeStatusDropdownItems = (status?: CALL_STATUS) =>
-  statusMenuItems.map((item) => (item.key === status ? { ...item, disabled: true } : item));
+  statusMenuItems.map((item) => ({
+    ...item,
+    label: toScreamingSnakeCase(item.key),
+    disabled: item.key === status,
+  }));

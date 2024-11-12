@@ -90,8 +90,7 @@ export const UsersPage = () => {
 
   const columns: ColumnsType<User> = [
     {
-      // TODO: Перевод
-      title: t('Name'),
+      title: t('FULL_NAME'),
       dataIndex: 'fullName',
       key: 'fullName',
       sorter: true,
@@ -100,8 +99,7 @@ export const UsersPage = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      // TODO: Перевод
-      title: t('Email'),
+      title: t('EMAIL'),
       dataIndex: 'email',
       key: 'email',
       sorter: true,
@@ -109,8 +107,7 @@ export const UsersPage = () => {
       className: 'cursor-pointer',
     },
     {
-      // TODO: Перевод
-      title: t('Phone Number'),
+      title: t('PHONE_NUMBER'),
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
       sorter: true,
@@ -124,16 +121,10 @@ export const UsersPage = () => {
   }, 300);
 
   return (
-    <TitlePage title={t('Users')}>
+    <TitlePage title={t('USERS')}>
       {/* TODO: вынести структуру card + search + table в shared таблицу */}
       <Card size="small">
-        <Input.Search
-          // TODO: перевод
-          placeholder="Поиск"
-          onChange={debounced}
-          allowClear
-          className="mb-2"
-        />
+        <Input.Search placeholder={t('SEARCH')} onChange={debounced} allowClear className="mb-2" />
         <Table
           size="small"
           columns={columns}

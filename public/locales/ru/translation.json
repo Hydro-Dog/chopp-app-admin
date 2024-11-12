@@ -38,5 +38,40 @@
     "PASSWORD_TOO_SHORT": "Минимум {{length}}",
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле"
-  }
+  },
+  "NAME": "Имя",
+  "FULL_NAME": "ФИО", 
+  "USERS": "Пользователи",
+  "SEARCH": "Поиск",
+  "STATUS": "Статус",
+  "CHANGE_STATUS": "Изменить статус",
+  "CALL": "Вызов",
+  "REFRESH": "Обновить",
+  "RESET": "Сбросить",
+  "BACK": "Назад",
+  "ACTIVITY": "Вызовы",
+  "DATE": "Дата",
+  "COMMENT": "Комментарий", 
+  "USER": "Пользователь",
+  "ACTION": "Действие",
+  "ADDRESS": "Адрес",
+  "ALL": "Все",
+  "CHATS": "Чаты",
+  "CHAT": "Чат",
+  "ACTIVITY_STATUS": {
+    "PROCESSING": "В обработке",
+    "ACCEPTED": "Принят",
+    "ON_THE_WAY": "В пути",
+    "ON_THE_SPOT": "На месте",
+    "COMPLETED": "Завершено",
+    "CANCELED": "Отменено"
+  },
+  "NEW_MESSAGE": "Новое сообщение"
+
+
+
+
+
+
+
 }

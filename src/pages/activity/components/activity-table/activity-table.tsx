@@ -63,14 +63,7 @@ export const ActivityTable = () => {
     });
   }, [dispatch]);
 
-  console.log('newActivityMessage: ', newActivityMessage);
-  console.log('activityMessageCounter: ', totalActivityMessageCounter);
-
   useEffect(() => {
-    // if (newActivityMessage) {
-    //   setTotalActivityMessageCounter((val) => val + 1);
-    // }
-
     if (messages.length > totalActivityMessageCounter) {
       setRefreshDisabled(false);
       setTotalActivityMessageCounter(messages.length);
@@ -152,7 +145,7 @@ export const ActivityTable = () => {
   };
 
   return (
-    <TitlePage title={t('Activity')}>
+    <TitlePage title={t('ACTIVITY')}>
       <CallsTable
         data={callHistory?.items}
         searchParams={{ pagination, sorter, search, filter }}

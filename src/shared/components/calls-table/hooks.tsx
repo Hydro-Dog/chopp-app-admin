@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
 import { CALL_STATUS } from '@shared/enum';
 import { TableSearchParams } from '@shared/types/table-search-params';
-import { truncateText, getChangeStatusDropdownItems } from '@shared/utils';
+import { getChangeStatusDropdownItems, truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/slices';
 import { Tooltip, Dropdown } from 'antd';
 import dayjs from 'dayjs';
@@ -23,9 +24,10 @@ export const useGetColumns = ({
   setChangeStatusModalData,
   openChangeStatusModal,
 }: Args) => {
+  const { t } = useTranslation();
   return [
     {
-      title: 'Date',
+      title: t('DATE'),
       dataIndex: 'date',
       key: 'date',
       sorter: true,
@@ -38,7 +40,7 @@ export const useGetColumns = ({
       ),
     },
     {
-      title: 'Status',
+      title: t('STATUS'),
       dataIndex: 'status',
       key: 'status',
       sorter: true,
@@ -56,7 +58,7 @@ export const useGetColumns = ({
       ),
     },
     {
-      title: 'Address',
+      title: t('ADDRESS'),
       dataIndex: 'address',
       key: 'address',
       sortOrder: searchParams?.sorter.field === 'address' ? searchParams?.sorter.order : null,
@@ -74,7 +76,7 @@ export const useGetColumns = ({
       ),
     },
     {
-      title: 'Comment',
+      title: t('COMMENT'),
       dataIndex: 'comment',
       key: 'comment',
       sorter: true,
@@ -88,7 +90,7 @@ export const useGetColumns = ({
       ),
     },
     {
-      title: 'User',
+      title: t('USER'),
       dataIndex: 'userFullName',
       key: 'userFullName',
       sorter: true,
@@ -100,20 +102,24 @@ export const useGetColumns = ({
       ),
     },
     {
-      title: 'Action',
+      title: t('ACTION'),
       key: 'action',
       render: (text: string, record: CallsTableRecord) => (
         <Dropdown
           trigger={['click']}
           menu={{
-            items: getChangeStatusDropdownItems(record.status),
+            items: getChangeStatusDropdownItems(record.status).map((item) => ({
+              ...item,
+              label: t(`ACTIVITY_STATUS.${item.label}`),
+            })),
             onClick: (value) => {
               setChangeStatusModalData({ item: record, newStatus: value.key as CALL_STATUS });
               openChangeStatusModal();
             },
           }}>
           <a>
-            Изменить статус <DownOutlined />
+            {t('CHANGE_STATUS')}
+            <DownOutlined />
           </a>
         </Dropdown>
       ),

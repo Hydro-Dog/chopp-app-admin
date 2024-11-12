@@ -27,7 +27,7 @@ export const Sidebar = () => {
   useNewIncomingMessagePreviewHandler({ setChats });
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 p-1">
       {chats?.map(
         (item) =>
           item?.lastMessage && (

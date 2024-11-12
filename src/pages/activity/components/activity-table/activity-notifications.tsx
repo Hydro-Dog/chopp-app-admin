@@ -6,7 +6,7 @@ import {
 } from '@shared/components/calls-table/components';
 import { ChangeStatusType } from '@shared/components/calls-table/types';
 import { useNotificationContext } from '@shared/context';
-import { CALL_STATUS } from '@shared/enum';
+import { ACTIVITY_STATUS } from '@shared/enum';
 import { useFilterWsMessages, useConnection } from '@shared/hooks';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { createWsMessage } from '@shared/utils';
@@ -72,7 +72,7 @@ export const ActivityNotifications = () => {
     );
   }, [dispatch]);
 
-  const updateStatus = (id = '', newStatus?: CALL_STATUS) => {
+  const updateStatus = (id = '', newStatus?: ACTIVITY_STATUS) => {
     if (id && newStatus) {
       dispatch(updateCallStatus({ id, newStatus })).then(() => {
         // TODO: Проблема - как обновть таблицу после отправки updateCallStatus, когда мы делаем это из ActivityNotifications

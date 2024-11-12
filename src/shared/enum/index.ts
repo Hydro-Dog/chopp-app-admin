@@ -1,2 +1,3 @@
 export * from './routes';
-export * from './call-status';
+export * from './activity-status';
+export * from './activity-colors';

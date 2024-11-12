@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { CALL_STATUS, getChangeStatusDropdownItems, toScreamingSnakeCase } from '@shared/index';
+import {
+  ACTIVITY_COLORS,
+  ACTIVITY_STATUS,
+  getChangeStatusDropdownItems,
+  toScreamingSnakeCase,
+} from '@shared/index';
 import { CallsTableRecord } from '@store/index';
-import { Button, Dropdown, Modal, Space, Typography } from 'antd';
+import { Button, Dropdown, Modal, Space, Tag, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
@@ -10,10 +15,10 @@ const { Text } = Typography;
 type Props = {
   data?: CallsTableRecord;
   open: boolean;
-  currentStatus?: CALL_STATUS;
+  currentStatus?: ACTIVITY_STATUS;
   onOk: () => void;
   onCancel: () => void;
-  onStatusChange: (newStatus?: CALL_STATUS) => void;
+  onStatusChange: (newStatus?: ACTIVITY_STATUS) => void;
 };
 
 export const RecordDetailsModal = ({
@@ -32,12 +37,22 @@ export const RecordDetailsModal = ({
   const menuProps = {
     items: getChangeStatusDropdownItems(data?.status).map((item) => ({
       ...item,
-      label: t(`ACTIVITY_STATUS.${item.label}`),
+      label: (
+        <Tag
+          color={ACTIVITY_COLORS[item.key]}
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+          {t(`ACTIVITY_STATUS.${item.label}`)}
+        </Tag>
+      ),
     })),
-    onClick: ({ key }: { key: CALL_STATUS }) => setCurrentStatusValue(key),
+    onClick: ({ key }: { key: ACTIVITY_STATUS }) => setCurrentStatusValue(key),
   };
 
-  const [currentStatusValue, setCurrentStatusValue] = useState<CALL_STATUS>('');
+  const [currentStatusValue, setCurrentStatusValue] = useState<ACTIVITY_STATUS>('');
 
   return (
     <Modal

@@ -1,7 +1,7 @@
-import { CALL_STATUS } from '@shared/enum';
+import { ACTIVITY_STATUS } from '@shared/enum';
 import { CallsTableRecord } from '@store/slices';
 
 export type ChangeStatusType = {
   item: CallsTableRecord;
-  newStatus: CALL_STATUS;
+  newStatus: ACTIVITY_STATUS;
 };

@@ -64,7 +64,8 @@
     "ON_THE_WAY": "В пути",
     "ON_THE_SPOT": "На месте",
     "COMPLETED": "Завершено",
-    "CANCELED": "Отменено"
+    "CANCELED": "Отменено",
+    "ALL": "Все"
   },
   "NEW_MESSAGE": "Новое сообщение"
 

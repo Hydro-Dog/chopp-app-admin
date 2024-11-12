@@ -1,4 +1,4 @@
-export enum CALL_STATUS {
+export enum ACTIVITY_STATUS {
   IDLE = 'idle',
   PROCESSING = 'processing',
   ACCEPTED = 'accepted',

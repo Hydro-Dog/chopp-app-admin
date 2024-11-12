@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { CALL_STATUS } from '@shared/enum';
+import { ACTIVITY_COLORS, ACTIVITY_STATUS } from '@shared/enum';
 import { TableSearchParams } from '@shared/types/table-search-params';
-import { getChangeStatusDropdownItems, truncateText } from '@shared/utils';
+import { getChangeStatusDropdownItems, toScreamingSnakeCase, truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/slices';
-import { Tooltip, Dropdown } from 'antd';
+import { Tooltip, Dropdown, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { ChangeStatusType } from './types';
 
@@ -25,6 +25,7 @@ export const useGetColumns = ({
   openChangeStatusModal,
 }: Args) => {
   const { t } = useTranslation();
+
   return [
     {
       title: t('DATE'),
@@ -49,11 +50,12 @@ export const useGetColumns = ({
       onClick: onRowClick,
       render: (text: string, record: CallsTableRecord, index: number) => (
         <Tooltip title={text}>
-          <div
+          <Tag
+            color={ACTIVITY_COLORS[text]}
             onClick={() => onRowClick(record, index)}
             style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </div>
+            {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(text)}`)}
+          </Tag>
         </Tooltip>
       ),
     },
@@ -110,10 +112,16 @@ export const useGetColumns = ({
           menu={{
             items: getChangeStatusDropdownItems(record.status).map((item) => ({
               ...item,
-              label: t(`ACTIVITY_STATUS.${item.label}`),
+              label: (
+                <Tag
+                  color={ACTIVITY_COLORS[item.key]}
+                  style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(item.key)}`)}
+                </Tag>
+              ),
             })),
             onClick: (value) => {
-              setChangeStatusModalData({ item: record, newStatus: value.key as CALL_STATUS });
+              setChangeStatusModalData({ item: record, newStatus: value.key as ACTIVITY_STATUS });
               openChangeStatusModal();
             },
           }}>

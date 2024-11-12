@@ -4,17 +4,32 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
-import { CALL_STATUS, ROUTES, useTheme } from '@shared/index';
+import { ACTIVITY_COLORS, ACTIVITY_STATUS, ROUTES, useTheme } from '@shared/index';
 import { TableSearchParams } from '@shared/types/table-search-params';
-import { getChangeStatusDropdownItems, statusMenuItems } from '@shared/utils';
+import { statusMenuItems, toScreamingSnakeCase } from '@shared/utils';
 import { AppDispatch, CallsTableRecord, fetchCallHistory, updateCallStatus } from '@store/index';
-import { Button, Card, Dropdown, Input, Space, Table, TableProps, Typography } from 'antd';
+import { Button, Card, Dropdown, Input, Space, Table, TableProps, Tag, Typography } from 'antd';
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { useBoolean, useDebounceCallback } from 'usehooks-ts';
 import { RecordDetailsModal } from './components';
 import { ConfirmChangeStatusModal } from './components/confirm-change-status-modal';
 import { useGetColumns } from './hooks';
 import { ChangeStatusType } from './types';
+
+export const useFetFilterItems = (status?: ACTIVITY_STATUS) => {
+  const { t } = useTranslation();
+  return [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) => ({
+    ...item,
+    label: (
+      <Tag
+        color={ACTIVITY_COLORS[item.key]}
+        style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(item.key)}`)}
+      </Tag>
+    ),
+    disabled: item.key === status,
+  }));
+};
 
 type Props = {
   data?: CallsTableRecord[];
@@ -83,7 +98,7 @@ export const CallsTable = ({
 
   const visibleColumns = defaultColumns.filter((item) => columns.includes(item.key));
 
-  const updateStatus = (id = '', newStatus?: CALL_STATUS) => {
+  const updateStatus = (id = '', newStatus?: ACTIVITY_STATUS) => {
     if (id && newStatus) {
       dispatch(updateCallStatus({ id, newStatus })).then(() =>
         dispatch(
@@ -104,10 +119,10 @@ export const CallsTable = ({
     }
   };
 
-  const getStatusMenuItems = (currentFilter?: string) =>
-    [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) =>
-      item.key === currentFilter ? { ...item, disabled: true } : item,
-    );
+  // const getStatusMenuItems = (currentFilter?: string) =>
+  //   [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) =>
+  //     item.key === currentFilter ? { ...item, disabled: true } : item,
+  //   );
 
   //TODO: вынести в отдельнй хук? логику связанную с полем поиска
   const debounced = useDebounceCallback((value) => {
@@ -122,36 +137,29 @@ export const CallsTable = ({
     debounced(search);
   }, [search]);
 
-  console.log('searchParams?.filter: ', searchParams?.filter);
-
   return (
     <div>
       <Card size="small" title={title}>
         <div className="flex  items-center justify-between mb-2">
-          <div className="flex gap-2 items-center ">
+          <div className="flex gap-2 items-center">
             <Typography>{t('STATUS')}</Typography>
             <Dropdown
               menu={{
-                items: getChangeStatusDropdownItems(searchParams?.filter || '').map((item) => ({
-                  ...item,
-                  label: t(`ACTIVITY_STATUS.${item.label}`),
-                })),
+                items: useFetFilterItems(searchParams?.filter),
                 onClick: (value) => {
                   onFilterChange(value.key);
                 },
               }}>
               <a>
                 <Space>
-                  {searchParams?.filter === 'all'
-                    ? t('ALL')
-                    : t(
-                        `ACTIVITY_STATUS.${
-                          getChangeStatusDropdownItems(searchParams?.filter || '').find(
-                            (item) => item.key === searchParams?.filter,
-                          )?.label
-                        }`,
-                      )}
-                  <DownOutlined />
+                  <div className="flex items-center">
+                    {
+                      useFetFilterItems(searchParams?.filter).find(
+                        (item) => item.key === searchParams?.filter,
+                      )?.label
+                    }
+                    <DownOutlined />
+                  </div>
                 </Space>
               </a>
             </Dropdown>

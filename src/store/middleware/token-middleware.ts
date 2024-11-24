@@ -24,7 +24,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 403) {
       // Редирект на страницу входа при 403 ошибке
-      window.location.href = '/signin';
+      // window.location.href = '/signin';
       localStorage.removeItem('token');
     }
     return Promise.reject(error);

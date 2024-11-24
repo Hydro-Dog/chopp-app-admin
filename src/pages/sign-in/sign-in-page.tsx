@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useNotificationContext, useThemeToken } from '@shared/index';
 import {
   AppDispatch,
@@ -27,11 +26,11 @@ const useSignInFormSchema = () => {
   const { t } = useTranslation();
 
   return z.object({
-    login: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
+    email: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
     password: z
       .string()
       .min(8, { message: t('ERRORS.PASSWORD_TOO_SHORT', { length: '8 символов' }) })
-      .max(20, { message: t('ERRORS.PASSWORD_TOO_LONG') }),
+      .max(160, { message: t('ERRORS.PASSWORD_TOO_LONG') }),
   });
 };
 
@@ -102,7 +101,7 @@ export const SignInPage = () => {
           validateStatus={errors.login ? 'error' : ''}
           help={errors.login?.message}>
           <Controller
-            name="login"
+            name="email"
             control={control}
             render={({ field }) => (
               <div className="flex">

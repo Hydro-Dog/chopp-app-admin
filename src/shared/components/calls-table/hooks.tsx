@@ -87,7 +87,7 @@ export const useGetColumns = ({
       onClick: onRowClick,
       render: (text: string, record: CallsTableRecord, index: number) => (
         <Tooltip title={text}>
-          <div onClick={() => onRowClick(record, index)}>{truncateText(text, 50)}</div>
+          <div onClick={() => onRowClick(record, index)}>{truncateText(text, 40)}</div>
         </Tooltip>
       ),
     },

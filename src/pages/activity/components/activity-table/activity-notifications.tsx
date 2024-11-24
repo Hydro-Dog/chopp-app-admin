@@ -14,9 +14,11 @@ import { AppDispatch } from '@store/index';
 import { CallsTableRecord, fetchCallHistory, updateCallStatus, wsSend } from '@store/slices';
 import { Button } from 'antd';
 import { useBoolean } from 'usehooks-ts';
+import { useTranslation } from 'react-i18next';
 
 export const ActivityNotifications = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const {t} = useTranslation()
   const { openNotification, closeNotification } = useNotificationContext();
 
   const [detailsModalData, setDetailsModalData] = useState<CallsTableRecord>();
@@ -42,7 +44,7 @@ export const ActivityNotifications = () => {
       openNotification({
         type: 'info',
         key: newActivityMessage.payload?.id,
-        message: 'New Activity',
+        message: t('NEW_ACTIVITY'),
         description: (
           <div className="flex flex-row justify-between items-center">
             <div>{newActivityMessage.payload?.address}</div>
@@ -53,7 +55,7 @@ export const ActivityNotifications = () => {
                 openRecordDetailsModal();
                 closeNotification(newActivityMessage.payload?.id);
               }}>
-              Open
+              {t('OPEN')}
             </Button>
           </div>
         ),

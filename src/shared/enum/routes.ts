@@ -5,4 +5,5 @@ export enum ROUTES {
   ACTIVITY = 'activity',
   SIGN_IN = 'signin',
   REGISTER = 'register',
+  GOODS = 'goods',
 }

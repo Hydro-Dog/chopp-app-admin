@@ -22,9 +22,7 @@ export const BasicModal = ({
 }: PropsWithChildren<Props>) => {
   return (
     <Modal title={title} loading={loading} open={open} onOk={onOk} onCancel={onCancel} {...props}>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      {children}
     </Modal>
   );
 };

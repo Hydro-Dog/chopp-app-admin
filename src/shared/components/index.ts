@@ -8,3 +8,4 @@ export * from './calls-table';
 export * from './confirm-modal';
 export * from './title-page';
 export * from './main-container';
+export * from './chopp-draggable-list';

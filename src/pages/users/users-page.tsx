@@ -7,11 +7,9 @@ import { Sorter, TitlePage } from '@shared/index';
 import { Pagination } from '@shared/types';
 import { calcTableRowsNumberByScreenHeight } from '@shared/utils/calc-table-rows-number-by-screen-height';
 import { AppDispatch, FETCH_STATUS, fetchUsers, RootState, User } from '@store/index';
-import { Table, Input, Typography, Card, TablePaginationConfig, TableProps } from 'antd';
+import { Table, Input, Card, TablePaginationConfig, TableProps } from 'antd';
 import { ColumnsType, FilterValue } from 'antd/es/table/interface';
 import { useDebounceCallback, useWindowSize } from 'usehooks-ts';
-
-const { Title } = Typography;
 
 export const UsersPage = () => {
   const { t } = useTranslation();

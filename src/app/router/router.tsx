@@ -10,6 +10,7 @@ import {
 import { ROUTES } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
+import { GoodsPage } from '@pages/goods';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: <UsersPage />,
+      },
+      {
+        path: ROUTES.GOODS,
+        element: <GoodsPage />,
       },
       {
         path: ROUTES.CHATS,

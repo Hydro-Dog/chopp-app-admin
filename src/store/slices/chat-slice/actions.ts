@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ChatData, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
-import { api } from '@store/middleware';
+import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 
 export const fetchChatMessages = createAsyncThunk<
@@ -11,7 +11,7 @@ export const fetchChatMessages = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('/fetchChatMessages', async (chatId, thunkAPI) => {
   try {
-    const response = await api.get<WsMessage<ChatMessage>[]>(`/chats/${chatId}/messages`);
+    const response = await axiosPrivate.get<WsMessage<ChatMessage>[]>(`/chats/${chatId}/messages`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -26,7 +26,7 @@ export const fetchChatData = createAsyncThunk<ChatData[], void, { rejectValue: E
   '/fetchChatsPreviews',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get<ChatData[]>('/chats');
+      const response = await axiosPrivate.get<ChatData[]>('/chats');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -42,7 +42,7 @@ export const fetchChatStats = createAsyncThunk<ChatStats, string, { rejectValue:
   '/fetchChatStats',
   async (chatId, thunkAPI) => {
     try {
-      const response = await api.get<ChatStats>(`/chats/${chatId}/stats`);
+      const response = await axiosPrivate.get<ChatStats>(`/chats/${chatId}/stats`);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

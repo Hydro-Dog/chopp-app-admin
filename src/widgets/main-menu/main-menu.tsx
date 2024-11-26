@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,10 +6,11 @@ import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import StoreIcon from '@mui/icons-material/Store';
+import { useChatsContext } from '@pages/chats/chats-context';
 import { ACTIVITY_STATUS, ROUTES } from '@shared/enum';
-import { SCREEN_SIZE } from '@shared/enum/screen-size';
+import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
 import {
-  ChatMessage,
   ChatData,
   createWsMessage,
   useFilterWsMessages,
@@ -23,8 +24,6 @@ import { FETCH_STATUS } from '@store/types/fetch-status';
 import { Badge, Layout, Menu, Tooltip, Typography } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetCurrentRoot } from './hooks/index';
-import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
-import { useChatsContext } from '@pages/chats/chats-context';
 
 const { Sider } = Layout;
 const { Text } = Typography;
@@ -81,12 +80,18 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     }
   }, [dispatch, wsConnected]);
 
-  useFetchChatStats()
+  useFetchChatStats();
   const { chatsStats } = useChatsContext();
 
-  console.log('chatsStats: ', chatsStats)
+  console.log('chatsStats: ', chatsStats);
 
   const menuItems = [
+    {
+      key: ROUTES.GOODS,
+      icon: <StoreIcon />,
+      label: t('GOODS'),
+      onClick: () => onMenuItemClick(ROUTES.GOODS),
+    },
     {
       key: '',
       icon: <GroupRoundedIcon />,

@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { LeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useTranslation } from 'react-i18next';
 
 type Props = {
   style?: CSSProperties;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const BackButton = ({ style, className }: Props) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const goBack = () => {

@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useState } from 'react';
 import { initReactI18next } from 'react-i18next';
 import { Provider as StoreProvider, useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
+import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
+import { ChatsContextProvider } from '@pages/chats/chats-context';
 import {
   useNotification,
   useTheme,
@@ -11,6 +13,7 @@ import {
   NotificationContextProvider,
 } from '@shared/index';
 import { AppDispatch, fetchCurrentUser, store, wsConnect, wsDisconnect } from '@store/index';
+import { useAxiosInterceptors } from '@store/middleware';
 import { ConfigProvider, Switch, theme as antTheme } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import ruRU from 'antd/lib/locale/ru_RU';
@@ -23,8 +26,6 @@ import { router } from './router/router';
 import 'dayjs/locale/ru';
 
 import './index.css';
-import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
-import { ChatsContextProvider } from '@pages/chats/chats-context';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -52,10 +53,14 @@ export const AudioLevelContext = createContext<any>(null);
 export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   const dispatch = useDispatch<AppDispatch>();
 
+  useAxiosInterceptors();
+
   // @ts-ignore
   useEffect(() => {
     // @ts-ignore
     if (localStorage.getItem('accessToken')) {
+      dispatch(fetchCurrentUser());
+      dispatch(fetchCurrentUser());
       dispatch(fetchCurrentUser());
 
       dispatch(

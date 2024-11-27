@@ -55,3 +55,19 @@ export const updateCategories = createAsyncThunk<
     }
   }
 });
+
+export const deleteCategory = createAsyncThunk<Category[], string, { rejectValue: ErrorResponse }>(
+  'goods/deleteCategory',
+  async (id, thunkAPI) => {
+    try {
+      const response = await axiosPrivate.delete<Category[]>(`/categories/${id}`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+      } else {
+        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      }
+    }
+  },
+);

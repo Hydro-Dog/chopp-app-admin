@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -16,24 +16,24 @@ import {
 import { List } from 'antd';
 import { ListItem } from './components/index';
 
-interface Item {
+type Item<T> = {
   id: string;
-  title: string;
   order: number;
+  title: T;
+};
+
+interface Props<T> {
+  items: Item<T>[];
+  onDragEnd: (items: Item<T>[]) => void;
+  onDeleteItem?: (val: string) => void;
 }
 
-interface Props {
-  items: Item[];
-  onDragEnd: (items: Item[]) => void;
-}
-
-const DragDropList = ({ items, onDragEnd }: Props) => {
-  console.log('items: ', items);
-  const [elements, setElements] = useState<Item[]>([]);
+export const DragDropList = <T extends ReactNode>({ items, onDragEnd, onDeleteItem }: Props<T>) => {
+  const [elements, setElements] = useState<Item<T>[]>([]);
 
   useEffect(() => {
-    const elements = [...items].sort((a, b) => a.order - b.order);
-    setElements(elements);
+    const sortedElements = [...items].sort((a, b) => a.order - b.order);
+    setElements(sortedElements);
   }, [items]);
 
   const sensors = useSensors(
@@ -48,27 +48,42 @@ const DragDropList = ({ items, onDragEnd }: Props) => {
     if (active.id !== over.id) {
       const oldIndex = elements.findIndex((item) => item.id === active.id);
       const newIndex = elements.findIndex((item) => item.id === over.id);
-      const newElements = arrayMove(elements, oldIndex, newIndex);
+      const newElements = arrayMove(elements, oldIndex, newIndex).map((item, index) => ({
+        ...item,
+        order: index,
+      }));
       setElements(newElements);
       onDragEnd(newElements);
     }
   };
 
+  const [activeCategory, setActiveCategory] = useState('')
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
-        items={elements?.map((item) => item.id)}
+        items={elements.map((item) => item.id)}
         strategy={verticalListSortingStrategy}>
         <List
           itemLayout="horizontal"
           dataSource={elements}
           renderItem={(item, index) => (
-            <ListItem key={item.id} id={item.id} index={index} item={item} />
+            <ListItem
+            onClick={(id) => {
+console.log('id: ', id)
+              setActiveCategory(id)
+            }}
+            active={activeCategory}
+              order={item.order}
+              key={item.id}
+              id={item.id}
+              index={index}
+              title={item.title}
+              onDeleteItem={onDeleteItem}
+            />
           )}
         />
       </SortableContext>
     </DndContext>
   );
 };
-
-export default DragDropList;

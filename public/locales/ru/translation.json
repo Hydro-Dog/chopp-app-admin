@@ -47,6 +47,8 @@
   "CATEGORY": "Категория",
   "ADD_CATEGORY": "Добавить категорию",
   "ADD_CATEGORY_DESCRIPTION": "",
+  "DRAG_CATEGORY_TOOLTIP_TEXT": "Перетащите, чтобы изменить порядок",
+  "DELETE_CATEGORY": "Удалить категорию",
   "SEARCH": "Поиск",
   "STATUS": "Статус",
   "CHANGE_STATUS": "Изменить статус",

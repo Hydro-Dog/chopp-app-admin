@@ -9,3 +9,5 @@ export * from './confirm-modal';
 export * from './title-page';
 export * from './main-container';
 export * from './chopp-draggable-list';
+export * from './basic-modal';
+export * from './chopp-clickable-icon';

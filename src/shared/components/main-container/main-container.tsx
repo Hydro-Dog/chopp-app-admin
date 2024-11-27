@@ -1,5 +1,11 @@
-import { PropsWithChildren } from 'react';
+import { forwardRef, PropsWithChildren } from 'react';
 
-export const MainContainer = ({ children }: PropsWithChildren) => {
-  return <div className="mx-6 my-4 h-full">{children}</div>;
-};
+export const MainContainer = forwardRef<HTMLDivElement, PropsWithChildren<object>>((props, ref) => {
+  return (
+    <div ref={ref} className="mx-6 my-4 h-full">
+      {props.children}
+    </div>
+  );
+});
+
+MainContainer.displayName = 'MainContainer';

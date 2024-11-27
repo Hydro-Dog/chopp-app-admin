@@ -1,25 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { BasicModal } from '@shared/components/basic-modal/basic-modal';
-import DragDropList from '@shared/components/chopp-draggable-list/chopp-draggable-list';
-import { TitlePage, useNotificationContext } from '@shared/index';
+import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
+import DensityMediumRoundedIcon from '@mui/icons-material/DensityMediumRounded';
+import {
+  TitlePage,
+  useNotificationContext,
+  DragDropList,
+  BasicModal,
+  useThemeToken,
+  ChoppClickableIcon,
+} from '@shared/index';
 import { AppDispatch, FETCH_STATUS, RootState } from '@store/index';
 import {
   Category,
   createCategory,
+  deleteCategory,
   fetchCategories,
   updateCategories,
 } from '@store/slices/goods-slice';
-import { Button, Card, Form, Input, List, Skeleton } from 'antd';
+import { Button, Card, Flex, Form, Input, Skeleton, Spin, theme, Tooltip, Typography } from 'antd';
+import { Splitter } from 'antd';
 import { useBoolean, useWindowSize } from 'usehooks-ts';
 import { z } from 'zod';
 
 const { Item } = Form;
+const { Title } = Typography;
 
 const useCreateCategoryFormSchema = () => {
   const { t } = useTranslation();
@@ -31,6 +40,7 @@ const useCreateCategoryFormSchema = () => {
 
 export const GoodsPage = () => {
   const { t } = useTranslation();
+  const themeToken = useThemeToken();
   const dispatch = useDispatch<AppDispatch>();
   const {
     categories,
@@ -91,8 +101,16 @@ export const GoodsPage = () => {
   };
 
   const onCategoriesOrderChange = (newCategories: Category[]) => {
+    console.log('onCategoriesOrderChange: ', newCategories);
     dispatch(updateCategories(newCategories));
   };
+
+  const onDeleteCategory = (id: string) => {
+    console.log('onDeleteCategory: ', id);
+    dispatch(deleteCategory(id));
+  };
+
+  const flexRef = useRef(null);
 
   //TODO: сделать хук, который будет принимать список статусов и реагировать на их изменение в ошибку useHook([createCategoryStatus,fetchCategoriesStatus,... ])
   useEffect(() => {
@@ -114,15 +132,22 @@ export const GoodsPage = () => {
         message: 'Error',
         description: updateCategoriesError?.errorMessage,
       });
-    } 
+    }
   }, [openNotification, createCategoryStatus, fetchCategoriesStatus, updateCategoriesStatus]);
+
+  console.log('flexRef.current?.offsetHeight: ', flexRef.current?.offsetHeight)
 
   return (
     <>
       <TitlePage title={t('GOODS')}>
         <Card
-          title={t('CATEGORIES')}
-          extra={
+          style={{
+            height: `calc(100%)`,
+            overflow: 'scroll',
+          }}
+          styles={{ body: { padding: 0 } }}>
+          <Flex ref={flexRef} className='p-2' justify='space-between'>
+            <Title level={5}>{t('CATEGORIES')}</Title>
             <Button
               disabled={updateCategoriesStatus === FETCH_STATUS.LOADING}
               loading={updateCategoriesStatus === FETCH_STATUS.LOADING}
@@ -131,12 +156,21 @@ export const GoodsPage = () => {
               icon={<AddRoundedIcon />}>
               {t('ADD_CATEGORY')}
             </Button>
-          }>
-          {fetchCategoriesStatus === FETCH_STATUS.LOADING ? (
-            <Skeleton />
-          ) : (
-            <DragDropList items={categories || []} onDragEnd={onCategoriesOrderChange} />
-          )}
+          </Flex>
+          <Splitter>
+            <Splitter.Panel defaultSize="20%" min="10%" max="30%">
+              {fetchCategoriesStatus === FETCH_STATUS.LOADING ? (
+                <Spin size="large" />
+              ) : (
+                <DragDropList
+                  items={categories || []}
+                  onDragEnd={onCategoriesOrderChange}
+                  onDeleteItem={onDeleteCategory}
+                />
+              )}
+            </Splitter.Panel>
+            <Splitter.Panel>content</Splitter.Panel>
+          </Splitter>
         </Card>
       </TitlePage>
       <BasicModal

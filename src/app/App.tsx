@@ -60,8 +60,6 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
     // @ts-ignore
     if (localStorage.getItem('accessToken')) {
       dispatch(fetchCurrentUser());
-      dispatch(fetchCurrentUser());
-      dispatch(fetchCurrentUser());
 
       dispatch(
         wsConnect({

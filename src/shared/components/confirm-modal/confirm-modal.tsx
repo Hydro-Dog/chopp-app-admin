@@ -1,11 +1,16 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
+import { ButtonColorType, ButtonVariantType } from 'antd/es/button';
 
 type Props = {
   open: boolean;
   title?: ReactNode;
   width?: string | number;
   loading?: boolean;
+  okTitle?: string;
+  okType?: 'primary' | 'link' | 'text' | 'default' | 'dashed';
+  okColor?: ButtonColorType;
+  okVariant?: ButtonVariantType;
   onOk: () => void;
   onCancel: () => void;
 };
@@ -13,6 +18,10 @@ type Props = {
 export const ConfirmModal = ({
   open,
   onOk,
+  okTitle,
+  okColor,
+  okType = 'primary',
+  okVariant = 'solid',
   onCancel,
   title,
   children,
@@ -28,7 +37,13 @@ export const ConfirmModal = ({
       footer={(_: any, { OkBtn, CancelBtn }: any) => (
         <>
           <CancelBtn />
-          <OkBtn />
+          {okTitle ? (
+            <Button color="danger" type={okType} variant={okVariant} onClick={onOk}>
+              {okTitle}
+            </Button>
+          ) : (
+            <OkBtn />
+          )}
         </>
       )}>
       {children}

@@ -28,6 +28,7 @@ export const UserProfile = () => {
         {user?.fullName}
       </Title>
 
+      {/* TODO: использовать компонет AntD Descriptions */}
       <p>
         {t('EMAIL')}: {user?.email}
       </p>

@@ -1,19 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
-import DensityMediumRoundedIcon from '@mui/icons-material/DensityMediumRounded';
-import {
-  TitlePage,
-  useNotificationContext,
-  DragDropList,
-  BasicModal,
-  useThemeToken,
-  ChoppClickableIcon,
-} from '@shared/index';
+import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import { TitlePage, useNotificationContext, ChopDraggableList, BasicModal } from '@shared/index';
 import { AppDispatch, FETCH_STATUS, RootState } from '@store/index';
 import {
   Category,
@@ -22,25 +15,19 @@ import {
   fetchCategories,
   updateCategories,
 } from '@store/slices/goods-slice';
-import { Button, Card, Flex, Form, Input, Skeleton, Spin, theme, Tooltip, Typography } from 'antd';
+import { Button, Card, Flex, Form, Input, Spin, Tooltip, Typography } from 'antd';
 import { Splitter } from 'antd';
-import { useBoolean, useWindowSize } from 'usehooks-ts';
+import { useBoolean } from 'usehooks-ts';
 import { z } from 'zod';
+import { useCreateCategoryFormSchema } from './components/sidebar/hooks';
+import { Sidebar } from './components';
 
 const { Item } = Form;
 const { Title } = Typography;
 
-const useCreateCategoryFormSchema = () => {
-  const { t } = useTranslation();
-
-  return z.object({
-    category: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
-  });
-};
-
 export const GoodsPage = () => {
   const { t } = useTranslation();
-  const themeToken = useThemeToken();
+  // const themeToken = useThemeToken();
   const dispatch = useDispatch<AppDispatch>();
   const {
     categories,
@@ -51,7 +38,6 @@ export const GoodsPage = () => {
     updateCategoriesStatus,
     updateCategoriesError,
   } = useSelector((state: RootState) => state.goods);
-  const { height = 0 } = useWindowSize();
   const { openNotification } = useNotificationContext();
 
   const {
@@ -60,9 +46,9 @@ export const GoodsPage = () => {
     setFalse: closeCreateCategoryModal,
   } = useBoolean();
 
-  const onCreateCategory = () => {
-    closeCreateCategoryModal();
-  };
+  // const onCreateCategory = () => {
+  //   closeCreateCategoryModal();
+  // };
 
   const createCategoryFormSchema = useCreateCategoryFormSchema();
   type CreateCategoryFormType = z.infer<typeof createCategoryFormSchema>;
@@ -113,87 +99,67 @@ export const GoodsPage = () => {
   const flexRef = useRef(null);
 
   //TODO: сделать хук, который будет принимать список статусов и реагировать на их изменение в ошибку useHook([createCategoryStatus,fetchCategoriesStatus,... ])
-  useEffect(() => {
-    if (createCategoryStatus === FETCH_STATUS.ERROR) {
-      openNotification({
-        type: 'error',
-        message: 'Error',
-        description: createCategoryError?.errorMessage,
-      });
-    } else if (fetchCategoriesStatus === FETCH_STATUS.ERROR) {
-      openNotification({
-        type: 'error',
-        message: 'Error',
-        description: fetchCategoriesError?.errorMessage,
-      });
-    } else if (updateCategoriesStatus === FETCH_STATUS.ERROR) {
-      openNotification({
-        type: 'error',
-        message: 'Error',
-        description: updateCategoriesError?.errorMessage,
-      });
-    }
-  }, [openNotification, createCategoryStatus, fetchCategoriesStatus, updateCategoriesStatus]);
-
-  console.log('flexRef.current?.offsetHeight: ', flexRef.current?.offsetHeight)
+  // useEffect(() => {
+  //   if (createCategoryStatus === FETCH_STATUS.ERROR) {
+  //     openNotification({
+  //       type: 'error',
+  //       message: 'Error',
+  //       description: createCategoryError?.errorMessage,
+  //     });
+  //   } else if (fetchCategoriesStatus === FETCH_STATUS.ERROR) {
+  //     openNotification({
+  //       type: 'error',
+  //       message: 'Error',
+  //       description: fetchCategoriesError?.errorMessage,
+  //     });
+  //   } else if (updateCategoriesStatus === FETCH_STATUS.ERROR) {
+  //     openNotification({
+  //       type: 'error',
+  //       message: 'Error',
+  //       description: updateCategoriesError?.errorMessage,
+  //     });
+  //   }
+  // }, [openNotification, createCategoryStatus, fetchCategoriesStatus, updateCategoriesStatus]);
 
   return (
     <>
       <TitlePage title={t('GOODS')}>
-        <Card
-          style={{
-            height: `calc(100%)`,
-            overflow: 'scroll',
-          }}
-          styles={{ body: { padding: 0 } }}>
-          <Flex ref={flexRef} className='p-2' justify='space-between'>
-            <Title level={5}>{t('CATEGORIES')}</Title>
-            <Button
-              disabled={updateCategoriesStatus === FETCH_STATUS.LOADING}
-              loading={updateCategoriesStatus === FETCH_STATUS.LOADING}
-              onClick={openCreateCategoryModal}
-              type="primary"
-              icon={<AddRoundedIcon />}>
-              {t('ADD_CATEGORY')}
-            </Button>
-          </Flex>
-          <Splitter>
-            <Splitter.Panel defaultSize="20%" min="10%" max="30%">
-              {fetchCategoriesStatus === FETCH_STATUS.LOADING ? (
-                <Spin size="large" />
-              ) : (
-                <DragDropList
-                  items={categories || []}
-                  onDragEnd={onCategoriesOrderChange}
-                  onDeleteItem={onDeleteCategory}
-                />
-              )}
+        <Card className="h-full" size="small">
+          <Splitter
+            style={{
+              position: 'absolute',
+              // 48px - это два паддинга стандартного card-body
+              height: `calc(100% - 24px)`,
+              width: `calc(100% - 48px)`,
+            }}>
+            <Splitter.Panel defaultSize="20%" min="20%" max="40%">
+              <Sidebar />
             </Splitter.Panel>
-            <Splitter.Panel>content</Splitter.Panel>
+            <Splitter.Panel>
+              <>
+                <Flex align="center" justify="space-between">
+                  <Flex ref={flexRef} align="center" gap={20} className="ml-4">
+                    <StorefrontOutlinedIcon />
+                    <Title className="!m-0" level={4}>
+                      {t('GOODS')}
+                    </Title>
+                  </Flex>
+                  <Tooltip title={t('ADD_GOODS')}>
+                    <Button
+                      disabled={updateCategoriesStatus === FETCH_STATUS.LOADING}
+                      loading={updateCategoriesStatus === FETCH_STATUS.LOADING}
+                      onClick={openCreateCategoryModal}
+                      type="primary">
+                      <AddRoundedIcon />
+                    </Button>
+                  </Tooltip>
+                </Flex>
+                content
+              </>
+            </Splitter.Panel>
           </Splitter>
         </Card>
       </TitlePage>
-      <BasicModal
-        title={t('ADD_CATEGORY')}
-        open={isCreateCategoryModalOpen}
-        onOk={handleSubmit(onSubmit)}
-        onCancel={onClose}>
-        <Form labelAlign="left" labelWrap colon={false} onFinish={handleSubmit(onSubmit)}>
-          <Item<CreateCategoryFormType>
-            validateStatus={errors.category ? 'error' : ''}
-            help={errors.category?.message || t('ADD_CATEGORY_DESCRIPTION')}>
-            <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-                <div className="flex">
-                  <Input {...field} placeholder={t('CATEGORY')} />
-                </div>
-              )}
-            />
-          </Item>
-        </Form>
-      </BasicModal>
     </>
   );
 };

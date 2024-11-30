@@ -22,25 +22,22 @@ import { useThemeToken } from '@shared/hooks';
 import { List } from 'antd';
 import { ListItem } from './components/index';
 
-type Item<T> = {
+type Item = {
   id: string;
   order: number;
-  title: T;
+  title: string;
 };
 
-type Props<T> = {
-  items: Item<T>[];
-  onDragEnd: (items: Item<T>[]) => void;
+type Props = {
+  items: Item[];
+  onDragEnd: (items: Item[]) => void;
   onDeleteItem?: (val: string) => void;
+  onEditItem?: ({ id, title }: { id: string; title: string }) => void;
 };
 
-export const ChopDraggableList = <T extends ReactNode>({
-  items,
-  onDragEnd,
-  onDeleteItem,
-}: Props<T>) => {
+export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem }: Props) => {
   const themeToken = useThemeToken();
-  const [elements, setElements] = useState<Item<T>[]>([]);
+  const [elements, setElements] = useState<Item[]>([]);
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();
   const [activeCategory, setActiveCategory] = useState('');
   const [overId, setOverId] = useState<UniqueIdentifier | undefined>();
@@ -84,7 +81,7 @@ export const ChopDraggableList = <T extends ReactNode>({
     setOverId(over?.id);
   };
 
-  console.log('overId: ', overId)
+  console.log('overId: ', overId);
 
   return (
     <DndContext
@@ -109,6 +106,7 @@ export const ChopDraggableList = <T extends ReactNode>({
               index={index}
               title={item.title}
               onDeleteItem={onDeleteItem}
+              onEditItem={onEditItem}
               overId={String(overId)}
             />
           )}

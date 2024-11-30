@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
   ConfirmChangeStatusModal,
@@ -11,15 +12,14 @@ import { useFilterWsMessages, useConnection } from '@shared/hooks';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { createWsMessage } from '@shared/utils';
 import { AppDispatch } from '@store/index';
-import { CallsTableRecord, fetchCallHistory, updateCallStatus, wsSend } from '@store/slices';
+import { CallsTableRecord, updateCallStatus, wsSend } from '@store/slices';
 import { Button } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-import { useTranslation } from 'react-i18next';
 
 export const ActivityNotifications = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const {t} = useTranslation()
-  const { openNotification, closeNotification } = useNotificationContext();
+  const { t } = useTranslation();
+  const { showNotification, closeNotification } = useNotificationContext();
 
   const [detailsModalData, setDetailsModalData] = useState<CallsTableRecord>();
   const [changeStatusModalData, setChangeStatusModalData] = useState<ChangeStatusType>();
@@ -41,7 +41,7 @@ export const ActivityNotifications = () => {
 
   useEffect(() => {
     if (newActivityMessage) {
-      openNotification({
+      showNotification({
         type: 'info',
         key: newActivityMessage.payload?.id,
         message: t('NEW_ACTIVITY'),

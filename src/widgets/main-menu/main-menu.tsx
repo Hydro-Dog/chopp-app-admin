@@ -40,7 +40,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   );
   const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
 
-  const { openNotification } = useNotificationContext();
+  const { showNotification } = useNotificationContext();
 
   const onMenuItemClick = (path: string) => {
     navigate(path);
@@ -54,12 +54,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
   useEffect(() => {
     if (logoutStatus === FETCH_STATUS.ERROR) {
-      openNotification({ type: 'error', message: 'Ошибка', description: 'Неудачный логаут' });
+      showNotification({ type: 'error', message: 'Ошибка', description: 'Неудачный логаут' });
     } else if (logoutStatus === FETCH_STATUS.SUCCESS) {
       navigate(ROUTES.SIGN_IN);
       dispatch(setLogoutStatus(FETCH_STATUS.IDLE));
     }
-  }, [dispatch, logoutStatus, navigate, openNotification]);
+  }, [dispatch, logoutStatus, navigate, showNotification]);
 
   useEffect(() => {
     if (wsConnected) {

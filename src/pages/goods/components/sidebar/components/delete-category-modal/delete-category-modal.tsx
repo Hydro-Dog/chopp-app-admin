@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { ConfirmModal } from '@shared/components';
 import { Category } from '@store/slices/goods-slice';
 import { Alert, Flex, Typography } from 'antd';
-import { useTranslation } from 'react-i18next';
 
-const { Text, Link } = Typography;
+const { Text } = Typography;
 
 type Props = {
   category?: Category;

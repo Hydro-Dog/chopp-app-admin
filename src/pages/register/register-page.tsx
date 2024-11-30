@@ -35,7 +35,7 @@ type RegisterFormType = z.infer<typeof registerFormSchema>;
 export const RegisterPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { openNotification } = useNotificationContext();
+  const { showNotification } = useNotificationContext();
   const { registerUserError, registerUserStatus } = useSelector((state: RootState) => state.user);
 
   const {
@@ -62,13 +62,13 @@ export const RegisterPage = () => {
 
   useEffect(() => {
     if (registerUserStatus === 'error') {
-      openNotification({
+      showNotification({
         type: 'error',
         message: 'Error',
         description: registerUserError?.errorMessage,
       });
     }
-  }, [openNotification, registerUserStatus]);
+  }, [showNotification, registerUserStatus]);
 
   if (registerUserStatus === 'success') {
     return <RegisterOk />;

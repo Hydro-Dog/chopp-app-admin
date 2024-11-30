@@ -14,7 +14,7 @@ export const fetchCategories = createAsyncThunk<Category[], void, { rejectValue:
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
@@ -34,7 +34,7 @@ export const createCategory = createAsyncThunk<
       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
     } else {
       // Handle unexpected errors
-      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
   }
 });
@@ -51,7 +51,7 @@ export const updateCategories = createAsyncThunk<
     if (axios.isAxiosError(error) && error.response) {
       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
     } else {
-      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
   }
 });
@@ -66,8 +66,27 @@ export const deleteCategory = createAsyncThunk<Category[], string, { rejectValue
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
 );
+
+export type UpdateCategoryTitleDTO = { id: string; title: string };
+
+export const updateCategoryTitle = createAsyncThunk<
+  Category,
+  UpdateCategoryTitleDTO,
+  { rejectValue: ErrorResponse }
+>('goods/updateCategoryTitle', async ({ id, title }, thunkAPI) => {
+  try {
+    const response = await axiosPrivate.put<Category>(`categories/${id}/title`, { title });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+    } else {
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
+    }
+  }
+});

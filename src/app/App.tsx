@@ -80,8 +80,12 @@ export const App = () => {
     algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
+
+  //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
   const {
-    openNotification,
+    showNotification,
+    showInfoNotification,
+    showErrorNotification,
     closeNotification,
     closeAllNotifications,
     NotificationContext: NotificationCtx,
@@ -94,7 +98,9 @@ export const App = () => {
         <WsWrapper />
         <ConfigProvider theme={themeConfig} locale={lang === LANG.RU ? ruRU : enUS}>
           <NotificationContextProvider
-            openNotification={openNotification}
+            showNotification={showNotification}
+            showInfoNotification={showInfoNotification}
+            showErrorNotification={showErrorNotification}
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />

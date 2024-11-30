@@ -3,15 +3,19 @@ import { PropsWithChildren, createContext, useContext } from 'react';
 import { ArgsProps } from 'antd/es/notification';
 
 type NotificationContextType = {
-  openNotification: ({ type, message, description, placement, ...rest }: ArgsProps) => void;
+  showNotification: ({ type, message, description, placement, ...rest }: ArgsProps) => void;
+  showErrorNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
+  showInfoNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
   closeNotification: (key: string) => void;
   closeAllNotifications: () => void;
 };
 
 const notificationContextTypeInitialValue = {
-  openNotification: () => null,
+  showNotification: () => null,
   closeNotification: () => null,
   closeAllNotifications: () => null,
+  showErrorNotification: () => null,
+  showInfoNotification: () => null,
 };
 
 const NotificationContext = createContext<NotificationContextType>(
@@ -22,13 +26,21 @@ export const useNotificationContext = () => useContext(NotificationContext);
 
 export const NotificationContextProvider = ({
   children,
-  openNotification,
+  showNotification,
+  showErrorNotification,
+  showInfoNotification,
   closeNotification,
   closeAllNotifications,
 }: PropsWithChildren<NotificationContextType>) => {
   return (
     <NotificationContext.Provider
-      value={{ openNotification, closeNotification, closeAllNotifications }}>
+      value={{
+        showNotification,
+        closeNotification,
+        closeAllNotifications,
+        showErrorNotification,
+        showInfoNotification,
+      }}>
       {children}
     </NotificationContext.Provider>
   );

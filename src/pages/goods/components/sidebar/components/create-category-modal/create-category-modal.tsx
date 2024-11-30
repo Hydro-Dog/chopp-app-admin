@@ -8,7 +8,7 @@ import { useNotificationContext } from '@shared/context';
 import { fetchCategories, createCategory } from '@store/slices/goods-slice';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
-import { Form, Input } from 'antd';
+import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
 
@@ -25,8 +25,8 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { categories, createCategoryStatus, createCategoryError } = useSelector(
     (state: RootState) => state.goods,
   );
-  const { openNotification } = useNotificationContext();
-  const inputRef = useRef(null);
+  const { showNotification } = useNotificationContext();
+  const inputRef = useRef<InputRef>(null);
 
   const createCategoryFormSchema = useCreateCategoryFormSchema();
   type CreateCategoryFormType = z.infer<typeof createCategoryFormSchema>;
@@ -36,7 +36,7 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
     control,
     formState: { errors },
     reset,
-  } = useForm<{ category: string }>({
+  } = useForm<CreateCategoryFormType>({
     resolver: zodResolver(createCategoryFormSchema),
     reValidateMode: 'onChange',
     mode: 'onSubmit',
@@ -54,6 +54,13 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
     )
       .unwrap()
       .then(onClose)
+      .catch((error) => {
+        showNotification({
+          type: 'error',
+          message: 'Error',
+          description: error?.message,
+        });
+      });
   };
 
   const onClose = () => {
@@ -64,16 +71,6 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
-
-  useEffect(() => {
-    if (createCategoryStatus === FETCH_STATUS.ERROR) {
-      openNotification({
-        type: 'error',
-        message: 'Error',
-        description: createCategoryError?.message,
-      });
-    }
-  }, [openNotification, createCategoryStatus, createCategoryError?.message]);
 
   useEffect(() => {
     if (open) {

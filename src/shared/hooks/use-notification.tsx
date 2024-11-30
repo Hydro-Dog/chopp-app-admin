@@ -7,7 +7,7 @@ const Context = createContext({ name: 'Default' });
 export const useNotification = () => {
   const [api, contextHolder] = notification.useNotification();
 
-  const openNotification = ({ type, message, description, placement, ...rest }: ArgsProps) => {
+  const showNotification = ({ type, message, description, placement, ...rest }: ArgsProps) => {
     let notificationApiCall = null;
 
     if (type === 'error') {
@@ -28,6 +28,30 @@ export const useNotification = () => {
     });
   };
 
+  const showErrorNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
+    const notificationApiCall = api.error;
+
+    notificationApiCall!({
+      message,
+      description: <Context.Consumer>{() => description}</Context.Consumer>,
+      placement: 'bottomRight',
+      // type: 'error',
+      ...rest,
+    });
+  };
+
+  const showInfoNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
+    const notificationApiCall = api.info;
+
+    notificationApiCall!({
+      message,
+      description: <Context.Consumer>{() => description}</Context.Consumer>,
+      placement: 'bottomRight',
+      // type: 'error',
+      ...rest,
+    });
+  };
+
   const closeNotification = (key: string) => {
     api.destroy(key);
   };
@@ -37,7 +61,9 @@ export const useNotification = () => {
   };
 
   return {
-    openNotification,
+    showNotification,
+    showInfoNotification,
+    showErrorNotification,
     closeNotification,
     closeAllNotifications,
     NotificationContext: () => (

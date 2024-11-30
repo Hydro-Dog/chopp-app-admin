@@ -1,8 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ErrorResponse } from '@shared/index';
-import { createCategory, deleteCategory, fetchCategories } from './actions';
+import { createCategory, deleteCategory, fetchCategories, updateCategoryTitle } from './actions';
 import { Category } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
+import { title } from 'process';
 
 export type GoodsState = {
   categories?: Category[];
@@ -14,6 +15,8 @@ export type GoodsState = {
   updateCategoriesError: ErrorResponse | null;
   deleteCategoryStatus: FETCH_STATUS;
   deleteCategoryError: ErrorResponse | null;
+  updateCategoryTitleStatus: FETCH_STATUS;
+  updateCategoryTitleError: ErrorResponse | null;
 };
 
 const initialState: GoodsState = {
@@ -26,6 +29,8 @@ const initialState: GoodsState = {
   updateCategoriesError: null,
   deleteCategoryStatus: FETCH_STATUS.IDLE,
   deleteCategoryError: null,
+  updateCategoryTitleStatus: FETCH_STATUS.IDLE,
+  updateCategoryTitleError: null,
 };
 
 export const goodsSlice = createSlice({
@@ -44,7 +49,7 @@ export const goodsSlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.fetchCategoriesStatus = FETCH_STATUS.ERROR;
         state.fetchCategoriesError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Unknown error',
         };
       })
       .addCase(createCategory.pending, (state) => {
@@ -57,7 +62,7 @@ export const goodsSlice = createSlice({
       .addCase(createCategory.rejected, (state, action) => {
         state.createCategoryStatus = FETCH_STATUS.ERROR;
         state.createCategoryError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Unknown error',
         };
       })
       .addCase(deleteCategory.pending, (state) => {
@@ -70,7 +75,22 @@ export const goodsSlice = createSlice({
       .addCase(deleteCategory.rejected, (state, action) => {
         state.deleteCategoryStatus = FETCH_STATUS.ERROR;
         state.deleteCategoryError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Unknown error',
+        };
+      })
+      .addCase(updateCategoryTitle.pending, (state) => {
+        state.updateCategoryTitleStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(updateCategoryTitle.fulfilled, (state, action: PayloadAction<Category>) => {
+        state.updateCategoryTitleStatus = FETCH_STATUS.SUCCESS;
+        state.categories = state.categories?.map((item) =>
+          item.id === action.payload.id ? { ...item, title: action.payload.title } : item,
+        );
+      })
+      .addCase(updateCategoryTitle.rejected, (state, action) => {
+        state.updateCategoryTitleStatus = FETCH_STATUS.ERROR;
+        state.updateCategoryTitleError = action.payload ?? {
+          message: 'Unknown error',
         };
       });
   },

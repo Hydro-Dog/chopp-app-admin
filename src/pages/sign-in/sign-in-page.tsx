@@ -38,7 +38,7 @@ export const SignInPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  const { openNotification } = useNotificationContext();
+  const { showNotification } = useNotificationContext();
   const { t } = useTranslation();
   const themeToken = useThemeToken();
   const signInFormSchema = useSignInFormSchema();
@@ -74,7 +74,7 @@ export const SignInPage = () => {
 
   useEffect(() => {
     if (loginStatus === FETCH_STATUS.ERROR) {
-      openNotification({
+      showNotification({
         type: 'error',
         message: t('ERROR'),
         description: loginError?.errorMessage,
@@ -84,7 +84,7 @@ export const SignInPage = () => {
       navigate('/');
       console.log('HERE!');
     }
-  }, [dispatch, loginError?.errorMessage, loginStatus, navigate, openNotification, t]);
+  }, [dispatch, loginError?.errorMessage, loginStatus, navigate, showNotification, t]);
 
   return (
     <div className="flex w-full h-screen" style={{ background: themeToken.colorBgBase }}>

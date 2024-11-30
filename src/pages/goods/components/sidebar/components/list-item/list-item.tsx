@@ -13,6 +13,7 @@ type Props = {
   title: string;
   order: number;
   active?: string;
+  changeable: boolean;
   onDeleteItem?: (id: string) => void;
   onEditItem?: ({ id, title }: { id: string; title: string }) => void;
   onClick?: (id: string) => void;
@@ -24,6 +25,7 @@ export const ListItem = ({
   title,
   order,
   active,
+  changeable,
   onDeleteItem,
   onEditItem,
   onClick,
@@ -67,15 +69,10 @@ export const ListItem = ({
           attributes={attributes}
           listeners={listeners}
           onDeleteItem={onDeleteItem}
+          changeable={changeable}
         />
       ) : (
-        <EditView
-          setMode={setMode}
-          onChange={(title) => {
-            onEditItem?.({ title, id });
-          }}
-          value={title}
-        />
+        <EditView id={id} setMode={setMode} value={title} />
       )}
       {/* <Flex>
         <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>

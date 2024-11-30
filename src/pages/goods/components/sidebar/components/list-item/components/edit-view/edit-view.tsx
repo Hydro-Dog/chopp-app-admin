@@ -2,9 +2,13 @@ import { Dispatch, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { useNotificationContext } from '@shared/index';
+import { updateCategoryTitle } from '@store/slices/goods-slice';
+import { AppDispatch } from '@store/store';
 import { Button, Flex, Form, Input } from 'antd';
 import { Tooltip } from 'antd/lib';
 import { z } from 'zod';
@@ -13,15 +17,17 @@ import { useEditCategoryFormSchema } from './hooks';
 const { Item } = Form;
 
 type Props = {
-  onChange: (val: string) => void;
   setMode: Dispatch<SetStateAction<'edit' | 'read'>>;
   editError?: boolean;
   value: string;
+  id: string;
 };
 
-export const EditView = ({ onChange, setMode, editError, value }: Props) => {
+export const EditView = ({ setMode, value, id }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
   const editCategoryFormSchema = useEditCategoryFormSchema();
+  const { showErrorNotification } = useNotificationContext();
 
   type EditCategoryFormType = z.infer<typeof editCategoryFormSchema>;
 
@@ -40,13 +46,10 @@ export const EditView = ({ onChange, setMode, editError, value }: Props) => {
   });
 
   const onSubmit: SubmitHandler<EditCategoryFormType> = ({ title }) => {
-    onChange(title);
-    // Дождаться, пока придет актуальный статус updateCategoryTitle
-    setTimeout(() => {
-      if (!editError) {
-        setMode('read');
-      }
-    }, 100);
+    dispatch(updateCategoryTitle({ id, title }))
+      .unwrap()
+      .then(() => setMode('read'))
+      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
   };
 
   return (

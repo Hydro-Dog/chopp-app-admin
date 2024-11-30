@@ -15,6 +15,7 @@ type Props<T> = {
   attributes: any;
   listeners: any;
   setNodeRef: any;
+  changeable: boolean;
 };
 
 export const ReadView = <T extends ReactNode>({
@@ -27,6 +28,7 @@ export const ReadView = <T extends ReactNode>({
   attributes,
   listeners,
   setNodeRef,
+  changeable,
 }: Props<T>) => {
   const { t } = useTranslation();
 
@@ -34,7 +36,7 @@ export const ReadView = <T extends ReactNode>({
     <>
       <Flex>
         <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
-          {hovered ? (
+          {hovered && changeable ? (
             <Tooltip title={t('DRAG_CATEGORY_TOOLTIP_TEXT')}>
               <Button
                 shape="circle"
@@ -57,7 +59,7 @@ export const ReadView = <T extends ReactNode>({
       </Flex>
 
       <Flex gap={8}>
-        {hovered && (
+        {hovered && changeable && (
           <Tooltip title={t('EDIT_TITLE')}>
             <Button
               shape="circle"
@@ -72,7 +74,7 @@ export const ReadView = <T extends ReactNode>({
           </Tooltip>
         )}
 
-        {onDeleteItem && hovered && (
+        {onDeleteItem && hovered && changeable && (
           <Tooltip title={t('DELETE_CATEGORY')}>
             <Button
               shape="circle"

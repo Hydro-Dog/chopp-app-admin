@@ -33,9 +33,11 @@ type Props = {
   onDragEnd: (items: Item[]) => void;
   onDeleteItem?: (val: string) => void;
   onEditItem?: ({ id, title }: { id: string; title: string }) => void;
+  ListItem: JSX.Element;
+  unchangeableItems: string[]
 };
 
-export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem }: Props) => {
+export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem, ListItem, unchangeableItems }: Props) => {
   const themeToken = useThemeToken();
   const [elements, setElements] = useState<Item[]>([]);
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();
@@ -81,8 +83,6 @@ export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem }
     setOverId(over?.id);
   };
 
-  console.log('overId: ', overId);
-
   return (
     <DndContext
       sensors={sensors}
@@ -98,6 +98,7 @@ export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem }
           dataSource={elements}
           renderItem={(item, index) => (
             <ListItem
+              changeable={!unchangeableItems.includes(item.title)}
               onClick={setActiveCategory}
               active={activeCategory}
               order={item.order}

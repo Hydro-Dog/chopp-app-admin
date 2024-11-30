@@ -18,6 +18,7 @@ import { useBoolean } from 'usehooks-ts';
 import { CreateCategoryModal } from './components';
 import { DeleteCategoryModal } from './components/delete-category-modal';
 import { useNotification, useNotificationContext } from '@shared/index';
+import { ListItem } from './components/list-item';
 
 const { Title } = Typography;
 
@@ -71,13 +72,6 @@ export const Sidebar = () => {
     onCloseDeleteCategory();
   };
 
-  const onEditCategory = ({ id, title }: { id: string; title: string }) => {
-    dispatch(updateCategoryTitle({ id, title }))
-      .unwrap()
-      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
-    onCloseDeleteCategory();
-  };
-
   return (
     <>
       {fetchCategoriesStatus === FETCH_STATUS.LOADING ? (
@@ -110,10 +104,11 @@ export const Sidebar = () => {
               marginRight: '12px',
             }}>
             <ChopDraggableList
+              unchangeableItems={['Без категории']}
               items={categories || []}
               onDragEnd={onCategoriesOrderChange}
               onDeleteItem={onDeleteCategoryModalOpen}
-              onEditItem={onEditCategory}
+              ListItem={ListItem}
             />
           </div>
         </>

@@ -4,7 +4,7 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { TitlePage } from '@shared/index';
 import { Button, Card, Flex, Tooltip, Typography } from 'antd';
 import { Splitter } from 'antd';
-import { Sidebar } from './components';
+import { Main, Sidebar } from './components';
 
 const { Title } = Typography;
 
@@ -44,7 +44,7 @@ export const GoodsPage = () => {
                     </Button>
                   </Tooltip>
                 </Flex>
-                content
+                <Main />
               </>
             </Splitter.Panel>
           </Splitter>

@@ -83,8 +83,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   useFetchChatStats();
   const { chatsStats } = useChatsContext();
 
-  console.log('chatsStats: ', chatsStats);
-
   const menuItems = [
     {
       key: ROUTES.GOODS,

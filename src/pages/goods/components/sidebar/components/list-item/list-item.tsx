@@ -12,7 +12,7 @@ type Props = {
   index: number;
   title: string;
   order: number;
-  active?: string;
+  activeId?: string;
   changeable: boolean;
   onDeleteItem?: (id: string) => void;
   onEditItem?: ({ id, title }: { id: string; title: string }) => void;
@@ -24,7 +24,7 @@ export const ListItem = ({
   overId,
   title,
   order,
-  active,
+  activeId,
   changeable,
   onDeleteItem,
   onEditItem,
@@ -36,20 +36,21 @@ export const ListItem = ({
   const { attributes, listeners, setNodeRef } = useSortable({ id });
   const [isPressed, setIsPressed] = useState(false);
 
+  console.log('active: ', activeId, id);
+
   return (
     <Flex
       align="center"
       justify="space-between"
       className="px-2 rounded cursor-pointer"
       style={{
-        backgroundColor:
-          hovered || String(overId) === String(id)
-            ? themeToken.colorPrimaryBg + '60'
-            : isPressed
-              ? themeToken.colorPrimaryBg + 'cc'
-              : active === id
-                ? themeToken.colorPrimaryBg
-                : 'transparent',
+        backgroundColor: isPressed
+          ? themeToken.colorPrimaryBg + '90'
+          : String(activeId) === String(id)
+            ? themeToken.colorPrimaryBg
+            : hovered || String(overId) === String(id)
+              ? themeToken.colorPrimaryBg + '60'
+              : 'transparent',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -74,65 +75,6 @@ export const ListItem = ({
       ) : (
         <EditView id={id} setMode={setMode} value={title} />
       )}
-      {/* <Flex>
-        <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
-          {hovered ? (
-            <Tooltip mouseEnterDelay={1} placement="right" title={t('DRAG_CATEGORY_TOOLTIP_TEXT')}>
-              <Button
-                shape="circle"
-                variant="filled"
-                type="text"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}>
-                <HeightRoundedIcon />
-              </Button>
-            </Tooltip>
-          ) : (
-            <div className="w-8" />
-          )}
-        </List.Item>
-
-        <div className="p-4 cursor-pointer whitespace-nowrap">
-          {order + 1}. {title}
-        </div>
-      </Flex>
-
-      <Flex gap={8}>
-        {hovered && (
-          // TODO: Добавить на удаление категорию модалку "Вы уверены что хотите удалить категорию?
-          // Товары из этой категории попадут в раздел Без Категории"
-          <Tooltip title={t('DELETE_CATEGORY')}>
-            <Button
-              shape="circle"
-              variant="filled"
-              type="text"
-              onClick={(e) => {
-                e.stopPropagation();
-                setMode('edit');
-              }}>
-              <ModeEditRoundedIcon />
-            </Button>
-          </Tooltip>
-        )}
-
-        {onDeleteItem && hovered && (
-          // TODO: Добавить на удаление категорию модалку "Вы уверены что хотите удалить категорию?
-          // Товары из этой категории попадут в раздел Без Категории"
-          <Tooltip title={t('DELETE_CATEGORY')}>
-            <Button
-              shape="circle"
-              color="danger"
-              variant="filled"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteItem(id);
-              }}>
-              <DeleteForeverRoundedIcon />
-            </Button>
-          </Tooltip>
-        )}
-      </Flex> */}
     </Flex>
   );
 };

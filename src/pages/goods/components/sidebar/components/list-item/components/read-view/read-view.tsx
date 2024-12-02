@@ -35,26 +35,30 @@ export const ReadView = <T extends ReactNode>({
   return (
     <>
       <Flex>
-        <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
-          {hovered && changeable ? (
-            <Tooltip title={t('DRAG_CATEGORY_TOOLTIP_TEXT')}>
-              <Button
-                shape="circle"
-                variant="filled"
-                type="text"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}>
-                <HeightRoundedIcon />
-              </Button>
-            </Tooltip>
-          ) : (
-            <div className="w-8" />
-          )}
-        </List.Item>
+        {changeable ? (
+          <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
+            {hovered ? (
+              <Tooltip title={t('DRAG_CATEGORY_TOOLTIP_TEXT')}>
+                <Button
+                  shape="circle"
+                  variant="filled"
+                  type="text"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}>
+                  <HeightRoundedIcon />
+                </Button>
+              </Tooltip>
+            ) : (
+              <div className="w-8" />
+            )}
+          </List.Item>
+        ) : (
+          <div className="w-8" />
+        )}
 
         <div className="p-4 cursor-pointer whitespace-nowrap">
-          {order + 1}. {title}
+          {order + 1}. {title} {String(changeable)}
         </div>
       </Flex>
 

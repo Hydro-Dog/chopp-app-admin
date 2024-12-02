@@ -34,10 +34,17 @@ type Props = {
   onDeleteItem?: (val: string) => void;
   onEditItem?: ({ id, title }: { id: string; title: string }) => void;
   ListItem: JSX.Element;
-  unchangeableItems: string[]
+  unchangeableItems: string[];
 };
 
-export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem, ListItem, unchangeableItems }: Props) => {
+export const ChopDraggableList = ({
+  items,
+  onDragEnd,
+  onDeleteItem,
+  onEditItem,
+  ListItem,
+  unchangeableItems,
+}: Props) => {
   const themeToken = useThemeToken();
   const [elements, setElements] = useState<Item[]>([]);
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();

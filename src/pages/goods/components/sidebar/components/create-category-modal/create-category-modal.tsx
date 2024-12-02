@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BasicModal } from '@shared/components';
+import { BasicModal } from '@shared/index';
 import { useNotificationContext } from '@shared/context';
 import { fetchCategories, createCategory } from '@store/slices/goods-slice';
 import { AppDispatch, RootState } from '@store/store';

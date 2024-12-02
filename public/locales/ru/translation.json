@@ -69,6 +69,7 @@
   "ALL": "Все",
   "CHATS": "Чаты",
   "CHAT": "Чат",
+  "SETTINGS": "Управление",
   "ACTIVITY_STATUS": {
     "PROCESSING": "В обработке",
     "ACCEPTED": "Принят",

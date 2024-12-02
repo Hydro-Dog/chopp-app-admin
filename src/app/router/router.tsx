@@ -11,6 +11,7 @@ import { ROUTES } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { GoodsPage } from '@pages/goods';
+import SettingsPage from '@pages/settings/settings-page';
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.CHATS,
         element: <ChatsPage />,
+      },
+      {
+        path: ROUTES.SETTINGS,
+        element: <SettingsPage />,
       },
       {
         path: ROUTES.ACTIVITY,

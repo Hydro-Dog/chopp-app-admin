@@ -1,9 +1,10 @@
-import { PropsWithChildren, useEffect, } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
+import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import StoreIcon from '@mui/icons-material/Store';
@@ -126,7 +127,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
     {
       key: ROUTES.SETTINGS,
-      icon: <ChatRoundedIcon />,
+      icon: <SettingsRoundedIcon fontSize="medium" />,
       label: t('SETTINGS'),
       onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },

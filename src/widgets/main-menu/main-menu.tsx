@@ -125,6 +125,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       onClick: () => onMenuItemClick(ROUTES.CHATS),
     },
     {
+      key: ROUTES.SETTINGS,
+      icon: <ChatRoundedIcon />,
+      label: t('SETTINGS'),
+      onClick: () => onMenuItemClick(ROUTES.SETTINGS),
+    },
+    {
       key: 'logout',
       icon: <LogoutRoundedIcon rotate={180} />,
       label: t('EXIT'),

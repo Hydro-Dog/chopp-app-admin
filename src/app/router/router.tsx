@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import {
   SignInPage,
   UsersPage,
@@ -7,10 +7,10 @@ import {
   ActivityPage,
   UserPage,
 } from '@pages/index';
+import { ProductsPage } from '@pages/products';
 import { ROUTES } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
-import { ProductsPage } from '@pages/products';
 
 export const router = createBrowserRouter([
   {

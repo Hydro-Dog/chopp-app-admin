@@ -14,8 +14,7 @@ import {
   wsConnect,
 } from '@store/index';
 import { FETCH_STATUS } from '@store/types/fetch-status';
-import { Button, Form, Input, Tooltip, Typography } from 'antd';
-
+import { Button, Flex, Form, Input, Tooltip, Typography } from 'antd';
 import { z } from 'zod';
 
 const { Item } = Form;
@@ -77,17 +76,17 @@ export const SignInPage = () => {
       showNotification({
         type: 'error',
         message: t('ERROR'),
-        description: loginError?.errorMessage,
+        description: loginError?.message,
       });
     } else if (loginStatus === FETCH_STATUS.SUCCESS) {
       dispatch(setLoginStatus(FETCH_STATUS.IDLE));
       navigate('/');
       console.log('HERE!');
     }
-  }, [dispatch, loginError?.errorMessage, loginStatus, navigate, showNotification, t]);
+  }, [dispatch, loginError?.message, loginStatus, navigate, showNotification, t]);
 
   return (
-    <div className="flex w-full h-screen" style={{ background: themeToken.colorBgBase }}>
+    <Flex className="w-full h-screen" style={{ background: themeToken.colorBgBase }}>
       <Form
         className="m-auto"
         labelCol={{ span: 8 }}
@@ -101,7 +100,7 @@ export const SignInPage = () => {
           validateStatus={errors.login ? 'error' : ''}
           help={errors.login?.message}>
           <Controller
-            name="email"
+            name="login"
             control={control}
             render={({ field }) => (
               <div className="flex">
@@ -140,6 +139,6 @@ export const SignInPage = () => {
           </Button> */}
         </div>
       </Form>
-    </div>
+    </Flex>
   );
 };

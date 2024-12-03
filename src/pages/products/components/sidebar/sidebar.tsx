@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import { ChopDraggableList } from '@shared/components';
@@ -30,8 +30,9 @@ export const Sidebar = () => {
 
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
-  const { categories, fetchCategoriesStatus, updateCategoriesStatus, updateCategoryTitleStatus } =
-    useSelector((state: RootState) => state.goods);
+  const { categories, fetchCategoriesStatus, updateCategoriesStatus } = useSelector(
+    (state: RootState) => state.goods,
+  );
 
   const {
     value: isCreateCategoryModalOpen,

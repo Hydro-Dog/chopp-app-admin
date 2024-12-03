@@ -38,7 +38,7 @@ export const ConfirmModal = ({
         <>
           <CancelBtn />
           {okTitle ? (
-            <Button color="danger" type={okType} variant={okVariant} onClick={onOk}>
+            <Button color={okColor} type={okType} variant={okVariant} onClick={onOk}>
               {okTitle}
             </Button>
           ) : (

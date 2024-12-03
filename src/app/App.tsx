@@ -80,7 +80,6 @@ export const App = () => {
     algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
-
   //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
   const {
     showNotification,

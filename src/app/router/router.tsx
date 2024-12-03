@@ -11,7 +11,7 @@ import { ROUTES } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { GoodsPage } from '@pages/goods';
-import SettingsPage from '@pages/settings/settings-page';
+import { SettingsPage } from '@pages/settings/settings-page';
 
 export const router = createBrowserRouter([
   {

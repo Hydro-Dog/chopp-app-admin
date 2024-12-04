@@ -3,13 +3,50 @@ import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
 import { useThemeToken } from '@shared/index';
-import CurrencyRubleRoundedIcon from '@mui/icons-material/CurrencyRubleRounded';
-import { Alert, Button, Flex, Form, Input, InputNumber, Tooltip, Typography } from 'antd';
+import {
+  Alert,
+  Form,
+  GetProp,
+  Input,
+  InputNumber,
+  Typography,
+  Upload,
+  UploadFile,
+  UploadProps,
+} from 'antd';
 import { z } from 'zod';
 import { useCreateProductFormSchema } from './hooks';
+import { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Item } = Form;
 const { Text } = Typography;
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
+// Обработчик загрузки файла, который просто сохраняет файлы в состояние
+const beforeUpload = (file) => {
+  console.log('file.type: ', file.type)
+  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  if (!isJpgOrPng) {
+    console.error('Вы можете загрузить только JPG/PNG файл!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    console.error('Изображение должно быть меньше 2MB!');
+  }
+
+  console.log('isJpgOrPng && isLt2M; ', isJpgOrPng, isLt2M)
+  return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
+};
 
 type Props = {
   open: boolean;
@@ -20,6 +57,10 @@ type Props = {
 export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
   const themeToken = useThemeToken();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+
   const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
 
@@ -37,8 +78,31 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   });
 
   const onSubmit: SubmitHandler<CreateProductFormType> = (data) => {
-    console.log('data: ', data);
+    const formData = new FormData();
+    console.log('fileList: ', fileList);
+    fileList.forEach((file) => {
+      if (file.originFileObj) {
+        formData.append('files', file.originFileObj);
+      }
+    });
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    formData.append('price', data.price?.toString() || '');
+
+    console.log('formData: ', formData);
   };
+
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
 
   return (
     <ConfirmModal
@@ -47,10 +111,9 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
       onOk={handleSubmit(onSubmit)}
       onCancel={onCancel}
       okTitle={t('ADD')}>
-      {/* <Flex style={{ background: themeToken.colorBgBase }}> */}
-      <Form layout="vertical">
+      <Form layout="vertical" className="flex flex-col gap-4">
         <Item
-          className="!mb-2"
+          className="!m-0"
           label={t('TITLE_NAME')}
           validateStatus={errors.title ? 'error' : ''}
           help={errors.title?.message}>
@@ -62,7 +125,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         </Item>
 
         <Item
-          className="!mb-2"
+          className="!m-0"
           label={t('DESCRIPTION')}
           validateStatus={errors.description ? 'error' : ''}
           help={errors.description?.message}>
@@ -76,6 +139,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         </Item>
 
         <Item
+          className="!m-0"
           label={t('PRICE')}
           validateStatus={errors.price ? 'error' : ''}
           help={errors.price?.message}>
@@ -93,6 +157,21 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
             )}
           />
         </Item>
+        
+        <Upload
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={handlePreview}
+          onChange={handleChange}
+          beforeUpload={beforeUpload}>
+          {fileList.length >= 8 ? null : (
+            <button style={{ border: 0, background: 'none' }} type="button">
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Upload</div>
+            </button>
+          )}
+        </Upload>
+        <Alert message={<Text>{t('UPLOAD_IMAGE_HELPER_TEXT')}</Text>} type="info" />
       </Form>
     </ConfirmModal>
   );

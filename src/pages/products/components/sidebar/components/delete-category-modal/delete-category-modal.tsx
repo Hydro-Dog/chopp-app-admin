@@ -28,6 +28,7 @@ export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) =
           <Text strong>{category?.title}</Text>
         </Flex>
 
+        {/* TODO: перевод */}
         <Alert
           message={
             <>

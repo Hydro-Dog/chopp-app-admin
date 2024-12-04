@@ -2,14 +2,14 @@ import { Card } from 'antd';
 
 const { Meta } = Card;
 
-interface ISettingCardProps {
+type Props = {
   image: string;
   title: string;
   description: string;
   path: string;
-}
+};
 
-export const SettingCard = ({ image, title, description, path }: ISettingCardProps) => (
+export const SettingCard = ({ image, title, description, path }: Props) => (
   <a href={path}>
     <Card
       className="m-5"

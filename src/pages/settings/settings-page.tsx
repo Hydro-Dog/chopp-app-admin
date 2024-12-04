@@ -9,13 +9,13 @@ export const SettingsPage = () => {
   return (
     <TitlePage title={t('SETTINGS')}>
       <Row>
-        {data.map((elem) => (
+        {data.map((item) => (
           <SettingCard
-            key={elem.path}
-            path={elem.path}
-            title={elem.title}
-            image={elem.image}
-            description={elem.description}
+            key={item.path}
+            path={item.path}
+            title={item.title}
+            image={item.image}
+            description={item.description}
           />
         ))}
       </Row>

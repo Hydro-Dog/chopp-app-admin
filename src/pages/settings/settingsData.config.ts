@@ -1,32 +1,32 @@
-import {SETTINGS_PATHES} from '@shared/enum/settings-pathes';
+import { SETTINGS_PATHS } from '@shared/index';
 
 export const data = [
   {
-    path: SETTINGS_PATHES.CHAT_SETTINGS,
+    path: SETTINGS_PATHS.CHAT_SETTINGS,
     image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
     title: 'Settings',
     description: 'Let settings',
   },
   {
-    path: SETTINGS_PATHES.GOODS_SETTINGS,
+    path: SETTINGS_PATHS.GOODS_SETTINGS,
     image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
     title: 'Settings',
     description: 'Let settings',
   },
   {
-    path: SETTINGS_PATHES.PAGE_SETTINGS,
+    path: SETTINGS_PATHS.PAGE_SETTINGS,
     image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
     title: 'Settings',
     description: 'Let settings',
   },
   {
-    path: SETTINGS_PATHES.PROFILE_SETTINGS,
+    path: SETTINGS_PATHS.PROFILE_SETTINGS,
     image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
     title: 'Settings',
     description: 'Let settings',
   },
   {
-    path: SETTINGS_PATHES.USERS_SETTINGS,
+    path: SETTINGS_PATHS.USERS_SETTINGS,
     image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
     title: 'Settings',
     description: 'Let settings',

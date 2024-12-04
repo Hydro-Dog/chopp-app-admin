@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import AnalyticsPage from '@pages/analytics/analytics-page';
+import { AnalyticsPage } from '@pages/analytics/analytics-page';
 import { GoodsPage } from '@pages/goods';
 import {
   SignInPage,

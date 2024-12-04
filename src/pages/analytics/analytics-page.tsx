@@ -1,8 +1,7 @@
-import React from 'react';
-import { TitlePage } from '@shared/components';
 import { useTranslation } from 'react-i18next';
+import { TitlePage } from '@shared/components';
 
-const AnalyticsPage = () => {
+export const AnalyticsPage = () => {
   const { t } = useTranslation();
 
   return (
@@ -11,5 +10,3 @@ const AnalyticsPage = () => {
     </TitlePage>
   );
 };
-
-export default AnalyticsPage;

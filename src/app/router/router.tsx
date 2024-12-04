@@ -7,11 +7,11 @@ import {
   ActivityPage,
   UserPage,
 } from '@pages/index';
-import { ROUTES } from '@shared/enum';
+import { ROUTES, SETTINGS_PATHS } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { GoodsPage } from '@pages/goods';
-import { SettingsPage } from '@pages/settings';
+import { SettingsPage, VisualSettings } from '@pages/settings-page';
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +45,12 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.SETTINGS,
         element: <SettingsPage />,
+        children: [
+          {
+            path: SETTINGS_PATHS.VISUAL_SETTINGS,
+            element: <VisualSettings />,
+          },
+        ],
       },
       {
         path: ROUTES.ACTIVITY,

@@ -1,4 +1,5 @@
 import { Card } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const { Meta } = Card;
 
@@ -9,14 +10,16 @@ type Props = {
   path: string;
 };
 
-export const SettingCard = ({ image, title, description, path }: Props) => (
-  <a href={path}>
+export const SettingCard = ({ image, title, description, path }: Props) => {
+  const navigate = useNavigate();
+
+  return (
     <Card
-      className="m-5"
+      onClick={() => navigate(path)}
       hoverable
       style={{ width: 240 }}
       cover={<img alt="example" src={image} />}>
       <Meta title={title} description={description} />
     </Card>
-  </a>
-);
+  );
+};

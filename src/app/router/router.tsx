@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import { AnalyticsPage } from '@pages/index';
 import {
   SignInPage,
   UsersPage,
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.ACTIVITY,
         element: <ActivityPage />,
+      },
+      {
+        path: ROUTES.ANALYTICS,
+        element: <AnalyticsPage />,
       },
       {
         path: `${ROUTES.USERS}/:id`, // Updated path for user profiles

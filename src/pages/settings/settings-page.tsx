@@ -1,18 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
-import { TitlePage } from '@shared/components';
+import { TitlePage } from '@shared/index';
 import { Row, Col } from 'antd';
+import { SettingCard } from './components';
 import { useGetSettings } from './hooks';
-import { SettingCard } from '../setting-card';
 
-export const RootSettings = () => {
+export const SettingsPage = () => {
   const { t } = useTranslation();
-  const data = useGetSettings();
+  const settingsList = useGetSettings();
 
   return (
     <TitlePage title={t('SETTINGS')}>
-      <Row gutter={[24, 24]}>
-        {data.map((item) => (
+      <Row gutter={[24, 24]} className="px-2">
+        {settingsList.map((item) => (
           <Col key={item.path}>
             <SettingCard
               path={item.path}

@@ -8,13 +8,12 @@ import {
   ActivityPage,
   UserPage,
   ProductsPage,
-  RootSettings,
+  SettingsPage,
 } from '@pages/index';
 
-import { Pricing } from '@pages/settings/components/utils/pricing';
-import { VisualSettings } from '@pages/settings/components/utils/visual-settings';
 import { MainMenu, ROUTES, SETTINGS_PATHS } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
+import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
 
 export const router = createBrowserRouter([
   {
@@ -51,15 +50,15 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <RootSettings />,
+            element: <SettingsPage />,
           },
           {
             path: SETTINGS_PATHS.VISUAL_SETTINGS,
-            element: <VisualSettings />,
+            element: <VisualSettingsPage />,
           },
           {
             path: SETTINGS_PATHS.PRICING_SETTINGS,
-            element: <Pricing />,
+            element: <PricingSettingsPage />,
           },
         ],
       },

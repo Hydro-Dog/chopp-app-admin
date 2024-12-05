@@ -1,1 +1,1 @@
-export * from './root-settings'
+export * from './setting-card';

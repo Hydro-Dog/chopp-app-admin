@@ -1,1 +1,0 @@
-export * from './card-for-settings'

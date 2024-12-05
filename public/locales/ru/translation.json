@@ -81,8 +81,8 @@
   },
   "SETTINGS_PAGE":{
     "VISUAL_SETTINGS":{
-      "Themes":"Цветовое оформление",
-      "Choosing a theme on the site":"Выбор цветового оформления на сайте"
+      "THEMES":"Цветовое оформление",
+      "CHOOSING A THEME ON THE SITE":"Выбор цветового оформления на сайте"
     }
     
   },

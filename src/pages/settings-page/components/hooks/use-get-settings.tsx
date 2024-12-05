@@ -1,50 +1,51 @@
 import { useTranslation } from 'react-i18next';
 import { SETTINGS_PATHS } from '@shared/index';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
 
 export const useGetSettings = () => {
   const { t } = useTranslation();
   return [
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
     {
       path: SETTINGS_PATHS.VISUAL_SETTINGS,
-      image: 'https://cdn.icon-icons.com/icons2/272/PNG/512/Settings_30027.png',
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.Themes'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.Choosing a theme on the site'),
+      image: <ColorLensIcon style={{ fontSize: '120px' }} />,
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING A THEME ON THE SITE'),
     },
   ];
 };

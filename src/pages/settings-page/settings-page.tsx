@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { TitlePage } from '@shared/components';
 import { Row, Col } from 'antd';
-import { SettingCard } from './components/card-for-settings';
+import { SettingCard } from './components/setting-card';
 import { useGetSettings } from './components/hooks';
 
 export const SettingsPage = () => {

@@ -6,5 +6,6 @@ export enum ROUTES {
   SIGN_IN = 'signin',
   REGISTER = 'register',
   GOODS = 'goods',
+  SETTINGS = 'settings',
   ANALYTICS = 'analytics',
 }

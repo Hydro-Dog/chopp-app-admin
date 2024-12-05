@@ -8,6 +8,7 @@ import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import StoreIcon from '@mui/icons-material/Store';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useChatsContext } from '@pages/chats/chats-context';
 import { ACTIVITY_STATUS, ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
@@ -121,6 +122,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
         </Tooltip>
       ),
       onClick: () => onMenuItemClick(ROUTES.CHATS),
+    },
+    {
+      key: ROUTES.SETTINGS,
+      icon: <SettingsIcon fontSize="medium" />,
+      label: t('SETTINGS'),
+      onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
     {
       key: ROUTES.ANALYTICS,

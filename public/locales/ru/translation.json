@@ -71,6 +71,7 @@
   "ALL": "Все",
   "CHATS": "Чаты",
   "CHAT": "Чат",
+  "SETTINGS": "Управление",
   "ACTIVITY_STATUS": {
     "PROCESSING": "В обработке",
     "ACCEPTED": "Принят",
@@ -79,6 +80,13 @@
     "COMPLETED": "Завершено",
     "CANCELED": "Отменено",
     "ALL": "Все"
+  },
+  "SETTINGS_PAGE":{
+    "VISUAL_SETTINGS":{
+      "THEMES":"Цветовое оформление",
+      "CHOOSING A THEME ON THE SITE":"Выбор цветового оформления на сайте"
+    }
+    
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",

@@ -4,6 +4,7 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import { SETTINGS_PATHS } from '@shared/index';
 import { SettingsGridIcon } from '../components/settings-grid-icon';
 
+
 export const useGetSettings = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();

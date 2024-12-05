@@ -36,7 +36,7 @@ export const VisualSettingsPage = () => {
               <Title level={2}>{t('SETTINGS_PAGE.VISUAL_SETTINGS.COLOR_SETTINGS')}</Title>
             </Divider>
           }>
-          <Title level={3}>{t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES')}</Title>
+          <Title level={3}>{t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSE_OF_THEME')}</Title>
           <Select
             defaultValue={t(`SETTINGS_PAGE.VISUAL_SETTINGS.${themeNow.toUpperCase()}`)}
             onChange={setTheme}

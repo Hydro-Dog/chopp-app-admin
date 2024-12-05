@@ -5,3 +5,5 @@ export * from './activity';
 export * from './chats';
 export * from './user';
 export * from './analytics';
+export * from './settings';
+export * from './products';

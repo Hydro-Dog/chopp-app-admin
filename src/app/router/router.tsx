@@ -1,19 +1,20 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { AnalyticsPage } from '@pages/index';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 import {
+  AnalyticsPage,
   SignInPage,
   UsersPage,
   RegisterPage,
   ChatsPage,
   ActivityPage,
   UserPage,
+  ProductsPage,
+  RootSettings,
 } from '@pages/index';
-import { ProductsPage } from '@pages/products';
-import { ROUTES, SETTINGS_PATHS } from '@shared/enum';
-import { MainMenu } from '@shared/index';
+
+import { Pricing } from '@pages/settings/components/utils/pricing';
+import { VisualSettings } from '@pages/settings/components/utils/visual-settings';
+import { MainMenu, ROUTES, SETTINGS_PATHS } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
-import { SettingsPage, VisualSettings } from '@pages/settings-page';
-import { Pricing } from '@pages/settings-page/components/utils/pricing';
 
 export const router = createBrowserRouter([
   {
@@ -46,8 +47,12 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.SETTINGS,
-        element: <SettingsPage />,
+        element: <Outlet />,
         children: [
+          {
+            path: '',
+            element: <RootSettings />,
+          },
           {
             path: SETTINGS_PATHS.VISUAL_SETTINGS,
             element: <VisualSettings />,

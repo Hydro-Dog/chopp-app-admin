@@ -81,12 +81,11 @@
     "CANCELED": "Отменено",
     "ALL": "Все"
   },
-  "SETTINGS_PAGE":{
-    "VISUAL_SETTINGS":{
-      "THEMES":"Цветовое оформление",
-      "CHOOSING A THEME ON THE SITE":"Выбор цветового оформления на сайте"
+  "SETTINGS_PAGE": {
+    "VISUAL_SETTINGS": {
+      "THEMES": "Цветовое оформление",
+      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте"
     }
-    
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",
@@ -97,5 +96,6 @@
   "PRICE": "Цена",
   "SAVE": "Сохранить",
   "ADD": "Добавить",
-  "ANALYTICS": "Аналитика"
+  "ANALYTICS": "Аналитика",
+  "PRICING": "Ценообразование"
 }

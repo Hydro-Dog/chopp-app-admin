@@ -35,6 +35,9 @@ type Props = {
   onEditItem?: ({ id, title }: { id: string; title: string }) => void;
   ListItem: JSX.Element;
   unchangeableItems: string[];
+  activeCategory: string;
+  initialCategoryId: string | null;
+  onClickItem: (id: string) => void;
 };
 
 export const ChopDraggableList = ({
@@ -42,14 +45,23 @@ export const ChopDraggableList = ({
   onDragEnd,
   onDeleteItem,
   onEditItem,
+  onClickItem,
+  initialCategoryId,
   ListItem,
   unchangeableItems,
 }: Props) => {
   const themeToken = useThemeToken();
   const [elements, setElements] = useState<Item[]>([]);
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();
-  const [activeCategory, setActiveCategory] = useState('');
+  const [activeCategoryId, setActiveCategoryId] = useState('');
   const [overId, setOverId] = useState<UniqueIdentifier | undefined>();
+
+  useEffect(() => {
+    if (initialCategoryId) {
+      console.log('initialCategoryId: ', initialCategoryId)
+      setActiveCategoryId(initialCategoryId);
+    }
+  }, [initialCategoryId]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -90,6 +102,13 @@ export const ChopDraggableList = ({
     setOverId(over?.id);
   };
 
+  const onClick = (item: string) => {
+    setActiveCategoryId(item);
+    onClickItem(item);
+  };
+
+  console.log('activeCategory: ', activeCategoryId)
+
   return (
     <DndContext
       sensors={sensors}
@@ -106,8 +125,8 @@ export const ChopDraggableList = ({
           renderItem={(item, index) => (
             <ListItem
               changeable={!unchangeableItems.includes(item.title)}
-              onClick={setActiveCategory}
-              active={activeCategory}
+              onClick={onClick}
+              activeId={activeCategoryId}
               order={item.order}
               key={item.id}
               id={item.id}

@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
+import { AnalyticsPage } from '@pages/index';
 import {
   SignInPage,
   UsersPage,
@@ -7,10 +8,10 @@ import {
   ActivityPage,
   UserPage,
 } from '@pages/index';
+import { ProductsPage } from '@pages/products';
 import { ROUTES, SETTINGS_PATHS } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
-import { GoodsPage } from '@pages/goods';
 import { SettingsPage, VisualSettings } from '@pages/settings-page';
 
 export const router = createBrowserRouter([
@@ -36,7 +37,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.GOODS,
-        element: <GoodsPage />,
+        element: <ProductsPage />,
       },
       {
         path: ROUTES.CHATS,
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.ACTIVITY,
         element: <ActivityPage />,
+      },
+      {
+        path: ROUTES.ANALYTICS,
+        element: <AnalyticsPage />,
       },
       {
         path: `${ROUTES.USERS}/:id`, // Updated path for user profiles

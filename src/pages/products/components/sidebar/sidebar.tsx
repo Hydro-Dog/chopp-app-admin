@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import { ChopDraggableList } from '@shared/components';
+import { useNotificationContext, useSearchParam } from '@shared/index';
 import {
   fetchCategories,
   Category,
   updateCategories,
   deleteCategory,
-  updateCategoryTitle,
 } from '@store/slices/goods-slice';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
@@ -17,21 +18,21 @@ import { Spin, Flex, Tooltip, Button, Typography } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateCategoryModal } from './components';
 import { DeleteCategoryModal } from './components/delete-category-modal';
-import { useNotification, useNotificationContext } from '@shared/index';
 import { ListItem } from './components/list-item';
 
 const { Title } = Typography;
 
 export const Sidebar = () => {
   const flexRef = useRef<HTMLElement>(null);
+  const urlCategoryId = useSearchParam('id');
+  const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
 
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
-  const { categories, fetchCategoriesStatus, updateCategoriesStatus, updateCategoryTitleStatus } =
-    useSelector((state: RootState) => state.goods);
-
-  console.log('updateCategoryTitleError: ', updateCategoryTitleStatus);
+  const { categories, fetchCategoriesStatus, updateCategoriesStatus } = useSelector(
+    (state: RootState) => state.goods,
+  );
 
   const {
     value: isCreateCategoryModalOpen,
@@ -72,6 +73,10 @@ export const Sidebar = () => {
     onCloseDeleteCategory();
   };
 
+  const onClickItem = (id: string) => {
+    setSearchParams({ id });
+  };
+
   return (
     <>
       {fetchCategoriesStatus === FETCH_STATUS.LOADING ? (
@@ -108,6 +113,8 @@ export const Sidebar = () => {
               items={categories || []}
               onDragEnd={onCategoriesOrderChange}
               onDeleteItem={onDeleteCategoryModalOpen}
+              onClickItem={onClickItem}
+              initialCategoryId={urlCategoryId}
               ListItem={ListItem}
             />
           </div>

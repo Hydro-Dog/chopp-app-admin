@@ -38,10 +38,12 @@
   "ERRORS": {
     "PASSWORD_TOO_SHORT": "Минимум {{length}}",
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
-    "REQUIRED": "Обязательное поле"
+    "REQUIRED": "Обязательное поле",
+    "CONTENT_TOO_SHORT": "Слишком короткий текст",
+    "CONTENT_TOO_LONG": "Слишком длинный текст"
   },
   "NAME": "Имя",
-  "FULL_NAME": "ФИО", 
+  "FULL_NAME": "ФИО",
   "USERS": "Пользователи",
   "GOODS": "Товары",
   "CATEGORIES": "Категории",
@@ -62,7 +64,7 @@
   "BACK": "Назад",
   "ACTIVITY": "Вызовы",
   "DATE": "Дата",
-  "COMMENT": "Комментарий", 
+  "COMMENT": "Комментарий",
   "USER": "Пользователь",
   "ACTION": "Действие",
   "ADDRESS": "Адрес",
@@ -88,5 +90,12 @@
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",
-  "OPEN": "Открыть"
+  "OPEN": "Открыть",
+  "CREATE_PRODUCT": "Добавить товар",
+  "TITLE_NAME": "Название",
+  "DESCRIPTION": "Описание",
+  "PRICE": "Цена",
+  "SAVE": "Сохранить",
+  "ADD": "Добавить",
+  "ANALYTICS": "Аналитика"
 }

@@ -17,7 +17,6 @@ export const useFetchChatStats = () => {
 
   useEffect(() => {
     if (chatsStats) {
-      console.log('---chatsStats: ', chatsStats)
       setChatsStats(chatsStats);
     }
   }, [chatsStats]);

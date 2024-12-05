@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useRef } from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 import { Typography } from 'antd';
 import { MainContainer } from '../main-container';
 

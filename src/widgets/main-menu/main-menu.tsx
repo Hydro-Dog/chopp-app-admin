@@ -2,6 +2,7 @@ import { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
@@ -83,9 +84,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
   useFetchChatStats();
   const { chatsStats } = useChatsContext();
-
-  console.log('chatsStats: ', chatsStats);
-
   const menuItems = [
     {
       key: ROUTES.GOODS,
@@ -130,6 +128,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       icon: <SettingsIcon fontSize="medium" />,
       label: t('SETTINGS'),
       onClick: () => onMenuItemClick(ROUTES.SETTINGS),
+    },
+    {
+      key: ROUTES.ANALYTICS,
+      icon: <AnalyticsIcon />,
+      label: t('ANALYTICS'),
+      onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
     },
     {
       key: 'logout',

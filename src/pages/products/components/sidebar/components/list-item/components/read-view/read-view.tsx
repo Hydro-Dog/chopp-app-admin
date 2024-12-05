@@ -8,6 +8,7 @@ import { Button, Flex, List, Tooltip } from 'antd';
 type Props<T> = {
   order: number;
   onDeleteItem?: (id: string) => void;
+  onClick?: (id: string) => void;
   hovered: boolean;
   setMode: Dispatch<SetStateAction<'edit' | 'read'>>;
   id: string;
@@ -21,6 +22,7 @@ type Props<T> = {
 export const ReadView = <T extends ReactNode>({
   order,
   onDeleteItem,
+  onClick,
   hovered,
   setMode,
   id,
@@ -34,7 +36,7 @@ export const ReadView = <T extends ReactNode>({
 
   return (
     <>
-      <Flex>
+      <Flex onClick={() => onClick?.(id)}>
         {changeable ? (
           <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
             {hovered ? (
@@ -58,7 +60,7 @@ export const ReadView = <T extends ReactNode>({
         )}
 
         <div className="p-4 cursor-pointer whitespace-nowrap">
-          {order + 1}. {title} {String(changeable)}
+          {order + 1}. {title}
         </div>
       </Flex>
 

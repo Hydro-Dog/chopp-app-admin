@@ -13,6 +13,7 @@ import { ROUTES, SETTINGS_PATHS } from '@shared/enum';
 import { MainMenu } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { SettingsPage, VisualSettings } from '@pages/settings-page';
+import { Pricing } from '@pages/settings-page/components/utils/pricing';
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
           {
             path: SETTINGS_PATHS.VISUAL_SETTINGS,
             element: <VisualSettings />,
+          },
+          {
+            path: SETTINGS_PATHS.PRICING_SETTINGS,
+            element: <Pricing />,
           },
         ],
       },

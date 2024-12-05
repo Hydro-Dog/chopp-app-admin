@@ -1,5 +1,5 @@
-import { Card } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { Card } from 'antd';
 
 const { Meta } = Card;
 

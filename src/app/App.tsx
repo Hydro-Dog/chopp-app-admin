@@ -104,7 +104,7 @@ export const App = () => {
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />
             <div className="w-full h-screen overflow-hidden">
-              <div className={theme === 'dark' ? 'bg-black' : 'bg-white'}>
+              {/* <div className={theme === 'dark' ? 'bg-black' : 'bg-white'}>
                 <Switch
                   className="absolute right-10 bottom-10"
                   checkedChildren="Dark"
@@ -112,7 +112,7 @@ export const App = () => {
                   value={theme === 'dark'}
                   onChange={toggleTheme}
                 />
-              </div>
+              </div> */}
               {/* <div className={lang === 'ru' ? 'bg-black' : 'bg-white'}>
                         <Switch
                           className="absolute right-4 top-12"

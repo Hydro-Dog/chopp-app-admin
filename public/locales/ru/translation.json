@@ -9,6 +9,8 @@
   "REGISTER": "Зарегистрироваться",
   "EMAIL": "Email",
   "LOGIN": "Логин",
+  "PHONE": "Телефон",
+  "BY_EMAIL": "Эл. почта",
   "PHONE_NUMBER": "Номер телефона",
   "PASSWORD": "Пароль",
   "ENTER": "Войти",

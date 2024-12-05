@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Category, CreateCategoryDTO } from './types';
 
 export const fetchCategories = createAsyncThunk<Category[], void, { rejectValue: ErrorResponse }>(
-  'goods/fetchCategories',
+  'productCategory/fetchCategories',
   async (_, thunkAPI) => {
     try {
       const response = await axiosPrivate.get<Category[]>('/categories');
@@ -24,7 +24,7 @@ export const createCategory = createAsyncThunk<
   Category,
   CreateCategoryDTO,
   { rejectValue: ErrorResponse }
->('goods/createCategory', async (newCategory, thunkAPI) => {
+>('productCategory/createCategory', async (newCategory, thunkAPI) => {
   try {
     const response = await axiosPrivate.post<Category>(`/categories`, newCategory);
     return response.data;
@@ -43,7 +43,7 @@ export const updateCategories = createAsyncThunk<
   Category[],
   Category[],
   { rejectValue: ErrorResponse }
->('goods/updateCategories', async (categories, thunkAPI) => {
+>('productCategory/updateCategories', async (categories, thunkAPI) => {
   try {
     const response = await axiosPrivate.put<Category[]>('/categories', categories);
     return response.data;
@@ -57,7 +57,7 @@ export const updateCategories = createAsyncThunk<
 });
 
 export const deleteCategory = createAsyncThunk<Category[], string, { rejectValue: ErrorResponse }>(
-  'goods/deleteCategory',
+  'productCategory/deleteCategory',
   async (id, thunkAPI) => {
     try {
       const response = await axiosPrivate.delete<Category[]>(`/categories/${id}`);
@@ -78,7 +78,7 @@ export const updateCategoryTitle = createAsyncThunk<
   Category,
   UpdateCategoryTitleDTO,
   { rejectValue: ErrorResponse }
->('goods/updateCategoryTitle', async ({ id, title }, thunkAPI) => {
+>('productCategory/updateCategoryTitle', async ({ id, title }, thunkAPI) => {
   try {
     const response = await axiosPrivate.put<Category>(`categories/${id}/title`, { title });
     return response.data;

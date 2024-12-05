@@ -29,13 +29,14 @@ export const useNotification = () => {
   };
 
   const showErrorNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
+    console.log('----------showErrorNotification')
     const notificationApiCall = api.error;
 
     notificationApiCall!({
       message,
       description: <Context.Consumer>{() => description}</Context.Consumer>,
       placement: 'bottomRight',
-      // type: 'error',
+      type: 'error',
       ...rest,
     });
   };

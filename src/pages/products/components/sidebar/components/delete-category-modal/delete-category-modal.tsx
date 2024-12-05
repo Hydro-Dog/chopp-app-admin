@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ConfirmModal } from '@shared/components';
-import { Category } from '@store/slices/goods-slice';
+import { Category } from '@store/slices/product-category-slice';
 import { Alert, Flex, Typography } from 'antd';
 
 const { Text } = Typography;
@@ -14,6 +14,7 @@ type Props = {
 
 export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
+
   return (
     <ConfirmModal
       title={t('DELETE_CATEGORY')}

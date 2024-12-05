@@ -11,7 +11,7 @@ import {
   Category,
   updateCategories,
   deleteCategory,
-} from '@store/slices/goods-slice';
+} from '@store/slices/product-category-slice';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
 import { Spin, Flex, Tooltip, Button, Typography } from 'antd';
@@ -31,7 +31,7 @@ export const Sidebar = () => {
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
   const { categories, fetchCategoriesStatus, updateCategoriesStatus } = useSelector(
-    (state: RootState) => state.goods,
+    (state: RootState) => state.productCategory,
   );
 
   const {

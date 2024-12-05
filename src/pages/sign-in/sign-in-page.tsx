@@ -37,8 +37,8 @@ export const SignInPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  const { showNotification } = useNotificationContext();
   const { t } = useTranslation();
+  const { showErrorNotification } = useNotificationContext();
   const themeToken = useThemeToken();
   const signInFormSchema = useSignInFormSchema();
   type SignInFormType = z.infer<typeof signInFormSchema>;
@@ -73,8 +73,7 @@ export const SignInPage = () => {
 
   useEffect(() => {
     if (loginStatus === FETCH_STATUS.ERROR) {
-      showNotification({
-        type: 'error',
+      showErrorNotification({
         message: t('ERROR'),
         description: loginError?.message,
       });

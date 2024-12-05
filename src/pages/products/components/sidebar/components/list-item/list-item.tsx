@@ -36,8 +36,6 @@ export const ListItem = ({
   const { attributes, listeners, setNodeRef } = useSortable({ id });
   const [isPressed, setIsPressed] = useState(false);
 
-  console.log('active: ', activeId, id);
-
   return (
     <Flex
       align="center"

@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BasicModal } from '@shared/index';
-import { useNotificationContext } from '@shared/context';
-import { fetchCategories, createCategory } from '@store/slices/goods-slice';
+import { useNotificationContext } from '@shared/index';
+import { fetchCategories, createCategory } from '@store/slices/product-category-slice';
 import { AppDispatch, RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
 import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
@@ -23,9 +22,9 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { categories, createCategoryStatus, createCategoryError } = useSelector(
-    (state: RootState) => state.goods,
+    (state: RootState) => state.productCategory,
   );
-  const { showNotification } = useNotificationContext();
+  const { showErrorNotification } = useNotificationContext();
   const inputRef = useRef<InputRef>(null);
 
   const createCategoryFormSchema = useCreateCategoryFormSchema();
@@ -55,9 +54,8 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
       .unwrap()
       .then(onClose)
       .catch((error) => {
-        showNotification({
-          type: 'error',
-          message: 'Error',
+        showErrorNotification({
+          message: t('Error'),
           description: error?.message,
         });
       });

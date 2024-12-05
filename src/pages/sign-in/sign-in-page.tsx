@@ -25,7 +25,7 @@ const useSignInFormSchema = () => {
   const { t } = useTranslation();
 
   return z.object({
-    email: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
+    login: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
     password: z
       .string()
       .min(8, { message: t('ERRORS.PASSWORD_TOO_SHORT', { length: '8 символов' }) })
@@ -58,7 +58,7 @@ export const SignInPage = () => {
   });
 
   const onSubmit: SubmitHandler<SignInFormType> = (data) => {
-    dispatch(loginUser(data))
+    dispatch(loginUser({ ...data, email: data.login }))
       .then(({ payload }) => {
         if (payload) {
           dispatch(
@@ -125,7 +125,11 @@ export const SignInPage = () => {
 
         <div className="flex items-center justify-between">
           <Item className="m-0">
-            <Button type="primary" htmlType="submit" loading={loginStatus === 'loading'}>
+            <Button
+              type="primary"
+              onClick={() => handleSubmit(onSubmit)}
+              htmlType="submit"
+              loading={loginStatus === 'loading'}>
               {t('ENTER')}
             </Button>
           </Item>

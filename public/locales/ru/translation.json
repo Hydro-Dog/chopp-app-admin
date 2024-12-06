@@ -84,12 +84,12 @@
   "SETTINGS_PAGE": {
     "VISUAL_SETTINGS": {
       "THEMES": "Цветовое оформление",
-      "CHOOSING_A_THEME_ON_THE_SITE": "Выбор цветового оформления на сайте",
-      "CHOOSE_OF_THEME":"Выбор темы",
+      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
+      "THEME_CHOOSE":"Выбор темы",
       "COLOR_SETTINGS":"Настройки цветового оформления",
       "DARK":"Темная",
       "LIGHT":"Светлая",
-      "SYSTEM_THEME":"Системная тема"
+      "SYSTEM":"Системная"
     }
   },
   "NEW_MESSAGE": "Новое сообщение",

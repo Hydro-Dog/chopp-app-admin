@@ -3,29 +3,29 @@ import { Divider } from 'antd';
 import { Select } from 'antd';
 import { Card } from 'antd';
 import { Typography } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGetVisualSettings } from './hooks';
 const { Title } = Typography;
 
 export const VisualSettingsPage = () => {
   const { theme, toggleTheme } = useTheme();
-  const [themeNow, setThemeNow] = useState(() => localStorage.getItem('theme') || theme);
+  const [pickedTheme, setPickedTheme] = useState(() => localStorage.getItem('theme') || theme);
   const { t } = useTranslation();
+  const info = useGetVisualSettings({ theme: pickedTheme.toUpperCase() });
 
-  const setTheme = (value: string) => {
-    if (value === 'system') {
+  useEffect(() => {
+    if (pickedTheme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light';
       toggleTheme(systemTheme);
-      setThemeNow(systemTheme);
-      localStorage.setItem('theme', 'SYSTEM_THEME'); // Сохраняем системную тему
+      localStorage.setItem('theme', 'SYSTEM'); // Сохраняем системную тему
     } else {
-      toggleTheme(value);
-      setThemeNow(value);
-      localStorage.setItem('theme', value); // Сохраняем выбранную тему
+      toggleTheme(pickedTheme);
+      localStorage.setItem('theme', pickedTheme); // Сохраняем выбранную тему
     }
-  };
+  }, [pickedTheme]);
 
   return (
     <>
@@ -33,18 +33,18 @@ export const VisualSettingsPage = () => {
         <Card
           title={
             <Divider variant="dashed" style={{ borderColor: '	#000000' }}>
-              <Title level={2}>{t('SETTINGS_PAGE.VISUAL_SETTINGS.COLOR_SETTINGS')}</Title>
+              <Title level={2}>{info.title}</Title>
             </Divider>
           }>
-          <Title level={3}>{t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSE_OF_THEME')}</Title>
+          <Title level={3}>{info.clue}</Title>
           <Select
-            defaultValue={t(`SETTINGS_PAGE.VISUAL_SETTINGS.${themeNow.toUpperCase()}`)}
-            onChange={setTheme}
-            style={{ width: 120 }}
+            defaultValue={info.defaultValue}
+            onChange={(item) => setPickedTheme(item)}
+            className=" w-36"
             options={[
-              { value: 'dark', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.DARK') },
-              { value: 'light', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.LIGHT') },
-              { value: 'system', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.SYSTEM_THEME') },
+              { value: 'dark', label: info.dark },
+              { value: 'light', label: info.light },
+              { value: 'system', label: info.system },
             ]}
           />
         </Card>

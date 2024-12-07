@@ -1,10 +1,14 @@
 import { createContext, useContext, useState } from 'react';
 import { PropsWithChildrenOnly } from '@shared/types';
-import { light } from '@mui/material/styles/createPalette';
 
-type CustomThemeContextType = { theme: string; toggleTheme: (value: string) => void };
+type CustomThemeContextType = {
+  theme: string;
+  systemTheme: 'light' | 'dark';
+  toggleTheme: (value: string) => void;
+};
 
 const initialCustomThemeContextValue: CustomThemeContextType = {
+  systemTheme: 'light',
   theme: 'light',
   toggleTheme: (value: string) => null,
 };
@@ -14,20 +18,21 @@ const ThemeContext = createContext<CustomThemeContextType>(initialCustomThemeCon
 export const useTheme = () => useContext(ThemeContext);
 
 export const CustomThemeProvider = ({ children }: PropsWithChildrenOnly) => {
-  const [theme, setTheme] = useState<string>(localStorage.getItem('colorTheme') || 'light');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 
-  const toggleTheme = (value: string) => {
-    switch (value) {
-      case 'light':
-        setTheme('light');
-        localStorage.setItem('colorTheme', 'light');
-        break;
-      case 'dark':
-        setTheme('dark');
-        localStorage.setItem('colorTheme', 'dark');
-        break;
-    }
-  };
+  const [theme, setTheme] = useState<string>(
+    //TODO: Использовать енам со значением 'system'
+    localStorage.getItem('theme') === 'system'
+      ? systemTheme
+      //TODO: Использовать енам со значением 'light'
+      : localStorage.getItem('theme') || 'light',
+  );
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
+  const toggleTheme = (value: string) => setTheme(value);
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme, systemTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };

@@ -75,8 +75,10 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
 };
 
 export const App = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
+
   const themeConfig = {
+    //TODO: Использовать енам со значением 'dark'
     algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
@@ -104,15 +106,6 @@ export const App = () => {
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />
             <div className="w-full h-screen overflow-hidden">
-              {/* <div className={lang === 'ru' ? 'bg-black' : 'bg-white'}>
-                        <Switch
-                          className="absolute right-4 top-12"
-                          checkedChildren="RU"
-                          unCheckedChildren="EN"
-                          defaultChecked
-                          onChange={() => setLang((prev) => (prev === LANG.EN ? LANG.RU : LANG.EN))}
-                        />
-                      </div> */}
               <ChatsContextProvider>
                 <RouterProvider router={router} />
               </ChatsContextProvider>

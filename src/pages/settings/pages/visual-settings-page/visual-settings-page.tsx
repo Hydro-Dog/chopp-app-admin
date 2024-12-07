@@ -1,54 +1,50 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TitlePage, useTheme } from '@shared/index';
-import { Divider } from 'antd';
 import { Select } from 'antd';
 import { Card } from 'antd';
-import { Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useGetVisualSettings } from './hooks';
-const { Title } = Typography;
+import { Form } from 'antd';
+
+const { Item } = Form;
 
 export const VisualSettingsPage = () => {
   const { theme, toggleTheme } = useTheme();
   const [pickedTheme, setPickedTheme] = useState(() => localStorage.getItem('theme') || theme);
   const { t } = useTranslation();
-  const info = useGetVisualSettings({ theme: pickedTheme.toUpperCase() });
 
-  useEffect(() => {
-    if (pickedTheme === 'system') {
+  const onThemeChange = (val: string) => {
+    //TODO: Использовать енам со значением 'system'
+    if (val === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light';
       toggleTheme(systemTheme);
-      localStorage.setItem('theme', 'SYSTEM'); // Сохраняем системную тему
+      //TODO: Использовать енам со значением 'system'
+      localStorage.setItem('theme', 'system');
     } else {
-      toggleTheme(pickedTheme);
-      localStorage.setItem('theme', pickedTheme); // Сохраняем выбранную тему
+      toggleTheme(val);
+      localStorage.setItem('theme', val);
     }
-  }, [pickedTheme]);
+
+    setPickedTheme(val);
+  };
 
   return (
-    <>
-      <TitlePage title={t('SETTINGS')}>
-        <Card
-          title={
-            <Divider variant="dashed" style={{ borderColor: '	#000000' }}>
-              <Title level={2}>{info.title}</Title>
-            </Divider>
-          }>
-          <Title level={3}>{info.clue}</Title>
+    <TitlePage title={t('SETTINGS')}>
+      <Card title={t('SETTINGS_PAGE.VISUAL_SETTINGS.COLOR_SETTINGS')}>
+        <Item className="w-52" label={t('THEME')}>
           <Select
-            defaultValue={info.defaultValue}
-            onChange={(item) => setPickedTheme(item)}
-            className=" w-36"
+            value={pickedTheme}
+            onChange={(item) => onThemeChange(item)}
             options={[
-              { value: 'dark', label: info.dark },
-              { value: 'light', label: info.light },
-              { value: 'system', label: info.system },
+              //TODO: Использовать енам со значением 'dark'
+              { value: 'dark', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.DARK') },
+              { value: 'light', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.LIGHT') },
+              { value: 'system', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.SYSTEM') },
             ]}
           />
-        </Card>
-      </TitlePage>
-    </>
+        </Item>
+      </Card>
+    </TitlePage>
   );
 };

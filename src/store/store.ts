@@ -1,6 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { wsMiddleware } from './middleware/ws-middleware';
-import { chatSlice, ChatState, userSlice, UserState, wsSlice, WsState } from './slices/';
+import {
+  chatSlice,
+  ChatState,
+  productsSlice,
+  ProductsState,
+  userSlice,
+  UserState,
+  wsSlice,
+  WsState,
+} from './slices/';
 import { goodsSlice, GoodsState } from './slices/goods-slice';
 
 export const store = configureStore({
@@ -9,6 +18,7 @@ export const store = configureStore({
     ws: wsSlice.reducer,
     chat: chatSlice.reducer,
     goods: goodsSlice.reducer,
+    products: productsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(wsMiddleware),
 });
@@ -18,6 +28,7 @@ export type RootState = {
   ws: WsState;
   chat: ChatState;
   goods: GoodsState;
+  products: ProductsState;
 };
 
 export type AppDispatch = typeof store.dispatch;

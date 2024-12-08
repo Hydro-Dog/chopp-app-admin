@@ -40,7 +40,8 @@
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле",
     "CONTENT_TOO_SHORT": "Слишком короткий текст",
-    "CONTENT_TOO_LONG": "Слишком длинный текст"
+    "CONTENT_TOO_LONG": "Слишком длинный текст",
+    "UPLOAD_IMAGE": "Загрузите изобрадение"
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -90,5 +91,8 @@
   "SAVE": "Сохранить",
   "ADD": "Добавить",
   "ANALYTICS": "Аналитика",
-  "UPLOAD_IMAGE_HELPER_TEXT": "JPG, JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения."
+  "UPLOAD_IMAGE_HELPER_TEXT": "JPG, JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения.",
+  "IMAGES": "Изображения",
+  "SUCCESS": "Успешно",
+  "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список"
 }

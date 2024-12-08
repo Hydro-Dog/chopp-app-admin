@@ -6,6 +6,7 @@ type NotificationContextType = {
   showNotification: ({ type, message, description, placement, ...rest }: ArgsProps) => void;
   showErrorNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
   showInfoNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
+  showSuccessNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
   closeNotification: (key: string) => void;
   closeAllNotifications: () => void;
 };
@@ -16,6 +17,7 @@ const notificationContextTypeInitialValue = {
   closeAllNotifications: () => null,
   showErrorNotification: () => null,
   showInfoNotification: () => null,
+  showSuccessNotification: () => null,
 };
 
 const NotificationContext = createContext<NotificationContextType>(
@@ -29,6 +31,7 @@ export const NotificationContextProvider = ({
   showNotification,
   showErrorNotification,
   showInfoNotification,
+  showSuccessNotification,
   closeNotification,
   closeAllNotifications,
 }: PropsWithChildren<NotificationContextType>) => {
@@ -40,6 +43,7 @@ export const NotificationContextProvider = ({
         closeAllNotifications,
         showErrorNotification,
         showInfoNotification,
+        showSuccessNotification,
       }}>
       {children}
     </NotificationContext.Provider>

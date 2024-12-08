@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
 import { ChatsContextProvider } from '@pages/chats/chats-context';
 import {
-  useNotification,
+  useNotificationApi,
   useTheme,
   LANG,
   LangContextProvider,
@@ -80,16 +80,16 @@ export const App = () => {
     algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
-
   //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
   const {
     showNotification,
     showInfoNotification,
     showErrorNotification,
+    showSuccessNotification,
     closeNotification,
     closeAllNotifications,
     NotificationContext: NotificationCtx,
-  } = useNotification();
+  } = useNotificationApi();
   const [lang, setLang] = useState(LANG.RU);
 
   return (
@@ -101,6 +101,7 @@ export const App = () => {
             showNotification={showNotification}
             showInfoNotification={showInfoNotification}
             showErrorNotification={showErrorNotification}
+            showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />

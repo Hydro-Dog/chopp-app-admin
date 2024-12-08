@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
-import { useThemeToken } from '@shared/index';
+import { useNotificationContext } from '@shared/index';
+import { AppDispatch, createProduct } from '@store/index';
 import {
   Alert,
   Form,
@@ -13,11 +17,11 @@ import {
   Upload,
   UploadFile,
   UploadProps,
+  Image,
 } from 'antd';
 import { z } from 'zod';
 import { useCreateProductFormSchema } from './hooks';
-import { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
+import { createFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -34,8 +38,9 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 // Обработчик загрузки файла, который просто сохраняет файлы в состояние
 const beforeUpload = (file) => {
-  console.log('file.type: ', file.type)
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  console.log('file.type: ', file.type);
+  const isJpgOrPng =
+    file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
   if (!isJpgOrPng) {
     console.error('Вы можете загрузить только JPG/PNG файл!');
   }
@@ -44,7 +49,7 @@ const beforeUpload = (file) => {
     console.error('Изображение должно быть меньше 2MB!');
   }
 
-  console.log('isJpgOrPng && isLt2M; ', isJpgOrPng, isLt2M)
+  console.log('isJpgOrPng && isLt2M; ', isJpgOrPng, isLt2M);
   return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
 };
 
@@ -56,10 +61,12 @@ type Props = {
 
 export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
-  const themeToken = useThemeToken();
+  const dispatch = useDispatch<AppDispatch>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+  const [uploadImageError, setUploadImageError] = useState('');
+  const { showErrorNotification, showSuccessNotification } = useNotificationContext();
 
   const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
@@ -77,19 +84,27 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<CreateProductFormType> = (data) => {
-    const formData = new FormData();
-    console.log('fileList: ', fileList);
-    fileList.forEach((file) => {
-      if (file.originFileObj) {
-        formData.append('files', file.originFileObj);
-      }
-    });
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    formData.append('price', data.price?.toString() || '');
-
-    console.log('formData: ', formData);
+  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
+    if (!fileList.length) {
+      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
+      return;
+    } else {
+      const reqData = createFormDto({ ...data, fileList });
+      dispatch(createProduct(reqData))
+        .unwrap()
+        .then(() => {
+          showSuccessNotification({
+            message: t('SUCCESS'),
+            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+          });
+        })
+        .catch((err) =>
+          showErrorNotification({
+            message: t('ERROR'),
+            description: err.message,
+          }),
+        );
+    }
   };
 
   const handlePreview = async (file: UploadFile) => {
@@ -101,8 +116,14 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps['onChange'] = ({ fileList }) => {
+    if (!fileList || !fileList?.length) {
+      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
+    } else {
+      setUploadImageError('');
+    }
+    setFileList(fileList);
+  };
 
   return (
     <ConfirmModal
@@ -115,7 +136,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('TITLE_NAME')}
-          validateStatus={errors.title ? 'error' : ''}
+          validateStatus={errors.title && 'error'}
           help={errors.title?.message}>
           <Controller
             name="title"
@@ -127,7 +148,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('DESCRIPTION')}
-          validateStatus={errors.description ? 'error' : ''}
+          validateStatus={errors.description && 'error'}
           help={errors.description?.message}>
           <Controller
             name="description"
@@ -141,7 +162,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('PRICE')}
-          validateStatus={errors.price ? 'error' : ''}
+          validateStatus={errors.price && 'error'}
           help={errors.price?.message}>
           <Controller
             name="price"
@@ -157,20 +178,37 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
             )}
           />
         </Item>
-        
-        <Upload
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}
-          beforeUpload={beforeUpload}>
-          {fileList.length >= 8 ? null : (
-            <button style={{ border: 0, background: 'none' }} type="button">
-              <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
-            </button>
+
+        <Item
+          className="!m-0"
+          label={t('IMAGES')}
+          validateStatus={uploadImageError && 'error'}
+          help={uploadImageError}>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            beforeUpload={beforeUpload}>
+            {fileList.length >= 8 ? null : (
+              <button style={{ border: 0, background: 'none' }} type="button">
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </button>
+            )}
+          </Upload>
+          {previewImage && (
+            <Image
+              wrapperStyle={{ display: 'none' }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              }}
+              src={previewImage}
+            />
           )}
-        </Upload>
+        </Item>
         <Alert message={<Text>{t('UPLOAD_IMAGE_HELPER_TEXT')}</Text>} type="info" />
       </Form>
     </ConfirmModal>

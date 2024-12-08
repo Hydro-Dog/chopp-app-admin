@@ -1,1 +1,1 @@
-export * from './delete-category-modal';
+export * from './create-category-modal';

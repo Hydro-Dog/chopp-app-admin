@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
 import { useNotificationContext } from '@shared/index';
+import { AppDispatch, createProduct } from '@store/index';
 import {
   Alert,
-  Flex,
   Form,
   GetProp,
   Input,
@@ -16,9 +17,12 @@ import {
   Upload,
   UploadFile,
   UploadProps,
+  Image,
 } from 'antd';
+import { t } from 'i18next';
 import { z } from 'zod';
 import { useCreateProductFormSchema } from './hooks';
+import { createFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -34,30 +38,31 @@ const getBase64 = (file: FileType): Promise<string> =>
   });
 
 // Обработчик загрузки файла, который просто сохраняет файлы в состояние
-const useGetBeforeUpload = () => {
-  const { t } = useTranslation();
+const useBeforeUpload = () => {
   const { showErrorNotification } = useNotificationContext();
+  const { t } = useTranslation();
 
   return (file) => {
-    const isFormatValid = file.type === 'image/jpeg' || file.type === 'image/png';
-
-    if (!isFormatValid) {
+    console.log('file.type: ', file.type);
+    const isJpgOrPng =
+      file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
+    if (!isJpgOrPng) {
+      console.error('Вы можете загрузить только JPG/PNG файл!');
       showErrorNotification({
         message: t('ERROR'),
-        description: t('UPLOAD_IMAGE_ERROR.INVALID_FORMAT'),
+        description: t('ERRORS.IMAGE_INVALID_FORMAT', { format: 'JPG, JPEG, PNG' }),
       });
-      return 'ass';
     }
-    const mbLimitOverload = file.size / 1024 / 1024 > 2;
-    if (mbLimitOverload) {
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      console.error('Изображение должно быть меньше 2MB!');
       showErrorNotification({
         message: t('ERROR'),
-        description: t('UPLOAD_IMAGE_ERROR.TOO_BIG', { mb: 2 }),
+        description: t('ERRORS.IMAGE_TOO_BIG', { mb: 2 }),
       });
-      return 'boob';
     }
 
-    return isFormatValid && !mbLimitOverload ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
+    return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
   };
 };
 
@@ -69,10 +74,13 @@ type Props = {
 
 export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
-  const beforeUpload = useGetBeforeUpload();
+  const [uploadImageError, setUploadImageError] = useState('');
+  const { showErrorNotification, showSuccessNotification } = useNotificationContext();
+  const beforeUpload = useBeforeUpload();
 
   const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
@@ -90,22 +98,26 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<CreateProductFormType> = (data) => {
-    try {
-      const formData = new FormData();
-      console.log('fileList: ', fileList);
-      fileList.forEach((file) => {
-        if (file.originFileObj) {
-          formData.append('files', file.originFileObj);
-        }
-      });
-      formData.append('title', data.title);
-      formData.append('description', data.description);
-      formData.append('price', data.price?.toString() || '');
-
-      console.log('formData: ', formData);
-    } catch (error) {
-      console.log('ERrrrrrrrOR: ', error);
+  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
+    if (!fileList.length) {
+      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
+      return;
+    } else {
+      const reqData = createFormDto({ ...data, fileList });
+      dispatch(createProduct(reqData))
+        .unwrap()
+        .then(() => {
+          showSuccessNotification({
+            message: t('SUCCESS'),
+            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+          });
+        })
+        .catch((err) =>
+          showErrorNotification({
+            message: t('ERROR'),
+            description: err.message,
+          }),
+        );
     }
   };
 
@@ -118,8 +130,14 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps['onChange'] = ({ fileList }) => {
+    if (!fileList || !fileList?.length) {
+      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
+    } else {
+      setUploadImageError('');
+    }
+    setFileList(fileList);
+  };
 
   return (
     <ConfirmModal
@@ -132,7 +150,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('TITLE_NAME')}
-          validateStatus={errors.title ? 'error' : ''}
+          validateStatus={errors.title && 'error'}
           help={errors.title?.message}>
           <Controller
             name="title"
@@ -144,7 +162,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('DESCRIPTION')}
-          validateStatus={errors.description ? 'error' : ''}
+          validateStatus={errors.description && 'error'}
           help={errors.description?.message}>
           <Controller
             name="description"
@@ -158,7 +176,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
         <Item
           className="!m-0"
           label={t('PRICE')}
-          validateStatus={errors.price ? 'error' : ''}
+          validateStatus={errors.price && 'error'}
           help={errors.price?.message}>
           <Controller
             name="price"
@@ -175,30 +193,42 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
           />
         </Item>
 
-        <Item validateStatus="error" help={t('IMAGE_REQUIRED')}>
-          <Flex vertical gap={8}>
-            <Upload
-              locale={{
-                uploading: t('UPLOAD.UPLOADING'),
-                removeFile: t('UPLOAD.REMOVE_FILE'),
-                uploadError: t('UPLOAD.UPLOAD_ERROR'),
-                previewFile: t('UPLOAD.PREVIEW_FILE'),
+        <Item
+          className="!m-0"
+          label={t('IMAGES')}
+          validateStatus={uploadImageError && 'error'}
+          help={uploadImageError}>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            beforeUpload={beforeUpload}>
+            {fileList.length >= 8 ? null : (
+              <button style={{ border: 0, background: 'none' }} type="button">
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </button>
+            )}
+          </Upload>
+          {previewImage && (
+            <Image
+              wrapperStyle={{ display: 'none' }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
               }}
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-              beforeUpload={beforeUpload}>
-              {fileList.length >= 8 ? null : (
-                <button style={{ border: 0, background: 'none' }} type="button">
-                  <PlusOutlined />
-                  <div style={{ marginTop: 8 }}>{t('UPLOAD')}</div>
-                </button>
-              )}
-            </Upload>
-            <Alert message={<Text>{t('UPLOAD_IMAGE_HELPER_TEXT')}</Text>} type="info" />
-          </Flex>
+              src={previewImage}
+            />
+          )}
         </Item>
+        <Alert
+          message={
+            <Text>{t('UPLOAD_IMAGE_HELPER_TEXT', { format: 'JPG, JPEG, PNG', mb: 2 })}</Text>
+          }
+          type="info"
+        />
       </Form>
     </ConfirmModal>
   );

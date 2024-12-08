@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import { useNotification, useSearchParam } from '@shared/index';
+import { useSearchParam } from '@shared/index';
 import { Flex, Tooltip, Button, Typography } from 'antd';
-import { useBoolean } from 'usehooks-ts';
 import { CreateProductModal } from './components/';
-import { useEffect } from 'react';
+import { useBoolean } from 'usehooks-ts';
 
 const { Title } = Typography;
 
@@ -26,15 +25,6 @@ export const Main = () => {
   const onCancel = () => {
     closeCreateProductModal();
   };
-
-  const { showNotification } = useNotification();
-  useEffect(() => {
-    showNotification({
-      type: 'info',
-      message: t('ERROR'),
-      description: t('ERROR'),
-    });
-  }, [])
 
   return (
     <div>

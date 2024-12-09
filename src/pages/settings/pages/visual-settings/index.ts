@@ -1,1 +1,1 @@
-export * from './visual-settings'
+export * from './visual-settings';

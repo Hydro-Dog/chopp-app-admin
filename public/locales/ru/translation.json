@@ -9,6 +9,8 @@
   "REGISTER": "Зарегистрироваться",
   "EMAIL": "Email",
   "LOGIN": "Логин",
+  "PHONE": "Телефон",
+  "BY_EMAIL": "Эл. почта",
   "PHONE_NUMBER": "Номер телефона",
   "PASSWORD": "Пароль",
   "ENTER": "Войти",
@@ -102,5 +104,12 @@
   "ADD": "Добавить",
   "ANALYTICS": "Аналитика",
   "PRICING": "Ценообразование",
-  "THEME":"Тема"
+  "THEME":"Тема",
+  "UPLOAD_IMAGE_HELPER_TEXT": "JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения.",
+  "UPLOAD": "Загрузить",
+  "UPLOAD_IMAGE_ERROR": {
+    "INVALID_FORMAT": "Вы можете загрузить только JPG/PNG файл",
+    "TOO_BIG": "Изображение должно быть меньше {{mb}}MB"
+  },
+  "IMAGE_REQUIRED": "Загрузите как минимум одно изображение"
 }

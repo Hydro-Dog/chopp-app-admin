@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useNotificationContext } from '@shared/index';
-import { updateCategoryTitle } from '@store/slices/goods-slice';
+import { updateCategoryTitle } from '@store/slices/product-category-slice';
 import { AppDispatch } from '@store/store';
 import { Button, Flex, Form, Input } from 'antd';
 import { Tooltip } from 'antd/lib';

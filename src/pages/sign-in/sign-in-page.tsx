@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext, useThemeToken } from '@shared/index';
+import './sign-in-page.scss';
+
 import {
   AppDispatch,
   RootState,
@@ -14,33 +16,24 @@ import {
   wsConnect,
 } from '@store/index';
 import { FETCH_STATUS } from '@store/types/fetch-status';
-import { Button, Flex, Form, Input, Tooltip, Typography } from 'antd';
+import { Button, Flex, Form, Input, Tooltip, Typography, Tabs } from 'antd';
 import { z } from 'zod';
+import { useSignInFormSchema } from './hooks/useSignInFormSchema';
+import { useSignInTabs } from './hooks/useSignInTabs';
 
 const { Item } = Form;
 const { Text } = Typography;
-
-//TODO: вынести в отдельный файл
-const useSignInFormSchema = () => {
-  const { t } = useTranslation();
-
-  return z.object({
-    login: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
-    password: z
-      .string()
-      .min(8, { message: t('ERRORS.PASSWORD_TOO_SHORT', { length: '8 символов' }) })
-      .max(160, { message: t('ERRORS.PASSWORD_TOO_LONG') }),
-  });
-};
 
 export const SignInPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  const { showNotification } = useNotificationContext();
   const { t } = useTranslation();
+  const { showErrorNotification } = useNotificationContext();
   const themeToken = useThemeToken();
-  const signInFormSchema = useSignInFormSchema();
+  const { signInType, setSignInType, isSignInByEmail, tabsItems } = useSignInTabs();
+  const signInFormSchema = useSignInFormSchema(signInType);
+
   type SignInFormType = z.infer<typeof signInFormSchema>;
 
   const {
@@ -52,13 +45,14 @@ export const SignInPage = () => {
     reValidateMode: 'onChange',
     mode: 'onSubmit',
     defaultValues: {
-      login: '',
+      email: '',
+      phoneNumber: '',
       password: '',
     },
   });
 
-  const onSubmit: SubmitHandler<SignInFormType> = (data) => {
-    dispatch(loginUser({ ...data, email: data.login }))
+  const onSubmit: SubmitHandler<UserLoginDTO> = (data) => {
+    dispatch(loginUser({ ...data }))
       .then(({ payload }) => {
         if (payload) {
           dispatch(
@@ -73,8 +67,7 @@ export const SignInPage = () => {
 
   useEffect(() => {
     if (loginStatus === FETCH_STATUS.ERROR) {
-      showNotification({
-        type: 'error',
+      showErrorNotification({
         message: t('ERROR'),
         description: loginError?.message,
       });
@@ -83,7 +76,7 @@ export const SignInPage = () => {
       navigate('/');
       console.log('HERE!');
     }
-  }, [dispatch, loginError?.message, loginStatus, navigate, showNotification, t]);
+  }, [dispatch, loginError?.message, loginStatus, navigate, showErrorNotification, t]);
 
   return (
     <Flex className="w-full h-screen" style={{ background: themeToken.colorBgBase }}>
@@ -95,20 +88,49 @@ export const SignInPage = () => {
         colon={false}
         wrapperCol={{ span: 16 }}
         onFinish={handleSubmit(onSubmit)}>
-        <Item<SignInFormType>
-          label={t('LOGIN')}
-          validateStatus={errors.login ? 'error' : ''}
-          help={errors.login?.message}>
-          <Controller
-            name="login"
-            control={control}
-            render={({ field }) => (
-              <div className="flex">
-                <Input {...field} placeholder={t('LOGIN')} />
-              </div>
-            )}
-          />
-        </Item>
+
+        <Tabs
+          centered
+          className="sign-in-tabs"
+          defaultActiveKey={signInType}
+          items={tabsItems}
+          onChange={(key: any) => setSignInType(key)}
+        />
+
+        {isSignInByEmail && (
+          <Item<SignInFormType>
+            label={t('EMAIL')}
+            validateStatus={errors.email ? 'error' : ''}
+            help={errors.email?.message}>
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <div className="flex">
+                  <Input {...field} placeholder={t('LOGIN')} />
+                </div>
+              )}
+            />
+          </Item>
+        )}
+
+        {!isSignInByEmail && (
+          <Item<SignInFormType>
+            label={t('PHONE')}
+            validateStatus={errors.phoneNumber ? 'error' : ''}
+            help={errors.phoneNumber?.message}>
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field }) => (
+                <div className="flex">
+                  {/* TODO: добавить маску номера из клиентской части */}
+                  <Input {...field} placeholder={t('+7 ___ ___-__-__')} />
+                </div>
+              )}
+            />
+          </Item>
+        )}
 
         <Item<SignInFormType>
           label={t('PASSWORD')}
@@ -138,10 +160,15 @@ export const SignInPage = () => {
               {t('FORGOT_PASSWORD')}?
             </Text>
           </Tooltip>
+
           {/* <Button type="text" onClick={() => navigate(`/${ROUTES.REGISTER}`)}>
             {t('REGISTER', { ns: 'phrases' })}
           </Button> */}
         </div>
+        {/* TODO: удалить, если не понадобится кнопка,
+            чисто для примера, сейчас вместо нее табы
+        */}
+        {/* <Button onClick={() => () => setSignInType(isSignInByEmail ? SIGN_IN_TYPE.PHONE_NUMBER : SIGN_IN_TYPE.EMAIL)}>{isSignInByEmail ? t('BY_PHONE_NUMBER') : t('BY_EMAIL');}</Button> */}
       </Form>
     </Flex>
   );

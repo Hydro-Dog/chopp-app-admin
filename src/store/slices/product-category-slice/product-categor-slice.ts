@@ -3,9 +3,8 @@ import { ErrorResponse } from '@shared/index';
 import { createCategory, deleteCategory, fetchCategories, updateCategoryTitle } from './actions';
 import { Category } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
-import { title } from 'process';
 
-export type GoodsState = {
+export type ProductCategoryState = {
   categories?: Category[];
   fetchCategoriesStatus: FETCH_STATUS;
   fetchCategoriesError: ErrorResponse | null;
@@ -19,7 +18,7 @@ export type GoodsState = {
   updateCategoryTitleError: ErrorResponse | null;
 };
 
-const initialState: GoodsState = {
+const initialState: ProductCategoryState = {
   categories: undefined,
   fetchCategoriesStatus: FETCH_STATUS.IDLE,
   fetchCategoriesError: null,
@@ -33,8 +32,8 @@ const initialState: GoodsState = {
   updateCategoryTitleError: null,
 };
 
-export const goodsSlice = createSlice({
-  name: 'goods',
+export const productCategorySlice = createSlice({
+  name: 'productCategory',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

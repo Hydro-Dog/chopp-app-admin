@@ -1,44 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { JSXElementConstructor, ReactElement, useState } from 'react';
+import { JSXElementConstructor, ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Form, Card, Button, Space, Row, Col } from 'antd';
+import { Form, Card, Button, Space, Row, Col, Flex } from 'antd';
+import { useBoolean } from 'usehooks-ts';
 
-interface ISettingCardComponentProps {
+type Props = {
   cardTitle: string;
-  onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
   editChildren: ReactElement<any, string | JSXElementConstructor<any>>;
   viewChildren: ReactElement<any, string | JSXElementConstructor<any>>;
-}
+};
 
-export const SettingCardComponent = ({
-  cardTitle,
-  onEdit,
-  onSave,
-  onCancel,
-  editChildren,
-  viewChildren,
-}: ISettingCardComponentProps) => {
+export const SettingCardComponent = ({ cardTitle, editChildren, viewChildren }: Props) => {
   const { t } = useTranslation();
-  const [isEditing, setIsEditing] = useState(false);
-  const handleEdit = () => {
-    onEdit();
-    setIsEditing(true);
-  };
-  const handleCancel = () => {
-    onCancel();
-    setIsEditing(false);
-  };
-  const handleSave = () => {
-    onSave();
-    setIsEditing(false);
-  };
+  const { value: isEditing, setTrue: handleEdit, setFalse: handleCancel } = useBoolean();
 
   return (
     <Card
       title={
-        <Row justify="space-between" align="middle">
+        <Flex justify="space-between" align="middle">
           <Col>{cardTitle}</Col>
           <Col>
             {!isEditing ? (
@@ -48,13 +27,13 @@ export const SettingCardComponent = ({
             ) : (
               <Space>
                 <Button onClick={handleCancel}>{t('CANCEL')}</Button>
-                <Button type="primary" onClick={handleSave}>
+                <Button type="primary" onClick={handleCancel}>
                   {t('SAVE')}
                 </Button>
               </Space>
             )}
           </Col>
-        </Row>
+        </Flex>
       }>
       <Form layout="vertical" size="large">
         {isEditing ? editChildren : viewChildren}

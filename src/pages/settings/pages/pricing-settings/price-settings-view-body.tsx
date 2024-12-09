@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { InputNumber, Checkbox, Tooltip, Alert, Form } from 'antd';
+import { InputNumber, Checkbox, Tooltip, Alert, Form, Card } from 'antd';
 
 export const PriceSettingsViewBody = () => {
   const { t } = useTranslation();
   return (
-    <>
-      {' '}
+    <div>
       <Form.Item label={<span>{t('PRICING_PAGE.AVERAGE_COST')}</span>}>
         <Tooltip title={t('PRICING_PAGE.DELIVERY_COMMENT')}>
           <InputNumber
@@ -33,6 +32,6 @@ export const PriceSettingsViewBody = () => {
           />
         </Tooltip>
       </Form.Item>{' '}
-    </>
+    </div>
   );
 };

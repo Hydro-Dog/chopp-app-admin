@@ -10,15 +10,6 @@ export const PricingSettingsPage = () => {
     <TitlePage title={t('PRICING')}>
       <SettingCardComponent
         cardTitle={t('PRICING_PAGE.DELIVERY_OPTIONS')}
-        onCancel={() => {
-          console.log('cancel');
-        }}
-        onEdit={() => {
-          console.log('edit');
-        }}
-        onSave={() => {
-          console.log('save');
-        }}
         editChildren={<PriceSettingsEditBody />}
         viewChildren={<PriceSettingsViewBody />}
       />

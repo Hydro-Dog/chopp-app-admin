@@ -11,6 +11,8 @@ import {
   LangContextProvider,
   PropsWithChildrenOnly,
   NotificationContextProvider,
+  STORAGE_KEYS,
+  THEME,
 } from '@shared/index';
 import { AppDispatch, fetchCurrentUser, store, wsConnect, wsDisconnect } from '@store/index';
 import { useAxiosInterceptors } from '@store/middleware';
@@ -58,12 +60,12 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   // @ts-ignore
   useEffect(() => {
     // @ts-ignore
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {
       dispatch(fetchCurrentUser());
 
       dispatch(
         wsConnect({
-          url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem('token')}`,
+          url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
         }),
       );
     }
@@ -79,7 +81,7 @@ export const App = () => {
 
   const themeConfig = {
     //TODO: Использовать енам со значением 'dark'
-    algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+    algorithm: theme === THEME.DARK ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
   //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()

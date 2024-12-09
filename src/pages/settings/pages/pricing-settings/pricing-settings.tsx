@@ -17,17 +17,17 @@ export const PricingSettingsPage = () => {
       <Card
         title={
           <Row justify="space-between" align="middle">
-            <Col>{t('Настройки доставки')}</Col>
+            <Col>{t('PRICING_PAGE.DELIVERY_OPTIONS')}</Col>
             <Col>
               {!isEditing ? (
                 <Button type="primary" onClick={handleEdit}>
-                  Редактировать
+                  {t('EDIT')}
                 </Button>
               ) : (
                 <Space>
-                  <Button onClick={handleCancel}>Отмена</Button>
+                  <Button onClick={handleCancel}>{t('CANCEL')}</Button>
                   <Button type="primary" onClick={handleSave}>
-                    Сохранить
+                    {t('SAVE')}
                   </Button>
                 </Space>
               )}
@@ -35,30 +35,32 @@ export const PricingSettingsPage = () => {
           </Row>
         }>
         <Form layout="vertical" size="large">
-          <Form.Item label={<span>Средняя стоимость доставки </span>}>
-            <Tooltip title="При оформлении заказа клиент увидит эту сумму в поле 'Средняя стоимость доставки'. Если сумма не указана, пользователь не будет проинформирован о стоимости доставки.">
+          <Form.Item label={<span>{t('PRICING_PAGE.AVERAGE_COST')}</span>}>
+            <Tooltip title={t('PRICING_PAGE.DELIVERY_COMMENT')}>
               <InputNumber
-                style={{ width: '100%' }}
-                placeholder="Введите сумму"
+                min={0}
+                style={{ width: '30%' }}
+                placeholder={t('PRICING_PAGE.ENTER_PRICE')}
                 disabled={!isEditing}
               />
             </Tooltip>
           </Form.Item>
           <Alert
             type="info"
-            message="Вы можете указать сумму заказа, с которой начинается бесплатная доставка."
+            message={t('PRICING_PAGE.PRICE_COMMENT')}
             showIcon
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 16, width: '30%' }}
           />
           <Form.Item>
-            <Checkbox disabled={!isEditing}>Бесплатная доставка включена</Checkbox>
+            <Checkbox disabled={!isEditing}>{t('PRICING_PAGE.FREE_SHIPPING')}</Checkbox>
           </Form.Item>
 
-          <Form.Item label={<span>Сумма </span>}>
-            <Tooltip title="Если заказ превышает эту сумму, то доставка бесплатная.">
+          <Form.Item label={<span>{t('PRICE')}</span>}>
+            <Tooltip title={t('PRICING_PAGE.PRICE_DELIVERY')}>
               <InputNumber
-                style={{ width: '100%' }}
-                placeholder="Введите сумму"
+                min={0}
+                style={{ width: '30%' }}
+                placeholder={t('PRICING_PAGE.ENTER_PRICE')}
                 disabled={!isEditing}
               />
             </Tooltip>

@@ -4,26 +4,29 @@ import { TitlePage, useTheme } from '@shared/index';
 import { Select } from 'antd';
 import { Card } from 'antd';
 import { Form } from 'antd';
+import { THEME, STORAGE_KEYS } from '@shared/enum';
 
 const { Item } = Form;
 
 export const VisualSettingsPage = () => {
   const { theme, toggleTheme } = useTheme();
-  const [pickedTheme, setPickedTheme] = useState(() => localStorage.getItem('theme') || theme);
+  const [pickedTheme, setPickedTheme] = useState(
+    () => localStorage.getItem(STORAGE_KEYS.THEME) || theme,
+  );
   const { t } = useTranslation();
 
   const onThemeChange = (val: string) => {
     //TODO: Использовать енам со значением 'system'
-    if (val === 'system') {
+    if (val === THEME.SYSTEM) {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
+        ? THEME.DARK
+        : THEME.LIGHT;
       toggleTheme(systemTheme);
       //TODO: Использовать енам со значением 'system'
-      localStorage.setItem('theme', 'system');
+      localStorage.setItem(STORAGE_KEYS.THEME, THEME.SYSTEM);
     } else {
       toggleTheme(val);
-      localStorage.setItem('theme', val);
+      localStorage.setItem(STORAGE_KEYS.THEME, val);
     }
 
     setPickedTheme(val);
@@ -38,9 +41,9 @@ export const VisualSettingsPage = () => {
             onChange={(item) => onThemeChange(item)}
             options={[
               //TODO: Использовать енам со значением 'dark'
-              { value: 'dark', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.DARK') },
-              { value: 'light', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.LIGHT') },
-              { value: 'system', label: t('SETTINGS_PAGE.VISUAL_SETTINGS.SYSTEM') },
+              { value: THEME.DARK, label: t('SETTINGS_PAGE.VISUAL_SETTINGS.DARK') },
+              { value: THEME.LIGHT, label: t('SETTINGS_PAGE.VISUAL_SETTINGS.LIGHT') },
+              { value: THEME.SYSTEM, label: t('SETTINGS_PAGE.VISUAL_SETTINGS.SYSTEM') },
             ]}
           />
         </Item>

@@ -1,2 +1,2 @@
 export * from './pricing-settings';
-export * from './visual-settings';
+export * from './visual-settings-page';

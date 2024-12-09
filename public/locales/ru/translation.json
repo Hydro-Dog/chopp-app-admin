@@ -86,7 +86,11 @@
   "SETTINGS_PAGE": {
     "VISUAL_SETTINGS": {
       "THEMES": "Цветовое оформление",
-      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте"
+      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
+      "COLOR_SETTINGS":"Настройки цветового оформления",
+      "DARK":"Темная",
+      "LIGHT":"Светлая",
+      "SYSTEM":"Системная"
     }
   },
   "NEW_MESSAGE": "Новое сообщение",
@@ -100,6 +104,7 @@
   "ADD": "Добавить",
   "ANALYTICS": "Аналитика",
   "PRICING": "Ценообразование",
+  "THEME":"Тема",
   "UPLOAD_IMAGE_HELPER_TEXT": "JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения.",
   "UPLOAD": "Загрузить",
   "UPLOAD_IMAGE_ERROR": {

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/index';
+import { ErrorResponse, STORAGE_KEYS } from '@shared/index';
 import {
   updateCurrentUser,
   fetchCurrentUser,
@@ -136,8 +136,8 @@ export const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<UserAuthorization>) => {
         state.loginStatus = FETCH_STATUS.SUCCESS;
 
-        localStorage.setItem('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, action.payload.accessToken);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, action.payload.refreshToken);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginStatus = FETCH_STATUS.ERROR;
@@ -148,7 +148,7 @@ export const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.logoutStatus = FETCH_STATUS.SUCCESS;
-        localStorage.removeItem('token');
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.logoutStatus = FETCH_STATUS.ERROR;

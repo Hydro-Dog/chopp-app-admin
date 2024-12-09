@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { STORAGE_KEYS } from '@shared/enum';
 
 type FailedQueRequest = {
   resolve: (val: unknown) => void;
@@ -17,15 +18,15 @@ export const axiosDefault = axios.create({ baseURL: import.meta.env.VITE_BASE_UR
 // Функция для обновления токена
 const refreshAccessToken = async () => {
   try {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
     const response = await axiosDefault.post('auth/refresh', { refreshToken });
-    localStorage.setItem('accessToken', response.data.accessToken);
-    localStorage.setItem('refreshToken', response.data.refreshToken);
+    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, response.data.accessToken);
+    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.data.refreshToken);
     return response.data.accessToken;
   } catch (error) {
     console.error('Error refreshing access token:', error);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
     window.location.href = '/signin'; // Редирект на страницу логина
     throw new Error('Session expired, please log in again');
   }
@@ -52,7 +53,7 @@ export const useAxiosInterceptors = () => {
   useEffect(() => {
     const requestInterceptor = axiosPrivate.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
         if (token) {
           config.headers['Authorization'] = `Bearer ${token}`;
         }

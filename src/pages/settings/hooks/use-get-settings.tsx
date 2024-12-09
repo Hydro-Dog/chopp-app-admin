@@ -18,7 +18,7 @@ export const useGetSettings = () => {
     },
     {
       path: SETTINGS_PATHS.PRICING_SETTINGS,
-      image: <SettingsGridIcon IconComponent={ColorLensIcon}/>,
+      image: <SettingsGridIcon IconComponent={ColorLensIcon} />,
       title: t('PRICING'),
       description: t('PRICING'),
     },

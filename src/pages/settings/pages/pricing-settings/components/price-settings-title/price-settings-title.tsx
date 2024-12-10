@@ -1,17 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Row, Space } from 'antd';
+import { Button, Col, Flex, Row, Space, Typography } from 'antd';
+const { Title } = Typography;
 
 type Props = {
   isEditing: boolean;
   toggleEditMode: () => void;
 };
-export const PricingTitleBlock = ({ isEditing, toggleEditMode }: Props) => {
+export const PriceSettingsTitle = ({ isEditing, toggleEditMode }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Row className="w-full" justify="space-between" align="middle">
-      <Col>{t('DELIVERY_OPTIONS')}</Col>
-      <Col>
+    <Flex className="w-full" justify="space-between" align="center">
+      <Title className="!m-0" level={4}>
+        {t('DELIVERY')}
+      </Title>
+      <div>
         {isEditing ? (
           <Space>
             <Button onClick={toggleEditMode}>{t('CANCEL')}</Button>
@@ -24,7 +27,7 @@ export const PricingTitleBlock = ({ isEditing, toggleEditMode }: Props) => {
             {t('EDIT')}
           </Button>
         )}
-      </Col>
-    </Row>
+      </div>
+    </Flex>
   );
 };

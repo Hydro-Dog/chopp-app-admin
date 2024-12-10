@@ -8,4 +8,6 @@ export enum ROUTES {
   GOODS = 'goods',
   SETTINGS = 'settings',
   ANALYTICS = 'analytics',
+  VISUAL_SETTINGS = 'visual_settings',
+  PRICING_SETTINGS = 'pricing-settings',
 }

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TitlePage } from '@shared/index';
+import { TitlePage, Breadcrumbs } from '@shared/index';
 import { Row, Col } from 'antd';
 import { SettingCard } from './components';
 import { useGetSettings } from './hooks';

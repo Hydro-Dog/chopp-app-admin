@@ -1,6 +1,7 @@
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import { Typography } from 'antd';
 import { MainContainer } from '../main-container';
+import { Breadcrumbs } from '@shared/index';
 
 const { Title } = Typography;
 
@@ -41,6 +42,7 @@ export const TitlePage = ({ title, children }: PropsWithChildren<Props>) => {
         <Title ref={titleRef} level={2}>
           {title}
         </Title>
+        <Breadcrumbs />
         <div ref={contentRef} style={{ overflow: 'auto' }}>
           {children}
         </div>

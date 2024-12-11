@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { ROUTES } from '@shared/enum';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const Breadcrumbs = () => {
@@ -9,19 +9,19 @@ export const Breadcrumbs = () => {
   const location = useLocation();
   const { t } = useTranslation();
 
-  const [parts, setParts] = useState([
+  const [pathSegment, setPathSegment] = useState([
     ...new Set(location.pathname.split('/').map((item) => (item === '' ? (item = '/') : item))),
   ]);
 
-  const nav = (item: string) => {
-    const index = parts.indexOf(item);
-    setParts((prev) => prev.slice(0, index + 1));
+  const breadcrumbsNavigation = (item: string) => {
+    const index = pathSegment.indexOf(item);
+    setPathSegment((prev) => prev.slice(0, index + 1));
 
-    if (parts.length > 1) {
-      const URL = parts.slice(0, 1).join('') + parts.slice(1, index + 1).join('/');
+    if (pathSegment.length > 1) {
+      const URL = pathSegment.slice(0, 1).join('') + pathSegment.slice(1, index + 1).join('/');
       navigate(URL);
     } else {
-      const URL = parts.slice(0, 1).join('');
+      const URL = pathSegment.slice(0, 1).join('');
       navigate(URL);
     }
   };
@@ -30,9 +30,12 @@ export const Breadcrumbs = () => {
 
   return (
     <Breadcrumb className="my-5">
-      {parts.map((item) => (
-        <Breadcrumb.Item key={item} onClick={() => nav(item)} className=" cursor-pointer">
-          {t(`BREADCRUMB_PATHS.${namings.find(([key, val]) => val === item)?.[0]}`)}
+      {pathSegment.map((item) => (
+        <Breadcrumb.Item
+          key={item}
+          onClick={() => breadcrumbsNavigation(item)}
+          className=" cursor-pointer">
+          {t(`PATHS.${namings.find(([_, val]) => val === item)?.[0]}`)}
         </Breadcrumb.Item>
       ))}
     </Breadcrumb>

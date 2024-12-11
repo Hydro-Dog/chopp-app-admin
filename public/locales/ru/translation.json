@@ -93,15 +93,15 @@
       "SYSTEM":"Системная"
     }
   },
-  "BREADCRUMB_PATHS":{
-    "ROOT":"Пользователи",
+  "PATHS":{
+    "ROOT":"Главная",
     "VISUAL_SETTINGS":"Цветовое оформление",
     "SETTINGS": "Управление",
     "PRICING_SETTINGS": "Ценообразование",
     "CHATS":"Чаты",
     "ACTIVITY":"Вызовы",
     "SIGN_IN":"Вход",
-    "REGISTER":"Зарегистрироваться",
+    "REGISTER":"Регистрация",
     "GOODS":"Товары",
     "ANALYTICS":"Аналитика"
   },

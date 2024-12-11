@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
-import { useNotificationContext } from '@shared/index';
+import { useNotificationContext, useSearchParam } from '@shared/index';
 import { AppDispatch, createProduct } from '@store/index';
 import {
   Alert,
@@ -75,6 +75,7 @@ type Props = {
 export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const categoryId = useSearchParam('id');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -103,7 +104,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const reqData = createFormDto({ ...data, fileList });
+      const reqData = createFormDto({ ...data, fileList, category: categoryId || '' });
       dispatch(createProduct(reqData))
         .unwrap()
         .then(() => {

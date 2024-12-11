@@ -6,6 +6,7 @@ export type Product = {
   description: number;
   price: number;
   images: string[];
+  category: number;
 };
 
 export type CreateProductDTO = Omit<Product, 'id' | 'images'> & { images: UploadFile[] };

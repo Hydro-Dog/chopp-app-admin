@@ -44,7 +44,7 @@
     "CONTENT_TOO_SHORT": "Слишком короткий текст",
     "CONTENT_TOO_LONG": "Слишком длинный текст",
     "UPLOAD_IMAGE": "Загрузите изображение",
-    "IMAGE_INVALID_FORMAT": "Требуется изображение формата {{format}}",
+    "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
     "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB"
   },
   "NAME": "Имя",

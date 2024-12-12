@@ -8,11 +8,11 @@ export const useCreateProductFormSchema = () => {
     title: z
       .string()
       .min(1, { message: t('ERRORS.REQUIRED') })
-      .max(30, { message: t('ERRORS.CONTENT_TOO_LONG') }),
+      .max(100, { message: t('ERRORS.CONTENT_TOO_LONG') }),
     description: z
       .string()
-      .min(1, { message: t('ERRORS.REQUIRED') })
-      .max(260, { message: t('ERRORS.CONTENT_TOO_LONG') }),
+      .min(1, { message: t('ERRORS.REQUIRED') }),
+      // .max(260, { message: t('ERRORS.CONTENT_TOO_LONG') }),
     price: z.number().min(1, { message: t('ERRORS.REQUIRED') }),
   });
 };

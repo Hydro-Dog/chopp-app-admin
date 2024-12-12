@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useChatsContext } from '@pages/chats/chats-context';
-import { useSearchParam } from '@shared/index';
+import { useSearchParamValue } from '@shared/index';
 import { ChatMessage } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { RootState, AppDispatch } from '@store/index';
@@ -17,7 +17,7 @@ export const ChatInput = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { setMessages, setChats } = useChatsContext();
 
-  const urlChatId = useSearchParam('id');
+  const urlChatId = useSearchParamValue('id');
 
   const handleSendMessage = () => {
     if (text.trim()) {

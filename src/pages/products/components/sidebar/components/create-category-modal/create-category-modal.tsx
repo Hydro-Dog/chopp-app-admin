@@ -1,12 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BasicModal } from '@shared/index';
-import { useNotificationContext } from '@shared/index';
+import { useSuperDispatch } from '@shared/index';
 import { createCategory } from '@store/slices/product-category-slice';
-import { AppDispatch, RootState } from '@store/store';
+import { RootState } from '@store/store';
+import { FETCH_STATUS } from '@store/types';
 import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
@@ -20,11 +21,10 @@ type Props = {
 
 export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const { categories, createCategoryStatus, createCategoryError } = useSelector(
+  const superDispatch = useSuperDispatch();
+  const { categories, createCategoryStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
-  const { showErrorNotification } = useNotificationContext();
   const inputRef = useRef<InputRef>(null);
 
   const createCategoryFormSchema = useCreateCategoryFormSchema();
@@ -42,21 +42,16 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
     },
   });
 
+  console.log('createCategoryStatus: ', createCategoryStatus);
+
   const onSubmit: SubmitHandler<CreateCategoryFormType> = ({ category: title }) => {
-    dispatch(
-      createCategory({
+    superDispatch({
+      action: createCategory({
         title,
         order: categories?.length !== undefined ? categories?.length : 0,
       }),
-    )
-      .unwrap()
-      .then(onClose)
-      .catch((error) => {
-        showErrorNotification({
-          message: t('Error'),
-          description: error?.message,
-        });
-      });
+      thenHandler: onClose,
+    });
   };
 
   const onClose = () => {
@@ -78,7 +73,8 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
       title={t('ADD_CATEGORY')}
       open={open}
       onOk={handleSubmit(onSubmit)}
-      onCancel={onClose}>
+      onCancel={onClose}
+      confirmLoading={createCategoryStatus === FETCH_STATUS.LOADING}>
       <Form onFinish={handleSubmit(onSubmit)}>
         <Item validateStatus={errors.category && 'error'} help={errors.category?.message}>
           <Controller

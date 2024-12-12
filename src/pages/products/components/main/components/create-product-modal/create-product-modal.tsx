@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
-import { useNotificationContext, useSearchParam } from '@shared/index';
+import { useNotificationContext, useSearchParamValue, useSuperDispatch } from '@shared/index';
 import { AppDispatch, createProduct } from '@store/index';
 import {
   Alert,
@@ -39,10 +39,10 @@ const getBase64 = (file: FileType): Promise<string> =>
 // Обработчик загрузки файла, который просто сохраняет файлы в состояние
 const useBeforeUpload = () => {
   const { showErrorNotification } = useNotificationContext();
+  const superDispatch = useSuperDispatch();
   const { t } = useTranslation();
 
   return (file) => {
-    console.log('file.type: ', file.type);
     const isJpgOrPng =
       file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
     if (!isJpgOrPng) {
@@ -74,7 +74,8 @@ type Props = {
 export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const categoryId = useSearchParam('id');
+  const superDispatch = useSuperDispatch();
+  const categoryId = useSearchParamValue('id');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -88,6 +89,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<{ title: string; description: string; price: number | null }>({
     resolver: zodResolver(createProductFormSchema),
@@ -104,20 +106,19 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
       return;
     } else {
       const reqData = createFormDto({ ...data, fileList, categoryId: categoryId || '' });
-      dispatch(createProduct(reqData))
-        .unwrap()
-        .then(() => {
+      superDispatch({
+        action: createProduct(reqData),
+        thenHandler: () => {
           showSuccessNotification({
             message: t('SUCCESS'),
             description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
           });
-        })
-        .catch((err) =>
-          showErrorNotification({
-            message: t('ERROR'),
-            description: err.message,
-          }),
-        );
+          // dispatch(fetchProducts())
+          onOk();
+          reset();
+          setFileList([])
+        },
+      });
     }
   };
 
@@ -139,12 +140,18 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     setFileList(fileList);
   };
 
+  const handleCancel = () => {
+    reset();
+    setFileList([])
+    onCancel();
+  };
+
   return (
     <ConfirmModal
       title={t('CREATE_PRODUCT')}
       open={open}
       onOk={handleSubmit(onSubmit)}
-      onCancel={onCancel}
+      onCancel={handleCancel}
       okTitle={t('ADD')}>
       <Form layout="vertical" className="flex flex-col gap-4">
         <Item

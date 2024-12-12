@@ -1,30 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import { useSearchParam } from '@shared/index';
 import { Flex, Tooltip, Button, Typography } from 'antd';
-import { CreateProductModal } from './components/';
 import { useBoolean } from 'usehooks-ts';
+import { CreateProductModal, ProductsGrid } from './components/';
 
 const { Title } = Typography;
 
 export const Main = () => {
-  const urlCategoryId = useSearchParam('id');
   const { t } = useTranslation();
 
   const {
     value: isCreateProductModalOpen,
     setTrue: openCreateProductModal,
-    setFalse: closeCreateProductModal,
+    toggle: toggleCreateProductModal,
   } = useBoolean();
-
-  const onOk = () => {
-    closeCreateProductModal();
-  };
-
-  const onCancel = () => {
-    closeCreateProductModal();
-  };
 
   return (
     <div>
@@ -36,17 +26,17 @@ export const Main = () => {
           </Title>
         </Flex>
         <Tooltip title={t('ADD_GOODS')}>
-          <Button
-            // disabled={createProductStatus === FETCH_STATUS.LOADING}
-            // loading={createProductStatus === FETCH_STATUS.LOADING}
-            onClick={openCreateProductModal}
-            type="primary">
+          <Button onClick={openCreateProductModal} type="primary">
             <AddRoundedIcon />
           </Button>
         </Tooltip>
       </Flex>
-      urlCategoryId: {urlCategoryId}
-      <CreateProductModal open={isCreateProductModalOpen} onCancel={onCancel} onOk={onOk} />
+      <ProductsGrid />
+      <CreateProductModal
+        open={isCreateProductModalOpen}
+        onCancel={toggleCreateProductModal}
+        onOk={toggleCreateProductModal}
+      />
     </div>
   );
 };

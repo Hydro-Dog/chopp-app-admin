@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, STORAGE_KEYS } from '@shared/index';
+import { ErrorResponse, SearchResponse, STORAGE_KEYS } from '@shared/index';
 import {
   updateCurrentUser,
   fetchCurrentUser,
@@ -11,7 +11,7 @@ import {
   fetchUser,
   fetchActiveCalls,
 } from './actions';
-import { CallsTableRecord, SearchResponse, User, UserAuthorization } from './types';
+import { CallsTableRecord, User, UserAuthorization } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type UserState = {

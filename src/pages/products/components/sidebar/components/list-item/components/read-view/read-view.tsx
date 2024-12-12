@@ -1,8 +1,8 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import HeightRoundedIcon from '@mui/icons-material/HeightRounded';
-import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { Button, Flex, List, Tooltip } from 'antd';
 
 type Props<T> = {
@@ -75,7 +75,7 @@ export const ReadView = <T extends ReactNode>({
                 e.stopPropagation();
                 setMode('edit');
               }}>
-              <ModeEditRoundedIcon />
+              <ModeEditOutlinedIcon />
             </Button>
           </Tooltip>
         )}
@@ -90,7 +90,7 @@ export const ReadView = <T extends ReactNode>({
                 e.stopPropagation();
                 onDeleteItem(id);
               }}>
-              <DeleteForeverRoundedIcon />
+              <DeleteOutlineRoundedIcon />
             </Button>
           </Tooltip>
         )}

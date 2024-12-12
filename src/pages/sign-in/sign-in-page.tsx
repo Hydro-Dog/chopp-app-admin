@@ -32,8 +32,8 @@ export const SignInPage = () => {
   const { showErrorNotification } = useNotificationContext();
   const themeToken = useThemeToken();
   const { signInType, setSignInType, isSignInByEmail, tabsItems } = useSignInTabs();
-  const signInFormSchema = useSignInFormSchema(signInType);
 
+  const signInFormSchema = useSignInFormSchema(signInType);
   type SignInFormType = z.infer<typeof signInFormSchema>;
 
   const {

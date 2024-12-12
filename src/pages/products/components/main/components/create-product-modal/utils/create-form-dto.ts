@@ -5,10 +5,10 @@ type Args = {
   description: string;
   price: number;
   fileList: UploadFile[];
-  category: string;
+  categoryId: string;
 };
 
-export const createFormDto = ({ title, description, price, fileList, category }: Args) => {
+export const createFormDto = ({ title, description, price, fileList, categoryId }: Args) => {
   const formData = new FormData();
   fileList.forEach((file) => {
     if (file.originFileObj) {
@@ -18,7 +18,7 @@ export const createFormDto = ({ title, description, price, fileList, category }:
   formData.append('title', title);
   formData.append('description', description);
   formData.append('price', String(price));
-  formData.append('category', category || '');
+  formData.append('categoryId', categoryId || '');
 
   return formData;
 };

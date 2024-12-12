@@ -19,7 +19,6 @@ import {
   UploadProps,
   Image,
 } from 'antd';
-import { t } from 'i18next';
 import { z } from 'zod';
 import { useCreateProductFormSchema } from './hooks';
 import { createFormDto } from './utils';
@@ -104,7 +103,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const reqData = createFormDto({ ...data, fileList, category: categoryId || '' });
+      const reqData = createFormDto({ ...data, fileList, categoryId: categoryId || '' });
       dispatch(createProduct(reqData))
         .unwrap()
         .then(() => {
@@ -224,6 +223,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
             />
           )}
         </Item>
+
         <Alert
           message={
             <Text>{t('UPLOAD_IMAGE_HELPER_TEXT', { format: 'JPG, JPEG, PNG', mb: 2 })}</Text>

@@ -87,23 +87,23 @@
     "VISUAL_SETTINGS": {
       "THEMES": "Цветовое оформление",
       "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
-      "COLOR_SETTINGS":"Настройки цветового оформления",
-      "DARK":"Темная",
-      "LIGHT":"Светлая",
-      "SYSTEM":"Системная"
+      "COLOR_SETTINGS": "Настройки цветового оформления",
+      "DARK": "Темная",
+      "LIGHT": "Светлая",
+      "SYSTEM": "Системная"
     }
   },
-  "PATHS":{
-    "ROOT":"Главная",
-    "VISUAL_SETTINGS":"Цветовое оформление",
+  "PATHS": {
+    "ROOT": "Главная",
+    "VISUAL_SETTINGS": "Тема",
     "SETTINGS": "Управление",
     "PRICING_SETTINGS": "Ценообразование",
-    "CHATS":"Чаты",
-    "ACTIVITY":"Вызовы",
-    "SIGN_IN":"Вход",
-    "REGISTER":"Регистрация",
-    "GOODS":"Товары",
-    "ANALYTICS":"Аналитика"
+    "CHATS": "Чаты",
+    "ACTIVITY": "Вызовы",
+    "SIGN_IN": "Вход",
+    "REGISTER": "Регистрация",
+    "GOODS": "Товары",
+    "ANALYTICS": "Аналитика"
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",
@@ -116,7 +116,7 @@
   "ADD": "Добавить",
   "ANALYTICS": "Аналитика",
   "PRICING": "Ценообразование",
-  "THEME":"Тема",
+  "THEME": "Тема",
   "UPLOAD_IMAGE_HELPER_TEXT": "JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения.",
   "UPLOAD": "Загрузить",
   "UPLOAD_IMAGE_ERROR": {

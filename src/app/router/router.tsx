@@ -11,9 +11,9 @@ import {
   SettingsPage,
 } from '@pages/index';
 
+import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
-import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
 
 export const router = createBrowserRouter([
   {

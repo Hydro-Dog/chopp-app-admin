@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TitlePage, Breadcrumbs } from '@shared/index';
+import { TitlePage } from '@shared/index';
 import { Row, Col } from 'antd';
 import { SettingCard } from './components';
 import { useGetSettings } from './hooks';
@@ -9,7 +9,7 @@ export const SettingsPage = () => {
   const settingsList = useGetSettings();
 
   return (
-    <TitlePage title={t('SETTINGS')}>
+    <TitlePage breadcrumbs title={t('SETTINGS')}>
       <Row gutter={[24, 24]} className="px-2">
         {settingsList.map((item) => (
           <Col key={item.path}>

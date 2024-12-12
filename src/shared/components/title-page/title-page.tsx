@@ -1,4 +1,5 @@
 import { PropsWithChildren, useEffect, useRef } from 'react';
+import { ChoppBreadcrumbs } from '@shared/index';
 import { Typography } from 'antd';
 import { MainContainer } from '../main-container';
 
@@ -6,9 +7,10 @@ const { Title } = Typography;
 
 type Props = {
   title: string;
+  breadcrumbs: boolean;
 };
 
-export const TitlePage = ({ title, children }: PropsWithChildren<Props>) => {
+export const TitlePage = ({ title, breadcrumbs = true, children }: PropsWithChildren<Props>) => {
   const titleRef = useRef<HTMLElement>(null);
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -41,6 +43,7 @@ export const TitlePage = ({ title, children }: PropsWithChildren<Props>) => {
         <Title ref={titleRef} level={2}>
           {title}
         </Title>
+        {breadcrumbs && <ChoppBreadcrumbs />}
         <div ref={contentRef} style={{ overflow: 'auto' }}>
           {children}
         </div>

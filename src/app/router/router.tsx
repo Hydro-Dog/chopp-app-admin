@@ -11,9 +11,9 @@ import {
   SettingsPage,
 } from '@pages/index';
 
-import { MainMenu, ROUTES, SETTINGS_PATHS } from '@shared/index';
-import { GuardedRoute } from './guarded-route';
 import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
+import { MainMenu, ROUTES } from '@shared/index';
+import { GuardedRoute } from './guarded-route';
 
 export const router = createBrowserRouter([
   {
@@ -53,11 +53,11 @@ export const router = createBrowserRouter([
             element: <SettingsPage />,
           },
           {
-            path: SETTINGS_PATHS.VISUAL_SETTINGS,
+            path: ROUTES.VISUAL_SETTINGS,
             element: <VisualSettingsPage />,
           },
           {
-            path: SETTINGS_PATHS.PRICING_SETTINGS,
+            path: ROUTES.PRICING_SETTINGS,
             element: <PricingSettingsPage />,
           },
         ],

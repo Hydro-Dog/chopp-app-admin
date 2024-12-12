@@ -90,11 +90,23 @@
     "VISUAL_SETTINGS": {
       "THEMES": "Цветовое оформление",
       "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
-      "COLOR_SETTINGS":"Настройки цветового оформления",
-      "DARK":"Темная",
-      "LIGHT":"Светлая",
-      "SYSTEM":"Системная"
+      "COLOR_SETTINGS": "Настройки цветового оформления",
+      "DARK": "Темная",
+      "LIGHT": "Светлая",
+      "SYSTEM": "Системная"
     }
+  },
+  "PATHS": {
+    "ROOT": "Главная",
+    "VISUAL_SETTINGS": "Тема",
+    "SETTINGS": "Управление",
+    "PRICING_SETTINGS": "Ценообразование",
+    "CHATS": "Чаты",
+    "ACTIVITY": "Вызовы",
+    "SIGN_IN": "Вход",
+    "REGISTER": "Регистрация",
+    "GOODS": "Товары",
+    "ANALYTICS": "Аналитика"
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",

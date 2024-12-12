@@ -13,9 +13,6 @@ export const useCreateProductFormSchema = () => {
       .string()
       .min(1, { message: t('ERRORS.REQUIRED') })
       .max(260, { message: t('ERRORS.CONTENT_TOO_LONG') }),
-    price: z
-      .number()
-      // .or(z.literal(null).refine((val) => val !== null, { message: t('ERRORS.REQUIRED') }))
-      .min(1, { message: t('ERRORS.REQUIRED') }),
+    price: z.number().min(1, { message: t('ERRORS.REQUIRED') }),
   });
 };

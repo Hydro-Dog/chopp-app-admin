@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Flex, Row, Space, Typography } from 'antd';
+import { Button, Flex, Space, Typography } from 'antd';
 const { Title } = Typography;
 
 type Props = {

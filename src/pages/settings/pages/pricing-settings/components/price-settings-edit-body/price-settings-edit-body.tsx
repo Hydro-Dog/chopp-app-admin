@@ -10,6 +10,7 @@ export const PriceSettingsEditBody = () => {
       <Item label={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}>
         <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
           <InputNumber
+            prefix="₽"
             className="w-full"
             type="number"
             min={0}
@@ -24,6 +25,7 @@ export const PriceSettingsEditBody = () => {
       <Item label={t('PRICE')}>
         <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
           <InputNumber
+            prefix="₽"
             className="w-full"
             type="number"
             min={0}

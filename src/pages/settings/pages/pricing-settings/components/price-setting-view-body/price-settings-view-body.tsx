@@ -6,20 +6,26 @@ export const PriceSettingsViewBody: React.FC = () => {
   const { t } = useTranslation();
   const items: DescriptionsProps['items'] = [
     {
-      key: '1',
+      key: 'averageDeliveryCost',
       label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
-      children: '123123123',
+      children: '12222222222222',
     },
     {
-      key: '2',
+      key: 'freeDeliveryIncluded',
       label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
       children: <Checkbox disabled checked />,
     },
     {
-      key: '3',
+      key: 'freeDeliveryThreshold',
       label: t('PRICE'),
       children: '333333',
     },
   ];
   return <Descriptions column={1} size={'default'} items={items} />;
 };
+
+// {
+//   "averageDeliveryCost": 20,
+//   "freeDeliveryIncluded": false,
+//   "freeDeliveryThreshold": 100
+// }

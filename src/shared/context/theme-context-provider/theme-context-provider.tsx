@@ -1,11 +1,17 @@
 import { createContext, useContext, useState } from 'react';
 import { PropsWithChildrenOnly } from '@shared/types';
+import { THEME, STORAGE_KEYS } from '@shared/enum';
 
-type CustomThemeContextType = { theme: string; toggleTheme: () => void };
+type CustomThemeContextType = {
+  theme: string;
+  systemTheme: THEME.LIGHT | THEME.DARK;
+  toggleTheme: (value: string) => void;
+};
 
 const initialCustomThemeContextValue: CustomThemeContextType = {
-  theme: 'light',
-  toggleTheme: () => null,
+  systemTheme: THEME.LIGHT,
+  theme: THEME.LIGHT,
+  toggleTheme: (value: string) => null,
 };
 
 const ThemeContext = createContext<CustomThemeContextType>(initialCustomThemeContextValue);
@@ -13,13 +19,23 @@ const ThemeContext = createContext<CustomThemeContextType>(initialCustomThemeCon
 export const useTheme = () => useContext(ThemeContext);
 
 export const CustomThemeProvider = ({ children }: PropsWithChildrenOnly) => {
-  const [theme, setTheme] = useState<string>(localStorage.getItem('colorTheme') || 'light');
+  const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? THEME.DARK
+    : THEME.LIGHT;
 
-  const toggleTheme = () => {
-    const value = theme === 'light' ? 'dark' : 'light';
-    setTheme(value);
-    localStorage.setItem('colorTheme', value);
-  };
+  const [theme, setTheme] = useState<string>(
+    //TODO: Использовать енам со значением 'system'
+    localStorage.getItem(STORAGE_KEYS.THEME) === THEME.SYSTEM
+      ? systemTheme
+      : //TODO: Использовать енам со значением 'light'
+        localStorage.getItem(STORAGE_KEYS.THEME) || THEME.LIGHT,
+  );
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
+  const toggleTheme = (value: string) => setTheme(value);
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme, systemTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };

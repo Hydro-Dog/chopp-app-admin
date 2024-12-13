@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BasicModal } from '@shared/index';
 import { useNotificationContext } from '@shared/index';
-import { fetchCategories, createCategory } from '@store/slices/product-category-slice';
+import { createCategory } from '@store/slices/product-category-slice';
 import { AppDispatch, RootState } from '@store/store';
 import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
@@ -37,8 +37,6 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
     reset,
   } = useForm<CreateCategoryFormType>({
     resolver: zodResolver(createCategoryFormSchema),
-    reValidateMode: 'onChange',
-    mode: 'onSubmit',
     defaultValues: {
       category: '',
     },
@@ -67,10 +65,6 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   };
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, []);
-
-  useEffect(() => {
     if (open) {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
@@ -85,18 +79,12 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
       open={open}
       onOk={handleSubmit(onSubmit)}
       onCancel={onClose}>
-      <Form labelAlign="left" labelWrap colon={false} onFinish={handleSubmit(onSubmit)}>
-        <Item<CreateCategoryFormType>
-          validateStatus={errors.category ? 'error' : ''}
-          help={errors.category?.message || t('ADD_CATEGORY_DESCRIPTION')}>
+      <Form onFinish={handleSubmit(onSubmit)}>
+        <Item validateStatus={errors.category && 'error'} help={errors.category?.message}>
           <Controller
             name="category"
             control={control}
-            render={({ field }) => (
-              <div className="flex">
-                <Input {...field} ref={inputRef} placeholder={t('CATEGORY')} />
-              </div>
-            )}
+            render={({ field }) => <Input {...field} ref={inputRef} placeholder={t('CATEGORY')} />}
           />
         </Item>
       </Form>

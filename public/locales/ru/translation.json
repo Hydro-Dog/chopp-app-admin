@@ -42,7 +42,10 @@
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле",
     "CONTENT_TOO_SHORT": "Слишком короткий текст",
-    "CONTENT_TOO_LONG": "Слишком длинный текст"
+    "CONTENT_TOO_LONG": "Слишком длинный текст",
+    "UPLOAD_IMAGE": "Загрузите изображение",
+    "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
+    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB"
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -86,7 +89,11 @@
   "SETTINGS_PAGE": {
     "VISUAL_SETTINGS": {
       "THEMES": "Цветовое оформление",
-      "CHOOSING_THEME_ON_SITE": "Выбор цветового оформления на сайте"
+      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
+      "COLOR_SETTINGS": "Настройки цветового оформления",
+      "DARK": "Темная",
+      "LIGHT": "Светлая",
+      "SYSTEM": "Системная"
     }
   },
   "PRICING_PAGE": {
@@ -98,6 +105,18 @@
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то осуществляется бесплатно."
   },
   "DELIVERY": "Доставка",
+  "PATHS": {
+    "ROOT": "Главная",
+    "VISUAL_SETTINGS": "Тема",
+    "SETTINGS": "Управление",
+    "PRICING_SETTINGS": "Ценообразование",
+    "CHATS": "Чаты",
+    "ACTIVITY": "Вызовы",
+    "SIGN_IN": "Вход",
+    "REGISTER": "Регистрация",
+    "GOODS": "Товары",
+    "ANALYTICS": "Аналитика"
+  },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",
   "OPEN": "Открыть",
@@ -109,11 +128,11 @@
   "ADD": "Добавить",
   "ANALYTICS": "Аналитика",
   "PRICING": "Ценообразование",
-  "UPLOAD_IMAGE_HELPER_TEXT": "JPEG, PNG, не больше 2MB. Рекомендуем использовать квадратные изображения.",
+  "THEME": "Тема",
   "UPLOAD": "Загрузить",
-  "UPLOAD_IMAGE_ERROR": {
-    "INVALID_FORMAT": "Вы можете загрузить только JPG/PNG файл",
-    "TOO_BIG": "Изображение должно быть меньше {{mb}}MB"
-  },
-  "IMAGE_REQUIRED": "Загрузите как минимум одно изображение"
+  "IMAGE_REQUIRED": "Загрузите как минимум одно изображение",
+  "UPLOAD_IMAGE_HELPER_TEXT": "{{format}}, не больше {{mb}}MB. Рекомендуем использовать квадратные изображения.",
+  "IMAGES": "Изображения",
+  "SUCCESS": "Успешно",
+  "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список"
 }

@@ -9,7 +9,7 @@ export const SettingsPage = () => {
   const settingsList = useGetSettings();
 
   return (
-    <TitlePage title={t('SETTINGS')}>
+    <TitlePage breadcrumbs title={t('SETTINGS')}>
       <Row gutter={[24, 24]} className="px-2">
         {settingsList.map((item) => (
           <Col key={item.path}>

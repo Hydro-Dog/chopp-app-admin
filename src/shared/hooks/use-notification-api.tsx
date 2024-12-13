@@ -4,7 +4,7 @@ import { ArgsProps } from 'antd/es/notification';
 
 const Context = createContext({ name: 'Default' });
 
-export const useNotification = () => {
+export const useNotificationApi = () => {
   const [api, contextHolder] = notification.useNotification();
 
   const showNotification = ({ type, message, description, placement, ...rest }: ArgsProps) => {
@@ -29,14 +29,25 @@ export const useNotification = () => {
   };
 
   const showErrorNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
-    console.log('----------showErrorNotification')
     const notificationApiCall = api.error;
 
     notificationApiCall!({
       message,
       description: <Context.Consumer>{() => description}</Context.Consumer>,
       placement: 'bottomRight',
-      type: 'error',
+      // type: 'error',
+      ...rest,
+    });
+  };
+
+  const showSuccessNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
+    const successApiCall = api.success;
+
+    successApiCall!({
+      message,
+      description: <Context.Consumer>{() => description}</Context.Consumer>,
+      placement: 'bottomRight',
+      // type: 'error',
       ...rest,
     });
   };
@@ -65,6 +76,7 @@ export const useNotification = () => {
     showNotification,
     showInfoNotification,
     showErrorNotification,
+    showSuccessNotification,
     closeNotification,
     closeAllNotifications,
     NotificationContext: () => (

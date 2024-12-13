@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import ColorLensIcon from '@mui/icons-material/ColorLens';
-import { SETTINGS_PATHS } from '@shared/index';
+import { ROUTES } from '@shared/index';
 import { SettingsGridIcon } from '../components/settings-grid-icon';
 
 export const useGetSettings = () => {
@@ -11,14 +11,14 @@ export const useGetSettings = () => {
 
   return [
     {
-      path: SETTINGS_PATHS.VISUAL_SETTINGS,
+      path: ROUTES.VISUAL_SETTINGS,
       image: <SettingsGridIcon IconComponent={ColorLensIcon} />,
       title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
       description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING_THEME_ON_SITE'),
     },
     {
-      path: SETTINGS_PATHS.PRICING_SETTINGS,
-      image: <SettingsGridIcon IconComponent={ColorLensIcon}/>,
+      path: ROUTES.PRICING_SETTINGS,
+      image: <SettingsGridIcon IconComponent={ColorLensIcon} />,
       title: t('PRICING'),
       description: t('PRICING'),
     },

@@ -11,7 +11,7 @@ export const PricingSettingsPage = () => {
   const { t } = useTranslation();
 
   return (
-    <TitlePage title={t('PRICING')}>
+    <TitlePage breadcrumbs title={t('PRICING')}>
       <Card title={<PriceSettingsTitle isEditing={isEditing} toggleEditMode={toggle} />}>
         <Form layout="vertical" size="large">
           {isEditing ? <PriceSettingsEditFrom /> : <PriceSettingsView />}

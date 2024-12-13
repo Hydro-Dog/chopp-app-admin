@@ -5,12 +5,14 @@ import { RouterProvider } from 'react-router-dom';
 import { ActivityNotifications } from '@pages/activity/components/activity-table/activity-notifications';
 import { ChatsContextProvider } from '@pages/chats/chats-context';
 import {
-  useNotification,
+  useNotificationApi,
   useTheme,
   LANG,
   LangContextProvider,
   PropsWithChildrenOnly,
   NotificationContextProvider,
+  STORAGE_KEYS,
+  THEME,
 } from '@shared/index';
 import { AppDispatch, fetchCurrentUser, store, wsConnect, wsDisconnect } from '@store/index';
 import { useAxiosInterceptors } from '@store/middleware';
@@ -58,12 +60,12 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   // @ts-ignore
   useEffect(() => {
     // @ts-ignore
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {
       dispatch(fetchCurrentUser());
 
       dispatch(
         wsConnect({
-          url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem('token')}`,
+          url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
         }),
       );
     }
@@ -75,9 +77,11 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
 };
 
 export const App = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
+
   const themeConfig = {
-    algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+    //TODO: Использовать енам со значением 'dark'
+    algorithm: theme === THEME.DARK ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
   //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
@@ -85,10 +89,11 @@ export const App = () => {
     showNotification,
     showInfoNotification,
     showErrorNotification,
+    showSuccessNotification,
     closeNotification,
     closeAllNotifications,
     NotificationContext: NotificationCtx,
-  } = useNotification();
+  } = useNotificationApi();
   const [lang, setLang] = useState(LANG.RU);
 
   return (
@@ -100,28 +105,11 @@ export const App = () => {
             showNotification={showNotification}
             showInfoNotification={showInfoNotification}
             showErrorNotification={showErrorNotification}
+            showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
             <ActivityNotifications />
             <div className="w-full h-screen overflow-hidden">
-              <div className={theme === 'dark' ? 'bg-black' : 'bg-white'}>
-                <Switch
-                  className="absolute right-10 bottom-10"
-                  checkedChildren="Dark"
-                  unCheckedChildren="Light"
-                  value={theme === 'dark'}
-                  onChange={toggleTheme}
-                />
-              </div>
-              {/* <div className={lang === 'ru' ? 'bg-black' : 'bg-white'}>
-                        <Switch
-                          className="absolute right-4 top-12"
-                          checkedChildren="RU"
-                          unCheckedChildren="EN"
-                          defaultChecked
-                          onChange={() => setLang((prev) => (prev === LANG.EN ? LANG.RU : LANG.EN))}
-                        />
-                      </div> */}
               <ChatsContextProvider>
                 <RouterProvider router={router} />
               </ChatsContextProvider>

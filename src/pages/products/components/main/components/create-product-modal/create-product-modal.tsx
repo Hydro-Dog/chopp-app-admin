@@ -116,7 +116,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
           // dispatch(fetchProducts())
           onOk();
           reset();
-          setFileList([])
+          setFileList([]);
         },
       });
     }
@@ -142,7 +142,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
 
   const handleCancel = () => {
     reset();
-    setFileList([])
+    setFileList([]);
     onCancel();
   };
 

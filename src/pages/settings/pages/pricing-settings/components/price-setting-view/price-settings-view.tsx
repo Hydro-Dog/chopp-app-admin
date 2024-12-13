@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox, Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
 
-export const PriceSettingsViewBody: React.FC = () => {
+export const PriceSettingsView = () => {
   const { t } = useTranslation();
   const items: DescriptionsProps['items'] = [
     {

@@ -3,7 +3,7 @@ import { InputNumber, Checkbox, Tooltip, Alert, Form } from 'antd';
 
 const { Item } = Form;
 
-export const PriceSettingsEditBody = () => {
+export const PriceSettingsEditFrom = () => {
   const { t } = useTranslation();
   return (
     <div className="w-1/3">

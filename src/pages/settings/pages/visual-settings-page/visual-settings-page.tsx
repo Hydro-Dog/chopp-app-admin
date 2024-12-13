@@ -33,7 +33,7 @@ export const VisualSettingsPage = () => {
   };
 
   return (
-    <TitlePage title={t('SETTINGS')}>
+    <TitlePage breadcrumbs title={t('SETTINGS')}>
       <Card title={t('SETTINGS_PAGE.VISUAL_SETTINGS.COLOR_SETTINGS')}>
         <Item className="w-52" label={t('THEME')}>
           <Select

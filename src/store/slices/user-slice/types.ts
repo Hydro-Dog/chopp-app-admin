@@ -35,10 +35,3 @@ export type CallsTableRecord = {
   address: string;
   comment: string;
 };
-
-export type SearchResponse<T> = {
-  items: T[];
-  pageNumber: number;
-  totalPages: number;
-  totalRecords: number;
-};

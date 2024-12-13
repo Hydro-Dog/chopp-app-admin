@@ -1,19 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/index';
-import { createProduct } from './actions';
+import { ErrorResponse, SearchResponse } from '@shared/index';
+import { createProduct, fetchProducts } from './actions';
 import { Product } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
-export type ProductState = {
-  products?: Product[];
+export type ProductsState = {
+  products?: SearchResponse<Product> ;
   createProductStatus: FETCH_STATUS;
   createProductError: ErrorResponse | null;
+  fetchProductStatus: FETCH_STATUS;
+  fetchProductError: ErrorResponse | null;
 };
 
-const initialState: ProductState = {
+const initialState: ProductsState = {
   products: undefined,
   createProductStatus: FETCH_STATUS.IDLE,
   createProductError: null,
+  fetchProductStatus: FETCH_STATUS.IDLE,
+  fetchProductError: null,
 };
 
 export const productSlice = createSlice({
@@ -31,6 +35,19 @@ export const productSlice = createSlice({
       .addCase(createProduct.rejected, (state, action) => {
         state.createProductStatus = FETCH_STATUS.ERROR;
         state.createProductError = action.payload ?? {
+          message: 'Unknown error',
+        };
+      })
+      .addCase(fetchProducts.pending, (state) => {
+        state.fetchProductStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.fetchProductStatus = FETCH_STATUS.SUCCESS;
+        state.products = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.fetchProductStatus = FETCH_STATUS.ERROR;
+        state.fetchProductError = action.payload ?? {
           message: 'Unknown error',
         };
       });

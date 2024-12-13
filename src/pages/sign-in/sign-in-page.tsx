@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNotificationContext, useThemeToken } from '@shared/index';
+import { useSuperDispatch, useNotificationContext, useThemeToken } from '@shared/index';
 import './sign-in-page.scss';
 
 import {
@@ -25,10 +25,11 @@ const { Item } = Form;
 const { Text } = Typography;
 
 export const SignInPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const superDispatch = useSuperDispatch();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { showErrorNotification } = useNotificationContext();
   const themeToken = useThemeToken();
   const { signInType, setSignInType, isSignInByEmail, tabsItems } = useSignInTabs();
@@ -52,17 +53,28 @@ export const SignInPage = () => {
   });
 
   const onSubmit: SubmitHandler<UserLoginDTO> = (data) => {
-    dispatch(loginUser({ ...data }))
-      .then(({ payload }) => {
-        if (payload) {
-          dispatch(
-            wsConnect({
-              url: `${import.meta.env.VITE_BASE_WS}/ws?token=${payload.accessToken}`,
-            }),
-          );
-        }
-      })
-      .catch((e) => console.log('e: ', e));
+    const thenHandler = ({ payload }) => {
+      if (payload) {
+        dispatch(
+          wsConnect({
+            url: `${import.meta.env.VITE_BASE_WS}/ws?token=${payload.accessToken}`,
+          }),
+        );
+      }
+    };
+  
+    superDispatch({ action: loginUser({ ...data }), thenHandler });
+    // dispatch(loginUser({ ...data }))
+    //   .then(({ payload }) => {
+    //     if (payload) {
+    //       dispatch(
+    //         wsConnect({
+    //           url: `${import.meta.env.VITE_BASE_WS}/ws?token=${payload.accessToken}`,
+    //         }),
+    //       );
+    //     }
+    //   })
+    //   .catch((e) => console.log('e: ', e));
   };
 
   useEffect(() => {
@@ -88,7 +100,6 @@ export const SignInPage = () => {
         colon={false}
         wrapperCol={{ span: 16 }}
         onFinish={handleSubmit(onSubmit)}>
-
         <Tabs
           centered
           className="sign-in-tabs"

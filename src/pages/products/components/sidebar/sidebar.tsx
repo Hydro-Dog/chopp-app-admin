@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import { ChopDraggableList } from '@shared/components';
-import { useNotificationContext, useSearchParam } from '@shared/index';
+import { useNotificationContext, useSearchParamValue } from '@shared/index';
 import {
   fetchCategories,
   Category,
@@ -24,9 +24,10 @@ const { Title } = Typography;
 
 export const Sidebar = () => {
   const flexRef = useRef<HTMLElement>(null);
-  const urlCategoryId = useSearchParam('id');
+  const urlCategoryId = useSearchParamValue('id');
   const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
+  const urlChatId = useSearchParamValue('id');
 
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
@@ -51,6 +52,12 @@ export const Sidebar = () => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
+
+  useEffect(() => {
+    if (!urlChatId && categories) {
+      setSearchParams({ id: categories.find((item) => item.order === 1)?.id || '' });
+    }
+  }, [categories, setSearchParams, urlChatId]);
 
   const onCategoriesOrderChange = (newCategories: Category[]) => {
     dispatch(updateCategories(newCategories));

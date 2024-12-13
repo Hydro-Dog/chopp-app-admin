@@ -7,7 +7,7 @@ const { Title } = Typography;
 
 type Props = {
   title: string;
-  breadcrumbs: boolean;
+  breadcrumbs?: boolean;
 };
 
 export const TitlePage = ({ title, breadcrumbs = true, children }: PropsWithChildren<Props>) => {

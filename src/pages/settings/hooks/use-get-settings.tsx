@@ -13,7 +13,7 @@ export const useGetSettings = () => {
     {
       path: ROUTES.VISUAL_SETTINGS,
       image: <SettingsGridIcon IconComponent={ColorLensIcon} />,
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEMES'),
+      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEME'),
       description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING_THEME_ON_SITE'),
     },
     {

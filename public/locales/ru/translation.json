@@ -88,8 +88,8 @@
   },
   "SETTINGS_PAGE": {
     "VISUAL_SETTINGS": {
-      "THEMES": "Тема",
-      "CHOOSING A THEME ON THE SITE": "Выбор цветового оформления на сайте",
+      "THEME": "Тема",
+      "CHOOSING_THEME_ON_SITE": "Выбор цветового оформления на сайте",
       "COLOR_SETTINGS": "Настройки цветового оформления",
       "DARK": "Темная",
       "LIGHT": "Светлая",

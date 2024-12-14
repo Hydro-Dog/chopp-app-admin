@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ConfirmModal } from '@shared/components';
+import { BasicModal, ConfirmModal } from '@shared/components';
 import { useNotificationContext, useSearchParamValue, useSuperDispatch } from '@shared/index';
-import { AppDispatch, createProduct } from '@store/index';
+import { createProduct, FETCH_STATUS, Product, RootState, updateProduct } from '@store/index';
 import {
   Alert,
   Form,
@@ -39,7 +39,6 @@ const getBase64 = (file: FileType): Promise<string> =>
 // Обработчик загрузки файла, который просто сохраняет файлы в состояние
 const useBeforeUpload = () => {
   const { showErrorNotification } = useNotificationContext();
-  const superDispatch = useSuperDispatch();
   const { t } = useTranslation();
 
   return (file) => {
@@ -69,19 +68,29 @@ type Props = {
   open: boolean;
   onCancel: () => void;
   onOk: () => void;
+  values?: Product;
+  mode: 'edit' | 'create';
+  id?: number;
 };
 
-export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
+export const CreateEditProductModal = ({
+  open,
+  onCancel,
+  onOk,
+  values,
+  mode = 'create',
+  id,
+}: Props) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
   const superDispatch = useSuperDispatch();
   const categoryId = useSearchParamValue('id');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [uploadImageError, setUploadImageError] = useState('');
-  const { showErrorNotification, showSuccessNotification } = useNotificationContext();
+  const { showSuccessNotification } = useNotificationContext();
   const beforeUpload = useBeforeUpload();
+  const { createProductStatus } = useSelector((state: RootState) => state.products);
 
   const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
@@ -91,6 +100,7 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     control,
     reset,
     formState: { errors },
+    setValue,
   } = useForm<{ title: string; description: string; price: number | null }>({
     resolver: zodResolver(createProductFormSchema),
     defaultValues: {
@@ -100,14 +110,40 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
     },
   });
 
+  useEffect(() => {
+    console.log('values: ', values);
+    if (values) {
+      reset({
+        title: values.title,
+        description: values.description,
+        price: values.price,
+      });
+
+      // Обработка начального списка изображений, если они есть
+      if (values.images && values.images.length) {
+        const initialFileList = values.images.map((url, index) => ({
+          uid: -index, // Убедитесь, что uid отрицательный для избежания конфликта с внутренней логикой Ant Design
+          name: `Image ${index + 1}`,
+          status: 'done',
+          url: import.meta.env.VITE_BASE_URL_FILES + url,
+        }));
+
+        setFileList(initialFileList);
+      }
+    }
+  }, [reset, values]);
+
   const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
     if (!fileList.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
       const reqData = createFormDto({ ...data, fileList, categoryId: categoryId || '' });
+      // eslint-disable-next-line prettier/prettier
+      const action =
+        mode === 'create' ? createProduct({ form: reqData }) : updateProduct({ form: reqData, id });
       superDispatch({
-        action: createProduct(reqData),
+        action,
         thenHandler: () => {
           showSuccessNotification({
             message: t('SUCCESS'),
@@ -148,8 +184,9 @@ export const CreateProductModal = ({ open, onCancel, onOk }: Props) => {
 
   return (
     <ConfirmModal
-      title={t('CREATE_PRODUCT')}
+      title={t('ADD_PRODUCT')}
       open={open}
+      confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
       onOk={handleSubmit(onSubmit)}
       onCancel={handleCancel}
       okTitle={t('ADD')}>

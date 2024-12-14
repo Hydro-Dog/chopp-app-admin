@@ -6,7 +6,7 @@ type Props = {
   open: boolean;
   title?: ReactNode;
   width?: string | number;
-  loading?: boolean;
+  confirmLoading?: boolean;
   okTitle?: string;
   okType?: 'primary' | 'link' | 'text' | 'default' | 'dashed';
   okColor?: ButtonColorType;
@@ -25,6 +25,8 @@ export const ConfirmModal = ({
   onCancel,
   title,
   children,
+  confirmLoading,
+  ...props
 }: PropsWithChildren<Props>) => {
   return (
     <Modal
@@ -33,19 +35,27 @@ export const ConfirmModal = ({
       title={title}
       onOk={onOk}
       onCancel={onCancel}
+      confirmLoading={confirmLoading}
       // @ts-ignore
       footer={(_: any, { OkBtn, CancelBtn }: any) => (
         <>
           <CancelBtn />
           {okTitle ? (
-            <Button color={okColor} type={okType} variant={okVariant} onClick={onOk}>
+            <Button
+              // disabled={confirmLoading}
+              loading={confirmLoading}
+              color={okColor}
+              type={okType}
+              variant={okVariant}
+              onClick={onOk}>
               {okTitle}
             </Button>
           ) : (
             <OkBtn />
           )}
         </>
-      )}>
+      )}
+      {...props}>
       {children}
     </Modal>
   );

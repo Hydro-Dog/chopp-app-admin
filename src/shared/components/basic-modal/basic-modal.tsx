@@ -6,7 +6,7 @@ type Props = {
   title?: ReactNode;
   width?: string | number;
   loading?: boolean;
-  confirmLoading?: boolean;
+  // confirmLoading?: boolean;
   onOk: () => void;
   onCancel: () => void;
   zIndex?: number;
@@ -19,11 +19,11 @@ export const BasicModal = ({
   title,
   onOk,
   onCancel,
-  confirmLoading,
+  // confirmLoading,
   ...props
 }: PropsWithChildren<Props>) => {
   return (
-    <Modal title={title} loading={loading} open={open} onOk={onOk} confirmLoading={confirmLoading} onCancel={onCancel} {...props}>
+    <Modal title={title} loading={loading} open={open} onOk={onOk} onCancel={onCancel} {...props}>
       {children}
     </Modal>
   );

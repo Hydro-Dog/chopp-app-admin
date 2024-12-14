@@ -20,7 +20,6 @@ import {
 } from '@dnd-kit/sortable';
 import { useThemeToken } from '@shared/hooks';
 import { List } from 'antd';
-import { ListItem } from './components/index';
 
 type Item = {
   id: string;
@@ -106,8 +105,6 @@ export const ChopDraggableList = ({
     setActiveCategoryId(item);
     onClickItem(item);
   };
-
-  console.log('activeCategory: ', activeCategoryId)
 
   return (
     <DndContext

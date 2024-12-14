@@ -1,9 +1,9 @@
 import { UploadFile } from 'antd';
 
 export type Product = {
-  id: string;
+  id: number;
   title: string;
-  description: number;
+  description: string;
   price: number;
   images: string[];
   category: number;

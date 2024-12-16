@@ -1,30 +1,39 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse, SearchResponse } from '@shared/index';
+import { ErrorResponse, SearchRequestParams, SearchResponse } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { Product } from './types';
 
+
 export const fetchProducts = createAsyncThunk<
   SearchResponse<Product>,
-  { categoryId: string },
+  { categoryId: string } & SearchRequestParams,
   { rejectValue: ErrorResponse }
->('products/fetchProducts', async ({ categoryId }, thunkAPI) => {
-  try {
-    const params = new URLSearchParams();
-    if (categoryId) {
-      params.append('categoryId', categoryId);
-    }
+>(
+  'products/fetchProducts',
+  async ({ categoryId, pageNumber, limit, search, sort, order }, thunkAPI) => {
+    try {
+      console.log('search: ', search)
+      const params = new URLSearchParams({
+        pageNumber: String(pageNumber || 1),
+        limit: String(limit || 10),
+        search: search || '',
+        sort: sort || '',
+        order: order || 'asc',
+        categoryId: categoryId,
+      });
 
-    const response = await axiosPrivate.get<SearchResponse<Product>>('/products', { params });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-    } else {
-      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
+      const response = await axiosPrivate.get<SearchResponse<Product>>('/products', { params });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+      } else {
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
+      }
     }
-  }
-});
+  },
+);
 
 export const createProduct = createAsyncThunk<
   Product,

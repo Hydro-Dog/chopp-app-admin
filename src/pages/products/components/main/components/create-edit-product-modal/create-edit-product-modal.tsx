@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BasicModal, ConfirmModal } from '@shared/components';
+import { ConfirmModal } from '@shared/components';
 import { useNotificationContext, useSearchParamValue, useSuperDispatch } from '@shared/index';
 import { createProduct, FETCH_STATUS, Product, RootState, updateProduct } from '@store/index';
 import {
@@ -18,10 +18,11 @@ import {
   UploadFile,
   UploadProps,
   Image,
+  Select,
 } from 'antd';
 import { z } from 'zod';
 import { useCreateProductFormSchema } from './hooks';
-import { createFormDto } from './utils';
+import { createFormDto, updateFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -67,9 +68,9 @@ const useBeforeUpload = () => {
 type Props = {
   open: boolean;
   onCancel: () => void;
-  onOk: () => void;
+  onOk: (item: Product) => void;
   values?: Product;
-  mode: 'edit' | 'create';
+  mode?: 'edit' | 'create';
   id?: number;
 };
 
@@ -91,17 +92,22 @@ export const CreateEditProductModal = ({
   const { showSuccessNotification } = useNotificationContext();
   const beforeUpload = useBeforeUpload();
   const { createProductStatus } = useSelector((state: RootState) => state.products);
+  const { categories, fetchCategoriesStatus } = useSelector(
+    (state: RootState) => state.productCategory,
+  );
 
-  const createProductFormSchema = useCreateProductFormSchema();
+  const createProductFormSchema = useCreateProductFormSchema(mode);
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
 
+  // console.log('values: ', values);
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
     setValue,
-  } = useForm<{ title: string; description: string; price: number | null }>({
+    getValues,
+  } = useForm<{ title: string; description: string; price: number | null; categoryId?: number }>({
     resolver: zodResolver(createProductFormSchema),
     defaultValues: {
       title: '',
@@ -111,21 +117,21 @@ export const CreateEditProductModal = ({
   });
 
   useEffect(() => {
-    console.log('values: ', values);
     if (values) {
       reset({
         title: values.title,
         description: values.description,
         price: values.price,
+        categoryId: values.category.id,
       });
 
       // Обработка начального списка изображений, если они есть
       if (values.images && values.images.length) {
-        const initialFileList = values.images.map((url, index) => ({
-          uid: -index, // Убедитесь, что uid отрицательный для избежания конфликта с внутренней логикой Ant Design
-          name: `Image ${index + 1}`,
+        const initialFileList = values.images.map((item, index) => ({
+          uid: item.id, // Убедитесь, что uid отрицательный для избежания конфликта с внутренней логикой Ant Design
+          name: item.originalName,
           status: 'done',
-          url: import.meta.env.VITE_BASE_URL_FILES + url,
+          url: import.meta.env.VITE_BASE_URL_FILES + item.path,
         }));
 
         setFileList(initialFileList);
@@ -133,17 +139,54 @@ export const CreateEditProductModal = ({
     }
   }, [reset, values]);
 
-  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
+  const submitCreateProduct = (data: CreateProductFormType) => {
     if (!fileList.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const reqData = createFormDto({ ...data, fileList, categoryId: categoryId || '' });
-      // eslint-disable-next-line prettier/prettier
-      const action =
-        mode === 'create' ? createProduct({ form: reqData }) : updateProduct({ form: reqData, id });
+      const reqData = createFormDto({
+        ...data,
+        categoryId,
+        fileList,
+      });
       superDispatch({
-        action,
+        action: createProduct({ form: reqData }),
+        thenHandler: (res: Product) => {
+          showSuccessNotification({
+            message: t('SUCCESS'),
+            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+          });
+          onOk(res);
+          reset();
+          setFileList([]);
+        },
+      });
+    }
+  };
+
+  const submitUpdateProduct = (data: CreateProductFormType) => {
+    if (!fileList.length && !values?.images.length) {
+      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
+      return;
+    } else {
+      const set = new Set(values?.images.map((item) => item.id));
+      const newFiles = fileList.filter((item) => !set.has(item.uid));
+      console.log('REQUSET BODY: ', {
+        ...data,
+        categoryId,
+        initialImages: values?.images,
+        newFiles,
+      });
+
+      const reqData = updateFormDto({
+        ...data,
+        categoryId,
+        initialImages: values?.images,
+        newFiles,
+      });
+
+      superDispatch({
+        action: updateProduct({ form: reqData, id }),
         thenHandler: () => {
           showSuccessNotification({
             message: t('SUCCESS'),
@@ -155,6 +198,14 @@ export const CreateEditProductModal = ({
           setFileList([]);
         },
       });
+    }
+  };
+
+  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
+    if (mode === 'create') {
+      submitCreateProduct(data);
+    } else {
+      submitUpdateProduct(data);
     }
   };
 
@@ -236,6 +287,32 @@ export const CreateEditProductModal = ({
             )}
           />
         </Item>
+
+        {mode === 'edit' && (
+          <Item
+            className="!m-0"
+            label={t('CATEGORY')}
+            validateStatus={errors.categoryId && 'error'}
+            help={errors.categoryId?.message}>
+            <Controller
+              name="categoryId"
+              control={control}
+              render={({ field }) => (
+                <div className="w-1/2">
+                  <Select
+                    {...field}
+                    loading={fetchCategoriesStatus === FETCH_STATUS.LOADING}
+                    value={field.value || ''}
+                    onChange={(val) => field.onChange(val || 0)}
+                    options={[...(categories || [])]
+                      ?.sort((a, b) => a.order - b.order)
+                      .map((item) => ({ value: item.id, label: item.title }))}
+                  />
+                </div>
+              )}
+            />
+          </Item>
+        )}
 
         <Item
           className="!m-0"

@@ -3,4 +3,5 @@ export type SearchResponse<T> = {
   pageNumber: number;
   totalPages: number;
   totalRecords: number;
+  limit: number;
 };

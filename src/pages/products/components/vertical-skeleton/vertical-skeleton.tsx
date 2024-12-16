@@ -29,7 +29,7 @@ export const VerticalSkeleton = ({ titleNode, mainNode }: Props) => {
 
   return (
     <>
-      <Flex ref={flexRef} align="center" justify="space-between" className="mr-2 mt-1">
+      <div ref={flexRef}>
         {titleNode}
         {/* <Flex align="center" gap={20}>
           <FormatListBulletedRoundedIcon />
@@ -46,7 +46,7 @@ export const VerticalSkeleton = ({ titleNode, mainNode }: Props) => {
             <AddRoundedIcon />
           </Button>
         </Tooltip> */}
-      </Flex>
+      </div>
       <div
         style={{
           overflow: 'scroll',

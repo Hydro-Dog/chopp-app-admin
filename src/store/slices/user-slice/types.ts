@@ -1,4 +1,5 @@
-import { ACTIVITY_STATUS } from "@shared/enum";
+import { ACTIVITY_STATUS } from '@shared/enum';
+import { SearchRequestParams } from '@shared/index';
 
 export type User = {
   id: string;
@@ -13,15 +14,6 @@ export type UserLoginDTO = { email?: string; phoneNumber?: string; password: str
 export type UserAuthorization = {
   accessToken: string;
   refreshToken: string;
-};
-
-export type SearchRequestParams = {
-  page?: number;
-  limit?: number;
-  search?: string;
-  sort?: string;
-  order?: 'asc' | 'desc';
-  filter?: string;
 };
 
 export type CallsTableParams = SearchRequestParams & {

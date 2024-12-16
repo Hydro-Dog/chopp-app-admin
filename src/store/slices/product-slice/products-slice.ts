@@ -35,8 +35,6 @@ export const productSlice = createSlice({
       })
       .addCase(createProduct.fulfilled, (state, action) => {
         state.createProductStatus = FETCH_STATUS.SUCCESS;
-        const items = [...(state.products?.items || []), action.payload];
-        state.products = { ...state.products, items };
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.createProductStatus = FETCH_STATUS.ERROR;
@@ -62,10 +60,22 @@ export const productSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.updateProductStatus = FETCH_STATUS.SUCCESS;
-        const items = state.products?.items.map((item) =>
-          item.id === action.payload.id ? action.payload : item,
-        );
-        state.products = { ...state.products, items };
+        // const currentCategory = state.products?.items[0].category.id;
+
+        // let items: Product[] = [];
+        // if (currentCategory === action.payload.category.id) {
+        //   items =
+        //     state.products?.items.map((item) =>
+        //       item.id === action.payload.id ? action.payload : item,
+        //     ) || [];
+        // } else {
+        //   items =
+        //     state.products?.items.map((item) =>
+        //       item.id === action.payload.id ? action.payload : item,
+        //     ) || [];
+        // }
+
+        // state.products = { ...state.products, items };
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.updateProductStatus = FETCH_STATUS.ERROR;

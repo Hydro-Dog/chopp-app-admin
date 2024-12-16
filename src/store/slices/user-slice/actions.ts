@@ -1,12 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS, ErrorResponse } from '@shared/index';
+import { ACTIVITY_STATUS, ErrorResponse, SearchRequestParams, SearchResponse } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import {
   CallsTableParams,
   CallsTableRecord,
-  SearchRequestParams,
-  SearchResponse,
   User,
   UserAuthorization,
   UserLoginDTO,

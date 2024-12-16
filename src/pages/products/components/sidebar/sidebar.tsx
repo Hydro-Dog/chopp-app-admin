@@ -27,7 +27,7 @@ export const Sidebar = () => {
     <>
       <VerticalSkeleton
         titleNode={
-          <>
+          <Flex align="center" justify="space-between" className="mr-2 mt-1">
             <Flex align="center" gap={20}>
               <FormatListBulletedRoundedIcon />
               <Title className="!m-0 whitespace-nowrap" level={4}>
@@ -43,7 +43,7 @@ export const Sidebar = () => {
                 <AddRoundedIcon />
               </Button>
             </Tooltip>
-          </>
+          </Flex>
         }
         mainNode={<CategoriesList />}
       />

@@ -5,10 +5,14 @@ const { Title } = Typography;
 type Props = {
   isEditing: boolean;
   toggleEditMode: () => void;
+  onSubmit: () => void;
 };
-export const PriceSettingsTitle = ({ isEditing, toggleEditMode }: Props) => {
+export const PriceSettingsTitle = ({ isEditing, toggleEditMode, onSubmit }: Props) => {
   const { t } = useTranslation();
-
+  const onSave = () => {
+    onSubmit();
+    toggleEditMode();
+  };
   return (
     <Flex className="w-full" justify="space-between" align="center">
       <Title className="!m-0" level={4}>
@@ -18,7 +22,7 @@ export const PriceSettingsTitle = ({ isEditing, toggleEditMode }: Props) => {
         {isEditing ? (
           <Space>
             <Button onClick={toggleEditMode}>{t('CANCEL')}</Button>
-            <Button type="primary" onClick={toggleEditMode}>
+            <Button type="primary" onClick={onSave}>
               {t('SAVE')}
             </Button>
           </Space>

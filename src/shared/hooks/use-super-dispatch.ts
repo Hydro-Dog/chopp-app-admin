@@ -25,6 +25,6 @@ export const useSuperDispatch = <R, A>() => {
   return ({ action, thenHandler, catchHandler }: Args<R, A>) =>
     dispatch(action)
       .unwrap()
-      .then(thenHandler)
+      .then(thenHandler as (value: R) => void)
       .catch(catchHandler || defaultErrorHandler);
 };

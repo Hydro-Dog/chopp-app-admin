@@ -5,12 +5,16 @@ import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components';
-import { useNotificationContext, useSearchParamValue, useSuperDispatch } from '@shared/index';
+import {
+  getBase64,
+  useNotificationContext,
+  useSearchParamValue,
+  useSuperDispatch,
+} from '@shared/index';
 import { createProduct, FETCH_STATUS, Product, RootState, updateProduct } from '@store/index';
 import {
   Alert,
   Form,
-  GetProp,
   Input,
   InputNumber,
   Typography,
@@ -21,49 +25,13 @@ import {
   Select,
 } from 'antd';
 import { z } from 'zod';
-import { useCreateProductFormSchema } from './hooks';
+import { useBeforeUpload, useCreateProductFormSchema } from './hooks';
 import { createFormDto, updateFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-
-// Обработчик загрузки файла, который просто сохраняет файлы в состояние
-const useBeforeUpload = () => {
-  const { showErrorNotification } = useNotificationContext();
-  const { t } = useTranslation();
-
-  return (file) => {
-    const isJpgOrPng =
-      file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
-    if (!isJpgOrPng) {
-      console.error('Вы можете загрузить только JPG/PNG файл!');
-      showErrorNotification({
-        message: t('ERROR'),
-        description: t('ERRORS.IMAGE_INVALID_FORMAT', { format: 'JPG, JPEG, PNG' }),
-      });
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      console.error('Изображение должно быть меньше 2MB!');
-      showErrorNotification({
-        message: t('ERROR'),
-        description: t('ERRORS.IMAGE_TOO_BIG', { mb: 2 }),
-      });
-    }
-
-    return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
-  };
-};
+type FormType = { title: string; description: string; price: number; categoryId?: number };
 
 type Props = {
   open: boolean;
@@ -83,8 +51,8 @@ export const CreateEditProductModal = ({
   id,
 }: Props) => {
   const { t } = useTranslation();
-  const superDispatch = useSuperDispatch();
-  const categoryId = useSearchParamValue('id');
+  const superDispatch = useSuperDispatch<Product, any>();
+  const categoryId = useSearchParamValue('id') || '';
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -99,15 +67,12 @@ export const CreateEditProductModal = ({
   const createProductFormSchema = useCreateProductFormSchema(mode);
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
 
-  // console.log('values: ', values);
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
-    setValue,
-    getValues,
-  } = useForm<{ title: string; description: string; price: number | null; categoryId?: number }>({
+  } = useForm<FormType>({
     resolver: zodResolver(createProductFormSchema),
     defaultValues: {
       title: '',
@@ -122,7 +87,7 @@ export const CreateEditProductModal = ({
         title: values.title,
         description: values.description,
         price: values.price,
-        categoryId: values.category.id,
+        categoryId: Number(values.category.id),
       });
 
       // Обработка начального списка изображений, если они есть
@@ -134,7 +99,7 @@ export const CreateEditProductModal = ({
           url: import.meta.env.VITE_BASE_URL_FILES + item.path,
         }));
 
-        setFileList(initialFileList);
+        setFileList(initialFileList as unknown as UploadFile[]);
       }
     }
   }, [reset, values]);
@@ -151,12 +116,12 @@ export const CreateEditProductModal = ({
       });
       superDispatch({
         action: createProduct({ form: reqData }),
-        thenHandler: (res: Product) => {
+        thenHandler: (response) => {
           showSuccessNotification({
             message: t('SUCCESS'),
             description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(res);
+          onOk(response);
           reset();
           setFileList([]);
         },
@@ -169,14 +134,8 @@ export const CreateEditProductModal = ({
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const set = new Set(values?.images.map((item) => item.id));
-      const newFiles = fileList.filter((item) => !set.has(item.uid));
-      console.log('REQUSET BODY: ', {
-        ...data,
-        categoryId,
-        initialImages: values?.images,
-        newFiles,
-      });
+      const set = new Set(values?.images.map((item) => String(item.id)));
+      const newFiles = fileList.filter((item) => !set.has(String(item.uid)));
 
       const reqData = updateFormDto({
         ...data,
@@ -186,14 +145,13 @@ export const CreateEditProductModal = ({
       });
 
       superDispatch({
-        action: updateProduct({ form: reqData, id }),
-        thenHandler: () => {
+        action: updateProduct({ form: reqData, id: id! }),
+        thenHandler: (response) => {
           showSuccessNotification({
             message: t('SUCCESS'),
             description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
           });
-          // dispatch(fetchProducts())
-          onOk();
+          onOk(response);
           reset();
           setFileList([]);
         },
@@ -211,7 +169,7 @@ export const CreateEditProductModal = ({
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
+      file.preview = await getBase64(file.originFileObj);
     }
 
     setPreviewImage(file.url || (file.preview as string));
@@ -314,6 +272,7 @@ export const CreateEditProductModal = ({
           </Item>
         )}
 
+        {/* TODO: вынести блок с изображениями в отдельный файл?  */}
         <Item
           className="!m-0"
           label={t('IMAGES')}

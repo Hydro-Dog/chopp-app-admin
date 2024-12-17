@@ -133,5 +133,6 @@
   "UPLOAD_IMAGE_HELPER_TEXT": "{{format}}, не больше {{mb}}MB. Рекомендуем использовать квадратные изображения.",
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
-  "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список"
+  "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
+  "LOAD_MORE": "Загрузить еще"
 }

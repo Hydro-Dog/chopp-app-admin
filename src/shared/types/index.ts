@@ -1,4 +1,4 @@
-export * from './response-error';
+export * from './error-response';
 export * from './props-with-children-only';
 export * from './pagination';
 export * from './sorter';

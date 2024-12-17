@@ -11,7 +11,6 @@ export const useCreateProductFormSchema = (mode: 'create' | 'edit') => {
         .min(1, { message: t('ERRORS.REQUIRED') })
         .max(100, { message: t('ERRORS.CONTENT_TOO_LONG') }),
       description: z.string().min(1, { message: t('ERRORS.REQUIRED') }),
-      // .max(260, { message: t('ERRORS.CONTENT_TOO_LONG') }),
       price: z.number().min(1, { message: t('ERRORS.REQUIRED') }),
     });
   }

@@ -1,20 +1,21 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import { Flex, Tooltip, Button, Typography, Input, Space } from 'antd';
+import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
+import { Pagination, SearchResponse } from '@shared/types';
+import { FETCH_STATUS, Product, fetchProducts } from '@store/index';
+import { AppDispatch, RootState } from '@store/store';
+import { Flex, Tooltip, Button, Typography, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { VerticalSkeleton } from '../vertical-skeleton';
 import { CreateEditProductModal, ProductsGrid } from './components/';
-import { useEffect, useState } from 'react';
-import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
-import { Pagination } from '@shared/types';
-import { FETCH_STATUS, Product, fetchProducts } from '@store/index';
-import { AppDispatch, RootState } from '@store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
 
 const { Title } = Typography;
 const { Search } = Input;
+
 const LIMIT = 2;
 const FIRST_PAGE_NUMBER = 1;
 
@@ -28,61 +29,52 @@ export const Main = () => {
   } = useBoolean();
 
   const dispatch = useDispatch<AppDispatch>();
-  const superDispatch = useSuperDispatch();
-  const categoryId = useSearchParamValue('id');
+  const superDispatch = useSuperDispatch<SearchResponse<Product>, any>();
+  const categoryId = useSearchParamValue('id') || '';
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
   const [searchParams, setSearchParams] = useSearchParams();
-  const urlSearch = searchParams.get('search');
+  const urlSearch = searchParams.get('search') || '';
   const [search, setSearch] = useState(urlSearch);
   const [pageProducts, setPageProducts] = useState<Product[]>([]);
-  const [pagination, setPagination] = useState<Partial<Pagination>>();
-
-  const [currentItemData, setCurrentItemData] = useState<Product>();
-
-  useEffect(() => {
-    if (categoryId !== undefined) {
-      dispatch(fetchProducts({ categoryId, limit: LIMIT, pageNumber: FIRST_PAGE_NUMBER, search }));
-      setPagination({
-        limit: LIMIT,
-        pageNumber: FIRST_PAGE_NUMBER,
-      });
-    }
-  }, [categoryId, dispatch, search]);
-
-  // useEffect(() => {
-  //   dispatch(fetchProducts({ categoryId, limit: LIMIT, pageNumber: FIRST_PAGE_NUMBER, search }));
-  //   setPagination({
-  //     limit: LIMIT,
-  //     pageNumber: FIRST_PAGE_NUMBER,
-  //   });
-  // }, [search, dispatch, categoryId]);
+  const [pagination, setPagination] = useState<Pick<Pagination, 'pageNumber' | 'limit'>>({
+    pageNumber: FIRST_PAGE_NUMBER,
+    limit: LIMIT,
+  });
 
   useEffect(() => {
     setPageProducts(products?.items || []);
   }, [products]);
+
+  useEffect(() => {
+    if (categoryId !== undefined) {
+      dispatch(fetchProducts({ categoryId, limit: LIMIT, pageNumber: FIRST_PAGE_NUMBER, search }));
+      //Сбросить пагинацию при переключении категории
+      setPagination({
+        pageNumber: FIRST_PAGE_NUMBER,
+        limit: LIMIT,
+      });
+    }
+  }, [categoryId, dispatch, search]);
 
   const onLoadMore = () => {
     superDispatch({
       action: fetchProducts({
         categoryId,
         limit: pagination?.limit,
-        pageNumber: pagination?.pageNumber + 1,
+        pageNumber: pagination.pageNumber + 1,
         search,
       }),
       thenHandler: (response) => {
         setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ ...pagination, pageNumber: pagination?.pageNumber + 1 });
+        setPagination({ ...pagination, pageNumber: response.pageNumber });
       },
     });
   };
 
   const onOk = (item: Product) => {
-    console.log('item: ', item, pagination?.pageNumber, products?.totalPages);
-    const isLastPage = pagination?.pageNumber === products?.totalPages;
+    const isLastPage = pagination?.pageNumber === products?.totalPages || products?.totalPages === 0;
     const isIncludedInCurrentSearch = search ? item.title.includes(search) : true;
 
-    console.log('isLastPage: ', isLastPage)
-    console.log('isIncludedInCurrentSearch: ', search, isIncludedInCurrentSearch)
     if (isLastPage && isIncludedInCurrentSearch) {
       setPageProducts((prev) => [...prev, item]);
     }
@@ -92,15 +84,22 @@ export const Main = () => {
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchValue = e.target.value;
     setSearch(newSearchValue);
-    // Обновляем URL, устанавливая новый поисковый запрос
+    updateUrlWithSearchValue(newSearchValue);
+  };
+
+  // Обновляем URL, устанавливая новый поисковый запрос
+  const updateUrlWithSearchValue = (value: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
-    if (newSearchValue) {
-      newSearchParams.set('search', newSearchValue);
+    if (value) {
+      newSearchParams.set('search', value);
     } else {
       newSearchParams.delete('search');
     }
     setSearchParams(newSearchParams);
   };
+
+  console.log('pagination: ', pagination);
+  console.log('products?.totalPages: ', products?.totalPages);
 
   return (
     <>
@@ -125,16 +124,18 @@ export const Main = () => {
           </Flex>
         }
         mainNode={
-          <>
-            <ProductsGrid
-              items={pageProducts}
-              loading={fetchProductsStatus === FETCH_STATUS.LOADING}
-            />
+          products?.totalPages !== undefined && (
+            <>
+              <ProductsGrid
+                items={pageProducts}
+                loading={fetchProductsStatus === FETCH_STATUS.LOADING}
+              />
 
-            {pagination?.pageNumber < products?.totalPages && (
-              <Button onClick={onLoadMore}>{t('LOAD_MORE')}</Button>
-            )}
-          </>
+              {pagination?.pageNumber < products?.totalPages && (
+                <Button onClick={onLoadMore}>{t('LOAD_MORE')}</Button>
+              )}
+            </>
+          )
         }
       />
 

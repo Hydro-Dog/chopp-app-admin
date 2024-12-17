@@ -16,6 +16,7 @@ export const PriceSettingsEditFrom = ({ control }) => {
             control={control}
             render={({ field }) => (
               <InputNumber
+                type="number"
                 {...field}
                 prefix="₽"
                 className="w-full"
@@ -48,6 +49,7 @@ export const PriceSettingsEditFrom = ({ control }) => {
             control={control}
             render={({ field }) => (
               <InputNumber
+                type="number"
                 {...field}
                 prefix="₽"
                 className="w-full"

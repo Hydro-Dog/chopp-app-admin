@@ -3,6 +3,7 @@ import { useNotificationContext } from '@shared/context';
 import { Upload } from 'antd';
 
 // Обработчик загрузки файла, который просто сохраняет файлы в состояние
+// TODO: добавить вычисление хэша, чтобы проверить нет ли уже такого изображения в загруженных
 export const useBeforeUpload = () => {
   const { showErrorNotification } = useNotificationContext();
   const { t } = useTranslation();

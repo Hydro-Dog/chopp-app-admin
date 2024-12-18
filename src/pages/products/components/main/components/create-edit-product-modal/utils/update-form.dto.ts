@@ -5,7 +5,7 @@ type Args = {
   title: string;
   description: string;
   price: number;
-  newFiles?: UploadFile[];
+  fileList?: UploadFile[];
   initialImages?: ProductImage[];
   categoryId: string;
 };
@@ -14,18 +14,19 @@ export const updateFormDto = ({
   title,
   description,
   price,
-  newFiles,
+  fileList,
   initialImages,
   categoryId,
 }: Args) => {
   const formData = new FormData();
-  if (newFiles?.length) {
-    newFiles.forEach((file) => {
+  if (fileList?.length) {
+    fileList.forEach((file) => {
       if (file.originFileObj) {
-        formData.append('newFiles', file.originFileObj);
+        formData.append('images', file.originFileObj);
       }
     });
   }
+
   if (initialImages?.length) {
     initialImages.forEach((item) => {
       formData.append('initialImages', JSON.stringify(item));

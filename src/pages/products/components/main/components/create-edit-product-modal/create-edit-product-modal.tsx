@@ -134,14 +134,16 @@ export const CreateEditProductModal = ({
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const set = new Set(values?.images.map((item) => String(item.id)));
-      const newFiles = fileList.filter((item) => !set.has(String(item.uid)));
-
+      console.log('submitUpdateProduct fileList: ', fileList);
+      const fileListIdsSet = new Set(fileList.map((item) => item.uid));
+      const initialImagesAfterChanges = values?.images.filter((item) =>
+        fileListIdsSet.has(item.id),
+      );
       const reqData = updateFormDto({
         ...data,
         categoryId,
-        initialImages: values?.images,
-        newFiles,
+        initialImages: initialImagesAfterChanges,
+        fileList,
       });
 
       superDispatch({
@@ -177,6 +179,7 @@ export const CreateEditProductModal = ({
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList }) => {
+    console.log('fileList: ', fileList);
     if (!fileList || !fileList?.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
     } else {

@@ -11,6 +11,8 @@ import { PriceSettingsEditFrom } from './components/price-settings-edit-form/pri
 import { PriceSettingsTitle } from './components/price-settings-title';
 
 export const PricingSettingsPage = () => {
+  const { t } = useTranslation();
+  const { value: isEditing, toggle } = useBoolean();
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
 
@@ -23,9 +25,6 @@ export const PricingSettingsPage = () => {
     console.log(data);
     reset();
   };
-
-  const { value: isEditing, toggle } = useBoolean();
-  const { t } = useTranslation();
 
   return (
     <TitlePage breadcrumbs title={t('PRICING')}>

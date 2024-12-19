@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const useCreatePricingFormSchema = () => {
   const { t } = useTranslation();
+
   return z
     .object({
       averageDeliveryCost: z.number().min(1, { message: t('ERRORS.REQUIRED') }),
@@ -20,7 +21,7 @@ export const useCreatePricingFormSchema = () => {
         return true;
       },
       {
-        message: t('ERRORS.FREE_DELIVERY_THRESHOLD_AT_LEAST_1'),
+        message: t('ERRORS.REQUIRED'),
         path: ['freeDeliveryThreshold'],
       },
     );

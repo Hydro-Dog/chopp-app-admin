@@ -13,6 +13,7 @@ export const PriceSettingsTitle = ({ isEditing, toggleEditMode, onSubmit }: Prop
     onSubmit();
     toggleEditMode();
   };
+
   return (
     <Flex className="w-full" justify="space-between" align="center">
       <Title className="!m-0" level={4}>

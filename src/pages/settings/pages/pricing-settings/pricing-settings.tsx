@@ -17,11 +17,6 @@ export const PricingSettingsPage = () => {
   const { control, handleSubmit, reset, ...methodsRest }: UseFormReturn<CreatePricingFormType> =
     useForm<CreatePricingFormType>({
       resolver: zodResolver(createPricingFormSchema),
-      defaultValues: {
-        averageDeliveryCost: 1,
-        freeDeliveryIncluded: false,
-        freeDeliveryThreshold: 1,
-      },
     });
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (data) => {

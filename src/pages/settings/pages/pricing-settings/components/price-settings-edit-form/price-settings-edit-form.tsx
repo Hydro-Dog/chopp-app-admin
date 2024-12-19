@@ -10,11 +10,11 @@ export const PriceSettingsEditFrom = ({ control }) => {
   return (
     <div className="w-1/3">
       <Item label={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}>
-        <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
-          <Controller
-            name="averageDeliveryCost"
-            control={control}
-            render={({ field }) => (
+        <Controller
+          name="averageDeliveryCost"
+          control={control}
+          render={({ field }) => (
+            <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
               <InputNumber
                 type="number"
                 {...field}
@@ -22,10 +22,10 @@ export const PriceSettingsEditFrom = ({ control }) => {
                 className="w-full"
                 min={0}
                 placeholder={t('PRICING_PAGE.ENTER_PRICE')}
-              />
-            )}
-          />
-        </Tooltip>
+              />{' '}
+            </Tooltip>
+          )}
+        />
       </Item>
 
       <Alert className="mb-2" type="info" message={t('PRICING_PAGE.PRICE_HINT')} showIcon />
@@ -43,11 +43,11 @@ export const PriceSettingsEditFrom = ({ control }) => {
       </Item>
 
       <Item label={t('PRICE')}>
-        <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
-          <Controller
-            name="freeDeliveryThreshold"
-            control={control}
-            render={({ field }) => (
+        <Controller
+          name="freeDeliveryThreshold"
+          control={control}
+          render={({ field }) => (
+            <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
               <InputNumber
                 type="number"
                 {...field}
@@ -55,10 +55,10 @@ export const PriceSettingsEditFrom = ({ control }) => {
                 className="w-full"
                 min={0}
                 placeholder={t('PRICING_PAGE.ENTER_PRICE')}
-              />
-            )}
-          />
-        </Tooltip>
+              />{' '}
+            </Tooltip>
+          )}
+        />
       </Item>
     </div>
   );

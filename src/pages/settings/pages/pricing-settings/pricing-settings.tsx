@@ -1,4 +1,4 @@
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm, UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TitlePage } from '@shared/index';
@@ -13,19 +13,16 @@ import { PriceSettingsTitle } from './components/price-settings-title';
 export const PricingSettingsPage = () => {
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
-  const methods = useForm<{
-    averageDeliveryCost: number;
-    freeDeliveryIncluded: boolean;
-    freeDeliveryThreshold: number;
-  }>({
-    resolver: zodResolver(createPricingFormSchema),
-    defaultValues: {
-      averageDeliveryCost: 1,
-      freeDeliveryIncluded: false,
-      freeDeliveryThreshold: 1,
-    },
-  });
-  const { control, handleSubmit, reset } = methods;
+
+  const { control, handleSubmit, reset, ...methodsRest }: UseFormReturn<CreatePricingFormType> =
+    useForm<CreatePricingFormType>({
+      resolver: zodResolver(createPricingFormSchema),
+      defaultValues: {
+        averageDeliveryCost: 1,
+        freeDeliveryIncluded: false,
+        freeDeliveryThreshold: 1,
+      },
+    });
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (data) => {
     console.log(data);
@@ -45,7 +42,7 @@ export const PricingSettingsPage = () => {
             toggleEditMode={toggle}
           />
         }>
-        <FormProvider {...methods}>
+        <FormProvider control={control} handleSubmit={handleSubmit} reset={reset} {...methodsRest}>
           <Form layout="vertical" size="large">
             {isEditing ? <PriceSettingsEditFrom control={control} /> : <PriceSettingsView />}
           </Form>

@@ -1,4 +1,5 @@
 import { Middleware } from '@reduxjs/toolkit';
+import { io, Socket } from 'socket.io-client';
 import {
   pushWsMessage,
   setWsConnected,
@@ -13,51 +14,57 @@ type WsAction = {
   payload?: any;
 };
 
-//@ts-ignore
 export const wsMiddleware: Middleware = (store) => {
-  let socket: WebSocket | null = null;
+  let socket: Socket | null = null;
 
   return (next) => (action: WsAction) => {
     switch (action.type) {
       case wsConnect.toString():
         if (socket !== null) {
-          socket.close();
+          socket.disconnect();
         }
 
-        socket = new WebSocket(action.payload.url);
+        console.log('Connecting to Socket.IO server at: ', action.payload.url);
+        socket = io(action.payload.url, {
+          transports: ['websocket'], // Используем только WebSocket транспорт
+          auth: action.payload.auth, // Передача авторизационных данных, если требуется
+        });
 
-        socket.onopen = () => {
+        socket.on('connect', () => {
+          console.log('Socket.IO connected');
           store.dispatch(setWsConnected(true));
-        };
+        });
 
-        socket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          store.dispatch(pushWsMessage(data));
-        };
-
-        socket.onclose = () => {
-          store.dispatch(setWsConnected(false));
-        };
-
-        socket.onclose = (error) => {
+        socket.on('connect_error', (error) => {
+          console.error('Socket.IO connection error:', error);
           store.dispatch(setWsError(error));
-        };
+        });
+
+        socket.on('disconnect', () => {
+          console.log('Socket.IO disconnected');
+          store.dispatch(setWsConnected(false));
+        });
+
+        socket.on('message', (data) => {
+          console.log('Message received:', data);
+          store.dispatch(pushWsMessage(data));
+        });
 
         break;
 
       case wsDisconnect.toString():
         if (socket !== null) {
-          socket.close();
+          console.log('Disconnecting from Socket.IO server');
+          socket.disconnect();
           socket = null;
         }
-
         break;
 
       case wsSend.toString():
         if (socket !== null) {
-          socket.send(JSON.stringify(action.payload));
+          console.log('Sending message via Socket.IO:', action.payload);
+          socket.emit('message', action.payload);
         }
-
         break;
 
       default:

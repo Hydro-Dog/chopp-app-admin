@@ -65,7 +65,7 @@ export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
 
       dispatch(
         wsConnect({
-          url: `${import.meta.env.VITE_BASE_WS}/ws?token=${localStorage.getItem(STORAGE_KEYS.TOKEN)}`,
+          url: `${import.meta.env.VITE_BASE_WS}`,
         }),
       );
     }

@@ -24,7 +24,9 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
     },
   });
 
-  const { control, handleSubmit, reset } = methods;
+  const { control, handleSubmit, reset, watch } = methods;
+
+  const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (data) => {
     console.log('данные:', data);
@@ -47,8 +49,8 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
               render={({ field }) => (
                 <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
                   <InputNumber
-                    type="number"
                     {...field}
+                    type="number"
                     prefix="₽"
                     className="w-full"
                     min={0}
@@ -80,12 +82,13 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
               render={({ field }) => (
                 <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
                   <InputNumber
-                    type="number"
                     {...field}
+                    type="number"
                     prefix="₽"
                     className="w-full"
                     min={0}
                     placeholder={t('PRICING_PAGE.ENTER_PRICE')}
+                    disabled={!freeDeliveryIncluded}
                   />
                 </Tooltip>
               )}

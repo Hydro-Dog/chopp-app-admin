@@ -12,8 +12,12 @@ export const PricingSettingsPage = () => {
 
   return (
     <TitlePage breadcrumbs title={t('PRICING')}>
-      <Card title={<PriceSettingsTitle isEditing={isEditing} toggleEditMode={toggle} />}>
-        {isEditing ? <PriceSettingsEditForm onSuccess={toggle} /> : <PriceSettingsView />}
+      <Card title={t('DELIVERY')}>
+        {isEditing ? (
+          <PriceSettingsEditForm toggle={toggle} />
+        ) : (
+          <PriceSettingsView toggle={toggle} />
+        )}
       </Card>
     </TitlePage>
   );

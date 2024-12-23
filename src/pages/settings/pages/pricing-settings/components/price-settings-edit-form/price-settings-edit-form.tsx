@@ -1,17 +1,17 @@
 import { useForm, SubmitHandler, FormProvider, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { InputNumber, Checkbox, Tooltip, Alert, Form } from 'antd';
+import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { z } from 'zod';
 import { useCreatePricingFormSchema } from './hooks/use-create-pricing-form-schema';
 
 const { Item } = Form;
 
 type Props = {
-  onSuccess: () => void;
+  toggle: () => void;
 };
 
-export const PriceSettingsEditForm = ({ onSuccess }: Props) => {
+export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
 
   const createPricingFormSchema = useCreatePricingFormSchema();
@@ -19,19 +19,26 @@ export const PriceSettingsEditForm = ({ onSuccess }: Props) => {
 
   const methods = useForm<CreatePricingFormType>({
     resolver: zodResolver(createPricingFormSchema),
+    defaultValues: {
+      freeDeliveryIncluded: false,
+    },
   });
 
   const { control, handleSubmit, reset } = methods;
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (data) => {
-    console.log(data);
+    console.log('данные:', data);
+    toggle();
+  };
+
+  const onCancel = () => {
     reset();
-    onSuccess();
+    toggle();
   };
 
   return (
     <FormProvider {...methods}>
-      <Form layout="vertical" size="large" onFinish={handleSubmit(onSubmit)}>
+      <Form layout="vertical" size="large">
         <div className="w-1/3">
           <Item label={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}>
             <Controller
@@ -85,6 +92,13 @@ export const PriceSettingsEditForm = ({ onSuccess }: Props) => {
             />
           </Item>
         </div>
+
+        <Space>
+          <Button onClick={onCancel}>{t('CANCEL')}</Button>
+          <Button onClick={handleSubmit(onSubmit)} type="primary">
+            {t('SAVE')}
+          </Button>
+        </Space>
       </Form>
     </FormProvider>
   );

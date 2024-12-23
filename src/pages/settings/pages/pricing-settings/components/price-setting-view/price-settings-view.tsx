@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Descriptions } from 'antd';
+import { Button, Checkbox, Descriptions } from 'antd';
 import type { DescriptionsProps } from 'antd';
-
-export const PriceSettingsView = () => {
+type Props = {
+  toggle: () => void;
+};
+export const PriceSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const items: DescriptionsProps['items'] = [
     {
@@ -21,7 +23,14 @@ export const PriceSettingsView = () => {
       children: '333333',
     },
   ];
-  return <Descriptions column={1} size={'default'} items={items} />;
+  return (
+    <div>
+      <Descriptions column={1} size={'default'} items={items} />
+      <Button className="mt-5" type="primary" onClick={toggle}>
+        {t('EDIT')}
+      </Button>
+    </div>
+  );
 };
 
 // {

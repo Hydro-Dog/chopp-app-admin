@@ -66,7 +66,7 @@ export const Main = () => {
         search,
       }),
       thenHandler: (response) => {
-        setPageProducts(prev => [...prev, ...(response.items || [])]);
+        setPageProducts([...pageProducts, ...(response.items || [])]);
         setPagination({ ...pagination, pageNumber: response.pageNumber });
       },
     });

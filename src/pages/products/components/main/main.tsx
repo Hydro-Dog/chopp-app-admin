@@ -42,6 +42,7 @@ export const Main = () => {
   });
 
   useEffect(() => {
+    console.log('setPageProducts: ', products?.items)
     setPageProducts(products?.items || []);
   }, [products]);
 
@@ -65,7 +66,7 @@ export const Main = () => {
         search,
       }),
       thenHandler: (response) => {
-        setPageProducts([...pageProducts, ...(response.items || [])]);
+        setPageProducts(prev => [...prev, ...(response.items || [])]);
         setPagination({ ...pagination, pageNumber: response.pageNumber });
       },
     });

@@ -4,7 +4,6 @@ import { Card } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { PriceSettingsView } from './components/price-setting-view/price-settings-view';
 import { PriceSettingsEditForm } from './components/price-settings-edit-form/price-settings-edit-form';
-import { PriceSettingsTitle } from './components/price-settings-title';
 
 export const PricingSettingsPage = () => {
   const { value: isEditing, toggle } = useBoolean();

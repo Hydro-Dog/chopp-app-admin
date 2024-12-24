@@ -6,7 +6,9 @@ export const useCreatePricingFormSchema = () => {
 
   return z
     .object({
-      averageDeliveryCost: z.number().min(1, { message: t('ERRORS.REQUIRED') }),
+      averageDeliveryCost: z
+        .number({ invalid_type_error: t('ERRORS.REQUIRED') })
+        .min(1, { message: t('ERRORS.REQUIRED') }),
       freeDeliveryIncluded: z.boolean(),
       freeDeliveryThreshold: z.number().optional(),
     })
@@ -21,7 +23,7 @@ export const useCreatePricingFormSchema = () => {
         return true;
       },
       {
-        message: t('ERRORS.REQUIRED'),
+        message: t('ERRORS.FREE_DELIVERY_THRESHOLD_AT_LEAST_1'),
         path: ['freeDeliveryThreshold'],
       },
     );

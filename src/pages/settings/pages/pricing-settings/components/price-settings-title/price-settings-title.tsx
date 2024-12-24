@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Flex, Typography } from 'antd';
+
 const { Title } = Typography;
 
 export const PriceSettingsTitle = () => {

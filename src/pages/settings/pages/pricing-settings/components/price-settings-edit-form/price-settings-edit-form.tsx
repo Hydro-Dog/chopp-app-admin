@@ -43,7 +43,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   };
 
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" className="flex flex-col gap-4">
       <div className="w-1/3">
         <Item
           help={errors.averageDeliveryCost?.message}
@@ -80,8 +80,8 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
         </Item>
         <Item
           label={t('PRICE')}
-          help={errors.freeDeliveryThreshold?.message}
-          validateStatus={errors.freeDeliveryThreshold && 'error'}>
+          help={freeDeliveryIncluded && errors.freeDeliveryThreshold?.message}
+          validateStatus={freeDeliveryIncluded && errors.freeDeliveryThreshold ? 'error' : ''}>
           <Controller
             name="freeDeliveryThreshold"
             control={control}

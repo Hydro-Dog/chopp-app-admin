@@ -6,18 +6,22 @@ import { PriceSettingsView } from './components/price-setting-view/price-setting
 import { PriceSettingsEditForm } from './components/price-settings-edit-form/price-settings-edit-form';
 
 export const PricingSettingsPage = () => {
-  const { value: isEditing, toggle } = useBoolean();
   const { t } = useTranslation();
+  const { value: isEditing, toggle } = useBoolean();
 
   return (
     <TitlePage breadcrumbs title={t('PRICING')}>
-      <Card title={t('DELIVERY')}>
-        {isEditing ? (
-          <PriceSettingsEditForm toggle={toggle} />
-        ) : (
-          <PriceSettingsView toggle={toggle} />
-        )}
-      </Card>
+      <div className="h-full pb-10">
+        <Card className="h-full" title={t('DELIVERY')}>
+          {isEditing ? (
+            <div className="h-full">
+              <PriceSettingsEditForm toggle={toggle} />
+            </div>
+          ) : (
+            <PriceSettingsView toggle={toggle} />
+          )}
+        </Card>
+      </div>
     </TitlePage>
   );
 };

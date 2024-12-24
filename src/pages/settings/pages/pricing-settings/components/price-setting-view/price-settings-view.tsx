@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Descriptions } from 'antd';
+import { Button, Checkbox, Descriptions, Flex, Space } from 'antd';
 import type { DescriptionsProps } from 'antd';
 
 type Props = {
@@ -27,11 +27,13 @@ export const PriceSettingsView = ({ toggle }: Props) => {
   ];
 
   return (
-    <>
+    <Flex vertical gap={16}>
       <Descriptions column={1} size={'default'} items={items} />
-      <Button className="mt-5" type="primary" onClick={toggle}>
-        {t('EDIT')}
-      </Button>
-    </>
+      <Space>
+        <Button className="mt-5" type="primary" onClick={toggle}>
+          {t('EDIT')}
+        </Button>
+      </Space>
+    </Flex>
   );
 };

@@ -38,7 +38,8 @@
   "TURN_OFF": "Выключить",
   "ERROR": "Ошибка",
   "ERRORS": {
-    "FREE_DELIVERY_THRESHOLD_AT_LEAST_1": "Cумма должна быть указана при наличии бесплатной доставки",
+    "NO_NEGATIVE": "Только положительные значения",
+    "INSERT_FREE_DELIVERY_THRESHOLD": "Укажите сумму или отключите 'Бесплатную доставку'",
     "PASSWORD_TOO_SHORT": "Минимум {{length}}",
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле",

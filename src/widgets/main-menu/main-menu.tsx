@@ -66,18 +66,18 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   useEffect(() => {
     if (wsConnected) {
       dispatch(
-        wsSend(
-          createWsMessage({
-            type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
-          }),
-        ),
+        // wsSend(
+        //   createWsMessage({
+        //     type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
+        //   }),
+        // ),
       );
       dispatch(
-        wsSend(
-          createWsMessage({
-            type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
-          }),
-        ),
+        // wsSend(
+        //   createWsMessage({
+        //     type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
+        //   }),
+        // ),
       );
     }
   }, [dispatch, wsConnected]);

@@ -57,24 +57,13 @@ export const SignInPage = () => {
       if (payload) {
         dispatch(
           wsConnect({
-            url: `${import.meta.env.VITE_BASE_WS}/ws?token=${payload.accessToken}`,
+            url: `${import.meta.env.VITE_BASE_WS}`,
           }),
         );
       }
     };
   
     superDispatch({ action: loginUser({ ...data }), thenHandler });
-    // dispatch(loginUser({ ...data }))
-    //   .then(({ payload }) => {
-    //     if (payload) {
-    //       dispatch(
-    //         wsConnect({
-    //           url: `${import.meta.env.VITE_BASE_WS}/ws?token=${payload.accessToken}`,
-    //         }),
-    //       );
-    //     }
-    //   })
-    //   .catch((e) => console.log('e: ', e));
   };
 
   useEffect(() => {

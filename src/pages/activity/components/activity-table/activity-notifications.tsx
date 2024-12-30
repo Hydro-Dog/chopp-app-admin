@@ -65,13 +65,13 @@ export const ActivityNotifications = () => {
 
   useConnection(() => {
     console.log('useConnection');
-    dispatch(
-      wsSend(
-        createWsMessage({
-          type: WS_MESSAGE_TYPE.GET_NEW_ACTIVITY,
-        }),
-      ),
-    );
+    // dispatch(
+    //   wsSend(
+    //     createWsMessage({
+    //       type: WS_MESSAGE_TYPE.GET_NEW_ACTIVITY,
+    //     }),
+    //   ),
+    // );
   }, [dispatch]);
 
   const updateStatus = (id = '', newStatus?: ACTIVITY_STATUS) => {

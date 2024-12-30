@@ -7,6 +7,8 @@ export const useFilterWsMessages = <T>(type: WS_MESSAGE_TYPE) => {
   // Используем селектор с указанием, что messages это массив WsMessage<T>
   const messages = useSelector<RootState, WsMessage<T>[]>((state: RootState) => state.ws.messages);
 
+  console.log('messages: ', messages)
+
   // Фильтруем сообщения по типу
   const typedMessages = messages.filter((item: WsMessage<T>) => item.type === type);
 

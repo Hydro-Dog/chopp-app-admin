@@ -13,6 +13,7 @@ import {
   NotificationContextProvider,
   STORAGE_KEYS,
   THEME,
+  useFilterWsMessages,
 } from '@shared/index';
 import { AppDispatch, fetchCurrentUser, store, wsConnect, wsDisconnect } from '@store/index';
 import { useAxiosInterceptors } from '@store/middleware';
@@ -28,6 +29,7 @@ import { router } from './router/router';
 import 'dayjs/locale/ru';
 
 import './index.css';
+import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -54,21 +56,18 @@ export const AudioLevelContext = createContext<any>(null);
 //TODO: вынести в отдельный файл
 export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { lastMessage: tokenExpiredMessage } = useFilterWsMessages(WS_MESSAGE_TYPE.TOKEN_EXPIRED);
 
   useAxiosInterceptors();
 
-  // @ts-ignore
   useEffect(() => {
-    // @ts-ignore
-    if (localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {
-      dispatch(fetchCurrentUser());
-
-      dispatch(
-        wsConnect({
-          url: `${import.meta.env.VITE_BASE_WS}`,
-        }),
-      );
-    }
+    //TODO: Добавить проверку на истекший токен, если истек то повторно соединиться через 1c
+    dispatch(fetchCurrentUser());
+    dispatch(
+      wsConnect({
+        url: `${import.meta.env.VITE_BASE_WS}`,
+      }),
+    );
 
     return () => wsDisconnect();
   }, [dispatch]);

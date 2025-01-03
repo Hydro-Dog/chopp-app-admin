@@ -98,7 +98,7 @@ export const App = () => {
   return (
     <LangContextProvider lang={lang} setLang={setLang}>
       <StoreProvider store={store}>
-        <WsWrapper />
+        {/* <WsWrapper /> */}
         <ConfigProvider theme={themeConfig} locale={lang === LANG.RU ? ruRU : enUS}>
           <NotificationContextProvider
             showNotification={showNotification}

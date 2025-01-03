@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSuperDispatch, useNotificationContext, useThemeToken } from '@shared/index';
+import { formatPhoneNumber, useSuperDispatch, useNotificationContext, useThemeToken } from '@shared/index';
 import './sign-in-page.scss';
 
 import {
@@ -41,6 +41,8 @@ export const SignInPage = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
+    register,
   } = useForm<UserLoginDTO>({
     resolver: zodResolver(signInFormSchema),
     reValidateMode: 'onChange',
@@ -64,6 +66,11 @@ export const SignInPage = () => {
     };
   
     superDispatch({ action: loginUser({ ...data }), thenHandler });
+  };
+
+  const handleChangePhoneNumber = (e: any) => {
+    const { value } = e.target;
+    setValue('phoneNumber', formatPhoneNumber(value));
   };
 
   useEffect(() => {
@@ -125,7 +132,17 @@ export const SignInPage = () => {
               render={({ field }) => (
                 <div className="flex">
                   {/* TODO: добавить маску номера из клиентской части */}
-                  <Input {...field} placeholder={t('+7 ___ ___-__-__')} />
+                  <Input
+                  {...register('phoneNumber', { 
+                    onChange: handleChangePhoneNumber,
+                    maxLength: {
+                      value: 12,
+                      message: 'Максимальная длина 12 символов'
+                    } 
+                  })}
+                  {...field}
+                  placeholder={t('+7 ___ ___-__-__')}
+                  />
                 </div>
               )}
             />

@@ -28,7 +28,9 @@ export const wsMiddleware: Middleware = (store) => {
           }
 
           if (!localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {
-            throw new Error('WS Connection failed due to no access token in Local storage');
+            console.error('WS Connection failed due to no access token in Local storage');
+
+            return;
           }
 
           socket = io(action.payload.url, {

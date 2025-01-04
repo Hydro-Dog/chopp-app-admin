@@ -14,6 +14,7 @@ import {
 import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
+import { WsWrapper } from '../ws/ws-wrapper';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
     path: ROUTES.ROOT,
     element: (
       <GuardedRoute>
+        <WsWrapper />
         <MainMenu />
       </GuardedRoute>
     ),

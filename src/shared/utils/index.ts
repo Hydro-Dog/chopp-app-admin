@@ -6,4 +6,5 @@ export * from './to-screaming-snake-case';
 export * from './get-base-64';
 export * from './remove-dashes-from-phoneNumber';
 export * from './format-phone-number';
+export * from './sanitize-user-number';
 

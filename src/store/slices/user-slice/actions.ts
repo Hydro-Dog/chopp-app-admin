@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS, ErrorResponse, SearchRequestParams, SearchResponse } from '@shared/index';
+import { ACTIVITY_STATUS, ErrorResponse, sanitizedUser, SearchRequestParams, SearchResponse } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import {
@@ -85,7 +85,7 @@ export const loginUser = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('/loginUser', async (userData, thunkAPI) => {
   try {
-    const response = await axiosPrivate.post<UserAuthorization>(`/auth/login`, userData);
+    const response = await axiosPrivate.post<UserAuthorization>(`/auth/login`, sanitizedUser(userData));
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

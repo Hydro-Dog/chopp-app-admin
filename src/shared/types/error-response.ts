@@ -1,4 +1,5 @@
 export type ErrorResponse = {
-  message: string;
+  message?: string;
+  errorMessage?: string;
   errors?: Record<string, string>;
 };

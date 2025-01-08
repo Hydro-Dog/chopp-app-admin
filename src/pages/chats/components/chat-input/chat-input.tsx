@@ -41,7 +41,7 @@ export const ChatInput = () => {
       });
       //Обновить превью чатов сообщения
       setChats((prev) =>
-        prev.map((item) =>
+        prev?.map((item) =>
           item.chatId === urlChatId ? { ...item, lastMessage: newMessage.payload } : item,
         ),
       );

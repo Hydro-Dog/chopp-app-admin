@@ -23,8 +23,8 @@ export const Sidebar = () => {
     setChats(chatsData);
   }, [chatsData]);
 
-  useMarkChatAsRead({ setChats, chats });
-  useNewIncomingMessagePreviewHandler({ setChats });
+  useMarkChatAsRead();
+  useNewIncomingMessagePreviewHandler();
 
   return (
     <div className="flex flex-col gap-1 p-1">
@@ -35,7 +35,7 @@ export const Sidebar = () => {
               size="small"
               className="cursor-pointer"
               key={item.userId}
-              onClick={() => setSearchParams({ id: item.chatId })}>
+              onClick={() => setSearchParams({ id: item.id })}>
               <div className="flex justify-between">
                 <div className="flex gap-1 items-center">
                   <Title className="!m-0" level={5}>

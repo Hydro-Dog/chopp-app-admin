@@ -6,7 +6,7 @@ import {
   useFilterWsMessages,
   ROUTES,
 } from '@shared/index';
-import { AppDispatch, fetchCurrentUser, wsConnect, wsDisconnect } from '@store/index';
+import { AppDispatch, fetchCurrentUser, wsConnect, wsDisconnect, wsSend } from '@store/index';
 import { useAxiosInterceptors } from '@store/middleware';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 

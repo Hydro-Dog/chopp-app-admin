@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ChatData, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
-import { fetchChatMessages, fetchChatData, fetchChatStats } from './actions';
+import { fetchChatMessages, fetchChatData, fetchChatStats, createChatAction } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ChatState = {
@@ -15,6 +15,9 @@ export type ChatState = {
   chatsStats: ChatStats | null;
   fetchChatsStatsStatus: FETCH_STATUS;
   fetchChatStatsError: ErrorResponse | null;
+  createChatData: ChatData | null;
+  createChatStatus: FETCH_STATUS;
+  createChatError: ErrorResponse | null;
 };
 
 const initialState: ChatState = {
@@ -27,6 +30,9 @@ const initialState: ChatState = {
   chatsStats: null,
   fetchChatsStatsStatus: FETCH_STATUS.IDLE,
   fetchChatStatsError: null,
+  createChatData: null,
+  createChatStatus: FETCH_STATUS.IDLE,
+  createChatError: null,
 };
 
 export const chatSlice = createSlice({
@@ -38,6 +44,11 @@ export const chatSlice = createSlice({
       state.fetchChatMessagesStatus = FETCH_STATUS.IDLE;
       state.fetchChatMessagesError = null;
     },
+    clearChatCreatingHistory: (state) => {
+      state.createChatData = null;
+      state.createChatStatus = FETCH_STATUS.IDLE;
+      state.createChatError = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -82,8 +93,21 @@ export const chatSlice = createSlice({
         state.fetchChatStatsError = action.payload ?? {
           errorMessage: 'Failed to fetch chat information',
         };
+      })
+      .addCase(createChatAction.pending, (state) => {
+        state.createChatStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(createChatAction.fulfilled, (state, action: PayloadAction<ChatData>) => {
+        state.createChatStatus = FETCH_STATUS.SUCCESS;
+        state.createChatData = action.payload;
+      })
+      .addCase(createChatAction.rejected, (state, action) => {
+        state.createChatStatus = FETCH_STATUS.ERROR;
+        state.createChatError = action.payload ?? {
+          errorMessage: 'Failed to fetch chat information',
+        };
       });
   },
 });
 
-export const { clearChatMessages } = chatSlice.actions;
+export const { clearChatMessages, clearChatCreatingHistory } = chatSlice.actions;

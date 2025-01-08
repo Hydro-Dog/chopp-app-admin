@@ -33,7 +33,25 @@ export const useChatsContext = () => useContext(ChatsContext);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const ChatsContextProvider = ({ children }: PropsWithChildren<any>) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [chats, setChats] = useState<ChatData[]>([]);
+  const [chats, setChats] = useState<ChatData[]>(
+    // dummy data for testing
+    // [
+    //   {
+    //     id: '1',
+    //     userId: '1',
+    //     fullName: 'Full Name',
+    //     lastMessage: {
+    //       messageId: '1',
+    //       senderId: '1',
+    //       text: 'string',
+    //       timeStamp: 2132131232,
+    //       wasReadBy: [],
+    //       chatId: '1',
+    //     },
+    //   },
+    // ]
+    []
+  );
   const [chatsStats, setChatsStats] = useState<ChatStats>({} as ChatStats);
 
   return (

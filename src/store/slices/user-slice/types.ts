@@ -1,4 +1,4 @@
-import { ACTIVITY_STATUS } from '@shared/enum';
+import { ORDER_STATUS } from '@shared/enum';
 import { SearchRequestParams } from '@shared/index';
 
 export type User = {
@@ -23,7 +23,7 @@ export type CallsTableParams = SearchRequestParams & {
 export type CallsTableRecord = {
   id: string;
   date: string;
-  status: ACTIVITY_STATUS;
+  status: ORDER_STATUS;
   address: string;
   comment: string;
 };

@@ -7,7 +7,7 @@ import {
 } from '@shared/components/calls-table/components';
 import { ChangeStatusType } from '@shared/components/calls-table/types';
 import { useNotificationContext } from '@shared/context';
-import { ACTIVITY_STATUS } from '@shared/enum';
+import { ORDER_STATUS } from '@shared/enum';
 import { useFilterWsMessages, useConnection } from '@shared/hooks';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { createWsMessage } from '@shared/utils';
@@ -36,7 +36,7 @@ export const ActivityNotifications = () => {
   } = useBoolean();
 
   const { lastMessage: newActivityMessage } = useFilterWsMessages<CallsTableRecord>(
-    WS_MESSAGE_TYPE.NEW_ACTIVITY,
+    WS_MESSAGE_TYPE.NEW_ORDER,
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export const ActivityNotifications = () => {
       showNotification({
         type: 'info',
         key: newActivityMessage.payload?.id,
-        message: t('NEW_ACTIVITY'),
+        message: t('NEW_ORDER'),
         description: (
           <div className="flex flex-row justify-between items-center">
             <div>{newActivityMessage.payload?.address}</div>
@@ -68,13 +68,13 @@ export const ActivityNotifications = () => {
     // dispatch(
     //   wsSend(
     //     createWsMessage({
-    //       type: WS_MESSAGE_TYPE.GET_NEW_ACTIVITY,
+    //       type: WS_MESSAGE_TYPE.GET_NEW_ORDER,
     //     }),
     //   ),
     // );
   }, [dispatch]);
 
-  const updateStatus = (id = '', newStatus?: ACTIVITY_STATUS) => {
+  const updateStatus = (id = '', newStatus?: ORDER_STATUS) => {
     if (id && newStatus) {
       dispatch(updateCallStatus({ id, newStatus })).then(() => {
         // TODO: Проблема - как обновть таблицу после отправки updateCallStatus, когда мы делаем это из ActivityNotifications

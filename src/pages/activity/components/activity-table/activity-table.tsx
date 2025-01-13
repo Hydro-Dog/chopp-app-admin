@@ -34,7 +34,7 @@ export const ActivityTable = () => {
   const [refreshDisabled, setRefreshDisabled] = useState(true);
 
   const { lastMessage: newActivityMessage, messages } = useFilterWsMessages<CallsTableRecord>(
-    WS_MESSAGE_TYPE.NEW_ACTIVITY,
+    WS_MESSAGE_TYPE.NEW_ORDER,
   );
   const [totalActivityMessageCounter, setTotalActivityMessageCounter] = useState(messages.length);
 

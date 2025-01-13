@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { ACTIVITY_COLORS, ACTIVITY_STATUS } from '@shared/enum';
+import { ORDER_COLORS, ORDER_STATUS } from '@shared/enum';
 import { TableSearchParams } from '@shared/types/table-search-params';
 import { getChangeStatusDropdownItems, toScreamingSnakeCase, truncateText } from '@shared/utils';
 import { CallsTableRecord } from '@store/slices';
@@ -51,10 +51,10 @@ export const useGetColumns = ({
       render: (text: string, record: CallsTableRecord, index: number) => (
         <Tooltip title={text}>
           <Tag
-            color={ACTIVITY_COLORS[text]}
+            color={ORDER_COLORS[text]}
             onClick={() => onRowClick(record, index)}
             style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(text)}`)}
+            {t(`ORDER_STATUS.${toScreamingSnakeCase(text)}`)}
           </Tag>
         </Tooltip>
       ),
@@ -114,14 +114,14 @@ export const useGetColumns = ({
               ...item,
               label: (
                 <Tag
-                  color={ACTIVITY_COLORS[item.key]}
+                  color={ORDER_COLORS[item.key]}
                   style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(item.key)}`)}
+                  {t(`ORDER_STATUS.${toScreamingSnakeCase(item.key)}`)}
                 </Tag>
               ),
             })),
             onClick: (value) => {
-              setChangeStatusModalData({ item: record, newStatus: value.key as ACTIVITY_STATUS });
+              setChangeStatusModalData({ item: record, newStatus: value.key as ORDER_STATUS });
               openChangeStatusModal();
             },
           }}>

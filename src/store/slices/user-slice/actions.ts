@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS, ErrorResponse, sanitizedUser, SearchRequestParams, SearchResponse } from '@shared/index';
+import { ORDER_STATUS, ErrorResponse, sanitizedUser, SearchRequestParams, SearchResponse } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import {
@@ -194,7 +194,7 @@ export const fetchActiveCalls = createAsyncThunk<
 
 export const updateCallStatus = createAsyncThunk<
   SearchResponse<CallsTableRecord>,
-  { id: string; newStatus: ACTIVITY_STATUS },
+  { id: string; newStatus: ORDER_STATUS },
   { rejectValue: ErrorResponse }
 >('call/updateStatus', async (params, thunkAPI) => {
   try {

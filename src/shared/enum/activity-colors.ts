@@ -1,13 +1,13 @@
-import { ACTIVITY_STATUS } from '@shared/enum';
+import { ORDER_STATUS } from '@shared/enum';
 import { useThemeToken } from '../hooks/use-theme-token';
 
-export const ACTIVITY_COLORS = {
-  [ACTIVITY_STATUS.IDLE]: 'blue',
-  [ACTIVITY_STATUS.PROCESSING]: 'cyan',
-  [ACTIVITY_STATUS.ACCEPTED]: 'green',
-  [ACTIVITY_STATUS.DECLINED]: 'orange',
-  [ACTIVITY_STATUS.ON_THE_WAY]: 'blue',
-  [ACTIVITY_STATUS.ON_THE_SPOT]: 'geekblue',
-  // [ACTIVITY_STATUS.COMPLETED]: 'lime',
-  [ACTIVITY_STATUS.CANCELED]: 'red',
+export const ORDER_COLORS = {
+  [ORDER_STATUS.IDLE]: 'blue',
+  [ORDER_STATUS.PROCESSING]: 'cyan',
+  [ORDER_STATUS.ACCEPTED]: 'green',
+  [ORDER_STATUS.DECLINED]: 'orange',
+  [ORDER_STATUS.ON_THE_WAY]: 'blue',
+  [ORDER_STATUS.ON_THE_SPOT]: 'geekblue',
+  // [ORDER_STATUS.COMPLETED]: 'lime',
+  [ORDER_STATUS.CANCELED]: 'red',
 };

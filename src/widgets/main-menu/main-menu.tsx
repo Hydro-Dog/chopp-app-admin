@@ -10,7 +10,7 @@ import RoomServiceIcon from '@mui/icons-material/RoomService';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StoreIcon from '@mui/icons-material/Store';
 import { useChatsContext } from '@pages/chats/chats-context';
-import { ACTIVITY_STATUS, ROUTES } from '@shared/enum';
+import { ORDER_STATUS, ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
 import { ChatData, useFilterWsMessages, useNotificationContext, useTheme } from '@shared/index';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
@@ -31,7 +31,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const navigate = useNavigate();
   const { wsConnected } = useSelector((state: RootState) => state.ws);
   const { logoutStatus } = useSelector((state: RootState) => state.user);
-  // const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<ACTIVITY_STATUS, number>>(
+  // const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<ORDER_STATUS, number>>(
   //   WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
   // );
   // const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);

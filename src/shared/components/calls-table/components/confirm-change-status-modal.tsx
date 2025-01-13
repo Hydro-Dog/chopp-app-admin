@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfirmModal } from '@shared/components/confirm-modal';
 import { toScreamingSnakeCase } from '@shared/utils';
 import { ChangeStatusType } from '../types';
-import { ACTIVITY_COLORS } from '@shared/enum';
+import { ORDER_COLORS } from '@shared/enum';
 import { Tag } from 'antd';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
@@ -21,15 +21,15 @@ export const ConfirmChangeStatusModal = ({ data, open, onOk, onCancel }: Props) 
         <div>Изменить статус заказа {data?.item.id}</div>
         <div className="flex flex-col items-center gap-1">
           <Tag 
-            color={ACTIVITY_COLORS[data?.item.status]}
+            color={ORDER_COLORS[data?.item.status]}
             style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 16 }}>
-            {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(data?.item.status || '')}`)}
+            {t(`ORDER_STATUS.${toScreamingSnakeCase(data?.item.status || '')}`)}
           </Tag>
           <KeyboardDoubleArrowDownIcon color="action" fontSize="small" />
           <Tag
-            color={ACTIVITY_COLORS[data?.newStatus]}
+            color={ORDER_COLORS[data?.newStatus]}
             style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: 16 }}>
-            {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(data?.newStatus || '')}`)}
+            {t(`ORDER_STATUS.${toScreamingSnakeCase(data?.newStatus || '')}`)}
           </Tag>
         </div>
       </div>

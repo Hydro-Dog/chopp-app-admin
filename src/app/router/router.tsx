@@ -65,7 +65,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: ROUTES.ACTIVITY,
+        path: ROUTES.ORDERS,
         element: <ActivityPage />,
       },
       {

@@ -145,7 +145,7 @@ export const ActivityTable = () => {
   };
 
   return (
-    <TitlePage title={t('ACTIVITY')}>
+    <TitlePage title={t('ORDERS')}>
       <CallsTable
         data={callHistory?.items}
         searchParams={{ pagination, sorter, search, filter }}

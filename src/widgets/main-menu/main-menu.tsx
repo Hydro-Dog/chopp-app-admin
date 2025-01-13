@@ -3,22 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
-import AssistantPhotoRoundedIcon from '@mui/icons-material/AssistantPhotoRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import StoreIcon from '@mui/icons-material/Store';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StoreIcon from '@mui/icons-material/Store';
 import { useChatsContext } from '@pages/chats/chats-context';
 import { ACTIVITY_STATUS, ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
-import {
-  ChatData,
-  createWsMessage,
-  useFilterWsMessages,
-  useNotificationContext,
-  useTheme,
-} from '@shared/index';
+import { ChatData, useFilterWsMessages, useNotificationContext, useTheme } from '@shared/index';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { logoutUser, setLogoutStatus, wsSend } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
@@ -37,10 +31,10 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const navigate = useNavigate();
   const { wsConnected } = useSelector((state: RootState) => state.ws);
   const { logoutStatus } = useSelector((state: RootState) => state.user);
-  const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<ACTIVITY_STATUS, number>>(
-    WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
-  );
-  const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
+  // const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<ACTIVITY_STATUS, number>>(
+  //   WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
+  // );
+  // const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
 
   const { showNotification } = useNotificationContext();
 
@@ -65,20 +59,18 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
   useEffect(() => {
     if (wsConnected) {
-      dispatch(
-        // wsSend(
-        //   createWsMessage({
-        //     type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
-        //   }),
-        // ),
-      );
-      dispatch(
-        // wsSend(
-        //   createWsMessage({
-        //     type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
-        //   }),
-        // ),
-      );
+      dispatch();
+      // wsSend(
+      //   createWsMessage({
+      //     type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
+      //   }),
+      // ),
+      dispatch();
+      // wsSend(
+      //   createWsMessage({
+      //     type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
+      //   }),
+      // ),
     }
   }, [dispatch, wsConnected]);
 
@@ -98,17 +90,15 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       onClick: () => onMenuItemClick(ROUTES.ROOT),
     },
     {
-      key: ROUTES.ACTIVITY,
-      icon: <AssistantPhotoRoundedIcon color="primary" />,
+      key: ROUTES.ORDERS,
+      icon: <RoomServiceIcon color="primary" />,
       label: (
-        <Tooltip title={JSON.stringify(callHistoryStats?.payload)}>
-          <div className="flex items-center gap-1">
-            <div>{t('ACTIVITY')}</div>
-            <Badge size="default" count={callHistoryStats?.payload?.idle} />
-          </div>
-        </Tooltip>
+        <div className="flex items-center gap-1">
+          <div>{t('ORDERS')}</div>
+          {/* <Badge size="default" count={callHistoryStats?.payload?.idle} /> */}
+        </div>
       ),
-      onClick: () => onMenuItemClick(ROUTES.ACTIVITY),
+      onClick: () => onMenuItemClick(ROUTES.ORDERS),
     },
     {
       key: ROUTES.CHATS,

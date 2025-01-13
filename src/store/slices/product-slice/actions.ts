@@ -4,7 +4,6 @@ import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { Product } from './types';
 
-
 export const fetchProducts = createAsyncThunk<
   SearchResponse<Product>,
   { categoryId: string } & SearchRequestParams,

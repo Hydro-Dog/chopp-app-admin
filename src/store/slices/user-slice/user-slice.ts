@@ -32,7 +32,7 @@ export type UserState = {
   users: SearchResponse<User> | null;
   fetchUsersStatus: FETCH_STATUS;
   fetchUsersError: ErrorResponse | null;
-  callHistory: SearchResponse<CallsTableRecord> | null;
+  orders: SearchResponse<CallsTableRecord> | null;
   fetchCallHistoryStatus: FETCH_STATUS;
   fetchCallHistoryError: ErrorResponse | null;
   activeCalls: SearchResponse<CallsTableRecord> | null;
@@ -58,7 +58,7 @@ const initialState: UserState = {
   users: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
   fetchUsersStatus: FETCH_STATUS.IDLE,
   fetchUsersError: null,
-  callHistory: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
+  orders: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
   fetchCallHistoryStatus: FETCH_STATUS.IDLE,
   fetchCallHistoryError: null,
   activeCalls: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
@@ -175,7 +175,7 @@ export const userSlice = createSlice({
       })
       .addCase(fetchCallHistory.fulfilled, (state, action) => {
         state.fetchCallHistoryStatus = FETCH_STATUS.SUCCESS;
-        state.callHistory = {
+        state.orders = {
           items: action.payload.items,
           pageNumber: action.payload.pageNumber,
           totalPages: action.payload.totalPages,

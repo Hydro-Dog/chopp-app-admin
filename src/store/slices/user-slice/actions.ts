@@ -141,7 +141,7 @@ export const fetchCallHistory = createAsyncThunk<
   SearchResponse<CallsTableRecord>,
   CallsTableParams,
   { rejectValue: ErrorResponse }
->('callHistory/fetchCallHistory', async (params, thunkAPI) => {
+>('orders/fetchCallHistory', async (params, thunkAPI) => {
   try {
     const queryString = new URLSearchParams({
       page: String(params.page || 1),
@@ -153,7 +153,7 @@ export const fetchCallHistory = createAsyncThunk<
     }).toString();
 
     const response = await axiosPrivate.get<SearchResponse<CallsTableRecord>>(
-      `/users/${params.userId}/callHistory?${queryString}`,
+      `/users/${params.userId}/orders?${queryString}`,
     );
     return response.data;
   } catch (error) {
@@ -170,7 +170,7 @@ export const fetchActiveCalls = createAsyncThunk<
   SearchResponse<CallsTableRecord>,
   CallsTableParams,
   { rejectValue: ErrorResponse }
->('callHistory/fetchActiveCalls', async (params, thunkAPI) => {
+>('orders/fetchActiveCalls', async (params, thunkAPI) => {
   try {
     const queryString = new URLSearchParams({
       page: String(params.page || 1),

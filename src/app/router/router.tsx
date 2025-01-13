@@ -5,7 +5,7 @@ import {
   UsersPage,
   RegisterPage,
   ChatsPage,
-  ActivityPage,
+  OrdersPage,
   UserPage,
   ProductsPage,
   SettingsPage,
@@ -66,7 +66,7 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.ORDERS,
-        element: <ActivityPage />,
+        element: <OrdersPage />,
       },
       {
         path: ROUTES.ANALYTICS,

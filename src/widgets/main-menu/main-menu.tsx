@@ -31,7 +31,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const navigate = useNavigate();
   const { wsConnected } = useSelector((state: RootState) => state.ws);
   const { logoutStatus } = useSelector((state: RootState) => state.user);
-  // const { lastMessage: callHistoryStats } = useFilterWsMessages<Record<ORDER_STATUS, number>>(
+  // const { lastMessage: ordersStats } = useFilterWsMessages<Record<ORDER_STATUS, number>>(
   //   WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
   // );
   // const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
@@ -95,7 +95,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       label: (
         <div className="flex items-center gap-1">
           <div>{t('ORDERS')}</div>
-          {/* <Badge size="default" count={callHistoryStats?.payload?.idle} /> */}
+          {/* <Badge size="default" count={ordersStats?.payload?.idle} /> */}
         </div>
       ),
       onClick: () => onMenuItemClick(ROUTES.ORDERS),

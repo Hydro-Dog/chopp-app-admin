@@ -11,6 +11,7 @@ import {
   CallsTableParams,
   CallsTableRecord,
   fetchCallHistory,
+  fetchOrders,
   RootState,
 } from '@store/index'; // Update the path as necessary
 import { TablePaginationConfig, TableProps, Typography } from 'antd';
@@ -19,11 +20,11 @@ import { useWindowSize } from 'usehooks-ts';
 
 const { Title } = Typography;
 
-export const ActivityTable = () => {
+export const OrdersTable = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const [search, setSearch] = useState('');
-  const { callHistory } = useSelector((state: RootState) => state.user);
+  const { orders } = useSelector((state: RootState) => state.orders);
   const { height = 0 } = useWindowSize();
   const [pagination, setPagination] = useState<Partial<Pagination>>({
     current: 1,
@@ -40,7 +41,7 @@ export const ActivityTable = () => {
 
   const fetchData = ({ search, page, limit, sort, order, userId, filter }: CallsTableParams) => {
     dispatch(
-      fetchCallHistory({
+      fetchOrders({
         search,
         page,
         limit,
@@ -71,10 +72,10 @@ export const ActivityTable = () => {
   }, [newActivityMessage]);
 
   useEffect(() => {
-    if (callHistory?.totalPages) {
-      setPagination((prev) => ({ ...prev, total: callHistory?.totalPages * 10 }));
+    if (orders?.totalPages) {
+      setPagination((prev) => ({ ...prev, total: orders?.totalPages * 10 }));
     }
-  }, [callHistory?.totalPages]);
+  }, [orders?.totalPages]);
 
   const onSearch = (value: string) => {
     setSearch(value);
@@ -147,7 +148,7 @@ export const ActivityTable = () => {
   return (
     <TitlePage title={t('ORDERS')}>
       <CallsTable
-        data={callHistory?.items}
+        data={orders?.items}
         searchParams={{ pagination, sorter, search, filter }}
         onSearch={onSearch}
         onFilterChange={onFilterChange}

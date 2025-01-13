@@ -8,3 +8,4 @@ export * from './chat-data';
 export * from './chat-stats';
 export * from './search-response';
 export * from './search-request-params';
+export * from './order';

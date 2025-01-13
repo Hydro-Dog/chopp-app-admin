@@ -17,7 +17,7 @@ import { useWindowSize } from 'usehooks-ts';
 
 export const CallsHistoryTable = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { callHistory } = useSelector((state: RootState) => state.user);
+  const { orders } = useSelector((state: RootState) => state.orders);
   const [search, setSearch] = useState('');
   const { height = 0 } = useWindowSize();
   const [pagination, setPagination] = useState<Partial<Pagination>>({
@@ -55,10 +55,10 @@ export const CallsHistoryTable = () => {
   }, [id]);
 
   useEffect(() => {
-    if (callHistory?.totalRecords) {
-      setPagination((prev) => ({ ...prev, total: callHistory?.totalRecords }));
+    if (orders?.totalRecords) {
+      setPagination((prev) => ({ ...prev, total: orders?.totalRecords }));
     }
-  }, [callHistory?.totalRecords]);
+  }, [orders?.totalRecords]);
 
   const onSearch = (value: string) => {
     setSearch(value);
@@ -120,7 +120,7 @@ export const CallsHistoryTable = () => {
   return (
     <CallsTable
       title={'Calls History'}
-      data={callHistory?.items}
+      data={orders?.items}
       searchParams={{ pagination, sorter, search, userId: id, filter }}
       onSearch={onSearch}
       onFilterChange={onFilterChange}

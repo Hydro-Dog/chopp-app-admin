@@ -16,7 +16,7 @@ import { CallsTableRecord, updateCallStatus, wsSend } from '@store/slices';
 import { Button } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 
-export const ActivityNotifications = () => {
+export const OrderNotifications = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
   const { showNotification, closeNotification } = useNotificationContext();

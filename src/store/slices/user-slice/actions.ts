@@ -114,7 +114,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: ErrorRespo
 
 export const fetchUsers = createAsyncThunk<
   SearchResponse<User>, // Тип возвращаемого значения
-  SearchRequestParams, // Тип аргумента
+  SearchRequestParams & { excludeRequesterId?: string }, // Тип аргумента
   { rejectValue: ErrorResponse } // Тип возвращаемого ошибки
 >('user/fetchUsers', async (params, thunkAPI) => {
   try {
@@ -124,6 +124,7 @@ export const fetchUsers = createAsyncThunk<
       search: params.search || '',
       sort: params.sort || '',
       order: params.order || 'asc',
+      excludeRequesterId: params.excludeRequesterId || '',
     }).toString();
 
     const response = await axiosPrivate.get<SearchResponse<User>>(`/users?${queryString}`);

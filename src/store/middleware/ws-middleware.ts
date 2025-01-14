@@ -15,6 +15,7 @@ type WsAction = {
   payload?: any;
 };
 
+//@ts-ignore
 export const wsMiddleware: Middleware = (store) => {
   let socket: Socket | null = null;
 
@@ -56,6 +57,10 @@ export const wsMiddleware: Middleware = (store) => {
           socket.on('message', (data) => {
             console.log('Message received:', data);
             store.dispatch(pushWsMessage(data));
+          });
+
+          socket.on('tokenExpired', (data) => {
+            console.log('Token expired message:', data);
           });
 
           break;

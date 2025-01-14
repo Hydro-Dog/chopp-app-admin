@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ChatData, ChatStats, ErrorResponse } from '@shared/index';
+import { Chat, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
 import { axiosPrivate } from '@store/middleware';
@@ -22,11 +22,11 @@ export const fetchChatMessages = createAsyncThunk<
   }
 });
 
-export const fetchChatData = createAsyncThunk<ChatData[], void, { rejectValue: ErrorResponse }>(
+export const fetchChats = createAsyncThunk<Chat[], void, { rejectValue: ErrorResponse }>(
   '/fetchChatsPreviews',
   async (_, thunkAPI) => {
     try {
-      const response = await axiosPrivate.get<ChatData[]>('/chats');
+      const response = await axiosPrivate.get<Chat[]>('/chats');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -43,7 +43,7 @@ type CreateChatDto = {
   ownerId: string;
 }
 
-export const createChatAction = createAsyncThunk<ChatData, CreateChatDto, { rejectValue: ErrorResponse }>(
+export const createChatAction = createAsyncThunk<Chat, CreateChatDto, { rejectValue: ErrorResponse }>(
   '/createChat',
   async (chatData, thunkAPI) => {
     try {

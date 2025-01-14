@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { wsMiddleware } from './middleware/ws-middleware';
 import {
   chatSlice,
-  ChatState,
+  ChatsState,
   userSlice,
   UserState,
   wsSlice,
@@ -18,7 +18,7 @@ export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
     ws: wsSlice.reducer,
-    chat: chatSlice.reducer,
+    chatsRepository: chatSlice.reducer,
     productCategory: productCategorySlice.reducer,
     products: productSlice.reducer,
     orders: ordersSlice.reducer,
@@ -29,7 +29,7 @@ export const store = configureStore({
 export type RootState = {
   user: UserState;
   ws: WsState;
-  chat: ChatState;
+  chatsRepository: ChatsState;
   productCategory: ProductCategoryState;
   products: ProductsState;
   orders: OrderState;

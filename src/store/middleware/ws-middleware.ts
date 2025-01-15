@@ -20,7 +20,6 @@ export const wsMiddleware: Middleware = (store) => {
   let socket: Socket | null = null;
 
   return (next) => (action: WsAction) => {
-    console.log('action: ', action);
     if (action) {
       switch (action?.type) {
         case wsConnect.toString():

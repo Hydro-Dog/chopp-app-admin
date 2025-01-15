@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
-import { Pagination, SearchResponse } from '@shared/types';
 import { FETCH_STATUS, Product, fetchProducts } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Flex, Tooltip, Button, Typography, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { VerticalSkeleton } from '../vertical-skeleton';
 import { CreateEditProductModal, ProductsGrid } from './components/';
+import { PaginationQuery, PaginationResponse } from '@shared/types';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -29,14 +29,14 @@ export const Main = () => {
   } = useBoolean();
 
   const dispatch = useDispatch<AppDispatch>();
-  const superDispatch = useSuperDispatch<SearchResponse<Product>, any>();
+  const superDispatch = useSuperDispatch<PaginationResponse<Product>, any>();
   const categoryId = useSearchParamValue('id') || '';
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
   const [searchParams, setSearchParams] = useSearchParams();
   const urlSearch = searchParams.get('search') || '';
   const [search, setSearch] = useState(urlSearch);
   const [pageProducts, setPageProducts] = useState<Product[]>([]);
-  const [pagination, setPagination] = useState<Pick<Pagination, 'pageNumber' | 'limit'>>({
+  const [pagination, setPagination] = useState<Pick<PaginationQuery, 'pageNumber' | 'limit'>>({
     pageNumber: FIRST_PAGE_NUMBER,
     limit: LIMIT,
   });

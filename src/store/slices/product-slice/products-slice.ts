@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, SearchResponse } from '@shared/index';
+import { ErrorResponse, PaginationResponse } from '@shared/index';
 import { createProduct, fetchProducts, updateProduct } from './actions';
 import { Product } from './types';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ProductsState = {
-  products?: SearchResponse<Product>;
+  products?: PaginationResponse<Product>;
   createProductStatus: FETCH_STATUS;
   createProductError: ErrorResponse | null;
   fetchProductsStatus: FETCH_STATUS;

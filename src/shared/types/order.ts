@@ -1,1 +1,1 @@
-export type Order = {};
+export type Order = {a?: string};

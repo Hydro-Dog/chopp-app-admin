@@ -1,18 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse, SearchRequestParams, SearchResponse } from '@shared/index';
+import { ErrorResponse, PaginationResponse, SearchRequestParams } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { Product } from './types';
 
 export const fetchProducts = createAsyncThunk<
-  SearchResponse<Product>,
+  PaginationResponse<Product>,
   { categoryId: string } & SearchRequestParams,
   { rejectValue: ErrorResponse }
 >(
   'products/fetchProducts',
   async ({ categoryId, pageNumber, limit, search, sort, order }, thunkAPI) => {
     try {
-      console.log('search: ', search)
+      console.log('search: ', search);
       const params = new URLSearchParams({
         pageNumber: String(pageNumber || 1),
         limit: String(limit || 10),
@@ -22,7 +22,7 @@ export const fetchProducts = createAsyncThunk<
         categoryId: categoryId,
       });
 
-      const response = await axiosPrivate.get<SearchResponse<Product>>('/products', { params });
+      const response = await axiosPrivate.get<PaginationResponse<Product>>('/products', { params });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

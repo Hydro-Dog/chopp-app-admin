@@ -3,6 +3,7 @@ export enum ROUTES {
   USERS = 'users',
   CHATS = 'chats',
   ORDERS = 'orders',
+  PAYMENTS = 'payments',
   SIGN_IN = 'signin',
   REGISTER = 'register',
   GOODS = 'goods',

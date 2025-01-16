@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StoreIcon from '@mui/icons-material/Store';
 import { useChatsContext } from '@pages/chats/chats-context';
-import { ORDER_STATUS, ROUTES } from '@shared/enum';
+import { ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
-import { ChatData, useFilterWsMessages, useNotificationContext, useTheme } from '@shared/index';
-import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
+import { useNotificationContext, useTheme } from '@shared/index';
 import { logoutUser, setLogoutStatus, wsSend } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types/fetch-status';
@@ -57,23 +57,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     }
   }, [dispatch, logoutStatus, navigate, showNotification]);
 
-  useEffect(() => {
-    if (wsConnected) {
-      dispatch();
-      // wsSend(
-      //   createWsMessage({
-      //     type: WS_MESSAGE_TYPE.GET_CALL_HISTORY_STATS,
-      //   }),
-      // ),
-      dispatch();
-      // wsSend(
-      //   createWsMessage({
-      //     type: WS_MESSAGE_TYPE.GET_CHAT_STATS,
-      //   }),
-      // ),
-    }
-  }, [dispatch, wsConnected]);
-
   useFetchChatStats();
   const { chatsStats } = useChatsContext();
   const menuItems = [
@@ -99,6 +82,17 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
         </div>
       ),
       onClick: () => onMenuItemClick(ROUTES.ORDERS),
+    },
+    {
+      key: ROUTES.PAYMENTS,
+      icon: <CreditCardIcon color="primary" />,
+      label: (
+        <div className="flex items-center gap-1">
+          <div>{t('PAYMENTS')}</div>
+          {/* <Badge size="default" count={ordersStats?.payload?.idle} /> */}
+        </div>
+      ),
+      onClick: () => onMenuItemClick(ROUTES.PAYMENTS),
     },
     {
       key: ROUTES.CHATS,

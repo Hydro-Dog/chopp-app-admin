@@ -38,6 +38,8 @@
   "TURN_OFF": "Выключить",
   "ERROR": "Ошибка",
   "ERRORS": {
+    "NO_NEGATIVE": "Только положительные значения",
+    "INSERT_FREE_DELIVERY_THRESHOLD": "Укажите сумму или отключите 'Бесплатную доставку'",
     "PASSWORD_TOO_SHORT": "Минимум {{length}}",
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле",
@@ -105,18 +107,11 @@
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то осуществляется бесплатно."
   },
   "DELIVERY": "Доставка",
-  "PATHS": {
-    "ROOT": "Главная",
-    "VISUAL_SETTINGS": "Тема",
-    "SETTINGS": "Управление",
-    "PRICING_SETTINGS": "Ценообразование",
-    "CHATS": "Чаты",
-    "ORDERS": "Заказы",
-    "SIGN_IN": "Вход",
-    "REGISTER": "Регистрация",
-    "GOODS": "Товары",
-    "ANALYTICS": "Аналитика"
-  },
+  "ROOT": "Главная",
+  "VISUAL_SETTINGS": "Тема",
+  "PRICING_SETTINGS": "Ценообразование",
+  "PAYMENTS": "Платежи",
+  "SIGN_IN": "Вход",
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ORDER": "Новый заказ",
   "OPEN": "Открыть",

@@ -12,6 +12,8 @@ import {
   ordersSlice,
   OrderState,
   pricingSlice,
+  PaymentsState,
+  paymentsSlice,
 } from './slices/';
 import { productCategorySlice, ProductCategoryState } from './slices/product-category-slice';
 
@@ -24,6 +26,7 @@ export const store = configureStore({
     products: productSlice.reducer,
     orders: ordersSlice.reducer,
     pricing: pricingSlice.reducer,
+    payments: paymentsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(wsMiddleware),
 });
@@ -35,6 +38,7 @@ export type RootState = {
   productCategory: ProductCategoryState;
   products: ProductsState;
   orders: OrderState;
+  payments: PaymentsState;
 };
 
 export type AppDispatch = typeof store.dispatch;

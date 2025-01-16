@@ -11,6 +11,7 @@ import {
   ProductsState,
   ordersSlice,
   OrderState,
+  pricingSlice,
 } from './slices/';
 import { productCategorySlice, ProductCategoryState } from './slices/product-category-slice';
 
@@ -22,6 +23,7 @@ export const store = configureStore({
     productCategory: productCategorySlice.reducer,
     products: productSlice.reducer,
     orders: ordersSlice.reducer,
+    pricing: pricingSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(wsMiddleware),
 });

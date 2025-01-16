@@ -4,3 +4,4 @@ export * from './chat-slice';
 export * from './product-category-slice';
 export * from './product-slice';
 export * from './orders-slice';
+export * from './pricing-slice';

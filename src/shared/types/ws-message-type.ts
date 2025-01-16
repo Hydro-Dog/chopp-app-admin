@@ -18,7 +18,9 @@
 //   MESSAGES_READ = 'messagesRead',
 // }
 
-
 export enum WS_MESSAGE_TYPE {
-  TOKEN_EXPIRED = 'tokenExpired'
+  NEW_ORDER = 'newOrder',
+  NEW_PAYMENT = 'newPayment',
+  ORDER_STATUS = 'orderStatus',
+  PAYMENT_STATUS = 'paymentStatus',
 }

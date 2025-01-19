@@ -12,6 +12,7 @@ import {
   ordersSlice,
   OrderState,
   pricingSlice,
+  PricingState,
   PaymentsState,
   paymentsSlice,
 } from './slices/';
@@ -39,6 +40,7 @@ export type RootState = {
   products: ProductsState;
   orders: OrderState;
   payments: PaymentsState;
+  pricing: PricingState;
 };
 
 export type AppDispatch = typeof store.dispatch;

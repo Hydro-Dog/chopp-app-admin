@@ -1,6 +1,9 @@
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { fetchPricing } from '@store/slices';
+import { FETCH_STATUS } from '@store/types';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { z } from 'zod';
 import { useCreatePricingFormSchema } from './hooks/use-create-pricing-form-schema';
@@ -13,6 +16,9 @@ type Props = {
 
 export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const submitStatus = useSelector((state) => state.pricing.submitStatus);
+  const submitError = useSelector((state) => state.pricing.submitError);
 
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
@@ -32,9 +38,13 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
 
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
-  const onSubmit: SubmitHandler<CreatePricingFormType> = (data) => {
-    console.log('данные:', data);
-    toggle();
+  const onSubmit: SubmitHandler<CreatePricingFormType> = async (data) => {
+    try {
+      await dispatch(fetchPricing(data)).unwrap();
+      toggle();
+    } catch (error) {
+      console.error('Ошибка', error);
+    }
   };
 
   const onCancel = () => {
@@ -102,10 +112,23 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
         </Item>
       </div>
 
+      {submitStatus === FETCH_STATUS.ERROR && (
+        <Alert type="error" message={submitError?.message} showIcon />
+      )}
+      {submitStatus === FETCH_STATUS.SUCCESS && (
+        <Alert type="success" message="Успешно" showIcon />
+      )}
+
       <Space>
-        <Button onClick={onCancel}>{t('CANCEL')}</Button>
-        <Button onClick={handleSubmit(onSubmit)} type="primary">
-          {t('SAVE')}
+        <Button onClick={onCancel} disabled={submitStatus === FETCH_STATUS.LOADING}>
+          {t('CANCEL')}
+        </Button>
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          type="primary"
+          loading={submitStatus === FETCH_STATUS.LOADING}
+          disabled={submitStatus === FETCH_STATUS.LOADING}>
+          {submitStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

@@ -1,44 +1,65 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchPricing } from './actions'; // Импортируем новый thunk
+import { fetchPricing, fetchPricingData } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
 
-// Тип состояния для pricing
-interface PricingState {
-  submitStatus: FETCH_STATUS; // Статус отправки данных
-  submitError: { message: string } | null; // Ошибка при отправке
-}
-
-// Начальное состояние
-const initialState: PricingState = {
-  submitStatus: FETCH_STATUS.IDLE, // Изначально статус "неактивен"
-  submitError: null, // Ошибок нет
+export type PricingData = {
+  averageDeliveryCost: number;
+  freeDeliveryIncluded: boolean;
+  freeDeliveryThreshold: number;
 };
 
-// Создаем slice
+export type PricingState = {
+  data: PricingData | null;
+  fetchStatus: FETCH_STATUS;
+  fetchError: { message: string } | undefined;
+  submitStatus: FETCH_STATUS;
+  submitError: { message: string } | undefined;
+};
+const initialState: PricingState = {
+  data: null,
+  fetchStatus: FETCH_STATUS.IDLE,
+  fetchError: undefined,
+  submitStatus: FETCH_STATUS.IDLE,
+  submitError: undefined,
+};
 export const pricingSlice = createSlice({
   name: 'pricing',
   initialState,
   reducers: {
-    // Синхронные reducers (если нужны)
     resetSubmitStatus(state) {
       state.submitStatus = FETCH_STATUS.IDLE;
-      state.submitError = null;
+      state.submitError = undefined;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Отправка данных началась
+      .addCase(fetchPricingData.pending, (state) => {
+        state.fetchStatus = FETCH_STATUS.LOADING;
+        state.fetchError = undefined;
+      })
+      .addCase(fetchPricingData.fulfilled, (state, action) => {
+        state.fetchStatus = FETCH_STATUS.SUCCESS;
+        state.data = action.payload;
+      })
+      .addCase(fetchPricingData.rejected, (state, action) => {
+        state.fetchStatus = FETCH_STATUS.ERROR;
+        state.fetchError = (action.payload as { message: string } | undefined) ?? {
+          message: 'Unknown error',
+        };
+      })
       .addCase(fetchPricing.pending, (state) => {
         state.submitStatus = FETCH_STATUS.LOADING;
-        state.submitError = null; // Сбрасываем ошибку при новом запросе
+        state.submitError = undefined;
       })
-      // Отправка данных успешно завершена
-      .addCase(fetchPricing.fulfilled, (state) => {
+      .addCase(fetchPricing.fulfilled, (state, action) => {
         state.submitStatus = FETCH_STATUS.SUCCESS;
+        state.data = action.payload;
       })
-      // Отправка данных завершена с ошибкой
       .addCase(fetchPricing.rejected, (state, action) => {
         state.submitStatus = FETCH_STATUS.ERROR;
+        state.submitError = (action.payload as { message: string } | undefined) ?? {
+          message: 'Unknown error',
+        };
       });
   },
 });

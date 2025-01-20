@@ -15,22 +15,19 @@ export const PriceSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  // Получаем данные из Redux store
   const pricingData = useSelector((state: RootState) => state.pricing.data);
   const fetchStatus = useSelector((state: RootState) => state.pricing.fetchStatus);
   const fetchError = useSelector((state: RootState) => state.pricing.fetchError);
 
-  // Загружаем данные при монтировании компонента
   useEffect(() => {
-    dispatch(fetchPricingData());
+    return dispatch(fetchPricingData()).unwrap();
   }, [dispatch]);
 
-  // Формируем элементы для отображения
   const items: DescriptionsProps['items'] = [
     {
       key: 'averageDeliveryCost',
       label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
-      children: pricingData?.averageDeliveryCost ?? 'N/A', // Если данных нет, показываем "N/A"
+      children: pricingData?.averageDeliveryCost ?? t('ERROR'),
     },
     {
       key: 'freeDeliveryIncluded',
@@ -40,21 +37,18 @@ export const PriceSettingsView = ({ toggle }: Props) => {
     {
       key: 'freeDeliveryThreshold',
       label: t('PRICE'),
-      children: pricingData?.freeDeliveryThreshold ?? 'N/A', // Если данных нет, показываем "N/A"
+      children: pricingData?.freeDeliveryThreshold ?? t('ERROR'),
     },
   ];
 
-  // Если данные загружаются, показываем спиннер
   if (fetchStatus === FETCH_STATUS.LOADING) {
     return <Spin tip={t('LOADING')} />;
   }
 
-  // Если произошла ошибка, показываем сообщение об ошибке
   if (fetchStatus === FETCH_STATUS.ERROR) {
     return <Alert type="error" message={fetchError?.message || t('UNKNOWN_ERROR')} />;
   }
 
-  // Если данные отсутствуют, показываем сообщение
   if (!pricingData) {
     return <Alert type="info" message={t('NO_DATA_AVAILABLE')} />;
   }

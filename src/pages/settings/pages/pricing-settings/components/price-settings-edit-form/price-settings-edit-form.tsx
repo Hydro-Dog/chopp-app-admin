@@ -1,3 +1,4 @@
+import { useEffect } from 'react'; // Добавь useEffect
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,8 +18,8 @@ type Props = {
 export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const submitStatus = useSelector((state) => state.pricing.submitStatus);
-  const submitError = useSelector((state) => state.pricing.submitError);
+  const submitStatus = useSelector((state: any) => state.pricing.submitStatus);
+  const submitError = useSelector((state: any) => state.pricing.submitError);
 
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
@@ -29,6 +30,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
     control,
     reset,
     watch,
+    setValue,
   } = useForm<CreatePricingFormType>({
     resolver: zodResolver(createPricingFormSchema),
     defaultValues: {
@@ -38,12 +40,18 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
 
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
+  useEffect(() => {
+    if (!freeDeliveryIncluded) {
+      setValue('freeDeliveryThreshold', 0);
+    }
+  }, [freeDeliveryIncluded, setValue]);
+
   const onSubmit: SubmitHandler<CreatePricingFormType> = async (data) => {
     try {
       await dispatch(fetchPricing(data)).unwrap();
       toggle();
     } catch (error) {
-      console.error('Ошибка', error);
+      console.error(t('ERROR'), error);
     }
   };
 
@@ -115,10 +123,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
       {submitStatus === FETCH_STATUS.ERROR && (
         <Alert type="error" message={submitError?.message} showIcon />
       )}
-      {submitStatus === FETCH_STATUS.SUCCESS && (
-        <Alert type="success" message="Успешно" showIcon />
-      )}
-
+      {submitStatus === FETCH_STATUS.SUCCESS}
       <Space>
         <Button onClick={onCancel} disabled={submitStatus === FETCH_STATUS.LOADING}>
           {t('CANCEL')}

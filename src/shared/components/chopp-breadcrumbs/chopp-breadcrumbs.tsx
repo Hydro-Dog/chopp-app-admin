@@ -21,7 +21,7 @@ export const ChoppBreadcrumbs = () => {
       {path.map((item, index) => (
         <Item key={item} className="cursor-pointer">
           <a href={`/${path.slice(0, index + 1).join('/')}`}>
-            {t(`PATHS.${ROUTES_MAP.find(([_, val]) => val === item)?.[0]}`)}
+            {t(`${ROUTES_MAP.find(([_, val]) => val === item)?.[0]}`)}
           </a>
         </Item>
       ))}

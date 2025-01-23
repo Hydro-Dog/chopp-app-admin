@@ -13,13 +13,13 @@ export const PricingSettingsPage = () => {
     <TitlePage breadcrumbs title={t('PRICING')}>
       <div className="h-full pb-10">
         <Card className="h-full" title={t('DELIVERY')}>
-          {isEditing ? (
-            <div className="h-full">
+          <div className="w-1/3">
+            {isEditing ? (
               <PriceSettingsEditForm toggle={toggle} />
-            </div>
-          ) : (
-            <PriceSettingsView toggle={toggle} />
-          )}
+            ) : (
+              <PriceSettingsView toggle={toggle} />
+            )}
+          </div>
         </Card>
       </div>
     </TitlePage>

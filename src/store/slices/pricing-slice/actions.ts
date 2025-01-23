@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/types';
+import { ErrorResponse, PricingData } from '@shared/types';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
-import { PricingData } from './types';
 
 export const fetchPricingData = createAsyncThunk<PricingData, void, { rejectValue: ErrorResponse }>(
   'pricing/fetchPricingData',
@@ -20,11 +19,11 @@ export const fetchPricingData = createAsyncThunk<PricingData, void, { rejectValu
   },
 );
 
-export const postPricing = createAsyncThunk<
+export const postPricingData = createAsyncThunk<
   PricingData,
   PricingData,
   { rejectValue: ErrorResponse }
->('pricing/postPricing', async (data, thunkAPI) => {
+>('pricing/postPricingData', async (data, thunkAPI) => {
   try {
     const response = await axiosPrivate.post<PricingData>('/pricing', data);
     return response.data;

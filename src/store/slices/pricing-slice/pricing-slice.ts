@@ -1,22 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { postPricing, fetchPricingData } from './actions';
-import { PricingData } from './types';
+import { postPricingData, fetchPricingData } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
+import { ErrorResponse, PricingData } from '@shared/types';
 
 export type PricingState = {
-  pricingData: PricingData | null;
-  fetchStatus: FETCH_STATUS;
-  fetchError: { message: string } | undefined;
-  submitStatus: FETCH_STATUS;
-  submitError: { message: string } | undefined;
+  pricingData?: PricingData;
+  fetchPricingDataStatus: FETCH_STATUS;
+  fetchPricingDataError?: ErrorResponse;
+  postPricingDataStatus: FETCH_STATUS;
+  postPricingDataError?: ErrorResponse;
 };
+
 const initialState: PricingState = {
-  pricingData: null,
-  fetchStatus: FETCH_STATUS.IDLE,
-  fetchError: undefined,
-  submitStatus: FETCH_STATUS.IDLE,
-  submitError: undefined,
+  pricingData: undefined,
+  fetchPricingDataStatus: FETCH_STATUS.IDLE,
+  fetchPricingDataError: undefined,
+  postPricingDataStatus: FETCH_STATUS.IDLE,
+  postPricingDataError: undefined,
 };
+
 export const pricingSlice = createSlice({
   name: 'pricing',
   initialState,
@@ -24,29 +26,29 @@ export const pricingSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchPricingData.pending, (state) => {
-        state.fetchStatus = FETCH_STATUS.LOADING;
+        state.fetchPricingDataStatus = FETCH_STATUS.LOADING;
       })
       .addCase(fetchPricingData.fulfilled, (state, action) => {
-        state.fetchStatus = FETCH_STATUS.SUCCESS;
+        state.fetchPricingDataStatus = FETCH_STATUS.SUCCESS;
         state.pricingData = action.payload;
       })
       .addCase(fetchPricingData.rejected, (state, action) => {
-        state.fetchStatus = FETCH_STATUS.ERROR;
-        state.fetchError = (action.payload as { message: string } | undefined) ?? {
+        state.fetchPricingDataStatus = FETCH_STATUS.ERROR;
+        state.fetchPricingDataError = action.payload ?? {
           message: 'Unknown error',
         };
       })
-      .addCase(postPricing.pending, (state) => {
-        state.submitStatus = FETCH_STATUS.LOADING;
-        state.submitError = undefined;
+      .addCase(postPricingData.pending, (state) => {
+        state.postPricingDataStatus = FETCH_STATUS.LOADING;
+        state.postPricingDataError = undefined;
       })
-      .addCase(postPricing.fulfilled, (state, action) => {
-        state.submitStatus = FETCH_STATUS.SUCCESS;
+      .addCase(postPricingData.fulfilled, (state, action) => {
+        state.postPricingDataStatus = FETCH_STATUS.SUCCESS;
         state.pricingData = action.payload;
       })
-      .addCase(postPricing.rejected, (state, action) => {
-        state.submitStatus = FETCH_STATUS.ERROR;
-        state.submitError = (action.payload as { message: string } | undefined) ?? {
+      .addCase(postPricingData.rejected, (state, action) => {
+        state.postPricingDataStatus = FETCH_STATUS.ERROR;
+        state.postPricingDataError = action.payload ?? {
           message: 'Unknown error',
         };
       });

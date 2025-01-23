@@ -12,3 +12,4 @@ export * from './pagination-query';
 export * from './pagination-response';
 export * from './pagination';
 export * from './order';
+export * from './pricing-data';

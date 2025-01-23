@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { postPricing } from '@store/slices';
-import { AppDispatch, RootState } from '@store/store';
+import { postPricingData } from '@store/slices';
+import { RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { z } from 'zod';
@@ -19,11 +20,9 @@ type Props = {
 };
 
 export const PriceSettingsEditForm = ({ toggle }: Props) => {
-  const { showErrorNotification } = useNotificationContext();
-  const superDispatch = useSuperDispatch();
-
   const { t } = useTranslation();
-
+  const superDispatch = useSuperDispatch();
+  const { showErrorNotification } = useNotificationContext();
   const pricing = useSelector((state: RootState) => state.pricing);
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
@@ -43,16 +42,17 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   });
 
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
+  const freeDeliveryThreshold = watch('freeDeliveryThreshold');
 
   useEffect(() => {
-    if (!freeDeliveryIncluded) {
-      setValue('freeDeliveryThreshold', 0);
+    if (!freeDeliveryIncluded && !!freeDeliveryThreshold) {
+      setValue('freeDeliveryThreshold', null);
     }
-  }, [freeDeliveryIncluded, setValue]);
+  }, [freeDeliveryIncluded, freeDeliveryThreshold, setValue]);
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (pricingData) => {
     superDispatch({
-      action: postPricing(pricingData),
+      action: postPricingData(pricingData),
       thenHandler: onCancel,
       catchHandler: (error) => {
         showErrorNotification({
@@ -62,6 +62,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
       },
     });
   };
+
   const onCancel = () => {
     reset();
     toggle();
@@ -69,74 +70,86 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
 
   return (
     <Form layout="vertical" className="flex flex-col gap-4">
-      <div className="w-1/3">
-        <Item
-          help={errors.averageDeliveryCost?.message}
-          validateStatus={errors.averageDeliveryCost && 'error'}
-          label={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}>
-          <Controller
-            name="averageDeliveryCost"
-            control={control}
-            render={({ field }) => (
-              <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
-                <InputNumber
-                  {...field}
-                  type="number"
-                  prefix="₽"
-                  className="w-full"
-                  min={0}
-                  placeholder={t('PRICING_PAGE.ENTER_PRICE')}
-                />
-              </Tooltip>
-            )}
-          />
-        </Item>
-        <Alert className="mb-2" type="info" message={t('PRICING_PAGE.PRICE_HINT')} showIcon />
-        <Item>
-          <Controller
-            name="freeDeliveryIncluded"
-            control={control}
-            render={({ field }) => (
-              <Checkbox checked={field.value} onChange={(e) => field.onChange(e.target.checked)}>
-                {t('PRICING_PAGE.FREE_SHIPPING')}
-              </Checkbox>
-            )}
-          />
-        </Item>
-        <Item
-          label={t('PRICE')}
-          help={freeDeliveryIncluded && errors.freeDeliveryThreshold?.message}
-          validateStatus={freeDeliveryIncluded && errors.freeDeliveryThreshold ? 'error' : ''}>
-          <Controller
-            name="freeDeliveryThreshold"
-            control={control}
-            render={({ field }) => (
-              <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
-                <InputNumber
-                  {...field}
-                  type="number"
-                  prefix="₽"
-                  className="w-full"
-                  min={0}
-                  placeholder={t('PRICING_PAGE.ENTER_PRICE')}
-                  disabled={!freeDeliveryIncluded}
-                />
-              </Tooltip>
-            )}
-          />
-        </Item>
-      </div>
+      <Item
+        className="!m-0"
+        help={errors.averageDeliveryCost?.message}
+        validateStatus={errors.averageDeliveryCost && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}
+            <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="averageDeliveryCost"
+          control={control}
+          render={({ field }) => (
+            <InputNumber
+              {...field}
+              type="number"
+              prefix="₽"
+              className="w-full"
+              min={0}
+              placeholder={t('PRICING_PAGE.ENTER_PRICE')}
+            />
+          )}
+        />
+      </Item>
+      <Alert type="info" message={t('PRICING_PAGE.PRICE_HINT')} />
+      <Item className="!m-0">
+        <Controller
+          name="freeDeliveryIncluded"
+          control={control}
+          render={({ field }) => (
+            <Checkbox checked={field.value} onChange={(e) => field.onChange(e.target.checked)}>
+              {t('PRICING_PAGE.FREE_SHIPPING')}
+            </Checkbox>
+          )}
+        />
+      </Item>
+      <Item
+        className="!m-0"
+        label={
+          <Space size={4}>
+            {t('PRICE')}
+            <Tooltip title={t('PRICING_PAGE.PRICE_HINT')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }
+        help={freeDeliveryIncluded && errors.freeDeliveryThreshold?.message}
+        validateStatus={freeDeliveryIncluded && errors.freeDeliveryThreshold ? 'error' : ''}>
+        <Controller
+          name="freeDeliveryThreshold"
+          control={control}
+          render={({ field }) => (
+            <InputNumber
+              {...field}
+              type="number"
+              prefix="₽"
+              className="w-full"
+              min={0}
+              placeholder={t('PRICING_PAGE.ENTER_PRICE')}
+              disabled={!freeDeliveryIncluded}
+            />
+          )}
+        />
+      </Item>
 
       <Space>
-        <Button onClick={onCancel} disabled={pricing.submitStatus === FETCH_STATUS.LOADING}>
+        <Button
+          onClick={onCancel}
+          disabled={pricing.postPricingDataStatus === FETCH_STATUS.LOADING}>
           {t('CANCEL')}
         </Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           type="primary"
-          loading={pricing.submitStatus === FETCH_STATUS.LOADING}
-          disabled={pricing.submitStatus === FETCH_STATUS.LOADING}>
-          {pricing.submitStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
+          loading={pricing.postPricingDataStatus === FETCH_STATUS.LOADING}
+          disabled={pricing.postPricingDataStatus === FETCH_STATUS.LOADING}>
+          {pricing.postPricingDataStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

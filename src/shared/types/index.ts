@@ -8,6 +8,7 @@ export * from './chat-stats';
 export * from './search-response';
 export * from './search-request-params';
 export * from './order';
-export * from './pagination-query'
-export * from './pagination-response'
-export * from './pagination'
+export * from './pagination-query';
+export * from './pagination-response';
+export * from './pagination';
+export * from './order';

@@ -6,3 +6,4 @@ export * from './product-slice';
 export * from './orders-slice';
 export * from './pricing-slice';
 export * from './payments-slice';
+export * from './notifications-slice';

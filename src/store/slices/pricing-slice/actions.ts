@@ -20,18 +20,19 @@ export const fetchPricingData = createAsyncThunk<PricingData, void, { rejectValu
   },
 );
 
-export const fetchPricing = createAsyncThunk<PricingData, { rejectValue: ErrorResponse }>(
-  'pricing/fetchPricing',
-  async (data, thunkAPI) => {
-    try {
-      const response = await axiosPrivate.post<PricingData>('/pricing', data);
-      return response.data;
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-      } else {
-        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
-      }
+export const postPricing = createAsyncThunk<
+  PricingData,
+  PricingData,
+  { rejectValue: ErrorResponse }
+>('pricing/postPricing', async (data, thunkAPI) => {
+  try {
+    const response = await axiosPrivate.post<PricingData>('/pricing', data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+    } else {
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
-  },
-);
+  }
+});

@@ -1,9 +1,12 @@
-import { useEffect } from 'react'; // Добавь useEffect
+import { useEffect } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { fetchPricing } from '@store/slices';
+import { useNotificationContext } from '@shared/context';
+import { useSuperDispatch } from '@shared/hooks';
+import { postPricing } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { z } from 'zod';
@@ -16,11 +19,12 @@ type Props = {
 };
 
 export const PriceSettingsEditForm = ({ toggle }: Props) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const submitStatus = useSelector((state: any) => state.pricing.submitStatus);
-  const submitError = useSelector((state: any) => state.pricing.submitError);
+  const { showErrorNotification } = useNotificationContext();
+  const superDispatch = useSuperDispatch();
 
+  const { t } = useTranslation();
+
+  const pricing = useSelector((state: RootState) => state.pricing);
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
 
@@ -46,15 +50,18 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
     }
   }, [freeDeliveryIncluded, setValue]);
 
-  const onSubmit: SubmitHandler<CreatePricingFormType> = async (data) => {
-    try {
-      await dispatch(fetchPricing(data)).unwrap();
-      toggle();
-    } catch (error) {
-      console.error(t('ERROR'), error);
-    }
+  const onSubmit: SubmitHandler<CreatePricingFormType> = (pricingData) => {
+    superDispatch({
+      action: postPricing(pricingData),
+      thenHandler: onCancel,
+      catchHandler: (error) => {
+        showErrorNotification({
+          message: t('ERROR'),
+          description: error.message,
+        });
+      },
+    });
   };
-
   const onCancel = () => {
     reset();
     toggle();
@@ -120,20 +127,16 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
         </Item>
       </div>
 
-      {submitStatus === FETCH_STATUS.ERROR && (
-        <Alert type="error" message={submitError?.message} showIcon />
-      )}
-      {submitStatus === FETCH_STATUS.SUCCESS}
       <Space>
-        <Button onClick={onCancel} disabled={submitStatus === FETCH_STATUS.LOADING}>
+        <Button onClick={onCancel} disabled={pricing.submitStatus === FETCH_STATUS.LOADING}>
           {t('CANCEL')}
         </Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           type="primary"
-          loading={submitStatus === FETCH_STATUS.LOADING}
-          disabled={submitStatus === FETCH_STATUS.LOADING}>
-          {submitStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
+          loading={pricing.submitStatus === FETCH_STATUS.LOADING}
+          disabled={pricing.submitStatus === FETCH_STATUS.LOADING}>
+          {pricing.submitStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

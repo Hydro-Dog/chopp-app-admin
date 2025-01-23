@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNotificationContext } from '@shared/context';
 import { fetchPricingData } from '@store/slices';
-import { RootState } from '@store/store';
+import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
-import { Button, Checkbox, Descriptions, Flex, Space, Spin, Alert } from 'antd';
+import { Button, Checkbox, Descriptions, Flex, Space, Spin } from 'antd';
 import type { DescriptionsProps } from 'antd';
 
 type Props = {
@@ -12,45 +13,43 @@ type Props = {
 };
 
 export const PriceSettingsView = ({ toggle }: Props) => {
+  const { showErrorNotification } = useNotificationContext();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
-  const pricingData = useSelector((state: RootState) => state.pricing.data);
-  const fetchStatus = useSelector((state: RootState) => state.pricing.fetchStatus);
-  const fetchError = useSelector((state: RootState) => state.pricing.fetchError);
+  const dispatch = useDispatch<AppDispatch>();
+  const pricing = useSelector((state: RootState) => state.pricing);
 
   useEffect(() => {
-    return dispatch(fetchPricingData()).unwrap();
+    dispatch(fetchPricingData())
+      .unwrap()
+      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
+    if (!pricing.pricingData) {
+      showErrorNotification({
+        message: t('ERROR'),
+        description: t('ERROR'),
+      });
+    }
   }, [dispatch]);
 
   const items: DescriptionsProps['items'] = [
     {
       key: 'averageDeliveryCost',
       label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
-      children: pricingData?.averageDeliveryCost ?? t('ERROR'),
+      children: pricing.pricingData?.averageDeliveryCost ?? null,
     },
     {
       key: 'freeDeliveryIncluded',
       label: t('PRICING_PAGE.FREE_SHIPPING'),
-      children: <Checkbox disabled checked={pricingData?.freeDeliveryIncluded ?? false} />,
+      children: <Checkbox disabled checked={pricing.pricingData?.freeDeliveryIncluded} />,
     },
     {
       key: 'freeDeliveryThreshold',
       label: t('PRICE'),
-      children: pricingData?.freeDeliveryThreshold ?? t('ERROR'),
+      children: pricing.pricingData?.freeDeliveryThreshold ?? null,
     },
   ];
 
-  if (fetchStatus === FETCH_STATUS.LOADING) {
+  if (pricing.fetchStatus === FETCH_STATUS.LOADING) {
     return <Spin tip={t('LOADING')} />;
-  }
-
-  if (fetchStatus === FETCH_STATUS.ERROR) {
-    return <Alert type="error" message={fetchError?.message || t('UNKNOWN_ERROR')} />;
-  }
-
-  if (!pricingData) {
-    return <Alert type="info" message={t('NO_DATA_AVAILABLE')} />;
   }
 
   return (

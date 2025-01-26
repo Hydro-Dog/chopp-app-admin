@@ -3,13 +3,14 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { postPricingData } from '@store/slices';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { postPricingData } from '@store/slices';
 import { RootState } from '@store/store';
 import { FETCH_STATUS } from '@store/types';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { z } from 'zod';
 import { useCreatePricingFormSchema } from './hooks/use-create-pricing-form-schema';
 
@@ -45,10 +46,21 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const freeDeliveryThreshold = watch('freeDeliveryThreshold');
 
   useEffect(() => {
-    if (!freeDeliveryIncluded && !!freeDeliveryThreshold) {
-      setValue('freeDeliveryThreshold', null);
+    if (pricing.pricingData) {
+      reset({
+        averageDeliveryCost: pricing.pricingData.averageDeliveryCost,
+        freeDeliveryIncluded: pricing.pricingData.freeDeliveryIncluded,
+        freeDeliveryThreshold: pricing.pricingData.freeDeliveryThreshold,
+      });
     }
-  }, [freeDeliveryIncluded, freeDeliveryThreshold, setValue]);
+  }, [pricing.pricingData, reset]);
+
+  const onChangeCheckbox = (event: CheckboxChangeEvent) => {
+    setValue('freeDeliveryIncluded', event.target.checked);
+    if (!event.target.checked) {
+      setValue('freeDeliveryThreshold', 0);
+    }
+  };
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (pricingData) => {
     superDispatch({
@@ -64,7 +76,6 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   };
 
   const onCancel = () => {
-    reset();
     toggle();
   };
 
@@ -103,7 +114,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
           name="freeDeliveryIncluded"
           control={control}
           render={({ field }) => (
-            <Checkbox checked={field.value} onChange={(e) => field.onChange(e.target.checked)}>
+            <Checkbox checked={field.value} onChange={onChangeCheckbox}>
               {t('PRICING_PAGE.FREE_SHIPPING')}
             </Checkbox>
           )}

@@ -11,12 +11,12 @@ import {
   ProductsState,
   ordersSlice,
   OrderState,
-  pricingSlice,
   PricingState,
   PaymentsState,
   paymentsSlice,
   NotificationsState,
   notificationsSlice,
+  pricingSlice,
 } from './slices/';
 import { productCategorySlice, ProductCategoryState } from './slices/product-category-slice';
 

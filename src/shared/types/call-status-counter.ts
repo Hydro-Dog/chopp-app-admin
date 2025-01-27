@@ -1,3 +1,3 @@
-import { ACTIVITY_STATUS } from '@shared/enum';
+import { ORDER_STATUS } from '@shared/enum';
 
-export type CallStatusCounts = Record<ACTIVITY_STATUS, number>;
+export type CallStatusCounts = Record<ORDER_STATUS, number>;

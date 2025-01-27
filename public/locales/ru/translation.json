@@ -38,6 +38,8 @@
   "TURN_OFF": "Выключить",
   "ERROR": "Ошибка",
   "ERRORS": {
+    "NO_NEGATIVE": "Только положительные значения",
+    "INSERT_FREE_DELIVERY_THRESHOLD": "Укажите сумму или отключите 'Бесплатную доставку'",
     "PASSWORD_TOO_SHORT": "Минимум {{length}}",
     "PASSWORD_TOO_LONG": "Пароль слишком длиный",
     "REQUIRED": "Обязательное поле",
@@ -67,7 +69,7 @@
   "REFRESH": "Обновить",
   "RESET": "Сбросить",
   "BACK": "Назад",
-  "ACTIVITY": "Вызовы",
+  "ORDERS": "Заказы",
   "DATE": "Дата",
   "COMMENT": "Комментарий",
   "USER": "Пользователь",
@@ -77,7 +79,7 @@
   "CHATS": "Чаты",
   "CHAT": "Чат",
   "SETTINGS": "Управление",
-  "ACTIVITY_STATUS": {
+  "ORDER_STATUS": {
     "PROCESSING": "В обработке",
     "ACCEPTED": "Принят",
     "ON_THE_WAY": "В пути",
@@ -121,8 +123,13 @@
     "ANALYTICS": "Аналитика",
     "PAYMENT_SETTINGS": "Платежная информация"
   },
+  "ROOT": "Главная",
+  "VISUAL_SETTINGS": "Тема",
+  "PRICING_SETTINGS": "Ценообразование",
+  "PAYMENTS": "Платежи",
+  "SIGN_IN": "Вход",
   "NEW_MESSAGE": "Новое сообщение",
-  "NEW_ACTIVITY": "Новое обращение",
+  "NEW_ORDER": "Новый заказ",
   "OPEN": "Открыть",
   "TITLE_NAME": "Название",
   "DESCRIPTION": "Описание",

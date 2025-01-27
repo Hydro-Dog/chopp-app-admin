@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useChatsContext } from '@pages/chats/chats-context';
@@ -15,38 +15,39 @@ export const ChatInput = () => {
   const [text, setText] = useState('');
   const { currentUser } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
-  const { setMessages, setChats } = useChatsContext();
+  const { pushNewMessageToChat } = useChatsContext();
 
   const urlChatId = useSearchParamValue('id');
 
-  const handleSendMessage = () => {
-    if (text.trim()) {
+  const handleSendMessage = useCallback(() => {
+    if (text.trim() && currentUser) {
       // Создаем и отправляем ws-сообщение
       const newMessage = {
         type: WS_MESSAGE_TYPE.MESSAGE,
         payload: {
-          timeStamp: Date.now(),
+          createdAt: Date.now(),
           text,
-          senderId: currentUser?.id,
+          senderId: currentUser.id,
           chatId: urlChatId,
-          wasReadBy: [currentUser?.id],
+          wasReadBy: [currentUser.id],
         } as ChatMessage,
       };
 
       dispatch(wsSend(newMessage));
       setText(''); // Очистка TextArea после отправки сообщения
       //Обновить открытые сообщения
-      setMessages((prev) => {
-        return [...prev, newMessage.payload];
-      });
-      //Обновить превью чатов сообщения
-      setChats((prev) =>
-        prev?.map((item) =>
-          item.chatId === urlChatId ? { ...item, lastMessage: newMessage.payload } : item,
-        ),
-      );
+      pushNewMessageToChat(newMessage.payload);
+      // setMessages((prev) => {
+      //   return [...prev, newMessage.payload];
+      // });
+      // //Обновить превью чатов сообщения
+      // setChats((prev) =>
+      //   prev?.map((item) =>
+      //     item.chatId === urlChatId ? { ...item, lastMessage: newMessage.payload } : item,
+      //   ),
+      // );
     }
-  };
+  }, [text, currentUser, urlChatId]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

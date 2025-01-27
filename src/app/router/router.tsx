@@ -5,7 +5,7 @@ import {
   UsersPage,
   RegisterPage,
   ChatsPage,
-  ActivityPage,
+  OrdersPage,
   UserPage,
   ProductsPage,
   SettingsPage,
@@ -15,6 +15,7 @@ import { PricingSettingsPage, VisualSettingsPage , PaymentSettingsPage} from '@p
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { WsWrapper } from '../ws/ws-wrapper';
+import { PaymentsPage } from '@pages/payments';
 
 export const router = createBrowserRouter([
   {
@@ -69,8 +70,12 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: ROUTES.ACTIVITY,
-        element: <ActivityPage />,
+        path: ROUTES.ORDERS,
+        element: <OrdersPage />,
+      },
+      {
+        path: ROUTES.PAYMENTS,
+        element: <PaymentsPage />,
       },
       {
         path: ROUTES.ANALYTICS,

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from '@shared/index';
 import { AppDispatch, clearChatCreatingHistory, createChatAction, FETCH_STATUS, fetchUser, RootState } from '@store/index';
 import { Button, Card, Typography } from 'antd';
@@ -13,16 +13,17 @@ export const UserProfile = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
-  const { createChatData, createChatStatus } = useSelector((state: RootState) => state.chat);
+  const { user, currentUser } = useSelector((state: RootState) => state.user);
+  const { createdChat, createChatStatus } = useSelector((state: RootState) => state.chatsRepository);
 
-  const chatId = createChatData?.id;
+  const chatId = createdChat?.id;
 
   const createChatWithUser = useCallback(() => {
-    if (id && user?.id) {
-      dispatch(createChatAction({ userId: id, ownerId: user?.id }));
+    console.log('currentUser', currentUser);
+    if (id && currentUser?.id) {
+      dispatch(createChatAction({ userId: id, ownerId: currentUser?.id }));
     }
-  }, [id, user?.id]);
+  }, [id, currentUser?.id]);
 
   useEffect(() => {
     if (id) {
@@ -31,9 +32,13 @@ export const UserProfile = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!!createChatData?.id) {
+    if (!!createdChat?.id) {
       dispatch(clearChatCreatingHistory());
-      navigate(`/${ROUTES.CHATS}/${chatId}`);
+      const path = {
+        pathname: `/${ROUTES.CHATS}`,
+        search: createSearchParams({ id: `${chatId}` }).toString()
+      };
+      navigate(path);
     }
   }, [chatId]);
 
@@ -51,14 +56,16 @@ export const UserProfile = () => {
         {t('PHONE_NUMBER')}: {user?.phoneNumber}
       </p>
 
-      {/* <Button
-        type="text"
-        onClick={createChatWithUser}
-        disabled={createChatStatus === FETCH_STATUS.LOADING}
-        loading={createChatStatus === FETCH_STATUS.LOADING}
-      >
-        Перейти в чат c пользователем
-      </Button> */}
+      {currentUser?.id !== user?.id && (
+        <Button
+          type="text"
+          onClick={createChatWithUser}
+          disabled={createChatStatus === FETCH_STATUS.LOADING}
+          loading={createChatStatus === FETCH_STATUS.LOADING}
+        >
+          Перейти в чат c пользователем
+        </Button>
+      )}
     </Card>
   );
 };

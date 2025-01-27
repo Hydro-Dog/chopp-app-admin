@@ -21,13 +21,13 @@ const { Text } = Typography;
 export const ChatsPage = () => {
   const themeToken = useThemeToken();
   const { messages, setMessages } = useChatsContext();
-  const { chatMessages } = useSelector((state: RootState) => state.chat);
+  const { chatMessages } = useSelector((state: RootState) => state.chatsRepository);
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   //Очистка стора при уходе из компонента чата
   useClearChatMessagesStoreOnLeave();
   useFetchMessages();
-  useReadAllChatMessages();
+  // useReadAllChatMessages();
   useNewIncomingMessageChatHandler();
 
   useEffect(() => {

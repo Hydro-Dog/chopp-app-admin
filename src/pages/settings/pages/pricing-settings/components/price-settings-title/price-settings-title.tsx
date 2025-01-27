@@ -1,12 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Button, Flex, Space, Typography } from 'antd';
+import { Flex, Typography } from 'antd';
+
 const { Title } = Typography;
 
-type Props = {
-  isEditing: boolean;
-  toggleEditMode: () => void;
-};
-export const PriceSettingsTitle = ({ isEditing, toggleEditMode }: Props) => {
+export const PriceSettingsTitle = () => {
   const { t } = useTranslation();
 
   return (
@@ -14,20 +11,6 @@ export const PriceSettingsTitle = ({ isEditing, toggleEditMode }: Props) => {
       <Title className="!m-0" level={4}>
         {t('DELIVERY')}
       </Title>
-      <div>
-        {isEditing ? (
-          <Space>
-            <Button onClick={toggleEditMode}>{t('CANCEL')}</Button>
-            <Button type="primary" onClick={toggleEditMode}>
-              {t('SAVE')}
-            </Button>
-          </Space>
-        ) : (
-          <Button type="primary" onClick={toggleEditMode}>
-            {t('EDIT')}
-          </Button>
-        )}
-      </div>
     </Flex>
   );
 };

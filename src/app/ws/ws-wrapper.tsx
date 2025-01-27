@@ -6,14 +6,15 @@ import {
   useFilterWsMessages,
   ROUTES,
 } from '@shared/index';
-import { AppDispatch, fetchCurrentUser, wsConnect, wsDisconnect, wsSend } from '@store/index';
+import { AppDispatch, fetchCurrentUser, wsConnect, wsDisconnect } from '@store/index';
 import { useAxiosInterceptors } from '@store/middleware';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
 export const WsWrapper = ({ children }: PropsWithChildrenOnly) => {
     const { pathname = '' } = useLocation();
     const dispatch = useDispatch<AppDispatch>();
-    const { lastMessage: tokenExpiredMessage } = useFilterWsMessages(WS_MESSAGE_TYPE.TOKEN_EXPIRED);
+    // TODO: перенести это в обработку специального события в WSMiddleware
+    // const { lastMessage: tokenExpiredMessage } = useFilterWsMessages(WS_MESSAGE_TYPE.TOKEN_EXPIRED);
   
     useAxiosInterceptors();
   

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import {
-  ACTIVITY_COLORS,
-  ACTIVITY_STATUS,
+  ORDER_COLORS,
+  ORDER_STATUS,
   getChangeStatusDropdownItems,
   toScreamingSnakeCase,
 } from '@shared/index';
@@ -15,10 +15,10 @@ const { Text } = Typography;
 type Props = {
   data?: CallsTableRecord;
   open: boolean;
-  currentStatus?: ACTIVITY_STATUS;
+  currentStatus?: ORDER_STATUS;
   onOk: () => void;
   onCancel: () => void;
-  onStatusChange: (newStatus?: ACTIVITY_STATUS) => void;
+  onStatusChange: (newStatus?: ORDER_STATUS) => void;
 };
 
 export const RecordDetailsModal = ({
@@ -39,20 +39,20 @@ export const RecordDetailsModal = ({
       ...item,
       label: (
         <Tag
-          color={ACTIVITY_COLORS[item.key]}
+          color={ORDER_COLORS[item.key]}
           style={{
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
           }}>
-          {t(`ACTIVITY_STATUS.${item.label}`)}
+          {t(`ORDER_STATUS.${item.label}`)}
         </Tag>
       ),
     })),
-    onClick: ({ key }: { key: ACTIVITY_STATUS }) => setCurrentStatusValue(key),
+    onClick: ({ key }: { key: ORDER_STATUS }) => setCurrentStatusValue(key),
   };
 
-  const [currentStatusValue, setCurrentStatusValue] = useState<ACTIVITY_STATUS>('');
+  const [currentStatusValue, setCurrentStatusValue] = useState<ORDER_STATUS>('');
 
   return (
     <Modal
@@ -71,7 +71,7 @@ export const RecordDetailsModal = ({
             <Dropdown menu={menuProps}>
               <a>
                 <Space>
-                  {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(currentStatusValue)}`)}
+                  {t(`ORDER_STATUS.${toScreamingSnakeCase(currentStatusValue)}`)}
                   <DownOutlined value={currentStatusValue} />
                 </Space>
               </a>

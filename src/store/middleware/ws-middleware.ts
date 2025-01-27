@@ -8,6 +8,7 @@ import {
   wsDisconnect,
   wsSend,
 } from '@store/index';
+import { pushWsNotification } from '@store/slices/notifications-slice';
 import { io, Socket } from 'socket.io-client';
 
 type WsAction = {
@@ -15,11 +16,11 @@ type WsAction = {
   payload?: any;
 };
 
+//@ts-ignore
 export const wsMiddleware: Middleware = (store) => {
   let socket: Socket | null = null;
 
   return (next) => (action: WsAction) => {
-    console.log('action: ', action);
     if (action) {
       switch (action?.type) {
         case wsConnect.toString():
@@ -56,6 +57,14 @@ export const wsMiddleware: Middleware = (store) => {
           socket.on('message', (data) => {
             console.log('Message received:', data);
             store.dispatch(pushWsMessage(data));
+          });
+
+          socket.on('notification', (data) => {
+            store.dispatch(pushWsNotification(data));
+          });
+
+          socket.on('tokenExpired', (data) => {
+            console.log('Token expired message:', data);
           });
 
           break;

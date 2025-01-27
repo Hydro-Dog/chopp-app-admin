@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined } from '@ant-design/icons';
-import { ACTIVITY_COLORS, ACTIVITY_STATUS, ROUTES, useTheme } from '@shared/index';
+import { ORDER_COLORS, ORDER_STATUS, ROUTES, useTheme } from '@shared/index';
 import { TableSearchParams } from '@shared/types/table-search-params';
 import { statusMenuItems, toScreamingSnakeCase } from '@shared/utils';
 import { AppDispatch, CallsTableRecord, fetchCallHistory, updateCallStatus } from '@store/index';
@@ -16,15 +16,15 @@ import { ConfirmChangeStatusModal } from './components/confirm-change-status-mod
 import { useGetColumns } from './hooks';
 import { ChangeStatusType } from './types';
 
-export const useFetFilterItems = (status?: ACTIVITY_STATUS) => {
+export const useFetFilterItems = (status?: ORDER_STATUS) => {
   const { t } = useTranslation();
   return [{ key: 'all', label: 'all' }, ...statusMenuItems].map((item) => ({
     ...item,
     label: (
       <Tag
-        color={ACTIVITY_COLORS[item.key]}
+        color={ORDER_COLORS[item.key]}
         style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {t(`ACTIVITY_STATUS.${toScreamingSnakeCase(item.key)}`)}
+        {t(`ORDER_STATUS.${toScreamingSnakeCase(item.key)}`)}
       </Tag>
     ),
     disabled: item.key === status,
@@ -98,7 +98,7 @@ export const CallsTable = ({
 
   const visibleColumns = defaultColumns.filter((item) => columns.includes(item.key));
 
-  const updateStatus = (id = '', newStatus?: ACTIVITY_STATUS) => {
+  const updateStatus = (id = '', newStatus?: ORDER_STATUS) => {
     if (id && newStatus) {
       dispatch(updateCallStatus({ id, newStatus })).then(() =>
         dispatch(

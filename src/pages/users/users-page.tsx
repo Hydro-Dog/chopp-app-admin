@@ -15,7 +15,8 @@ export const UsersPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { users, fetchUsersStatus } = useSelector((state: RootState) => state.user);
+  const { users, fetchUsersStatus, currentUser } = useSelector((state: RootState) => state.user);
+
   const [searchTerm, setSearchTerm] = useState('');
   const { height = 0 } = useWindowSize();
   const [pagination, setPagination] = useState<Partial<Pagination>>({
@@ -34,6 +35,7 @@ export const UsersPage = () => {
         limit,
         sort,
         order,
+        excludeRequesterId: currentUser?.id,
       }),
     );
   };

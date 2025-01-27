@@ -6,8 +6,8 @@ import { AppDispatch, fetchChatStats, RootState } from '@store/index';
 export const useFetchChatStats = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { currentUser } = useSelector((state: RootState) => state.user);
-  const { chatsStats } = useSelector((state: RootState) => state.chat);
-  const { setChatsStats } = useChatsContext();
+  const { chatsStats } = useSelector((state: RootState) => state.chatsRepository);
+  // const { setChatsStats } = useChatsContext();
 
   
 

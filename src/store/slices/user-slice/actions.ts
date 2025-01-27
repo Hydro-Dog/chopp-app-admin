@@ -1,5 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ACTIVITY_STATUS, ErrorResponse, sanitizedUser, SearchRequestParams, SearchResponse } from '@shared/index';
+import {
+  ORDER_STATUS,
+  ErrorResponse,
+  sanitizedUser,
+  SearchRequestParams,
+  PaginationResponse,
+} from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import {
@@ -85,7 +91,10 @@ export const loginUser = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('/loginUser', async (userData, thunkAPI) => {
   try {
-    const response = await axiosPrivate.post<UserAuthorization>(`/auth/login`, sanitizedUser(userData));
+    const response = await axiosPrivate.post<UserAuthorization>(
+      `/auth/login`,
+      sanitizedUser(userData),
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -113,7 +122,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: ErrorRespo
 );
 
 export const fetchUsers = createAsyncThunk<
-  SearchResponse<User>, // Тип возвращаемого значения
+  PaginationResponse<User>, // Тип возвращаемого значения
   SearchRequestParams, // Тип аргумента
   { rejectValue: ErrorResponse } // Тип возвращаемого ошибки
 >('user/fetchUsers', async (params, thunkAPI) => {
@@ -124,9 +133,10 @@ export const fetchUsers = createAsyncThunk<
       search: params.search || '',
       sort: params.sort || '',
       order: params.order || 'asc',
+      excludeRequesterId: params.excludeRequesterId || '',
     }).toString();
 
-    const response = await axiosPrivate.get<SearchResponse<User>>(`/users?${queryString}`);
+    const response = await axiosPrivate.get<PaginationResponse<User>>(`/users?${queryString}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -138,10 +148,10 @@ export const fetchUsers = createAsyncThunk<
 });
 
 export const fetchCallHistory = createAsyncThunk<
-  SearchResponse<CallsTableRecord>,
+  PaginationResponse<CallsTableRecord>,
   CallsTableParams,
   { rejectValue: ErrorResponse }
->('callHistory/fetchCallHistory', async (params, thunkAPI) => {
+>('orders/fetchCallHistory', async (params, thunkAPI) => {
   try {
     const queryString = new URLSearchParams({
       page: String(params.page || 1),
@@ -152,8 +162,8 @@ export const fetchCallHistory = createAsyncThunk<
       filter: params.filter || '',
     }).toString();
 
-    const response = await axiosPrivate.get<SearchResponse<CallsTableRecord>>(
-      `/users/${params.userId}/callHistory?${queryString}`,
+    const response = await axiosPrivate.get<PaginationResponse<CallsTableRecord>>(
+      `/users/${params.userId}/orders?${queryString}`,
     );
     return response.data;
   } catch (error) {
@@ -167,10 +177,10 @@ export const fetchCallHistory = createAsyncThunk<
 });
 
 export const fetchActiveCalls = createAsyncThunk<
-  SearchResponse<CallsTableRecord>,
+  PaginationResponse<CallsTableRecord>,
   CallsTableParams,
   { rejectValue: ErrorResponse }
->('callHistory/fetchActiveCalls', async (params, thunkAPI) => {
+>('orders/fetchActiveCalls', async (params, thunkAPI) => {
   try {
     const queryString = new URLSearchParams({
       page: String(params.page || 1),
@@ -180,7 +190,9 @@ export const fetchActiveCalls = createAsyncThunk<
       order: params.order || 'asc',
     }).toString();
 
-    const response = await axiosPrivate.get<SearchResponse<CallsTableRecord>>(`/activeCalls?${queryString}`);
+    const response = await axiosPrivate.get<PaginationResponse<CallsTableRecord>>(
+      `/activeCalls?${queryString}`,
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -193,14 +205,17 @@ export const fetchActiveCalls = createAsyncThunk<
 });
 
 export const updateCallStatus = createAsyncThunk<
-  SearchResponse<CallsTableRecord>,
-  { id: string; newStatus: ACTIVITY_STATUS },
+  PaginationResponse<CallsTableRecord>,
+  { id: string; newStatus: ORDER_STATUS },
   { rejectValue: ErrorResponse }
 >('call/updateStatus', async (params, thunkAPI) => {
   try {
-    const response = await axiosPrivate.patch<SearchResponse<CallsTableRecord>>(`/call/${params.id}`, {
-      status: params.newStatus,
-    });
+    const response = await axiosPrivate.patch<PaginationResponse<CallsTableRecord>>(
+      `/call/${params.id}`,
+      {
+        status: params.newStatus,
+      },
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

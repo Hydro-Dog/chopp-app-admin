@@ -1,4 +1,4 @@
-export enum ACTIVITY_STATUS {
+export enum ORDER_STATUS {
   IDLE = 'idle',
   PROCESSING = 'processing',
   ACCEPTED = 'accepted',

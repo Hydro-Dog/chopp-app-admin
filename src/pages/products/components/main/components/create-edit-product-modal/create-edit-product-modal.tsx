@@ -51,7 +51,7 @@ export const CreateEditProductModal = ({
   id,
 }: Props) => {
   const { t } = useTranslation();
-  const superDispatch = useSuperDispatch<Product, any>();
+  const superDispatch = useSuperDispatch<Product, unknown>();
   const categoryId = useSearchParamValue('id') || '';
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -77,7 +77,7 @@ export const CreateEditProductModal = ({
     defaultValues: {
       title: '',
       description: '',
-      price: 100,
+      price: 0,
     },
   });
 
@@ -137,7 +137,7 @@ export const CreateEditProductModal = ({
       console.log('submitUpdateProduct fileList: ', fileList);
       const fileListIdsSet = new Set(fileList.map((item) => item.uid));
       const initialImagesAfterChanges = values?.images.filter((item) =>
-        fileListIdsSet.has(item.id),
+        fileListIdsSet.has(String(item.id)),
       );
       const reqData = updateFormDto({
         ...data,

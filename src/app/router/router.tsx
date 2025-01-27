@@ -11,11 +11,15 @@ import {
   SettingsPage,
 } from '@pages/index';
 
-import { PricingSettingsPage, VisualSettingsPage , PaymentSettingsPage} from '@pages/settings/pages';
+import { PaymentsPage } from '@pages/payments';
+import {
+  PricingSettingsPage,
+  VisualSettingsPage,
+  PaymentSettingsPage,
+} from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { WsWrapper } from '../ws/ws-wrapper';
-import { PaymentsPage } from '@pages/payments';
 
 export const router = createBrowserRouter([
   {

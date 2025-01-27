@@ -104,6 +104,9 @@
     "FREE_SHIPPING": "Бесплатная доставка включена",
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то осуществляется бесплатно."
   },
+  "PAYMENT_PAGE": {
+  
+  },
   "DELIVERY": "Доставка",
   "PATHS": {
     "ROOT": "Главная",
@@ -115,7 +118,8 @@
     "SIGN_IN": "Вход",
     "REGISTER": "Регистрация",
     "GOODS": "Товары",
-    "ANALYTICS": "Аналитика"
+    "ANALYTICS": "Аналитика",
+    "PAYMENT_SETTINGS": "Платежная информация"
   },
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ACTIVITY": "Новое обращение",
@@ -134,5 +138,7 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
-  "LOAD_MORE": "Загрузить еще"
+  "LOAD_MORE": "Загрузить еще",
+  "PAYMENT": "Платежная информация",
+  "PAYMENT_SETTINGS": "Данные для настройки системы платежей"
 }

@@ -11,7 +11,7 @@ import {
   SettingsPage,
 } from '@pages/index';
 
-import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
+import { PricingSettingsPage, VisualSettingsPage , PaymentSettingsPage} from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './guarded-route';
 import { WsWrapper } from '../ws/ws-wrapper';
@@ -61,6 +61,10 @@ export const router = createBrowserRouter([
           {
             path: ROUTES.PRICING_SETTINGS,
             element: <PricingSettingsPage />,
+          },
+          {
+            path: ROUTES.PAYMENT_SETTINGS,
+            element: <PaymentSettingsPage />,
           },
         ],
       },

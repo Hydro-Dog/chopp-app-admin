@@ -1,6 +1,12 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Descriptions, Flex, Space } from 'antd';
-import type { DescriptionsProps } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNotificationContext } from '@shared/context';
+import { fetchPricingData } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
+import { FETCH_STATUS } from '@store/types';
+import { Button, Descriptions, Flex, Space, Spin } from 'antd';
+import { useGetDescriptionItems } from './hooks';
 
 type Props = {
   toggle: () => void;
@@ -8,23 +14,21 @@ type Props = {
 
 export const PriceSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const items: DescriptionsProps['items'] = [
-    {
-      key: 'averageDeliveryCost',
-      label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
-      children: '12222222222222',
-    },
-    {
-      key: 'freeDeliveryIncluded',
-      label: t('PRICING_PAGE.AVERAGE_DELIVERY_COST'),
-      children: <Checkbox disabled checked />,
-    },
-    {
-      key: 'freeDeliveryThreshold',
-      label: t('PRICE'),
-      children: '333333',
-    },
-  ];
+  const { showErrorNotification } = useNotificationContext();
+  const dispatch = useDispatch<AppDispatch>();
+  const { fetchPricingDataStatus } = useSelector((state: RootState) => state.pricing);
+
+  useEffect(() => {
+    dispatch(fetchPricingData())
+      .unwrap()
+      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
+  }, [dispatch]);
+
+  const items = useGetDescriptionItems()
+
+  if (fetchPricingDataStatus === FETCH_STATUS.LOADING) {
+    return <Spin tip={t('LOADING')} />;
+  }
 
   return (
     <Flex vertical gap={16}>

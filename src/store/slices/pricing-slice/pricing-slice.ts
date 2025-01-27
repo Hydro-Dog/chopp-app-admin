@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ErrorResponse, PricingData } from '@shared/types';
 import { postPricingData, fetchPricingData } from './actions';
 import { FETCH_STATUS } from '../../types/fetch-status';
-import { ErrorResponse, PricingData } from '@shared/types';
 
 export type PricingState = {
   pricingData?: PricingData;

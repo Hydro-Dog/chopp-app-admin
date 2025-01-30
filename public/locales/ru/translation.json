@@ -74,6 +74,7 @@
   "COMMENT": "Комментарий",
   "USER": "Пользователь",
   "ACTION": "Действие",
+  "ACTIONS": "Действия",
   "ADDRESS": "Адрес",
   "ALL": "Все",
   "CHATS": "Чаты",
@@ -129,5 +130,10 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
-  "LOAD_MORE": "Загрузить еще"
+  "LOAD_MORE": "Загрузить еще",
+  "CREATED_AT": "Дата создания",
+  "AMOUNT": "Сумма",
+  "PAID": "Оплачено",
+  "REFUNDED_AMOUNT": "Сумма возврата",
+  "FAILED": "Отказ"
 }

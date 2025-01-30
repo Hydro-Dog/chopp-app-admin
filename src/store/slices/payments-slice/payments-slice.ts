@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/index';
-import { FETCH_STATUS } from '../../types/fetch-status';
+import { ErrorResponse, YookassaPaginationResponse } from '@shared/index';
+import { Payment } from '@shared/types/payment';
 import { fetchPayments, refundPayment } from './actions';
+import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type PaymentsState = {
-  payments?: any;
+  payments?: YookassaPaginationResponse<Payment>;
   fetchPaymentsStatus: FETCH_STATUS;
   //TODO: тип смотри в axios запросе в экшене
   fetchPaymentsError: ErrorResponse | null;
@@ -53,6 +54,6 @@ export const paymentsSlice = createSlice({
         state.refundPaymentError = action.payload ?? {
           message: 'Unknown error',
         };
-      })
+      });
   },
 });

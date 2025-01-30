@@ -1,61 +1,67 @@
-// Основной тип Payment
-export interface Payment {
-  id: string;
-  status: string;
-  paid: boolean;
-  amount: Amount;
-  created_at: string;
-  description: string;
-  expires_at: string;
-  metadata: Record<string, any>;
-  payment_method: PaymentMethod;
-  recipient: Recipient;
-  refundable: boolean;
-  test: boolean;
+// Enum для статусов платежа
+export enum PaymentStatus {
+  WAITING_FOR_CAPTURE = 'waiting_for_capture',
+  PENDING = 'pending',
+  SUCCEEDED = 'succeeded',
+  CANCELED = 'canceled',
 }
 
-// Тип для суммы
-export interface Amount {
+// Тип суммы платежа
+export type PaymentAmount = {
   value: string;
   currency: string;
-}
+};
 
-// Тип для метода оплаты
-export interface PaymentMethod {
-  type: string;
+// Тип для данных авторизации платежа
+export type AuthorizationDetails = {
+  rrn: string;
+  auth_code: string;
+  three_d_secure: {
+    applied: boolean;
+  };
+};
+
+// Тип для метода платежа (в данном случае - банковская карта)
+export type PaymentMethod = {
+  type: 'bank_card';
   id: string;
   saved: boolean;
-  card: CardDetails;
+  card: {
+    first6: string;
+    last4: string;
+    expiry_month: string;
+    expiry_year: string;
+    card_type: string;
+    card_product?: {
+      code: string;
+      name: string;
+    };
+    issuer_country?: string;
+    issuer_name?: string;
+  };
   title: string;
-}
+};
 
-// Тип для деталей карты
-export interface CardDetails {
-  first6: string;
-  last4: string;
-  expiry_month: string;
-  expiry_year: string;
-  card_type: string;
-  card_product: CardProduct;
-  issuer_country: string;
-  issuer_name: string;
-}
-
-// Тип для продукта карты
-export interface CardProduct {
-  code: string;
-  name: string;
-}
-
-// Тип для получателя
-export interface Recipient {
+// Тип для получателя платежа
+export type PaymentRecipient = {
   account_id: string;
   gateway_id: string;
-}
+};
 
-// Тип для ответа с пагинацией
-export interface PaymentsResponse {
-  type: string; // Обычно "list"
-  items: Payment[];
-  next_cursor?: string; // Курсор для пагинации, если есть
-}
+// Основной тип платежа
+export type Payment = {
+  id: string;
+  status: PaymentStatus;
+  paid: boolean;
+  amount: PaymentAmount;
+  authorization_details?: AuthorizationDetails;
+  created_at: string;
+  description?: string;
+  expires_at?: string;
+  metadata?: Record<string, any>;
+  payment_method: PaymentMethod;
+  recipient: PaymentRecipient;
+  refundable: boolean;
+  test: boolean;
+  income_amount?: PaymentAmount;
+};

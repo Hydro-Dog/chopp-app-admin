@@ -5,9 +5,12 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
 import { ConfirmModal } from '@shared/index';
+import { Payment, PaymentStatus } from '@shared/types/payment';
 import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Descriptions, Spin, Table, TableColumnsType, Typography, Tag, Tooltip } from 'antd';
+import Checkbox from 'antd/lib/checkbox';
+import { ORDER_STATUS_MAP } from './constants';
 import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
 
 const { Text } = Typography;
@@ -39,7 +42,7 @@ export const RefundModal: React.FC<RefundModalProps> = ({ open, onClose, onConfi
 };
 
 type PaymentDetailsProps = {
-  data?: Record<string, any>;
+  data: Record<string, unknown> | null;
   open: boolean;
   onClose: () => void;
 };
@@ -68,8 +71,8 @@ export const PaymentsTable = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { payments, fetchPaymentsStatus } = useSelector((state: RootState) => state.payments || {});
-  const [list, setList] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [list, setList] = useState<Payment[]>([]);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
@@ -115,16 +118,16 @@ export const PaymentsTable = () => {
 
   useEffect(() => {
     if (payments?.items) {
-      setList((prev) => [...prev, ...payments.items]);
+      setList((prev) => [...prev, ...(payments.items || [])]);
     }
   }, [payments]);
 
-  const handleDetailsClick = (record: any) => {
+  const handleDetailsClick = (record: Payment) => {
     setSelectedPayment(record);
     setIsDetailsModalOpen(true);
   };
 
-  const handleRefundClick = (record: any) => {
+  const handleRefundClick = (record: Payment) => {
     setSelectedPayment(record);
     setIsRefundModalOpen(true);
   };
@@ -139,14 +142,13 @@ export const PaymentsTable = () => {
     setSelectedPayment(null);
   };
 
-  console.log('selectedPayment: ', selectedPayment);
   const handleRefundConfirm = () => {
     setIsRefundModalOpen(false);
 
     dispatch(
       refundPayment({
-        payment_id: selectedPayment.id,
-        amount: selectedPayment.amount,
+        payment_id: selectedPayment!.id,
+        amount: selectedPayment!.amount,
       }),
     );
     setSelectedPayment(null);
@@ -160,7 +162,7 @@ export const PaymentsTable = () => {
 
   const { setObserverElement } = useInfiniteScroll({ callback: handleLoadMore });
 
-  const columns: TableColumnsType<any> = [
+  const columns: TableColumnsType<Payment> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -170,57 +172,33 @@ export const PaymentsTable = () => {
       title: t('STATUS'),
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {
-        let color = 'default';
-        switch (status) {
-          case t('SUCCESS'):
-            color = 'green';
-            break;
-          case t('ORDER_STATUS.PROCESSING'):
-            color = 'orange';
-            break;
-          case t('ORDER_STATUS.CANCELED'):
-            color = 'red';
-            break;
-          default:
-            color = 'default';
-        }
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+      render: (status: PaymentStatus) => {
+        return (
+          <Tooltip title={t(ORDER_STATUS_MAP[status].tooltip)}>
+            <Tag color={ORDER_STATUS_MAP[status].color}>{t(ORDER_STATUS_MAP[status].title)}</Tag>
+          </Tooltip>
+        );
       },
     },
     {
       title: t('PAID'),
       dataIndex: 'paid',
       key: 'paid',
-      render: (status: string) => {
-        let color = 'default';
-        switch (status) {
-          case 'X':
-            color = 'red';
-            break;
-          case '✓':
-            color = 'green';
-            break;
-          default:
-            color = 'default';
-        }
-        return <Tag color={color}>{status}</Tag>;
-      },
+      render: (paid: boolean) => <Checkbox checked={paid} />,
     },
     {
       title: t('AMOUNT'),
       dataIndex: 'amount',
       key: 'amount',
-      render: (amount: { value: string; currency: string }) => `${amount.value} ${amount.currency}`,
+      render: (amount: { value: string; currency: string }) => `${amount.value} ₽`,
     },
     {
-      title: t('REFUNDED_AMOUNT'),
+      title: t('REFUND_AMOUNT'),
       dataIndex: 'refunded_amount',
       key: 'refunded_amount',
       render: (amount: { value: string; currency: string }) =>
-        `${amount?.value} ${amount?.currency}`,
+        amount?.value ? `${amount?.value} ₽` : '',
     },
-
     {
       title: t('CREATED_AT'),
       dataIndex: 'created_at',
@@ -248,7 +226,7 @@ export const PaymentsTable = () => {
     {
       title: t('ACTIONS'),
       key: 'actions',
-      render: (_: any, record: any) => {
+      render: (_: any, record: Payment) => {
         return (
           <>
             <IconButton onClick={() => handleDetailsClick(record)}>
@@ -265,14 +243,7 @@ export const PaymentsTable = () => {
 
   return (
     <>
-      <Table
-        size="small"
-        columns={columns}
-        dataSource={list}
-        // loading={fetchPaymentsStatus === FETCH_STATUS.LOADING}
-        rowKey="id"
-        pagination={false}
-      />
+      <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 

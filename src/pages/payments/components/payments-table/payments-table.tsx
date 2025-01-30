@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
 import { ConfirmModal } from '@shared/index';
+import { Payment, PaymentStatus } from '@shared/types/payment';
 import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { Descriptions, Spin, Table, TableColumnsType, Typography } from 'antd';
+import { Descriptions, Spin, Table, TableColumnsType, Typography, Tag, Tooltip } from 'antd';
+import Checkbox from 'antd/lib/checkbox';
+import { ORDER_STATUS_MAP } from './constants';
 import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
 
 const { Text } = Typography;
-
 type RefundModalProps = {
   open: boolean;
   onClose: () => void;
@@ -39,7 +42,7 @@ export const RefundModal: React.FC<RefundModalProps> = ({ open, onClose, onConfi
 };
 
 type PaymentDetailsProps = {
-  data?: Record<string, any>;
+  data: Record<string, unknown> | null;
   open: boolean;
   onClose: () => void;
 };
@@ -65,10 +68,11 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsProps> = ({ data, open,
 };
 
 export const PaymentsTable = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { payments, fetchPaymentsStatus } = useSelector((state: RootState) => state.payments || {});
-  const [list, setList] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [list, setList] = useState<Payment[]>([]);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
@@ -78,16 +82,16 @@ export const PaymentsTable = () => {
 
   useEffect(() => {
     if (payments?.items) {
-      setList((prev) => [...prev, ...payments.items]);
+      setList((prev) => [...prev, ...(payments.items || [])]);
     }
   }, [payments]);
 
-  const handleDetailsClick = (record: any) => {
+  const handleDetailsClick = (record: Payment) => {
     setSelectedPayment(record);
     setIsDetailsModalOpen(true);
   };
 
-  const handleRefundClick = (record: any) => {
+  const handleRefundClick = (record: Payment) => {
     setSelectedPayment(record);
     setIsRefundModalOpen(true);
   };
@@ -102,14 +106,13 @@ export const PaymentsTable = () => {
     setSelectedPayment(null);
   };
 
-  console.log('selectedPayment: ', selectedPayment);
   const handleRefundConfirm = () => {
     setIsRefundModalOpen(false);
 
     dispatch(
       refundPayment({
-        payment_id: selectedPayment.id,
-        amount: selectedPayment.amount,
+        payment_id: selectedPayment!.id,
+        amount: selectedPayment!.amount,
       }),
     );
     setSelectedPayment(null);
@@ -123,52 +126,71 @@ export const PaymentsTable = () => {
 
   const { setObserverElement } = useInfiniteScroll({ callback: handleLoadMore });
 
-  const columns: TableColumnsType<any> = [
+  const columns: TableColumnsType<Payment> = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
     },
     {
-      title: 'Status',
+      title: t('STATUS'),
       dataIndex: 'status',
       key: 'status',
+      render: (status: PaymentStatus) => {
+        return (
+          <Tooltip title={t(ORDER_STATUS_MAP[status].tooltip)}>
+            <Tag color={ORDER_STATUS_MAP[status].color}>{t(ORDER_STATUS_MAP[status].title)}</Tag>
+          </Tooltip>
+        );
+      },
     },
     {
-      title: 'Paid',
+      title: t('PAID'),
       dataIndex: 'paid',
       key: 'paid',
-      render: (paid: boolean) => (paid ? 'Yes' : 'No'),
+      render: (paid: boolean) => <Checkbox checked={paid} />,
     },
     {
-      title: 'Amount',
+      title: t('AMOUNT'),
       dataIndex: 'amount',
       key: 'amount',
-      render: (amount: { value: string; currency: string }) => `${amount.value} ${amount.currency}`,
+      render: (amount: { value: string; currency: string }) => `${amount.value} ₽`,
     },
     {
-      title: 'Refunded amount',
+      title: t('REFUND_AMOUNT'),
       dataIndex: 'refunded_amount',
       key: 'refunded_amount',
       render: (amount: { value: string; currency: string }) =>
-        `${amount?.value} ${amount?.currency}`,
+        amount?.value ? `${amount?.value} ₽` : '',
     },
-
     {
-      title: 'Created At',
+      title: t('CREATED_AT'),
       dataIndex: 'created_at',
       key: 'created_at',
       render: (date: string) => new Date(date).toLocaleString(),
     },
     {
-      title: 'Description',
+      title: t('DESCRIPTION'),
       dataIndex: 'description',
       key: 'description',
+      render: (description: string) => (
+        <Tooltip title={description}>
+          <div
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '200px',
+            }}>
+            {description}
+          </div>
+        </Tooltip>
+      ),
     },
     {
-      title: 'Actions',
+      title: t('ACTIONS'),
       key: 'actions',
-      render: (_: any, record: any) => {
+      render: (_: any, record: Payment) => {
         return (
           <>
             <IconButton onClick={() => handleDetailsClick(record)}>
@@ -185,14 +207,7 @@ export const PaymentsTable = () => {
 
   return (
     <>
-      <Table
-        size="middle"
-        columns={columns}
-        dataSource={list}
-        // loading={fetchPaymentsStatus === FETCH_STATUS.LOADING}
-        rowKey="id"
-        pagination={false}
-      />
+      <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 

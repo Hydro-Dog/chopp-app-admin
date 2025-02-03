@@ -1,5 +1,5 @@
-import { BasicModal } from "../basic-modal";
-import { ChoppDescriptionsTree } from "../chopp-descriptions-tree";
+import { ChoppOkModal } from '@shared/index';
+import { ChoppDescriptionsTree } from '../chopp-descriptions-tree';
 
 type Props = {
   value?: object;
@@ -7,14 +7,8 @@ type Props = {
   onClose: () => void;
 };
 
-export const ChoppInfoModal = ({ value, open, onClose }: Props) => {
-  const onSubmit = () => {
-    onClose();
-  };
-
-  return (
-    <BasicModal open={open} onOk={onSubmit} onCancel={onClose}>
-      <ChoppDescriptionsTree value={value} />
-    </BasicModal>
-  );
-};
+export const ChoppInfoModal = ({ value, open, onClose }: Props) => (
+  <ChoppOkModal onOk={onClose} open={open}>
+    <ChoppDescriptionsTree value={value} />
+  </ChoppOkModal>
+);

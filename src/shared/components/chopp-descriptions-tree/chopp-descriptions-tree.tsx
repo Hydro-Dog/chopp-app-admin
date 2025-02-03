@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tree, Typography } from 'antd';
+import { Space, Tree, Typography, Tooltip } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 
 const { Text } = Typography;
@@ -9,7 +9,7 @@ type Props = {
   defaultExpanded?: boolean; // Начальное состояние узлов
 };
 
-export const ChoppDescriptionsTree: React.FC<Props> = ({ value, defaultExpanded = true }) => {
+export const ChoppDescriptionsTree: React.FC<Props> = ({ value = {}, defaultExpanded = true }) => {
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   // Функция рекурсивного построения структуры дерева
@@ -19,27 +19,40 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({ value, defaultExpanded 
       let children;
 
       if (Array.isArray(val)) {
-        // Если массив, используем `OrderedListOutlined` и строим элементы массива
+        // Если массив, строим элементы массива
         children = val.map((item, index) => ({
-          title: `Item ${index + 1}`,
+          title: (
+            <Tooltip title={`Item ${index + 1}`}>
+              <span className="truncate max-w-[200px] block pointer-events-none">
+                {`Item ${index + 1}`}
+              </span>
+            </Tooltip>
+          ),
           key: `${nodeKey}[${index}]`,
+          selectable: false, // Отключаем клик
           children:
             typeof item === 'object' ? buildTreeData(item, `${nodeKey}[${index}]`) : undefined,
         }));
       } else if (typeof val === 'object' && val !== null) {
-        // Если объект, используем `FolderOutlined`
+        // Если объект, рекурсивно строим дерево
         children = buildTreeData(val, nodeKey);
       }
 
       return {
         title: (
-          <>
-            <Text>
-              {key}: {children ? '' : String(val)}
+          <Space>
+            <Text strong className="truncate max-w-[150px]">
+              {key}
             </Text>
-          </>
+            {!children && (
+              <Tooltip title={String(val)}>
+                <Text className="truncate max-w-[200px] block">{String(val)}</Text>
+              </Tooltip>
+            )}
+          </Space>
         ),
         key: nodeKey,
+        selectable: false, // Отключаем клик
         children,
       };
     });
@@ -47,19 +60,21 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({ value, defaultExpanded 
 
   const treeData = buildTreeData(value);
 
-  // Устанавливаем начальные открытые узлы **один раз** при монтировании компонента
+  // Устанавливаем начальные открытые узлы один раз при монтировании компонента
   useEffect(() => {
     if (defaultExpanded) {
       const allKeys = treeData.flatMap((node) => (node.children ? String(node.key) : []));
       setExpandedKeys(allKeys);
     }
-  }, []); // Пустой массив зависимостей → выполняется только один раз
+  }, []); // Выполняется только при монтировании
 
   return (
     <Tree
+      className="w-full [&_.ant-tree-treenode]:!bg-transparent"
       treeData={treeData}
       expandedKeys={expandedKeys}
-      onExpand={(keys) => setExpandedKeys(keys as string[])} // Обновляем состояние при сворачивании/разворачивании
+      onExpand={(keys) => setExpandedKeys(keys as string[])}
+      selectable={false} // Отключаем клик по всем элементам
     />
   );
 };

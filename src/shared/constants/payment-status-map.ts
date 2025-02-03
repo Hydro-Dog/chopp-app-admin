@@ -1,4 +1,4 @@
-export const ORDER_STATUS_MAP = {
+export const PAYMENT_STATUS_MAP = {
   pending: {
     color: 'default',
     title: 'PAYMENT_STATUS.PENDING',

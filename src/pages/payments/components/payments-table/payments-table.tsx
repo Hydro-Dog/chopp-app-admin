@@ -5,13 +5,14 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
 import { ConfirmModal } from '@shared/index';
-import { Payment, PaymentStatus } from '@shared/types/payment';
+import { Payment, PAYMENT_STATUS } from '@shared/types/payment';
 import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Descriptions, Spin, Table, TableColumnsType, Typography, Tag, Tooltip } from 'antd';
 import Checkbox from 'antd/lib/checkbox';
-import { ORDER_STATUS_MAP } from './constants';
+import { PAYMENT_STATUS_MAP } from '../../../../shared/constants';
 import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
+import { InfoCircleOutlined, RetweetOutlined, UndoOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 type RefundModalProps = {
@@ -133,13 +134,15 @@ export const PaymentsTable = () => {
       key: 'id',
     },
     {
-      title: t('STATUS'),
+      title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'status',
       key: 'status',
-      render: (status: PaymentStatus) => {
+      render: (status: PAYMENT_STATUS) => {
         return (
-          <Tooltip title={t(ORDER_STATUS_MAP[status].tooltip)}>
-            <Tag color={ORDER_STATUS_MAP[status].color}>{t(ORDER_STATUS_MAP[status].title)}</Tag>
+          <Tooltip title={t(PAYMENT_STATUS_MAP[status].tooltip)}>
+            <Tag color={PAYMENT_STATUS_MAP[status].color}>
+              {t(PAYMENT_STATUS_MAP[status].title)}
+            </Tag>
           </Tooltip>
         );
       },
@@ -154,14 +157,21 @@ export const PaymentsTable = () => {
       title: t('AMOUNT'),
       dataIndex: 'amount',
       key: 'amount',
-      render: (amount: { value: string; currency: string }) => `${amount.value} ₽`,
+      render: (amount: { value: string; currency: string }) =>
+        Number(amount.value)?.toLocaleString('ru-RU', {
+          style: 'currency',
+          currency: 'RUB',
+        }),
     },
     {
       title: t('REFUND_AMOUNT'),
       dataIndex: 'refunded_amount',
       key: 'refunded_amount',
       render: (amount: { value: string; currency: string }) =>
-        amount?.value ? `${amount?.value} ₽` : '',
+        Number(amount?.value)?.toLocaleString('ru-RU', {
+          style: 'currency',
+          currency: 'RUB',
+        }),
     },
     {
       title: t('CREATED_AT'),
@@ -187,6 +197,7 @@ export const PaymentsTable = () => {
         </Tooltip>
       ),
     },
+    //TODO: сделать котонку Actions по аналогии с ordersTable
     {
       title: t('ACTIONS'),
       key: 'actions',
@@ -194,10 +205,14 @@ export const PaymentsTable = () => {
         return (
           <>
             <IconButton onClick={() => handleDetailsClick(record)}>
-              <InfoIcon />
+              <Tooltip title={t('INFO')}>
+                <InfoCircleOutlined />
+              </Tooltip>
             </IconButton>
             <IconButton disabled={!record?.refundable} onClick={() => handleRefundClick(record)}>
-              <CurrencyExchangeIcon />
+              <Tooltip title={t('REFUND')}>
+                <UndoOutlined />
+              </Tooltip>
             </IconButton>
           </>
         );

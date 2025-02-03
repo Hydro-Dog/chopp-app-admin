@@ -15,15 +15,3 @@ export type UserAuthorization = {
   accessToken: string;
   refreshToken: string;
 };
-
-export type CallsTableParams = SearchRequestParams & {
-  userId?: string;
-};
-
-export type CallsTableRecord = {
-  id: string;
-  date: string;
-  status: ORDER_STATUS;
-  address: string;
-  comment: string;
-};

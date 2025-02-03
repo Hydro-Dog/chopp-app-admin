@@ -74,7 +74,8 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
       open={open}
       onOk={handleSubmit(onSubmit)}
       onCancel={onClose}
-      confirmLoading={createCategoryStatus === FETCH_STATUS.LOADING}>
+      // confirmLoading={createCategoryStatus === FETCH_STATUS.LOADING}
+      >
       <Form onFinish={handleSubmit(onSubmit)}>
         <Item validateStatus={errors.category && 'error'} help={errors.category?.message}>
           <Controller

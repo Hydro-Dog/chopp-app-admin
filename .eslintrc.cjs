@@ -53,6 +53,7 @@ module.exports = {
     ],
     'prettier/prettier': ['warn', {}, { usePrettierrc: true }],
     'react/react-in-jsx-scope': 'off',
+    max_line_length: 200,
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',

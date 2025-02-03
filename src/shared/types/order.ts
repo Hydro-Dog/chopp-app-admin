@@ -1,4 +1,16 @@
+import { PAYMENT_STATUS } from './payment';
+
 // TODO: вынести в отдельный файл
+export enum ORDER_STATUS {
+  AWAITING_PAYMENT = 'awaitingPayment',
+  PENDING = 'pending',
+  PAYMENT_SUCCEEDED = 'paymentSucceeded',
+  PAYMENT_CANCELED = 'paymentCanceled',
+  IN_PROGRESS = 'inProgress',
+  IN_DELIVERY_PROCESS = 'inDeliveryProcess',
+  DELIVERED = 'delivered',
+  // FINISHED = 'finished',
+}
 
 type Image = {
   id: number;
@@ -47,8 +59,8 @@ export type Order = {
   userId: number;
   totalPrice: number;
   quantity: number;
-  orderStatus: string;
-  paymentStatus: string;
+  orderStatus: ORDER_STATUS;
+  paymentStatus: PAYMENT_STATUS;
   paymentUrl: string;
   transactionId: string;
   items: OrderItem[];

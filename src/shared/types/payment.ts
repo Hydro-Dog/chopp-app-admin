@@ -1,5 +1,5 @@
 // Enum для статусов платежа
-export enum PaymentStatus {
+export enum PAYMENT_STATUS {
   WAITING_FOR_CAPTURE = 'waiting_for_capture',
   PENDING = 'pending',
   SUCCEEDED = 'succeeded',
@@ -51,7 +51,7 @@ export type PaymentRecipient = {
 // Основной тип платежа
 export type Payment = {
   id: string;
-  status: PaymentStatus;
+  status: PAYMENT_STATUS;
   paid: boolean;
   amount: PaymentAmount;
   authorization_details?: AuthorizationDetails;

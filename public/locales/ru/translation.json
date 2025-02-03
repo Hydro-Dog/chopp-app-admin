@@ -75,11 +75,18 @@
   "USER": "Пользователь",
   "ACTION": "Действие",
   "ACTIONS": "Действия",
+  "INFO": "Инфо",
+  "REFUND": "Возврат средств",
+  "CHANGE_ORDER_STATUS": "Изменить статус заказа",
   "ADDRESS": "Адрес",
   "ALL": "Все",
   "CHATS": "Чаты",
   "CHAT": "Чат",
   "SETTINGS": "Управление",
+  "QUANTITY": "Количество",
+  "TRANSACTION_ID": "ID Транзакции",
+  "TRANSACTION_ID_TOOLTIP": "ID Транзакции в Юкассе",
+  "ORDER_STATUS_TITLE": "Статус заказа", 
   "ORDER_STATUS": {
     "PROCESSING": "В обработке",
     "ACCEPTED": "Принят",
@@ -89,6 +96,7 @@
     "CANCELED": "Отменено",
     "ALL": "Все"
   },
+  "PAYMENT_STATUS_TITLE": "Статус платежа", 
   "PAYMENT_STATUS": {
     "PENDING": "Ожидание",
     "PENDING_TOOLTIP": "Платеж создан и ожидает действий от пользователя.",

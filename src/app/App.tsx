@@ -3,7 +3,6 @@ import { initReactI18next } from 'react-i18next';
 import { Provider as StoreProvider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { ChatsContextProvider } from '@pages/chats/chats-context';
-import { OrderNotifications } from '@pages/orders/components/orders-table/orders-notifications';
 import {
   useNotificationApi,
   useTheme,
@@ -79,7 +78,6 @@ export const App = () => {
             showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
-            <OrderNotifications />
             <div className="w-full h-screen overflow-hidden">
               <ChatsContextProvider>
                 <RouterProvider router={router} />

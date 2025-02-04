@@ -1,4 +1,4 @@
-import { PAYMENT_STATUS } from './payment';
+import { PAYMENT_STATUS } from '@shared/enum';
 
 // TODO: вынести в отдельный файл
 export enum ORDER_STATUS {

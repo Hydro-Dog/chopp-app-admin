@@ -22,7 +22,7 @@ type Props = {
 
 export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const superDispatch = useSuperDispatch();
+  const { superDispatch } = useSuperDispatch();
   const { showErrorNotification } = useNotificationContext();
   const { pricingData, postPricingDataStatus } = useSelector((state: RootState) => state.pricing);
   const createPricingFormSchema = useCreatePricingFormSchema();

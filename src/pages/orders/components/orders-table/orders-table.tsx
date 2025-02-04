@@ -8,6 +8,7 @@ import { ACTION_MENU_ITEMS } from './enums';
 import { useGetOrderTableColumns } from './hooks';
 import { ActionValue } from './types';
 import { ChoppInfoModal } from '@shared/index';
+import { ORDER_STATUS } from '@shared/enum';
 
 type FetchDataFunction = (
   params: PaginationQuery,
@@ -16,9 +17,10 @@ type FetchDataFunction = (
 type Props = {
   fetchData: FetchDataFunction;
   data?: PaginationResponse<Order>;
+  onStatusChange: ({orderStatus, transactionId}: {orderStatus: ORDER_STATUS, transactionId: string}) => void
 };
 
-export const OrdersTable = ({ data }: Props) => {
+export const OrdersTable = ({ data, onStatusChange }: Props) => {
   const { value: isStatusModalOpened, setTrue: openStatusModal, setFalse: closeStatusModal } = useBoolean();
   const { value: isInfoModalOpened, setTrue: openInfoModal, setFalse: closeInfoModal } = useBoolean();
   const [clickedOrder, setClickedOrder] = useState<Order>();
@@ -37,6 +39,7 @@ export const OrdersTable = ({ data }: Props) => {
   const onActionClick = (action: ActionValue) => {
     map[action.key](action);
   };
+  
   const { columns } = useGetOrderTableColumns({ onActionClick });
 
   return (
@@ -44,6 +47,7 @@ export const OrdersTable = ({ data }: Props) => {
       <Table className="!p-0" size="small" columns={columns} dataSource={data?.items} rowKey="id" />
       <ChangeOrderStatusModal
         open={isStatusModalOpened}
+        onSubmit={onStatusChange}
         onClose={closeStatusModal}
         order={clickedOrder}
       />

@@ -15,3 +15,5 @@ export * from './chopp-info-text';
 export * from './chopp-descriptions-tree';
 export * from './chopp-info-modal';
 export * from './chopp-ok-modal';
+export * from './chopp-order-status';
+export * from './chopp-payment-status';

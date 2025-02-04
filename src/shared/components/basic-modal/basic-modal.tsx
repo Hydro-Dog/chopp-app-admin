@@ -12,6 +12,7 @@ type Props = {
   zIndex?: number;
 };
 
+//TODO: удалить, заменить везде на обычный Modal
 export const BasicModal = ({
   children,
   open,

@@ -29,7 +29,7 @@ export const Main = () => {
   } = useBoolean();
 
   const dispatch = useDispatch<AppDispatch>();
-  const superDispatch = useSuperDispatch<PaginationResponse<Product>, any>();
+  const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, any>();
   const categoryId = useSearchParamValue('id') || '';
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,7 +42,7 @@ export const Main = () => {
   });
 
   useEffect(() => {
-    console.log('setPageProducts: ', products?.items)
+    console.log('setPageProducts: ', products?.items);
     setPageProducts(products?.items || []);
   }, [products]);
 
@@ -73,7 +73,8 @@ export const Main = () => {
   };
 
   const onOk = (item: Product) => {
-    const isLastPage = pagination?.pageNumber === products?.totalPages || products?.totalPages === 0;
+    const isLastPage =
+      pagination?.pageNumber === products?.totalPages || products?.totalPages === 0;
     const isIncludedInCurrentSearch = search ? item.title.includes(search) : true;
 
     if (isLastPage && isIncludedInCurrentSearch) {

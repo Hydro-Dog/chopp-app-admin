@@ -27,7 +27,7 @@ const { Text } = Typography;
 export const SignInPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const superDispatch = useSuperDispatch();
+  const { superDispatch } = useSuperDispatch();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
   const { showErrorNotification } = useNotificationContext();

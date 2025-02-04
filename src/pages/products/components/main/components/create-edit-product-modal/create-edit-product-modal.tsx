@@ -51,7 +51,7 @@ export const CreateEditProductModal = ({
   id,
 }: Props) => {
   const { t } = useTranslation();
-  const superDispatch = useSuperDispatch<Product, unknown>();
+  const { superDispatch } = useSuperDispatch<Product, unknown>();
   const categoryId = useSearchParamValue('id') || '';
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);

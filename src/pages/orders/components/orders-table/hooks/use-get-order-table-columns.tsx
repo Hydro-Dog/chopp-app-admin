@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { PAYMENT_STATUS_MAP, ChoppInfoText, Order } from '@shared/index';
-import { PAYMENT_STATUS } from '@shared/types/payment';
+import { PAYMENT_STATUS_MAP, PAYMENT_STATUS, ChoppInfoText, Order, ChoppPaymentStatus, ChoppOrderStatus, ORDER_STATUS } from '@shared/index';
 import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useGetActionItems } from './use-get-action-items';
@@ -47,23 +46,13 @@ export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
       title: t('ORDER_STATUS_TITLE'),
       dataIndex: 'orderStatus',
       key: 'orderStatus',
-      render: (text: string) => (
-        <Tooltip title={text}>
-          <Tag>{t(`ORDER_STATUS.${text?.toUpperCase()}`)}</Tag>
-        </Tooltip>
-      ),
+      render: (status: ORDER_STATUS) => <ChoppOrderStatus status={status} />,
     },
     {
       title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'paymentStatus',
       key: 'paymentStatus',
-      render: (status: PAYMENT_STATUS) => (
-        <Tooltip title={t(PAYMENT_STATUS_MAP[status]?.tooltip)}>
-          <Tag color={PAYMENT_STATUS_MAP[status]?.color}>
-            {t(PAYMENT_STATUS_MAP[status]?.title)}
-          </Tag>
-        </Tooltip>
-      ),
+      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
     },
     {
       title: t('DESCRIPTION'),

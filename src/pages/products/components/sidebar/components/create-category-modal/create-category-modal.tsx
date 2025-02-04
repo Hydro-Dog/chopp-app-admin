@@ -21,7 +21,7 @@ type Props = {
 
 export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { t } = useTranslation();
-  const superDispatch = useSuperDispatch();
+  const { superDispatch } = useSuperDispatch();
   const { categories, createCategoryStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );

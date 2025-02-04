@@ -22,9 +22,11 @@ export const useSuperDispatch = <R, A>() => {
     });
   };
 
-  return ({ action, thenHandler, catchHandler }: Args<R, A>) =>
+  const superDispatch = ({ action, thenHandler, catchHandler }: Args<R, A>) =>
     dispatch(action)
       .unwrap()
       .then(thenHandler as (value: R) => void)
       .catch(catchHandler || defaultErrorHandler);
+
+  return { superDispatch };
 };

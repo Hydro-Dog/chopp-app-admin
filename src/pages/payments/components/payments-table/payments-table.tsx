@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
-import { ConfirmModal } from '@shared/index';
-import { Payment, PAYMENT_STATUS } from '@shared/types/payment';
+import { ChoppPaymentStatus, ConfirmModal, PAYMENT_STATUS } from '@shared/index';
+import { Payment } from '@shared/types/payment';
 import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Descriptions, Spin, Table, TableColumnsType, Typography, Tag, Tooltip } from 'antd';
@@ -137,15 +137,7 @@ export const PaymentsTable = () => {
       title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'status',
       key: 'status',
-      render: (status: PAYMENT_STATUS) => {
-        return (
-          <Tooltip title={t(PAYMENT_STATUS_MAP[status].tooltip)}>
-            <Tag color={PAYMENT_STATUS_MAP[status].color}>
-              {t(PAYMENT_STATUS_MAP[status].title)}
-            </Tag>
-          </Tooltip>
-        );
-      },
+      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
     },
     {
       title: t('PAID'),

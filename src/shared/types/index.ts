@@ -5,7 +5,7 @@ export * from './call-status-counter';
 export * from './chat-message';
 export * from './chat-data';
 export * from './chat-stats';
-export * from './search-request-params';
+export * from './pagination-request-query';
 export * from './order';
 export * from './pagination-query';
 export * from './pagination-response';

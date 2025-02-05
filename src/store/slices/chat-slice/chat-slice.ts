@@ -3,7 +3,7 @@ import { Chat, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
 import { fetchChatMessages, fetchChats, fetchChatStats, createChatAction } from './actions';
-import { FETCH_STATUS } from '../../types/fetch-status';
+import { FETCH_STATUS } from '@shared/index';
 
 export type ChatsState = {
   // state of messages

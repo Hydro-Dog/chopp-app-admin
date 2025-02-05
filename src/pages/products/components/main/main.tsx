@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
-import { FETCH_STATUS, Product, fetchProducts } from '@store/index';
+import { Product, fetchProducts } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Flex, Tooltip, Button, Typography, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { VerticalSkeleton } from '../vertical-skeleton';
 import { CreateEditProductModal, ProductsGrid } from './components/';
-import { PaginationQuery, PaginationResponse } from '@shared/types';
+import { FETCH_STATUS, PaginationQuery, PaginationResponse } from '@shared/types';
 
 const { Title } = Typography;
 const { Search } = Input;

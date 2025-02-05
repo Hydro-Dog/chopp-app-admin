@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse } from '@shared/index';
+import { ErrorResponse, Category } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
-import { Category, CreateCategoryDTO } from './types';
+import { CreateCategoryDTO } from './types';
 
 export const fetchCategories = createAsyncThunk<Category[], void, { rejectValue: ErrorResponse }>(
   'productCategory/fetchCategories',

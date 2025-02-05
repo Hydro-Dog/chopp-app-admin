@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, SearchResponse, STORAGE_KEYS } from '@shared/index';
+import { ErrorResponse, PaginationResponse, STORAGE_KEYS, User } from '@shared/index';
+import { FETCH_STATUS } from '@shared/types/fetch-status';
 import {
   updateCurrentUser,
   fetchCurrentUser,
@@ -9,8 +10,7 @@ import {
   fetchUsers,
   fetchUser,
 } from './actions';
-import { User, UserAuthorization } from './types';
-import { FETCH_STATUS } from '../../types/fetch-status';
+import { UserAuthorization } from './types';
 
 export type UserState = {
   currentUser: User | null;
@@ -27,7 +27,7 @@ export type UserState = {
   logoutError: ErrorResponse | null;
   loginStatus: FETCH_STATUS;
   loginError: ErrorResponse | null;
-  users: SearchResponse<User> | null;
+  users: PaginationResponse<User> | null;
   fetchUsersStatus: FETCH_STATUS;
   fetchUsersError: ErrorResponse | null;
 };
@@ -50,8 +50,8 @@ const initialState: UserState = {
   users: {
     items: [],
     totalPages: 0,
-    totalRecords: 0,
-    pageNumber: 0,
+    currentPage: 0,
+    totalItems: 0,
     limit: 0,
   },
   fetchUsersStatus: FETCH_STATUS.IDLE,
@@ -153,10 +153,11 @@ export const userSlice = createSlice({
         state.fetchUsersStatus = FETCH_STATUS.SUCCESS;
         state.users = {
           items: action.payload.items,
-          pageNumber: action.payload.pageNumber,
+          currentPage: action.payload.currentPage,
+          limit: action.payload.limit,
+          totalItems: action.payload.totalItems,
           totalPages: action.payload.totalPages,
-          totalRecords: action.payload.totalRecords,
-        }; // Предполагаем, что ответ включает массив users
+        };
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.fetchUsersStatus = FETCH_STATUS.ERROR;

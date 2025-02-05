@@ -15,7 +15,7 @@ import {
   setLoginStatus,
   wsConnect,
 } from '@store/index';
-import { FETCH_STATUS } from '@store/types/fetch-status';
+import { FETCH_STATUS } from '@shared/index';
 import { Button, Flex, Form, Input, Tooltip, Typography, Tabs } from 'antd';
 import { z } from 'zod';
 import { useSignInFormSchema } from './hooks/useSignInFormSchema';

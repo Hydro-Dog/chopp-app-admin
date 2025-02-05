@@ -1,8 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ErrorResponse, PaginationResponse, SearchRequestParams } from '@shared/index';
+import { ErrorResponse, PaginationResponse, SearchRequestParams, Product } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
-import { Product } from './types';
 
 export const fetchProducts = createAsyncThunk<
   PaginationResponse<Product>,

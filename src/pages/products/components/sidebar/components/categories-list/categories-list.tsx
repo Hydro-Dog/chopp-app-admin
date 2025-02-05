@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
@@ -10,14 +10,13 @@ import {
   fetchCategories,
   updateCategories,
   deleteCategory,
-  FETCH_STATUS,
 } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { useBoolean } from 'usehooks-ts';
-import { CreateCategoryModal } from '../create-category-modal';
 import { DeleteCategoryModal } from '../delete-category-modal';
 import { Spin } from 'antd';
 import { ListItem } from '../list-item';
+import { FETCH_STATUS } from '@shared/index';
 
 export const CategoriesList = () => {
   const urlCategoryId = useSearchParamValue('id');

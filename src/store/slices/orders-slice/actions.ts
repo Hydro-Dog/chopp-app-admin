@@ -5,7 +5,6 @@ import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { UpdateOrderDTO } from './types';
 
-// // Пример использования функции для создания thunk-запроса к orders
 export const fetchOrders = createFetchPaginationListThunkAction<
   Order,
   { categoryId: string } & SearchRequestParams,
@@ -21,7 +20,10 @@ export const updateOrderPaymentStatus = createAsyncThunk<
   { rejectValue: ErrorResponse } // Тип для ошибок
 >('orders/updateOrderPaymentStatus', async (updateData, thunkAPI) => {
   try {
-    const response = await axiosPrivate.post<Order>('/orders/update-order-payment-status', updateData);
+    const response = await axiosPrivate.post<Order>(
+      '/orders/update-order-payment-status',
+      updateData,
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -31,4 +33,3 @@ export const updateOrderPaymentStatus = createAsyncThunk<
     }
   }
 });
-

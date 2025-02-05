@@ -53,10 +53,30 @@ module.exports = {
     ],
     'prettier/prettier': ['warn', {}, { usePrettierrc: true }],
     'react/react-in-jsx-scope': 'off',
-    max_line_length: 200,
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'max-len': ['error', { code: 140 }],
+    'max-len': ['error', { code: 140 }], // Добавляем это правило здесь
+    // "padding-line-between-statements": [
+    //   "warn",
+    //   { blankLine: "always", prev: "*", next: "var" },
+    //   { blankLine: "always", prev: "*", next: "let" },
+    //   { blankLine: "always", prev: "*", next: "const" },
+    //   {
+    //     blankLine: "never",
+    //     prev: ["const", "let", "var"],
+    //     next: ["const", "let", "var"],
+    //   },
+    //   {
+    //     blankLine: "always",
+    //     prev: ["block", "block-like"],
+    //     next: ["const", "let", "var"],
+    //   },
+    //   {
+    //     blankLine: "always",
+    //     prev: ["const", "let", "var"],
+    //     next: ["block", "block-like"],
+    //   },
+    // ],
   },
 };

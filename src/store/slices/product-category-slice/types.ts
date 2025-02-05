@@ -1,7 +1,3 @@
-export type Category = {
-  id: string;
-  title: string;
-  order: number;
-};
+import { Category } from '@shared/index';
 
 export type CreateCategoryDTO = Omit<Category, 'id'>;

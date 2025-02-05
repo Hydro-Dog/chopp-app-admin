@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import { STORAGE_KEYS } from '@shared/enum';
+import axios from 'axios';
 
 type FailedQueRequest = {
   resolve: (val: unknown) => void;

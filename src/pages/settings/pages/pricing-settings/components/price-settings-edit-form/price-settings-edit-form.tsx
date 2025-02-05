@@ -8,7 +8,7 @@ import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { postPricingData } from '@store/slices';
 import { RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
+import { FETCH_STATUS } from '@shared/index';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { z } from 'zod';

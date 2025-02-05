@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNotificationContext } from '@shared/context';
 import { fetchPricingData } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
+import { FETCH_STATUS } from '@shared/index';
 import { Button, Descriptions, Flex, Space, Spin } from 'antd';
 import { useGetDescriptionItems } from './hooks';
 

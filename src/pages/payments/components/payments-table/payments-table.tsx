@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import InfoIcon from '@mui/icons-material/Info';
 import IconButton from '@mui/material/IconButton';
-import { ChoppPaymentStatus, ConfirmModal, PAYMENT_STATUS } from '@shared/index';
+import { ChoppPaymentStatus, ConfirmModal, FETCH_STATUS, PAYMENT_STATUS } from '@shared/index';
 import { Payment } from '@shared/types/payment';
-import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
+import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { Descriptions, Spin, Table, TableColumnsType, Typography, Tag, Tooltip } from 'antd';
+import { Descriptions, Spin, Table, TableColumnsType, Typography, Tooltip } from 'antd';
 import Checkbox from 'antd/lib/checkbox';
-import { PAYMENT_STATUS_MAP } from '../../../../shared/constants';
 import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
-import { InfoCircleOutlined, RetweetOutlined, UndoOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, UndoOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 type RefundModalProps = {

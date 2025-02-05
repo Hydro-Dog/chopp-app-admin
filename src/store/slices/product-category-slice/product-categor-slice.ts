@@ -1,8 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ErrorResponse } from '@shared/index';
+import { FETCH_STATUS, Category } from '@shared/index';
 import { createCategory, deleteCategory, fetchCategories, updateCategoryTitle } from './actions';
-import { Category } from './types';
-import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ProductCategoryState = {
   categories?: Category[];

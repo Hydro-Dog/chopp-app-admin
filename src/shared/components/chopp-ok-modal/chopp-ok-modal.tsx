@@ -12,11 +12,13 @@ type Props = {
   okColor?: ButtonColorType;
   okVariant?: ButtonVariantType;
   onOk: () => void;
+  onClose: () => void;
 };
 
 export const ChoppOkModal = ({
   open,
   onOk,
+  onClose,
   okTitle,
   okColor,
   okType = 'primary',
@@ -32,6 +34,7 @@ export const ChoppOkModal = ({
       open={open}
       title={title}
       onOk={onOk}
+      onClose={onClose || onOk}
       confirmLoading={confirmLoading}
       // @ts-ignore
       footer={(_: any, { OkBtn, CancelBtn }: any) => (

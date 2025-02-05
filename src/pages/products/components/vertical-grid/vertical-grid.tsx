@@ -1,16 +1,16 @@
 import { ReactNode, useRef } from 'react';
 
 type Props = {
-  titleNode: ReactNode;
-  mainNode: ReactNode;
+  header: ReactNode;
+  main: ReactNode;
 };
 
-export const VerticalGrid = ({ titleNode, mainNode }: Props) => {
+export const VerticalGrid = ({ header, main }: Props) => {
   const flexRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
-      <div ref={flexRef}>{titleNode}</div>
+      <div ref={flexRef}>{header}</div>
       <div
         style={{
           overflow: 'scroll',
@@ -19,7 +19,7 @@ export const VerticalGrid = ({ titleNode, mainNode }: Props) => {
           marginTop: '12px',
           marginRight: '12px',
         }}>
-        {mainNode}
+        {main}
       </div>
     </>
   );

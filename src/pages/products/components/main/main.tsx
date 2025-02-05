@@ -106,7 +106,7 @@ export const Main = () => {
   return (
     <>
       <VerticalGrid
-        titleNode={
+        header={
           <Flex vertical>
             <Flex align="center" justify="space-between" className="mr-2 mt-1">
               <Flex align="center" gap={20} className="ml-4">
@@ -125,7 +125,7 @@ export const Main = () => {
             <Search value={search} placeholder={t('SEARCH')} onChange={onSearchChange} allowClear />
           </Flex>
         }
-        mainNode={
+        main={
           products?.totalPages !== undefined && (
             <>
               <ProductsGrid

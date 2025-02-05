@@ -3,7 +3,7 @@
   "htmlWhitespaceSensitivity": "strict",
   "singleQuote": true,
   "endOfLine": "auto",
-  "printWidth": 100,
+  "printWidth": 200,
   "trailingComma": "all",
   "semi": true,
   "tabWidth": 2,

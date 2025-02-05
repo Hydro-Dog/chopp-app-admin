@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import {
-  TitlePage,
-  updateArrayItemById,
-  useNotificationContext,
-  useSuperDispatch,
-} from '@shared/index';
+import { TitlePage, updateArrayItemById, useNotificationContext, useSuperDispatch } from '@shared/index';
 import { PaginationQuery, PaginationResponse, Order, ORDER_STATUS } from '@shared/types';
 import { AppDispatch } from '@store/index';
 import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
+import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
 import { Card } from 'antd';
 import { OrdersTable } from './components';
 import { useNewOrderNotificationHandler } from './hooks';
-import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
 
 export const OrdersPage = () => {
   const { t } = useTranslation();
@@ -42,13 +37,7 @@ export const OrdersPage = () => {
 
   const onPaginationChange = (page: number, pageSize: number) => {};
 
-  const onOrderStatusChange = ({
-    orderStatus,
-    transactionId,
-  }: {
-    orderStatus: ORDER_STATUS;
-    transactionId: string;
-  }) => {
+  const onOrderStatusChange = ({ orderStatus, transactionId }: { orderStatus: ORDER_STATUS; transactionId: string }) => {
     superDispatch({
       action: updateOrderPaymentStatus({
         transactionId,
@@ -69,12 +58,7 @@ export const OrdersPage = () => {
   return (
     <TitlePage title={t('ORDERS')}>
       <Card className="h-full" size="small">
-        <OrdersTable
-          data={ordersData}
-          fetchData={fetchOrdersData}
-          onStatusChange={onOrderStatusChange}
-          onPaginationChange={onPaginationChange}
-        />
+        <OrdersTable data={ordersData} fetchData={fetchOrdersData} onStatusChange={onOrderStatusChange} onPaginationChange={onPaginationChange} />
       </Card>
     </TitlePage>
   );

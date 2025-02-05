@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import { InfoCircleOutlined, UndoOutlined, DownOutlined } from '@ant-design/icons';
 import { PAYMENT_STATUS_MAP, PAYMENT_STATUS } from '@shared/index';
 import { Payment } from '@shared/types/payment';
+import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import { MenuProps } from 'antd';
 
 type Args = {

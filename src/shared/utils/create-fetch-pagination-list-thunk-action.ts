@@ -1,17 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { PaginationResponse, SearchRequestParams } from '@shared/types';
+import { PaginationResponse, PaginationRequestQuery } from '@shared/types';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 
 // Универсальная функция для создания асинхронных запросов с динамическими параметрами
 export function createFetchPaginationListThunkAction<
   T,
-  Params extends SearchRequestParams,
+  Params extends PaginationRequestQuery,
   ErrorType,
 >({ actionName, endpoint }: { actionName: string; endpoint: string }) {
   return createAsyncThunk<
     PaginationResponse<T>,
-    Params & SearchRequestParams,
+    Params & PaginationRequestQuery,
     { rejectValue: ErrorType }
   >(actionName, async (params, thunkAPI) => {
     try {

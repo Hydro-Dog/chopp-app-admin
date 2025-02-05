@@ -12,7 +12,7 @@ type Props = {
   okColor?: ButtonColorType;
   okVariant?: ButtonVariantType;
   onOk: () => void;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export const ChoppOkModal = ({

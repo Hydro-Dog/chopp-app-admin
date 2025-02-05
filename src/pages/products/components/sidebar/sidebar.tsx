@@ -2,19 +2,18 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
+import { FETCH_STATUS } from '@shared/index';
 import { RootState } from '@store/store';
 import { Flex, Tooltip, Button, Typography } from 'antd';
-import { FETCH_STATUS } from '@shared/index';
-import { CreateCategoryModal } from './components';
-import { VerticalSkeleton } from '../vertical-skeleton';
-import { CategoriesList } from './components/categories-list/categories-list';
 import { useBoolean } from 'usehooks-ts';
+import { CreateCategoryModal } from './components';
+import { VerticalGrid } from '../vertical-grid';
+import { CategoriesList } from './components/categories-list/categories-list';
 
 const { Title } = Typography;
 
 export const Sidebar = () => {
   const { t } = useTranslation();
-
   const { updateCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
 
   const {
@@ -25,7 +24,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <VerticalSkeleton
+      <VerticalGrid
         titleNode={
           <Flex align="center" justify="space-between" className="mr-2 mt-1">
             <Flex align="center" gap={20}>

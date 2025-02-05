@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ConfirmModal } from '@shared/components';
-import { Category } from '@store/slices/product-category-slice';
+import { Category, ConfirmModal } from '@shared/index';
 import { Alert, Flex, Typography } from 'antd';
 
 const { Text } = Typography;

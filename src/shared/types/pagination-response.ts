@@ -1,3 +1,4 @@
+//Синхронизировано с бэком! Менять только во всех местах однвоременно
 export type PaginationResponse<T> = {
   items: T[];
   totalItems: number;

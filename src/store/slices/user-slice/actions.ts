@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   ErrorResponse,
   sanitizedUser,
-  SearchRequestParams,
+  PaginationRequestQuery,
   PaginationResponse,
   User,
 } from '@shared/index';
@@ -114,7 +114,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: ErrorRespo
 
 export const fetchUsers = createAsyncThunk<
   PaginationResponse<User>, // Тип возвращаемого значения
-  SearchRequestParams, // Тип аргумента
+  PaginationRequestQuery, // Тип аргумента
   { rejectValue: ErrorResponse } // Тип возвращаемого ошибки
 >('user/fetchUsers', async (params, thunkAPI) => {
   try {

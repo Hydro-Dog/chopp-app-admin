@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
-import { Product, fetchProducts } from '@store/index';
+import { FETCH_STATUS, PaginationQuery, PaginationResponse, Product, PaginationRequestQuery } from '@shared/index';
+import { fetchProducts } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Flex, Tooltip, Button, Typography, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-import { VerticalSkeleton } from '../vertical-skeleton';
+import { VerticalGrid } from '../vertical-grid';
 import { CreateEditProductModal, ProductsGrid } from './components/';
-import { FETCH_STATUS, PaginationQuery, PaginationResponse } from '@shared/types';
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -36,8 +36,8 @@ export const Main = () => {
   const urlSearch = searchParams.get('search') || '';
   const [search, setSearch] = useState(urlSearch);
   const [pageProducts, setPageProducts] = useState<Product[]>([]);
-  const [pagination, setPagination] = useState<Pick<PaginationQuery, 'pageNumber' | 'limit'>>({
-    pageNumber: FIRST_PAGE_NUMBER,
+  const [pagination, setPagination] = useState<Pick<PaginationRequestQuery, 'page' | 'limit'>>({
+    page: FIRST_PAGE_NUMBER,
     limit: LIMIT,
   });
 
@@ -48,10 +48,10 @@ export const Main = () => {
 
   useEffect(() => {
     if (categoryId !== undefined) {
-      dispatch(fetchProducts({ categoryId, limit: LIMIT, pageNumber: FIRST_PAGE_NUMBER, search }));
+      dispatch(fetchProducts({ categoryId, limit: LIMIT, page: FIRST_PAGE_NUMBER, search }));
       //Сбросить пагинацию при переключении категории
       setPagination({
-        pageNumber: FIRST_PAGE_NUMBER,
+        page: FIRST_PAGE_NUMBER,
         limit: LIMIT,
       });
     }
@@ -62,19 +62,19 @@ export const Main = () => {
       action: fetchProducts({
         categoryId,
         limit: pagination?.limit,
-        pageNumber: pagination.pageNumber + 1,
+        page: pagination.page || 0 + 1,
         search,
       }),
       thenHandler: (response) => {
         setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ ...pagination, pageNumber: response.pageNumber });
+        setPagination({ ...pagination, page: response.currentPage + 1 });
       },
     });
   };
 
   const onOk = (item: Product) => {
     const isLastPage =
-      pagination?.pageNumber === products?.totalPages || products?.totalPages === 0;
+      pagination?.page === products?.totalPages || products?.totalPages === 0;
     const isIncludedInCurrentSearch = search ? item.title.includes(search) : true;
 
     if (isLastPage && isIncludedInCurrentSearch) {
@@ -105,7 +105,7 @@ export const Main = () => {
 
   return (
     <>
-      <VerticalSkeleton
+      <VerticalGrid
         titleNode={
           <Flex vertical>
             <Flex align="center" justify="space-between" className="mr-2 mt-1">
@@ -133,7 +133,7 @@ export const Main = () => {
                 loading={fetchProductsStatus === FETCH_STATUS.LOADING}
               />
 
-              {pagination?.pageNumber < products?.totalPages && (
+              {(pagination?.page || 1) < products?.totalPages && (
                 <Button onClick={onLoadMore}>{t('LOAD_MORE')}</Button>
               )}
             </>

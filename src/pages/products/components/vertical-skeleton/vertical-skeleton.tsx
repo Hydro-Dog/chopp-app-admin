@@ -1,14 +1,8 @@
 import { ReactNode, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import { RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
-import { Flex, Tooltip, Button, Typography } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-
-const { Title } = Typography;
 
 type Props = {
   titleNode: ReactNode;

@@ -10,8 +10,9 @@ import {
   useNotificationContext,
   useSearchParamValue,
   useSuperDispatch,
+  FETCH_STATUS,
 } from '@shared/index';
-import { createProduct, FETCH_STATUS, Product, RootState, updateProduct } from '@store/index';
+import { createProduct, Product, RootState, updateProduct } from '@store/index';
 import {
   Alert,
   Form,

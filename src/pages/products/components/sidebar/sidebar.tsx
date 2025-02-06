@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import { RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
 import { Flex, Tooltip, Button, Typography } from 'antd';
-import { useBoolean } from 'usehooks-ts';
+import { FETCH_STATUS } from '@shared/index';
 import { CreateCategoryModal } from './components';
 import { VerticalSkeleton } from '../vertical-skeleton';
 import { CategoriesList } from './components/categories-list/categories-list';
+import { useBoolean } from 'usehooks-ts';
 
 const { Title } = Typography;
 

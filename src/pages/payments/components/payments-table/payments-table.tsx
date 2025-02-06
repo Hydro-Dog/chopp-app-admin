@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Table, Spin, Modal } from 'antd';
-import { ChoppInfoModal } from '@shared/index';
-import { Payment } from '@shared/types/payment';
-import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
-import { AppDispatch, RootState } from '@store/store';
-import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
-import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
-import { useTranslation } from 'react-i18next';
 import { ACTION_MENU_ITEMS } from './enums';
 import { ActionValue } from './types';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
+import { fetchPayments, refundPayment } from '@store/index';
+import { AppDispatch, RootState } from '@store/store';
+import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
 
 export const PaymentsTable = () => {
   const dispatch = useDispatch<AppDispatch>();

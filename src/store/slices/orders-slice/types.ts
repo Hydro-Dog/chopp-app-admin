@@ -1,4 +1,4 @@
-import { ORDER_STATUS, PAYMENT_STATUS } from "@shared/index";
+import { ORDER_STATUS, PAYMENT_STATUS } from '@shared/index';
 
 export type UpdateOrderDTO = {
   transactionId: string;

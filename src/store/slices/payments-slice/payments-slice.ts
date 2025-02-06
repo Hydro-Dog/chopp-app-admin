@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ErrorResponse, YookassaPaginationResponse } from '@shared/index';
+import { FETCH_STATUS } from '@shared/index';
 import { Payment } from '@shared/types/payment';
 import { fetchPayments, refundPayment } from './actions';
-import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type PaymentsState = {
   payments?: YookassaPaginationResponse<Payment>;

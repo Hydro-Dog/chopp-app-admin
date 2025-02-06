@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, PaginationResponse } from '@shared/index';
+import { ErrorResponse, PaginationResponse, Product } from '@shared/index';
+import { FETCH_STATUS } from '@shared/index';
 import { createProduct, fetchProducts, updateProduct } from './actions';
-import { Product } from './types';
-import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type ProductsState = {
   products?: PaginationResponse<Product>;
@@ -33,7 +32,7 @@ export const productSlice = createSlice({
       .addCase(createProduct.pending, (state) => {
         state.createProductStatus = FETCH_STATUS.LOADING;
       })
-      .addCase(createProduct.fulfilled, (state, action) => {
+      .addCase(createProduct.fulfilled, (state) => {
         state.createProductStatus = FETCH_STATUS.SUCCESS;
       })
       .addCase(createProduct.rejected, (state, action) => {

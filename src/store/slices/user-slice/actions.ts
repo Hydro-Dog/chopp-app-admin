@@ -1,19 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  ORDER_STATUS,
   ErrorResponse,
   sanitizedUser,
   SearchRequestParams,
   PaginationResponse,
+  User,
 } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
-import {
-  User,
-  UserAuthorization,
-  UserLoginDTO,
-  UserRegisterDTO,
-} from './types';
+import { UserAuthorization, UserLoginDTO, UserRegisterDTO } from './types';
 
 export const fetchCurrentUser = createAsyncThunk<User, void, { rejectValue: ErrorResponse }>(
   '/fetchCurrentUser',
@@ -25,7 +20,7 @@ export const fetchCurrentUser = createAsyncThunk<User, void, { rejectValue: Erro
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
@@ -43,7 +38,7 @@ export const fetchUser = createAsyncThunk<User, string, { rejectValue: ErrorResp
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
         // Handle unexpected errors
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
@@ -59,7 +54,7 @@ export const updateCurrentUser = createAsyncThunk<User, User, { rejectValue: Err
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
@@ -75,13 +70,11 @@ export const registerUser = createAsyncThunk<User, UserRegisterDTO, { rejectValu
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
 );
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVc2VyIGRldGFpbHMiLCJpZCI6IjZkOWVkMDE1LWVkY2QtNDE3OS1iNTQ1LTAxZjg1NmNkOGNkMyIsImlhdCI6MTcxNzYxMDA1MywiaXNzIjoiZGlzcGF0Y2hlciJ9.YCpBezyh5nGBGfAmDRqLHHLjFKauqjrNFHBhk9Haic4
 
 export const loginUser = createAsyncThunk<
   UserAuthorization,
@@ -98,7 +91,7 @@ export const loginUser = createAsyncThunk<
     if (axios.isAxiosError(error) && error.response) {
       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
     } else {
-      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
   }
 });
@@ -113,7 +106,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: ErrorRespo
       if (axios.isAxiosError(error) && error.response) {
         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
       } else {
-        return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+        return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
       }
     }
   },
@@ -126,12 +119,12 @@ export const fetchUsers = createAsyncThunk<
 >('user/fetchUsers', async (params, thunkAPI) => {
   try {
     const queryString = new URLSearchParams({
-      page: String(params.page || 1),
+      page: String(params.pageNumber || 1),
       limit: String(params.limit || 10),
       search: params.search || '',
       sort: params.sort || '',
       order: params.order || 'asc',
-      excludeRequesterId: params.excludeRequesterId || '',
+      excludeRequesterId: 'true',
     }).toString();
 
     const response = await axiosPrivate.get<PaginationResponse<User>>(`/users?${queryString}`);
@@ -140,7 +133,7 @@ export const fetchUsers = createAsyncThunk<
     if (axios.isAxiosError(error) && error.response) {
       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
     } else {
-      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
   }
 });

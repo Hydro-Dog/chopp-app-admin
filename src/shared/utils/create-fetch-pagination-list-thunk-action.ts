@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { PaginationResponse, SearchRequestParams, SearchResponse } from '@shared/types';
+import { PaginationResponse, SearchRequestParams } from '@shared/types';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 

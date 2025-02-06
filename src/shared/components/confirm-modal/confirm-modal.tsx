@@ -34,6 +34,7 @@ export const ConfirmModal = ({
       open={open}
       title={title}
       onOk={onOk}
+      onClose={}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
       // @ts-ignore

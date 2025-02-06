@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, Order, PaginationResponse } from '@shared/index';
+import { ErrorResponse, Order, PaginationResponse, FETCH_STATUS } from '@shared/index';
 import { fetchOrders, updateOrderPaymentStatus } from './actions';
-import { FETCH_STATUS } from '../../types/fetch-status';
 
 export type OrderState = {
   orders?: PaginationResponse<Order>;

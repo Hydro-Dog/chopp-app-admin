@@ -2,8 +2,8 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
-import { ROUTES } from '@shared/index';
-import { AppDispatch, clearChatCreatingHistory, createChatAction, FETCH_STATUS, fetchUser, RootState } from '@store/index';
+import { ROUTES, FETCH_STATUS } from '@shared/index';
+import { AppDispatch, clearChatCreatingHistory, createChatAction, fetchUser, RootState } from '@store/index';
 import { Button, Card, Typography } from 'antd';
 
 const { Title } = Typography;

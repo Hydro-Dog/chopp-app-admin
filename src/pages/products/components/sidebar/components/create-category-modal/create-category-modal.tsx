@@ -7,7 +7,6 @@ import { BasicModal } from '@shared/index';
 import { useSuperDispatch } from '@shared/index';
 import { createCategory } from '@store/slices/product-category-slice';
 import { RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types';
 import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';

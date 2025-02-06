@@ -32,6 +32,7 @@ export const ChoppOkModal = ({
       open={open}
       title={title}
       onOk={onOk}
+      onCancel={onOk}
       confirmLoading={confirmLoading}
       // @ts-ignore
       footer={(_: any, { OkBtn, CancelBtn }: any) => (

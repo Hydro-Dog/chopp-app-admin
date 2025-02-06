@@ -4,7 +4,7 @@ export * from './draggable-modal';
 export * from './cursor-eye-follower';
 export * from './mobile-modal';
 export * from './back-button';
-export * from './confirm-modal';
+export * from './chopp-custom-modal';
 export * from './title-page';
 export * from './main-container';
 export * from './chopp-draggable-list';
@@ -17,4 +17,4 @@ export * from './chopp-info-modal';
 export * from './chopp-ok-modal';
 export * from './chopp-order-status';
 export * from './chopp-payment-status';
-export * from './confirm-modal'
+export * from './chopp-custom-modal'

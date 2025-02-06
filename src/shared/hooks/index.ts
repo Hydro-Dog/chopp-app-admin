@@ -10,3 +10,4 @@ export * from './use-new-incoming-message-chat-handler';
 export * from './use-search-param-value';
 export * from './use-super-dispatch';
 export * from './use-infinite-scroll';
+export * from './use-auto-focus';

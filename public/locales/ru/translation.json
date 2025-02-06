@@ -47,7 +47,8 @@
     "CONTENT_TOO_LONG": "Слишком длинный текст",
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
-    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB"
+    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
+    "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\""
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -165,5 +166,9 @@
   "AMOUNT": "Сумма",
   "PAID": "Оплачено",
   "REFUND_AMOUNT": "Сумма возврата",
-  "FAILED": "Отказ"
+  "FAILED": "Отказ",
+  "YOU_ARE_GOING_TO_REMOVE_CATEGORY": "Высобираетесь удалить категорию",
+  "ALL_PRODUCTS_WILL_BE_MOVED_TO": "Все товары будут перенесены в категорию",
+  "NO_CATEGORY": "Без категории",
+  "INPUT_CATEGORY_TO_DELETE_NAME": "Введите название категории, которую хотите удалить"
 }

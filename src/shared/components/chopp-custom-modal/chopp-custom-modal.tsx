@@ -8,6 +8,7 @@ type Props = {
   width?: string | number;
   confirmLoading?: boolean;
   okTitle?: string;
+  okDisabled?: boolean;
   okType?: 'primary' | 'link' | 'text' | 'default' | 'dashed';
   okColor?: ButtonColorType;
   okVariant?: ButtonVariantType;
@@ -16,11 +17,12 @@ type Props = {
 };
 
 //TODO: Удалить, заменить на custom modal который будет принимать кастомные кнопки
-export const ConfirmModal = ({
+export const CustomModal = ({
   open,
   onOk,
   okTitle,
   okColor,
+  okDisabled,
   okType = 'primary',
   okVariant = 'solid',
   onCancel,
@@ -43,7 +45,7 @@ export const ConfirmModal = ({
           <CancelBtn />
           {okTitle ? (
             <Button
-              // disabled={confirmLoading}
+              disabled={okDisabled || confirmLoading}
               loading={confirmLoading}
               color={okColor}
               type={okType}

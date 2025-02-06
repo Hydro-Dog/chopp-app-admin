@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ConfirmModal } from '@shared/components';
+import { CustomModal } from '@shared/components';
 import {
   getBase64,
   useNotificationContext,
@@ -197,7 +197,7 @@ export const CreateEditProductModal = ({
   };
 
   return (
-    <ConfirmModal
+    <CustomModal
       title={t('ADD_PRODUCT')}
       open={open}
       confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
@@ -316,6 +316,6 @@ export const CreateEditProductModal = ({
           type="info"
         />
       </Form>
-    </ConfirmModal>
+    </CustomModal>
   );
 };

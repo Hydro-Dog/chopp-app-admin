@@ -23,15 +23,7 @@ module.exports = {
     'import/order': [
       'warn',
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          ['sibling', 'parent'],
-          'index',
-          'object',
-          'type',
-        ],
+        groups: ['builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'object', 'type'],
         pathGroups: [
           {
             pattern: 'react',
@@ -56,27 +48,6 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'max-len': ['warn', { code: 200 }], // Добавляем это правило здесь
-    // "padding-line-between-statements": [
-    //   "warn",
-    //   { blankLine: "always", prev: "*", next: "var" },
-    //   { blankLine: "always", prev: "*", next: "let" },
-    //   { blankLine: "always", prev: "*", next: "const" },
-    //   {
-    //     blankLine: "never",
-    //     prev: ["const", "let", "var"],
-    //     next: ["const", "let", "var"],
-    //   },
-    //   {
-    //     blankLine: "always",
-    //     prev: ["block", "block-like"],
-    //     next: ["const", "let", "var"],
-    //   },
-    //   {
-    //     blankLine: "always",
-    //     prev: ["const", "let", "var"],
-    //     next: ["block", "block-like"],
-    //   },
-    // ],
+    'max-len': ['warn', { code: 120 }],
   },
 };

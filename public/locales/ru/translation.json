@@ -100,7 +100,7 @@
     "PAYMENT_SUCCEEDED_TOOLTIP": "Оплата успешно завершена, заказ готовится к отправке.",
     "PAYMENT_CANCELED": "Платеж отменен",
     "PAYMENT_CANCELED_TOOLTIP": "Оплата была отменена, заказ не может быть выполнен.",
-    "IN_PROGRESS": "В обработке",
+    "IN_PROGRESS": "Собирается",
     "IN_PROGRESS_TOOLTIP": "Заказ передан в работу и готовится к отправке.",
     "IN_DELIVERY_PROCESS": "Доставляется",
     "IN_DELIVERY_PROCESS_TOOLTIP": "Заказ передан в службу доставки и находится в пути.",

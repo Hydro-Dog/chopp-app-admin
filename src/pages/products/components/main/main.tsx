@@ -5,7 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useSuperDispatch, useSearchParamValue } from '@shared/hooks';
-import { FETCH_STATUS, PaginationQuery, PaginationResponse, Product, PaginationRequestQuery } from '@shared/index';
+import {
+  FETCH_STATUS,
+  PaginationQuery,
+  PaginationResponse,
+  Product,
+  PaginationRequestQuery,
+} from '@shared/index';
 import { fetchProducts } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Flex, Tooltip, Button, Typography, Input } from 'antd';
@@ -38,17 +44,15 @@ export const Main = () => {
   const [pageProducts, setPageProducts] = useState<Product[]>([]);
   const [pagination, setPagination] = useState<Pick<PaginationRequestQuery, 'page' | 'limit'>>({
     page: FIRST_PAGE_NUMBER,
-    limit: LIMIT,
   });
 
   useEffect(() => {
-    console.log('setPageProducts: ', products?.items);
     setPageProducts(products?.items || []);
   }, [products]);
 
   useEffect(() => {
     if (categoryId !== undefined) {
-      dispatch(fetchProducts({ categoryId, limit: LIMIT, page: FIRST_PAGE_NUMBER, search }));
+      dispatch(fetchProducts({ categoryId, page: FIRST_PAGE_NUMBER, limit: LIMIT, search }));
       //Сбросить пагинацию при переключении категории
       setPagination({
         page: FIRST_PAGE_NUMBER,
@@ -57,24 +61,25 @@ export const Main = () => {
     }
   }, [categoryId, dispatch, search]);
 
+  console.log('pagination: ', pagination);
+
   const onLoadMore = () => {
     superDispatch({
       action: fetchProducts({
         categoryId,
-        limit: pagination?.limit,
-        page: pagination.page || 0 + 1,
+        limit: LIMIT,
+        page: pagination.page + 1,
         search,
       }),
       thenHandler: (response) => {
         setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ ...pagination, page: response.currentPage + 1 });
+        setPagination({ page: response.currentPage + 1 });
       },
     });
   };
 
   const onOk = (item: Product) => {
-    const isLastPage =
-      pagination?.page === products?.totalPages || products?.totalPages === 0;
+    const isLastPage = pagination?.page === products?.totalPages || products?.totalPages === 0;
     const isIncludedInCurrentSearch = search ? item.title.includes(search) : true;
 
     if (isLastPage && isIncludedInCurrentSearch) {

@@ -16,4 +16,5 @@ export * from './fetch-status';
 export * from './user'
 export * from './product-image'
 export * from './product'
+export * from './payment'
 export * from './category'

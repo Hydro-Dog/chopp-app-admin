@@ -1,82 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import IconButton from '@mui/material/IconButton';
-import { ChoppPaymentStatus, ConfirmModal, FETCH_STATUS, PAYMENT_STATUS } from '@shared/index';
-import { Payment } from '@shared/types/payment';
+import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { Descriptions, Spin, Table, TableColumnsType, Typography, Tooltip } from 'antd';
-import Checkbox from 'antd/lib/checkbox';
-import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
-import { InfoCircleOutlined, UndoOutlined } from '@ant-design/icons';
-
-const { Text } = Typography;
-type RefundModalProps = {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  amount?: { value: string; currency: string };
-};
-
-export const RefundModal: React.FC<RefundModalProps> = ({ open, onClose, onConfirm, amount }) => {
-  return (
-    <ConfirmModal
-      open={open}
-      title="Confirm Refund"
-      onOk={onConfirm}
-      onCancel={onClose}
-      okTitle="Ok"
-      width={400}>
-      <Text>
-        You are about to refund the customer an amount of{' '}
-        <strong>
-          {amount?.value} {amount?.currency}
-        </strong>
-        .
-      </Text>
-    </ConfirmModal>
-  );
-};
-
-type PaymentDetailsProps = {
-  data: Record<string, unknown> | null;
-  open: boolean;
-  onClose: () => void;
-};
-
-export const PaymentDetailsModal: React.FC<PaymentDetailsProps> = ({ data, open, onClose }) => {
-  return (
-    <ConfirmModal
-      open={open}
-      title={`Payment Details - ID: ${data?.id || 'Unknown'}`}
-      onOk={onClose}
-      onCancel={onClose}
-      okTitle="Close"
-      width={600}>
-      <Descriptions column={1} bordered size="small">
-        {Object.entries(data || {}).map(([key, value]) => (
-          <Descriptions.Item label={key} key={key}>
-            {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
-          </Descriptions.Item>
-        ))}
-      </Descriptions>
-    </ConfirmModal>
-  );
-};
+import { Table, Spin, Modal } from 'antd';
+import { ACTION_MENU_ITEMS } from './enums';
+import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
+import { ActionValue } from './types';
 
 export const PaymentsTable = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { payments, fetchPaymentsStatus } = useSelector((state: RootState) => state.payments || {});
+  const { t } = useTranslation();
   const [list, setList] = useState<Payment[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPayments({}));
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (payments?.items) {
@@ -84,9 +28,9 @@ export const PaymentsTable = () => {
     }
   }, [payments]);
 
-  const handleDetailsClick = (record: Payment) => {
+  const handleInfoClick = (record: Payment) => {
     setSelectedPayment(record);
-    setIsDetailsModalOpen(true);
+    setIsInfoModalOpen(true);
   };
 
   const handleRefundClick = (record: Payment) => {
@@ -94,25 +38,11 @@ export const PaymentsTable = () => {
     setIsRefundModalOpen(true);
   };
 
-  const handleDetailsModalClose = () => {
-    setIsDetailsModalOpen(false);
-    setSelectedPayment(null);
-  };
-
-  const handleRefundModalClose = () => {
-    setIsRefundModalOpen(false);
-    setSelectedPayment(null);
-  };
-
   const handleRefundConfirm = () => {
+    if (!selectedPayment) return;
+    //TODO: Пройти по всем асинхронным запросам и добавить обработку ошибок.
+    dispatch(refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }));
     setIsRefundModalOpen(false);
-
-    dispatch(
-      refundPayment({
-        payment_id: selectedPayment!.id,
-        amount: selectedPayment!.amount,
-      }),
-    );
     setSelectedPayment(null);
   };
 
@@ -124,108 +54,42 @@ export const PaymentsTable = () => {
 
   const { setObserverElement } = useInfiniteScroll({ callback: handleLoadMore });
 
-  const columns: TableColumnsType<Payment> = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+  const map: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
+    [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
+      handleInfoClick(record);
+      setIsInfoModalOpen(true);
     },
-    {
-      title: t('PAYMENT_STATUS_TITLE'),
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
+    [ACTION_MENU_ITEMS.REFUND]: ({ record }) => {
+      handleRefundClick(record);
+      setIsRefundModalOpen(true);
     },
-    {
-      title: t('PAID'),
-      dataIndex: 'paid',
-      key: 'paid',
-      render: (paid: boolean) => <Checkbox checked={paid} />,
-    },
-    {
-      title: t('AMOUNT'),
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (amount: { value: string; currency: string }) =>
-        Number(amount.value)?.toLocaleString('ru-RU', {
-          style: 'currency',
-          currency: 'RUB',
-        }),
-    },
-    {
-      title: t('REFUND_AMOUNT'),
-      dataIndex: 'refunded_amount',
-      key: 'refunded_amount',
-      render: (amount: { value: string; currency: string }) =>
-        Number(amount?.value)?.toLocaleString('ru-RU', {
-          style: 'currency',
-          currency: 'RUB',
-        }),
-    },
-    {
-      title: t('CREATED_AT'),
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (date: string) => new Date(date).toLocaleString(),
-    },
-    {
-      title: t('DESCRIPTION'),
-      dataIndex: 'description',
-      key: 'description',
-      render: (description: string) => (
-        <Tooltip title={description}>
-          <div
-            style={{
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: '200px',
-            }}>
-            {description}
-          </div>
-        </Tooltip>
-      ),
-    },
-    //TODO: сделать котонку Actions по аналогии с ordersTable
-    {
-      title: t('ACTIONS'),
-      key: 'actions',
-      render: (_: any, record: Payment) => {
-        return (
-          <>
-            <IconButton onClick={() => handleDetailsClick(record)}>
-              <Tooltip title={t('INFO')}>
-                <InfoCircleOutlined />
-              </Tooltip>
-            </IconButton>
-            <IconButton disabled={!record?.refundable} onClick={() => handleRefundClick(record)}>
-              <Tooltip title={t('REFUND')}>
-                <UndoOutlined />
-              </Tooltip>
-            </IconButton>
-          </>
-        );
-      },
-    },
-  ];
+  };
+
+  const onActionClick = (action: ActionValue) => {
+    map[action.key](action);
+  };
+
+  const { columns } = useGetPaymentsTableColumns({ onActionClick });
 
   return (
-    <>
+    <div>
       <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
+
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
-      <PaymentDetailsModal
-        data={selectedPayment}
-        open={isDetailsModalOpen}
-        onClose={handleDetailsModalClose}
-      />
-      <RefundModal
-        open={isRefundModalOpen}
-        onClose={handleRefundModalClose}
-        onConfirm={handleRefundConfirm}
-        amount={selectedPayment?.amount}
-      />
-    </>
+      <ChoppInfoModal open={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} value={selectedPayment || undefined} />
+
+      <Modal open={isRefundModalOpen} title={t('CONFIRM_REFUND')} onOk={handleRefundConfirm} onCancel={() => setIsRefundModalOpen(false)} width={400}>
+        {selectedPayment && (
+          <p>
+            {t('REFUND_AMOUNT')}:{' '}
+            <strong>
+              {selectedPayment.amount.value} {selectedPayment.amount.currency}
+            </strong>
+          </p>
+        )}
+      </Modal>
+    </div>
   );
 };

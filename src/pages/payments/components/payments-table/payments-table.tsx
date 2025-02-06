@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table, Spin } from 'antd';
-import { ConfirmModal, ChoppInfoModal } from '@shared/index';
+import { Table, Spin, Modal } from 'antd';
+import { ChoppInfoModal } from '@shared/index';
 import { Payment } from '@shared/types/payment';
 import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
 import { useTranslation } from 'react-i18next';
+import { ACTION_MENU_ITEMS } from './enums';
+import { ActionValue } from './types';
 
 export const PaymentsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +17,7 @@ export const PaymentsTable = () => {
   const { t } = useTranslation();
   const [list, setList] = useState<Payment[]>([]);
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,9 +30,9 @@ export const PaymentsTable = () => {
     }
   }, [payments]);
 
-  const handleDetailsClick = (record: Payment) => {
+  const handleInfoClick = (record: Payment) => {
     setSelectedPayment(record);
-    setIsDetailsModalOpen(true);
+    setIsInfoModalOpen(true);
   };
 
   const handleRefundClick = (record: Payment) => {
@@ -53,12 +55,21 @@ export const PaymentsTable = () => {
 
   const { setObserverElement } = useInfiniteScroll({ callback: handleLoadMore });
 
-  const handleActionClick = (key: string, record: Payment) => {
-    if (key === 'details') handleDetailsClick(record);
-    if (key === 'refund') handleRefundClick(record);
+  const map: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
+    [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
+      handleInfoClick(record);
+      setIsInfoModalOpen(true);
+    },
+    [ACTION_MENU_ITEMS.REFUND]: ({ record }) => {
+      handleRefundClick(record);
+      setIsRefundModalOpen(true);
+    },
+  };
+  const onActionClick = (action: ActionValue) => {
+    map[action.key](action);
   };
 
-  const { columns } = useGetPaymentsTableColumns({ onActionClick: handleActionClick });
+  const { columns } = useGetPaymentsTableColumns({ onActionClick });
 
   return (
     <div>
@@ -67,17 +78,16 @@ export const PaymentsTable = () => {
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
       <ChoppInfoModal
-        open={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
+        open={isInfoModalOpen}
+        onClose={() => setIsInfoModalOpen(false)}
         value={selectedPayment || undefined}
       />
 
-      <ConfirmModal
+      <Modal
         open={isRefundModalOpen}
         title={t('CONFIRM_REFUND')}
         onOk={handleRefundConfirm}
         onCancel={() => setIsRefundModalOpen(false)}
-        okTitle="OK"
         width={400}>
         {selectedPayment && (
           <p>
@@ -87,7 +97,7 @@ export const PaymentsTable = () => {
             </strong>
           </p>
         )}
-      </ConfirmModal>
+      </Modal>
     </div>
   );
 };

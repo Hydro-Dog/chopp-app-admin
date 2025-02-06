@@ -1,30 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { Tooltip, Tag, Dropdown, Space } from 'antd';
-import { InfoCircleOutlined, UndoOutlined, DownOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { PAYMENT_STATUS_MAP, PAYMENT_STATUS } from '@shared/index';
 import { Payment } from '@shared/types/payment';
-import { MenuProps } from 'antd';
+import { useGetActionItems } from './use-get-action-items';
+import { ACTION_MENU_ITEMS } from '../enums';
+import { ActionValue } from '../types';
 
 type Args = {
-  onActionClick: (key: string, record: Payment) => void;
+  onActionClick: (info: ActionValue) => void;
 };
 
 export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
   const { t } = useTranslation();
-
-  const getActionsMenu = (record: Payment): MenuProps['items'] => [
-    {
-      key: 'details',
-      label: t('INFO'),
-      icon: <InfoCircleOutlined />,
-    },
-    {
-      key: 'refund',
-      label: t('REFUND'),
-      icon: <UndoOutlined />,
-      disabled: !record?.refundable,
-    },
-  ];
+  const { actionItems } = useGetActionItems();
 
   const columns = [
     {
@@ -60,8 +49,8 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
       render: (_: any, record: Payment) => (
         <Dropdown
           menu={{
-            items: getActionsMenu(record),
-            onClick: (e) => onActionClick(e.key, record),
+            items: actionItems(record),
+            onClick: (e) => onActionClick({ key: e.key as ACTION_MENU_ITEMS, record }),
           }}>
           <Space>
             {t('ACTIONS')}

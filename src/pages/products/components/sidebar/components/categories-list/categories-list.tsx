@@ -4,39 +4,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { ChopDraggableList } from '@shared/components';
 import { useNotificationContext } from '@shared/context';
-import { useSearchParamValue } from '@shared/hooks';
-import {
-  Category,
-  fetchCategories,
-  updateCategories,
-  deleteCategory,
-} from '@store/index';
+import { useSearchParamValue, useSuperDispatch } from '@shared/hooks';
+import { Category, FETCH_STATUS } from '@shared/index';
+import { fetchCategories, updateCategories, deleteCategory } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
+import { Spin } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { DeleteCategoryModal } from '../delete-category-modal';
-import { Spin } from 'antd';
 import { ListItem } from '../list-item';
-import { FETCH_STATUS } from '@shared/index';
 
 export const CategoriesList = () => {
-  const urlCategoryId = useSearchParamValue('id');
-  const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
-  const urlChatId = useSearchParamValue('id');
-
-  const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
-  const { categories, fetchCategoriesStatus } = useSelector(
-    (state: RootState) => state.productCategory,
-  );
-
-  const {
-    value: isDeleteCategoryModalOpen,
-    setTrue: openDeleteCategoryModal,
-    setFalse: closeDeleteCategoryModal,
-  } = useBoolean();
-
+  const { superDispatch } = useSuperDispatch<Category[], string>();
+  const urlChatId = useSearchParamValue('id');
+  const { categories, fetchCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
+  const { value: isDeleteCategoryModalOpen, setTrue: openDeleteCategoryModal, setFalse: closeDeleteCategoryModal } = useBoolean();
+  const [, setSearchParams] = useSearchParams();
   const [categoryToDelete, setCategoryToDelete] = useState<Category>();
+  const { showErrorNotification } = useNotificationContext();
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -45,10 +31,7 @@ export const CategoriesList = () => {
   useEffect(() => {
     if (!urlChatId && categories) {
       setSearchParams({
-        id:
-          categories.find((item) => item.order === 1)?.id ||
-          categories.find((item) => item.order === 0)?.id ||
-          '',
+        id: categories.find((item) => item.order === 1)?.id || categories.find((item) => item.order === 0)?.id || '',
       });
     }
   }, [categories, setSearchParams, urlChatId]);
@@ -58,7 +41,7 @@ export const CategoriesList = () => {
   };
 
   const onDeleteCategoryModalOpen = (id: string) => {
-    setCategoryToDelete(categories?.find((item) => item.id == id));
+    setCategoryToDelete(categories?.find((item) => item.id === id));
     openDeleteCategoryModal();
   };
 
@@ -68,9 +51,10 @@ export const CategoriesList = () => {
   };
 
   const onDeleteCategory = () => {
-    dispatch(deleteCategory(categoryToDelete!.id))
-      .unwrap()
-      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
+    superDispatch({
+      action: deleteCategory(categoryToDelete!.id),
+      catchHandler: (error) => showErrorNotification({ message: t('ERROR'), description: error.message }),
+    });
     onCloseDeleteCategory();
   };
 
@@ -79,7 +63,7 @@ export const CategoriesList = () => {
   };
 
   if (fetchCategoriesStatus === FETCH_STATUS.LOADING) {
-    return <Spin size="large" />;
+    return <Spin size="small" />;
   }
 
   return (
@@ -90,15 +74,11 @@ export const CategoriesList = () => {
         onDragEnd={onCategoriesOrderChange}
         onDeleteItem={onDeleteCategoryModalOpen}
         onClickItem={onClickItem}
-        initialCategoryId={urlCategoryId}
+        initialCategoryId={urlChatId}
+        // @ts-ignore
         ListItem={ListItem}
       />
-      <DeleteCategoryModal
-        category={categoryToDelete}
-        open={isDeleteCategoryModalOpen}
-        onOk={onDeleteCategory}
-        onCancel={onCloseDeleteCategory}
-      />
+      <DeleteCategoryModal category={categoryToDelete} open={isDeleteCategoryModalOpen} onOk={onDeleteCategory} onCancel={onCloseDeleteCategory} />
     </>
   );
 };

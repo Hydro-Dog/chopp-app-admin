@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createFetchPaginationListThunkAction } from '@shared/index';
-import { ErrorResponse, Order, SearchRequestParams } from '@shared/types';
+import { ErrorResponse, Order, PaginationRequestQuery } from '@shared/types';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { UpdateOrderDTO } from './types';
 
 export const fetchOrders = createFetchPaginationListThunkAction<
   Order,
-  { categoryId: string } & SearchRequestParams,
+  { categoryId: string } & PaginationRequestQuery,
   ErrorResponse
 >({
   actionName: 'orders/fetchOrders',

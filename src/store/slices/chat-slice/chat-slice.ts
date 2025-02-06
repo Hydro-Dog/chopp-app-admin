@@ -71,64 +71,64 @@ export const chatSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
+    // builder
       // messages actions
-      .addCase(fetchChatMessages.pending, (state) => {
-        state.fetchChatMessagesStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(
-        fetchChatMessages.fulfilled,
-        (state, action: PayloadAction<WsMessage<ChatMessage>[]>) => {
-          state.fetchChatMessagesStatus = FETCH_STATUS.SUCCESS;
-          state.chatMessages = action.payload;
-        },
-      )
-      .addCase(fetchChatMessages.rejected, (state, action) => {
-        state.fetchChatMessagesStatus = FETCH_STATUS.ERROR;
-        state.fetchChatMessagesError = action.payload ?? {
-          errorMessage: 'Failed to fetch chat information',
-        };
-      })
-      // chats actions
-      .addCase(fetchChats.pending, (state) => {
-        state.fetchChatsStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(fetchChats.fulfilled, (state, action: PayloadAction<Chat[]>) => {
-        state.fetchChatsStatus = FETCH_STATUS.SUCCESS;
-        state.chats = action.payload;
-      })
-      .addCase(fetchChats.rejected, (state, action) => {
-        state.fetchChatsStatus = FETCH_STATUS.ERROR;
-        state.fetchChatsError = action.payload ?? {
-          errorMessage: 'Failed to fetch chat information',
-        };
-      })
-      .addCase(fetchChatStats.pending, (state) => {
-        state.fetchChatsStatsStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(fetchChatStats.fulfilled, (state, action: PayloadAction<ChatStats>) => {
-        state.fetchChatsStatsStatus = FETCH_STATUS.SUCCESS;
-        state.chatsStats = action.payload;
-      })
-      .addCase(fetchChatStats.rejected, (state, action) => {
-        state.fetchChatsStatsStatus = FETCH_STATUS.ERROR;
-        state.fetchChatStatsError = action.payload ?? {
-          errorMessage: 'Failed to fetch chat information',
-        };
-      })
-      .addCase(createChatAction.pending, (state) => {
-        state.createChatStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(createChatAction.fulfilled, (state, action: PayloadAction<Chat>) => {
-        state.createChatStatus = FETCH_STATUS.SUCCESS;
-        state.createdChat = action.payload;
-      })
-      .addCase(createChatAction.rejected, (state, action) => {
-        state.createChatStatus = FETCH_STATUS.ERROR;
-        state.createChatError = action.payload ?? {
-          errorMessage: 'Failed to fetch chat information',
-        };
-      });
+      // .addCase(fetchChatMessages.pending, (state) => {
+      //   state.fetchChatMessagesStatus = FETCH_STATUS.LOADING;
+      // })
+      // .addCase(
+      //   fetchChatMessages.fulfilled,
+      //   (state, action: PayloadAction<WsMessage<ChatMessage>[]>) => {
+      //     state.fetchChatMessagesStatus = FETCH_STATUS.SUCCESS;
+      //     state.chatMessages = action.payload;
+      //   },
+      // )
+      // .addCase(fetchChatMessages.rejected, (state, action) => {
+      //   state.fetchChatMessagesStatus = FETCH_STATUS.ERROR;
+      //   state.fetchChatMessagesError = action.payload ?? {
+      //     errorMessage: 'Failed to fetch chat information',
+      //   };
+      // })
+      // // chats actions
+      // .addCase(fetchChats.pending, (state) => {
+      //   state.fetchChatsStatus = FETCH_STATUS.LOADING;
+      // })
+      // .addCase(fetchChats.fulfilled, (state, action: PayloadAction<Chat[]>) => {
+      //   state.fetchChatsStatus = FETCH_STATUS.SUCCESS;
+      //   state.chats = action.payload;
+      // })
+      // .addCase(fetchChats.rejected, (state, action) => {
+      //   state.fetchChatsStatus = FETCH_STATUS.ERROR;
+      //   state.fetchChatsError = action.payload ?? {
+      //     errorMessage: 'Failed to fetch chat information',
+      //   };
+      // })
+      // .addCase(fetchChatStats.pending, (state) => {
+      //   state.fetchChatsStatsStatus = FETCH_STATUS.LOADING;
+      // })
+      // .addCase(fetchChatStats.fulfilled, (state, action: PayloadAction<ChatStats>) => {
+      //   state.fetchChatsStatsStatus = FETCH_STATUS.SUCCESS;
+      //   state.chatsStats = action.payload;
+      // })
+      // .addCase(fetchChatStats.rejected, (state, action) => {
+      //   state.fetchChatsStatsStatus = FETCH_STATUS.ERROR;
+      //   state.fetchChatStatsError = action.payload ?? {
+      //     errorMessage: 'Failed to fetch chat information',
+      //   };
+      // })
+      // .addCase(createChatAction.pending, (state) => {
+      //   state.createChatStatus = FETCH_STATUS.LOADING;
+      // })
+      // .addCase(createChatAction.fulfilled, (state, action: PayloadAction<Chat>) => {
+      //   state.createChatStatus = FETCH_STATUS.SUCCESS;
+      //   state.createdChat = action.payload;
+      // })
+      // .addCase(createChatAction.rejected, (state, action) => {
+      //   state.createChatStatus = FETCH_STATUS.ERROR;
+      //   state.createChatError = action.payload ?? {
+      //     errorMessage: 'Failed to fetch chat information',
+      //   };
+      // });
   },
 });
 

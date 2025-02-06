@@ -1,16 +1,16 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react';
-import { useTranslation } from 'react-i18next';
-import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
-import HeightRoundedIcon from '@mui/icons-material/HeightRounded';
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import { Button, Flex, List, Tooltip } from 'antd';
+import { Flex, List } from 'antd';
+import { MoveButton } from './components';
+import { LIST_ITEM_MODE } from '../../enum';
+import { DeleteButton } from './components/delete-button';
+import { EditButton } from './components/edit-button';
 
 type Props<T> = {
   order: number;
   onDeleteItem?: (id: string) => void;
   onClick?: (id: string) => void;
   hovered: boolean;
-  setMode: Dispatch<SetStateAction<'edit' | 'read'>>;
+  setMode: Dispatch<SetStateAction<LIST_ITEM_MODE>>;
   id: string;
   title: T;
   attributes: any;
@@ -19,81 +19,24 @@ type Props<T> = {
   changeable: boolean;
 };
 
-export const ReadView = <T extends ReactNode>({
-  order,
-  onDeleteItem,
-  onClick,
-  hovered,
-  setMode,
-  id,
-  title,
-  attributes,
-  listeners,
-  setNodeRef,
-  changeable,
-}: Props<T>) => {
-  const { t } = useTranslation();
-
+export const ReadView = <T extends ReactNode>({ order, onDeleteItem, onClick, hovered, setMode, id, title, attributes, listeners, setNodeRef, changeable }: Props<T>) => {
   return (
     <>
       <Flex onClick={() => onClick?.(id)}>
-        {changeable ? (
-          <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
-            {hovered ? (
-              <Tooltip title={t('DRAG_CATEGORY_TOOLTIP_TEXT')}>
-                <Button
-                  shape="circle"
-                  variant="filled"
-                  type="text"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}>
-                  <HeightRoundedIcon />
-                </Button>
-              </Tooltip>
-            ) : (
-              <div className="w-8" />
-            )}
-          </List.Item>
-        ) : (
-          <div className="w-8" />
-        )}
-
         <div className="p-4 cursor-pointer whitespace-nowrap">
           {order + 1}. {title}
         </div>
       </Flex>
 
-      <Flex gap={8}>
-        {hovered && changeable && (
-          <Tooltip title={t('EDIT_TITLE')}>
-            <Button
-              shape="circle"
-              variant="filled"
-              type="text"
-              onClick={(e) => {
-                e.stopPropagation();
-                setMode('edit');
-              }}>
-              <ModeEditOutlinedIcon />
-            </Button>
-          </Tooltip>
+      <Flex gap={8} align="center">
+        {changeable && (
+          <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
+            {hovered ? <MoveButton /> : <div className="w-8" />}
+          </List.Item>
         )}
 
-        {onDeleteItem && hovered && changeable && (
-          <Tooltip title={t('DELETE_CATEGORY')}>
-            <Button
-              shape="circle"
-              color="danger"
-              variant="filled"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteItem(id);
-              }}>
-              <DeleteOutlineRoundedIcon />
-            </Button>
-          </Tooltip>
-        )}
+        {hovered && changeable && <EditButton setMode={setMode} />}
+        {onDeleteItem && hovered && changeable && <DeleteButton onDeleteItem={() => onDeleteItem(id)} />}
       </Flex>
     </>
   );

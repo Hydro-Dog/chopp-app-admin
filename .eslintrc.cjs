@@ -56,7 +56,7 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'max-len': ['error', { code: 140 }], // Добавляем это правило здесь
+    'max-len': ['warn', { code: 200 }], // Добавляем это правило здесь
     // "padding-line-between-statements": [
     //   "warn",
     //   { blankLine: "always", prev: "*", next: "var" },

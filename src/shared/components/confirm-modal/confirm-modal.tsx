@@ -15,6 +15,7 @@ type Props = {
   onCancel: () => void;
 };
 
+//TODO: Удалить, заменить на custom modal который будет принимать кастомные кнопки
 export const ConfirmModal = ({
   open,
   onOk,

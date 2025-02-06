@@ -24,6 +24,7 @@ import { router } from './router/router';
 import 'dayjs/locale/ru';
 
 import './index.css';
+import { useAxiosInterceptors } from '@store/middleware';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -45,17 +46,13 @@ i18n
     },
   });
 
-export const AudioLevelContext = createContext<any>(null);
-
 export const App = () => {
   const { theme } = useTheme();
 
   const themeConfig = {
-    //TODO: Использовать енам со значением 'dark'
     algorithm: theme === THEME.DARK ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
-  //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
   const {
     showNotification,
     showInfoNotification,

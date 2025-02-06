@@ -1,4 +1,3 @@
-
 export type ProductImage = {
     id: number;
     hash: string;

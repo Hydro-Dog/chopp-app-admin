@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { TitlePage, useSearchParamValue } from '@shared/index';
+import { TitlePage } from '@shared/index';
 import { Card } from 'antd';
 import { Splitter } from 'antd';
 import { Main, Sidebar } from './components';

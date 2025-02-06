@@ -11,8 +11,9 @@ import {
   useSearchParamValue,
   useSuperDispatch,
   FETCH_STATUS,
+  Product
 } from '@shared/index';
-import { createProduct, Product, RootState, updateProduct } from '@store/index';
+import { createProduct, RootState, updateProduct } from '@store/index';
 import {
   Alert,
   Form,

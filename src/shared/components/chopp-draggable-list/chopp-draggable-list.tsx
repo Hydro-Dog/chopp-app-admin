@@ -1,23 +1,6 @@
-import { ReactNode, useEffect, useState } from 'react';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-  DragOverEvent,
-  UniqueIdentifier,
-  DragEndEvent,
-  DragStartEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { useEffect, useState } from 'react';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay, DragOverEvent, UniqueIdentifier, DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useThemeToken } from '@shared/hooks';
 import { List } from 'antd';
 
@@ -39,16 +22,7 @@ type Props = {
   onClickItem: (id: string) => void;
 };
 
-export const ChopDraggableList = ({
-  items,
-  onDragEnd,
-  onDeleteItem,
-  onEditItem,
-  onClickItem,
-  initialCategoryId,
-  ListItem,
-  unchangeableItems,
-}: Props) => {
+export const ChopDraggableList = ({ items, onDragEnd, onDeleteItem, onEditItem, onClickItem, initialCategoryId, ListItem, unchangeableItems }: Props) => {
   const themeToken = useThemeToken();
   const [elements, setElements] = useState<Item[]>([]);
   const [draggingId, setDraggingId] = useState<UniqueIdentifier | undefined>();
@@ -57,7 +31,7 @@ export const ChopDraggableList = ({
 
   useEffect(() => {
     if (initialCategoryId) {
-      console.log('initialCategoryId: ', initialCategoryId)
+      console.log('initialCategoryId: ', initialCategoryId);
       setActiveCategoryId(initialCategoryId);
     }
   }, [initialCategoryId]);
@@ -107,19 +81,13 @@ export const ChopDraggableList = ({
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onDragOver={handleDragOver}>
-      <SortableContext
-        items={elements.map((item) => item.id)}
-        strategy={verticalListSortingStrategy}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragOver={handleDragOver}>
+      <SortableContext items={elements.map((item) => item.id)} strategy={verticalListSortingStrategy}>
         <List
           itemLayout="horizontal"
           dataSource={elements}
           renderItem={(item, index) => (
+            // @ts-ignore
             <ListItem
               changeable={!unchangeableItems.includes(item.title)}
               onClick={onClick}

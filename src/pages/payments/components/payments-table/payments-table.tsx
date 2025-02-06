@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Table, Spin, Modal } from 'antd';
-import { ACTION_MENU_ITEMS } from './enums';
-import { ActionValue } from './types';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
+import { Table, Spin, Modal } from 'antd';
+import { ACTION_MENU_ITEMS } from './enums';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
+import { ActionValue } from './types';
 
 export const PaymentsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +40,7 @@ export const PaymentsTable = () => {
 
   const handleRefundConfirm = () => {
     if (!selectedPayment) return;
+    //TODO: Пройти по всем асинхронным запросам и добавить обработку ошибок.
     dispatch(refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }));
     setIsRefundModalOpen(false);
     setSelectedPayment(null);
@@ -63,6 +64,7 @@ export const PaymentsTable = () => {
       setIsRefundModalOpen(true);
     },
   };
+
   const onActionClick = (action: ActionValue) => {
     map[action.key](action);
   };
@@ -73,20 +75,12 @@ export const PaymentsTable = () => {
     <div>
       <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
+
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
-      <ChoppInfoModal
-        open={isInfoModalOpen}
-        onClose={() => setIsInfoModalOpen(false)}
-        value={selectedPayment || undefined}
-      />
+      <ChoppInfoModal open={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} value={selectedPayment || undefined} />
 
-      <Modal
-        open={isRefundModalOpen}
-        title={t('CONFIRM_REFUND')}
-        onOk={handleRefundConfirm}
-        onCancel={() => setIsRefundModalOpen(false)}
-        width={400}>
+      <Modal open={isRefundModalOpen} title={t('CONFIRM_REFUND')} onOk={handleRefundConfirm} onCancel={() => setIsRefundModalOpen(false)} width={400}>
         {selectedPayment && (
           <p>
             {t('REFUND_AMOUNT')}:{' '}

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { PAYMENT_STATUS_MAP, PAYMENT_STATUS } from '@shared/index';
 import { Payment } from '@shared/types/payment';
+import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import { useGetActionItems } from './use-get-action-items';
 import { ACTION_MENU_ITEMS } from '../enums';
 import { ActionValue } from '../types';
@@ -46,7 +46,7 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
     {
       title: t('ACTIONS'),
       key: 'actions',
-      render: (_: any, record: Payment) => (
+      render: (_: unknown, record: Payment) => (
         <Dropdown
           menu={{
             items: actionItems(record),

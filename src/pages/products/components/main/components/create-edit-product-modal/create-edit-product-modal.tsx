@@ -11,7 +11,7 @@ import {
   useSearchParamValue,
   useSuperDispatch,
   FETCH_STATUS,
-  Product
+  Product,
 } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
 import {
@@ -27,13 +27,11 @@ import {
   Select,
 } from 'antd';
 import { z } from 'zod';
-import { useBeforeUpload, useCreateProductFormSchema } from './hooks';
+import { useBeforeUpload, useCreateProductFormSchema, useEditProductFormSchema } from './hooks';
 import { createFormDto, updateFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
-
-type FormType = { title: string; description: string; price: number; categoryId?: number };
 
 type Props = {
   open: boolean;
@@ -66,16 +64,22 @@ export const CreateEditProductModal = ({
     (state: RootState) => state.productCategory,
   );
 
-  const createProductFormSchema = useCreateProductFormSchema(mode);
+  const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
+
+  const editProductFormSchema = useEditProductFormSchema();
+  type EditProductFormType = z.infer<typeof editProductFormSchema>;
+
+  const productFormSchema = mode === 'create' ? createProductFormSchema : editProductFormSchema;
+  type ProductFormType = CreateProductFormType | EditProductFormType;
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: zodResolver(createProductFormSchema),
+  } = useForm<ProductFormType>({
+    resolver: zodResolver(productFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -111,11 +115,8 @@ export const CreateEditProductModal = ({
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const reqData = createFormDto({
-        ...data,
-        categoryId,
-        fileList,
-      });
+      const reqData = createFormDto({ ...data, categoryId, fileList });
+
       superDispatch({
         action: createProduct({ form: reqData }),
         thenHandler: (response) => {
@@ -132,18 +133,17 @@ export const CreateEditProductModal = ({
   };
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
+    console.log('data: ', data);
     if (!fileList.length && !values?.images.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      console.log('submitUpdateProduct fileList: ', fileList);
       const fileListIdsSet = new Set(fileList.map((item) => item.uid));
       const initialImagesAfterChanges = values?.images.filter((item) =>
         fileListIdsSet.has(String(item.id)),
       );
       const reqData = updateFormDto({
-        ...data,
-        categoryId,
+        ...(data as EditProductFormType),
         initialImages: initialImagesAfterChanges,
         fileList,
       });
@@ -163,14 +163,6 @@ export const CreateEditProductModal = ({
     }
   };
 
-  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
-    if (mode === 'create') {
-      submitCreateProduct(data);
-    } else {
-      submitUpdateProduct(data);
-    }
-  };
-
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -181,7 +173,6 @@ export const CreateEditProductModal = ({
   };
 
   const handleChange: UploadProps['onChange'] = ({ fileList }) => {
-    console.log('fileList: ', fileList);
     if (!fileList || !fileList?.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
     } else {
@@ -198,10 +189,10 @@ export const CreateEditProductModal = ({
 
   return (
     <CustomModal
-      title={t('ADD_PRODUCT')}
+      title={t(mode === 'create' ? 'ADD_PRODUCT' : 'EDIT_PRODUCT')}
       open={open}
       confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
-      onOk={handleSubmit(onSubmit)}
+      onOk={handleSubmit(mode === 'create' ? submitCreateProduct : submitUpdateProduct)}
       onCancel={handleCancel}
       okTitle={t('ADD')}>
       <Form layout="vertical" className="flex flex-col gap-4">
@@ -255,8 +246,8 @@ export const CreateEditProductModal = ({
           <Item
             className="!m-0"
             label={t('CATEGORY')}
-            validateStatus={errors.categoryId && 'error'}
-            help={errors.categoryId?.message}>
+            validateStatus={errors?.categoryId && 'error'}
+            help={errors?.categoryId?.message}>
             <Controller
               name="categoryId"
               control={control}

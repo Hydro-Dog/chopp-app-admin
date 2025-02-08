@@ -57,6 +57,7 @@
   "CATEGORIES": "Категории",
   "CATEGORY": "Категория",
   "ADD_PRODUCT": "Добавить товар",
+  "EDIT_PRODUCT": "Редактировать товар",
   "ADD_CATEGORY": "Добавить категорию",
   "ADD_CATEGORY_DESCRIPTION": "",
   "DRAG_CATEGORY_TOOLTIP_TEXT": "Перетащите, чтобы изменить порядок",

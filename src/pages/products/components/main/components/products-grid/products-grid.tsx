@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DeleteOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
-import { Product } from '@store/index';
+import { Product } from '@shared/types';
 import { Col, Row, Spin, Tooltip } from 'antd';
 import { Card } from 'antd';
 import { useBoolean } from 'usehooks-ts';

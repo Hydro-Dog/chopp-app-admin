@@ -106,10 +106,7 @@ export const ProductsGrid = ({ items, loading }: Props) => {
                     <Tooltip key="edit" title={t('EDIT')}>
                       <SettingOutlined onClick={() => onSettingClicked(item)} />
                     </Tooltip>,
-                    <Tooltip key="settings" title={t('PREVIEW')}>
-                      <EyeOutlined />
-                    </Tooltip>,
-                    <Tooltip key="delete" title={t('DELETE')}>
+                    <Tooltip key="delete" title={t('MOVE_TO_TRASH')}>
                       <DeleteOutlined />
                     </Tooltip>,
                   ]}>

@@ -176,6 +176,6 @@
   "PRODUCT_VISIBLE_TOOLTIP": "Товар отображается пользователям",
   "PRODUCT_HIDDEN_TOOLTIP": "Товар скрыт от пользователей",
   "PRODUCT_IS_NOW_VISIBLE": "Товар '{{title}}' теперь виден пользователям",
-  "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей"
-  
+  "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей",
+  "MOVE_TO_TRASH": "Переместить в корзину"
 }

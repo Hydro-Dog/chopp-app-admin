@@ -40,7 +40,7 @@ export const TitlePage = ({ title, breadcrumbs = true, children }: PropsWithChil
   return (
     <div className="h-full">
       <MainContainer ref={mainContainerRef}>
-        <Title ref={titleRef} level={2}>
+        <Title ref={titleRef} level={2} className="!mb-1">
           {title}
         </Title>
         {breadcrumbs && <ChoppBreadcrumbs />}

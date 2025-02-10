@@ -88,7 +88,7 @@ export const CreateEditProductModal = ({
     setUploadImageError,
     handleChange,
     handlePreview,
-  } = useImage({ product, reset });
+  } = useImage({ product, reset, isOpened: open });
 
   const submitCreateProduct = (data: CreateProductFormType) => {
     if (!fileList.length) {

@@ -19,11 +19,12 @@ type ProductFormType =
     };
 
 type Args = {
+  isOpened: boolean;
   product?: Product;
   reset: UseFormReset<ProductFormType>;
 };
 
-export const useImage = ({ product, reset }: Args) => {
+export const useImage = ({ product, reset, isOpened }: Args) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -50,7 +51,7 @@ export const useImage = ({ product, reset }: Args) => {
         setFileList(initialFileList as unknown as UploadFile[]);
       }
     }
-  }, [reset, product]);
+  }, [reset, product, isOpened]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {

@@ -3,13 +3,14 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { BasicModal, useAutoFocus } from '@shared/index';
+import { BasicModal, Category, useAutoFocus } from '@shared/index';
 import { useSuperDispatch } from '@shared/index';
-import { createCategory } from '@store/slices/product-category-slice';
+import { createCategory, CreateCategoryDTO } from '@store/slices/product-category-slice';
 import { RootState } from '@store/store';
 import { Form, Input, InputRef } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
+import { useSearchParams } from 'react-router-dom';
 
 const { Item } = Form;
 
@@ -20,7 +21,8 @@ type Props = {
 
 export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { t } = useTranslation();
-  const { superDispatch } = useSuperDispatch();
+  const { superDispatch } = useSuperDispatch<Category, CreateCategoryDTO>();
+  const [_, setSearchParams] = useSearchParams();
   const { categories } = useSelector((state: RootState) => state.productCategory);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -45,7 +47,10 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
         title,
         order: categories?.length !== undefined ? categories?.length : 0,
       }),
-      thenHandler: onClose,
+      thenHandler: (category) => {
+        setSearchParams({ id: category.id });
+        onClose();
+      },
     });
   };
 

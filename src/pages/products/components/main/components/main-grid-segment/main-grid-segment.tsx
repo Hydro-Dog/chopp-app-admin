@@ -42,7 +42,7 @@ export const MainGridSegment = () => {
           onLoadMore={onLoadMore}
           totalPages={products.totalPages}
           page={pagination.page}
-          className='mt-3'
+          className="mt-3"
         />
       </div>
     )

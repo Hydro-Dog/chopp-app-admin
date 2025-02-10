@@ -20,9 +20,9 @@ import {
   useCreateProductFormSchema,
   useEditProductFormSchema,
   useImage,
+  useResetProductList,
 } from './hooks';
 import { createFormDto, updateFormDto } from './utils';
-import { updateProductsList } from './utils/update-products-list';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -30,7 +30,7 @@ const { Text } = Typography;
 type Props = {
   open: boolean;
   onCancel: () => void;
-  onOk: (item: Product) => void;
+  onOk: () => void;
   product?: Product;
   mode?: 'edit' | 'create';
   id?: number;
@@ -48,8 +48,6 @@ export const CreateEditProductModal = ({
   const { superDispatch } = useSuperDispatch<Product, unknown>();
   const categoryId = useSearchParamValue('id') || '';
   const beforeUpload = useBeforeUpload();
-  const { setPageProducts } = useProductsContext();
-
   const { showSuccessNotification } = useNotificationContext();
   const { createProductStatus } = useSelector((state: RootState) => state.products);
   const { categories, fetchCategoriesStatus } = useSelector(
@@ -106,15 +104,15 @@ export const CreateEditProductModal = ({
             message: t('SUCCESS'),
             description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(product);
+          onOk();
           reset();
           setFileList([]);
-
-          setPageProducts((prevProducts) => [product, ...prevProducts]);
+          resetProductList();
         },
       });
     }
   };
+  const { resetProductList } = useResetProductList();
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
     const allImagesIds = new Set(fileList.map((item) => item.uid));
@@ -145,13 +143,11 @@ export const CreateEditProductModal = ({
             message: t('SUCCESS'),
             description: t('PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(product);
+          onOk();
           reset();
           setFileList([]);
 
-          setPageProducts((prevProducts) =>
-            updateProductsList({ prevProducts, updatedProduct: product, categoryId }),
-          );
+          resetProductList();
         },
       });
     }

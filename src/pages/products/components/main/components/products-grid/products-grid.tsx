@@ -37,12 +37,11 @@ export const ProductsGrid = ({ items, loading }: Props) => {
   return (
     <>
       <div style={{ width: `calc(100% - 12px)` }}>
-        <Row gutter={[12, 12]}>
+        <Row gutter={[8, 8]}>
           {items?.map((item) => {
             return (
-              <Col key={item.id} span={6}>
+              <Col key={item.id} span={4}>
                 <Card
-                  // onClick={() => {}}
                   hoverable
                   cover={
                     <img

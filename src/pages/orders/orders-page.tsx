@@ -20,7 +20,7 @@ export const OrdersPage = () => {
     items: [],
     totalItems: 0,
     totalPages: 0,
-    currentPage: 1,
+    pageNumber: 1,
     limit: 10,
   });
 

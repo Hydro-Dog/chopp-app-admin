@@ -6,6 +6,7 @@ type Args = {
   categoryId: number | string;
 };
 
+// TODO: удалить, не используется
 export const updateProductsList = ({ prevProducts, updatedProduct, categoryId }: Args) => {
   if (String(updatedProduct.category.id) !== String(categoryId)) {
     return prevProducts.filter((product) => product.id !== updatedProduct.id);

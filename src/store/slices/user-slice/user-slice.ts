@@ -50,7 +50,7 @@ const initialState: UserState = {
   users: {
     items: [],
     totalPages: 0,
-    currentPage: 0,
+    pageNumber: 0,
     totalItems: 0,
     limit: 0,
   },
@@ -153,7 +153,7 @@ export const userSlice = createSlice({
         state.fetchUsersStatus = FETCH_STATUS.SUCCESS;
         state.users = {
           items: action.payload.items,
-          currentPage: action.payload.currentPage,
+          pageNumber: action.payload.pageNumber,
           limit: action.payload.limit,
           totalItems: action.payload.totalItems,
           totalPages: action.payload.totalPages,

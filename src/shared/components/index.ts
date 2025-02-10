@@ -17,4 +17,5 @@ export * from './chopp-info-modal';
 export * from './chopp-ok-modal';
 export * from './chopp-order-status';
 export * from './chopp-payment-status';
-export * from './chopp-custom-modal'
+export * from './chopp-custom-modal';
+export * from './chopp-load-more';

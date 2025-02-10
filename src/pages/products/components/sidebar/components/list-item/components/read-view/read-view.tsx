@@ -19,7 +19,19 @@ type Props<T> = {
   changeable: boolean;
 };
 
-export const ReadView = <T extends ReactNode>({ order, onDeleteItem, onClick, hovered, setMode, id, title, attributes, listeners, setNodeRef, changeable }: Props<T>) => {
+export const ReadView = <T extends ReactNode>({
+  order,
+  onDeleteItem,
+  onClick,
+  hovered,
+  setMode,
+  id,
+  title,
+  attributes,
+  listeners,
+  setNodeRef,
+  changeable,
+}: Props<T>) => {
   return (
     <>
       <Flex onClick={() => onClick?.(id)}>
@@ -36,7 +48,9 @@ export const ReadView = <T extends ReactNode>({ order, onDeleteItem, onClick, ho
         )}
 
         {hovered && changeable && <EditButton setMode={setMode} />}
-        {onDeleteItem && hovered && changeable && <DeleteButton onDeleteItem={() => onDeleteItem(id)} />}
+        {onDeleteItem && hovered && changeable && (
+          <DeleteButton onDeleteItem={() => onDeleteItem(id)} />
+        )}
       </Flex>
     </>
   );

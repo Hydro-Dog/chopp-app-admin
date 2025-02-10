@@ -78,7 +78,7 @@ export const CategoriesList = () => {
   return (
     <>
       <ChopDraggableList
-        unchangeableItems={['Без категории']}
+        unchangeableItems={['Другое']}
         items={categories || []}
         onDragEnd={onCategoriesOrderChange}
         onDeleteItem={onDeleteCategoryModalOpen}

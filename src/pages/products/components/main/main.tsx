@@ -31,16 +31,5 @@ export const Main = () => {
     setPageProducts(products?.items || []);
   }, [products]);
 
-  // useEffect(() => {
-  //   if (categoryId !== undefined) {
-  //     dispatch(fetchProducts({ categoryId, page: FIRST_PAGE_NUMBER, limit: LIMIT, search }));
-  //     //Сбросить пагинацию при переключении категории
-  //     setPagination({
-  //       page: FIRST_PAGE_NUMBER,
-  //       limit: LIMIT,
-  //     });
-  //   }
-  // }, [categoryId, dispatch, search]);
-
   return <VerticalGrid header={<HeaderGridSegment />} main={<MainGridSegment />} />;
 };

@@ -7,6 +7,7 @@ import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
 import { Button } from 'antd';
 import { ProductsGrid } from '../products-grid';
+import { ChoppLoadMore } from '@shared/index';
 
 const LIMIT = 2;
 
@@ -22,25 +23,28 @@ export const MainGridSegment = () => {
       action: fetchProducts({
         categoryId,
         limit: LIMIT,
-        page: pagination.page || 0 + 1,
+        page: pagination.page + 1,
         search,
       }),
       thenHandler: (response) => {
         setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ page: response.currentPage + 1 });
+        setPagination({ page: response.pageNumber + 1 });
       },
     });
   };
 
   return (
     products?.totalPages !== undefined && (
-      <>
+      <div className="p-3">
         <ProductsGrid items={pageProducts} loading={fetchProductsStatus === FETCH_STATUS.LOADING} />
 
-        {(pagination?.page || 1) < products?.totalPages && (
-          <Button onClick={onLoadMore}>{t('LOAD_MORE')}</Button>
-        )}
-      </>
+        <ChoppLoadMore
+          onLoadMore={onLoadMore}
+          totalPages={products.totalPages}
+          page={pagination.page}
+          className='mt-3'
+        />
+      </div>
     )
   );
 };

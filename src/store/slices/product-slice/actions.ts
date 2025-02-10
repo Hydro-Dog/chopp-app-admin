@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorResponse, PaginationResponse, PaginationRequestQuery, Product } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
+import { UpdateProductVisibilityDTO } from './types';
 
 export const fetchProducts = createAsyncThunk<
   PaginationResponse<Product>,
@@ -64,6 +65,25 @@ export const updateProduct = createAsyncThunk<
         'Content-Type': 'multipart/form-data',
       },
     });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      // Return the error message as part of the rejection
+      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
+    } else {
+      // Handle unexpected errors
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
+    }
+  }
+});
+
+export const updateProductVisibility = createAsyncThunk<
+  Product,
+  UpdateProductVisibilityDTO,
+  { rejectValue: ErrorResponse }
+>('products/updateProductVisibility', async ({ isVisible, id }, thunkAPI) => {
+  try {
+    const response = await axiosPrivate.patch<Product>(`/products/${id}/visibility`, { isVisible });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

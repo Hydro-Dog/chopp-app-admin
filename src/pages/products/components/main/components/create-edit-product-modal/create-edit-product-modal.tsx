@@ -102,7 +102,7 @@ export const CreateEditProductModal = ({
         thenHandler: (product) => {
           showSuccessNotification({
             message: t('SUCCESS'),
-            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE') + product.title,
           });
           onOk();
           reset();

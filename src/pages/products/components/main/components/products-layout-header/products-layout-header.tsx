@@ -9,7 +9,7 @@ import { CreateEditProductModal } from '../create-edit-product-modal';
 const { Title } = Typography;
 const { Search } = Input;
 
-export const HeaderGridSegment = () => {
+export const ProductsLayoutHeader = () => {
   const { t } = useTranslation();
   const { search, searchParams, setSearchParams, setSearch } = useProductsContext();
   const {

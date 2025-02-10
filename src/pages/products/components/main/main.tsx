@@ -4,9 +4,9 @@ import { useProductsContext } from '@pages/products/context';
 import { useSearchParamValue } from '@shared/hooks';
 import { fetchProducts } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { VerticalGrid } from '../vertical-grid';
-import { HeaderGridSegment } from './components/';
-import { MainGridSegment } from './components/main-grid-segment';
+import { VerticalLayout } from '../vertical-layout';
+import { ProductsLayoutHeader } from './components/';
+import { ProductsLayoutMain } from './components/products-layout-main';
 
 const LIMIT = 2;
 const FIRST_PAGE_NUMBER = 1;
@@ -31,5 +31,5 @@ export const Main = () => {
     setPageProducts(products?.items || []);
   }, [products]);
 
-  return <VerticalGrid header={<HeaderGridSegment />} main={<MainGridSegment />} />;
+  return <VerticalLayout header={<ProductsLayoutHeader />} main={<ProductsLayoutMain />} />;
 };

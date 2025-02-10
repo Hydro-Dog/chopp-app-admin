@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DeleteOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
-import { Product } from '@shared/types';
-import { Col, Row, Spin, Tooltip } from 'antd';
+import { useSelector } from 'react-redux';
+import {
+  DeleteOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { useProductsContext } from '@pages/products/context';
+import { useSuperDispatch } from '@shared/hooks';
+import { updateListItemById, useNotificationContext } from '@shared/index';
+import { FETCH_STATUS, Product } from '@shared/types';
+import { RootState } from '@store/index';
+import { updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
+import { Col, Row, Spin, Switch, Tooltip } from 'antd';
 import { Card } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
@@ -22,12 +33,32 @@ export const ProductsGrid = ({ items, loading }: Props) => {
     setTrue: openCreateProductModal,
     toggle: toggleCreateProductModal,
   } = useBoolean();
+  const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
+  const { showSuccessNotification } = useNotificationContext();
+  const { setPageProducts } = useProductsContext();
+  const { superDispatch } = useSuperDispatch<Product, UpdateProductVisibilityDTO>();
 
   const [currentItemData, setCurrentItemData] = useState<Product>();
 
   const onSettingClicked = (item: Product) => {
     setCurrentItemData(item);
     openCreateProductModal();
+  };
+
+  const onVisibilityToggled = ({ id, isVisible }: UpdateProductVisibilityDTO) => {
+    superDispatch({
+      action: updateProductVisibility({ id, isVisible }),
+      thenHandler: (product) => {
+        showSuccessNotification({
+          message: t('SUCCESS'),
+          description: t(product.isVisible ? 'PRODUCT_IS_NOW_VISIBLE' : 'PRODUCT_IS_NOW_HIDDEN', {
+            title: product.title,
+          }),
+        });
+
+        setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
+      },
+    });
   };
 
   if (loading && !items.length) {
@@ -40,15 +71,36 @@ export const ProductsGrid = ({ items, loading }: Props) => {
         <Row gutter={[8, 8]}>
           {items?.map((item) => {
             return (
-              <Col key={item.id} span={4}>
+              <Col key={item.id} span={6}>
                 <Card
+                  size="small"
                   hoverable
                   cover={
-                    <img
-                      className="aspect-square object-cover "
-                      alt={item.title}
-                      src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
-                    />
+                    <div className="!flex items-center justify-center">
+                      <img
+                        className="aspect-square object-cover !size-[95%] "
+                        alt={item.title}
+                        src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
+                      />
+                    </div>
+                  }
+                  title={item.title}
+                  extra={
+                    <Tooltip
+                      key="isVisible"
+                      title={t(
+                        item.isVisible ? 'PRODUCT_VISIBLE_TOOLTIP' : 'PRODUCT_HIDDEN_TOOLTIP',
+                      )}>
+                      <Switch
+                        onChange={(isVisible) => onVisibilityToggled({ id: item.id, isVisible })}
+                        checkedChildren={<EyeOutlined />}
+                        unCheckedChildren={<EyeInvisibleOutlined />}
+                        checked={item.isVisible}
+                        loading={
+                          updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING
+                        }
+                      />
+                    </Tooltip>
                   }
                   actions={[
                     <Tooltip key="edit" title={t('EDIT')}>
@@ -61,10 +113,7 @@ export const ProductsGrid = ({ items, loading }: Props) => {
                       <DeleteOutlined />
                     </Tooltip>,
                   ]}>
-                  <Meta
-                    title={item.title}
-                    description={<div className="line-clamp-2">{item.description}</div>}
-                  />
+                  <Meta description={<div className="line-clamp-2">{item.description}</div>} />
                 </Card>
               </Col>
             );

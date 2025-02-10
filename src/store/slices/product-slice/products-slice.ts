@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ErrorResponse, PaginationResponse, Product } from '@shared/index';
 import { FETCH_STATUS } from '@shared/index';
-import { createProduct, fetchProducts, updateProduct } from './actions';
+import { createProduct, fetchProducts, updateProduct, updateProductVisibility } from './actions';
 
 export type ProductsState = {
   products?: PaginationResponse<Product>;
@@ -11,6 +11,8 @@ export type ProductsState = {
   fetchProductsError: ErrorResponse | null;
   updateProductStatus: FETCH_STATUS;
   updateProductError: ErrorResponse | null;
+  updateProductVisibilityStatusMap: Record<string, FETCH_STATUS>;
+  updateProductVisibilityError: ErrorResponse | null;
 };
 
 const initialState: ProductsState = {
@@ -21,6 +23,8 @@ const initialState: ProductsState = {
   fetchProductsError: null,
   updateProductStatus: FETCH_STATUS.IDLE,
   updateProductError: null,
+  updateProductVisibilityStatusMap: {},
+  updateProductVisibilityError: null,
 };
 
 export const productSlice = createSlice({
@@ -57,7 +61,7 @@ export const productSlice = createSlice({
       .addCase(updateProduct.pending, (state) => {
         state.updateProductStatus = FETCH_STATUS.LOADING;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(updateProduct.fulfilled, (state) => {
         state.updateProductStatus = FETCH_STATUS.SUCCESS;
       })
       .addCase(updateProduct.rejected, (state, action) => {
@@ -65,6 +69,18 @@ export const productSlice = createSlice({
         state.updateProductError = action.payload ?? {
           message: 'Unknown error',
         };
+      })
+      .addCase(updateProductVisibility.pending, (state, action) => {
+        state.updateProductVisibilityStatusMap = {
+          ...state.updateProductVisibilityStatusMap,
+          [action.meta.arg.id]: FETCH_STATUS.LOADING,
+        };
+      })
+      .addCase(updateProductVisibility.fulfilled, (state, action) => {
+        state.updateProductVisibilityStatusMap[action.payload.id] = FETCH_STATUS.SUCCESS;
+      })
+      .addCase(updateProductVisibility.rejected, (state, action) => {
+        state.updateProductVisibilityStatusMap[action.meta.arg.id] = FETCH_STATUS.ERROR;
       });
   },
 });

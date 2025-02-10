@@ -20,6 +20,7 @@ export const createFormDto = ({ title, description, price, fileList, categoryId 
   formData.append('description', description);
   formData.append('price', String(price));
   formData.append('categoryId', categoryId);
+  formData.append('isVisible', 'true');
 
   return formData;
 };

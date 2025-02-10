@@ -1,3 +1,3 @@
 export * from './products-grid';
-export * from './header-grid-segment';
-export * from './main-grid-segment';
+export * from './products-layout-header';
+export * from './products-layout-main';

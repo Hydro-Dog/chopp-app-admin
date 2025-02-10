@@ -5,7 +5,7 @@ type Props = {
   main: ReactNode;
 };
 
-export const VerticalGrid = ({ header, main }: Props) => {
+export const VerticalLayout = ({ header, main }: Props) => {
   const flexRef = useRef<HTMLDivElement>(null);
 
   return (

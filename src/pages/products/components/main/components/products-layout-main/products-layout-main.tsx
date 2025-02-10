@@ -1,18 +1,15 @@
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useProductsContext } from '@pages/products/context';
 import { useSearchParamValue, useSuperDispatch } from '@shared/hooks';
+import { ChoppLoadMore } from '@shared/index';
 import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
-import { Button } from 'antd';
 import { ProductsGrid } from '../products-grid';
-import { ChoppLoadMore } from '@shared/index';
 
 const LIMIT = 2;
 
-export const MainGridSegment = () => {
-  const { t } = useTranslation();
+export const ProductsLayoutMain = () => {
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
   const { search, pageProducts, pagination, setPagination, setPageProducts } = useProductsContext();
   const categoryId = useSearchParamValue('id') || '';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { TitlePage, updateArrayItemById, useNotificationContext, useSuperDispatch } from '@shared/index';
+import { TitlePage, updateListItemById, useNotificationContext, useSuperDispatch } from '@shared/index';
 import { PaginationQuery, PaginationResponse, Order, ORDER_STATUS } from '@shared/types';
 import { AppDispatch } from '@store/index';
 import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
@@ -44,7 +44,7 @@ export const OrdersPage = () => {
         orderStatus,
       }),
       thenHandler: (value) => {
-        setOrdersData((prev) => ({ ...prev, items: updateArrayItemById(prev.items, value) }));
+        setOrdersData((prev) => ({ ...prev, items: updateListItemById(prev.items, value) }));
       },
       catchHandler: (error) => {
         showErrorNotification({

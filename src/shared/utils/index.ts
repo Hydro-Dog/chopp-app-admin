@@ -7,4 +7,4 @@ export * from './remove-dashes-from-phoneNumber';
 export * from './format-phone-number';
 export * from './sanitize-user-number';
 export * from './create-fetch-pagination-list-thunk-action';
-export * from './update-array-item-by-id';
+export * from './update-list-item-by-id';

@@ -72,12 +72,13 @@ export const ProductsGrid = ({ items, loading }: Props) => {
           })}
         </Row>
       </div>
+
       <CreateEditProductModal
         open={isCreateProductModalOpen}
         onCancel={toggleCreateProductModal}
         onOk={toggleCreateProductModal}
         mode="edit"
-        values={currentItemData}
+        product={currentItemData}
         id={currentItemData?.id}
       />
     </>

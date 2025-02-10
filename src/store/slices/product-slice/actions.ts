@@ -15,7 +15,7 @@ export const fetchProducts = createAsyncThunk<
       limit: String(limit || 10),
       search: search || '',
       sort: sort || '',
-      order: order || 'asc',
+      order: order || 'desc',
       categoryId: categoryId,
     });
 

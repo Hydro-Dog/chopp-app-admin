@@ -40,6 +40,7 @@ export const HeaderGridSegment = () => {
   };
 
   const onOk = (item: Product) => {
+    console.log('item: ', item)
     const isLastPage = pagination?.page === products?.totalPages || products?.totalPages === 0;
     const isIncludedInCurrentSearch = search ? item.title.includes(search) : true;
 

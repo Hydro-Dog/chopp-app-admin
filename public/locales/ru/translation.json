@@ -162,6 +162,7 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
+  "PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE": "Товар обновлен",
   "LOAD_MORE": "Загрузить еще",
   "CREATED_AT": "Дата создания",
   "AMOUNT": "Сумма",

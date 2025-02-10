@@ -1,4 +1,4 @@
-import { ProductImage } from '@store/index';
+import { ProductImage } from '@shared/index';
 import { UploadFile } from 'antd';
 
 type Args = {
@@ -6,7 +6,7 @@ type Args = {
   description: string;
   price: number;
   fileList?: UploadFile[];
-  initialImages?: ProductImage[];
+  remainingOldImages?: ProductImage[];
   categoryId: string;
 };
 
@@ -15,7 +15,7 @@ export const updateFormDto = ({
   description,
   price,
   fileList,
-  initialImages,
+  remainingOldImages,
   categoryId,
 }: Args) => {
   const formData = new FormData();
@@ -27,9 +27,9 @@ export const updateFormDto = ({
     });
   }
 
-  if (initialImages?.length) {
-    initialImages.forEach((item) => {
-      formData.append('initialImages', JSON.stringify(item));
+  if (remainingOldImages?.length) {
+    remainingOldImages.forEach((item) => {
+      formData.append('remainingOldImages', JSON.stringify(item));
     });
   }
   formData.append('title', title);

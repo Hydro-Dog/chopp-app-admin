@@ -25,6 +25,7 @@ export const useBeforeUpload = () => {
       });
     }
 
-    return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE; // Возвращаем false, чтобы предотвратить автоматическую загрузку
+    // Возвращаем false, чтобы предотвратить автоматическую загрузку
+    return isJpgOrPng && isLt2M ? false : Upload.LIST_IGNORE;
   };
 };

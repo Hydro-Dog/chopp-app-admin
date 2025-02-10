@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useProductsContext } from '@pages/products/context';
 import { CustomModal } from '@shared/components';
 import {
-  getBase64,
   useNotificationContext,
   useSearchParamValue,
   useSuperDispatch,
@@ -14,21 +13,16 @@ import {
   Product,
 } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
-import {
-  Alert,
-  Form,
-  Input,
-  InputNumber,
-  Typography,
-  Upload,
-  UploadFile,
-  UploadProps,
-  Image,
-  Select,
-} from 'antd';
+import { Alert, Form, Input, InputNumber, Typography, Upload, Image, Select } from 'antd';
 import { z } from 'zod';
-import { useBeforeUpload, useCreateProductFormSchema, useEditProductFormSchema } from './hooks';
+import {
+  useBeforeUpload,
+  useCreateProductFormSchema,
+  useEditProductFormSchema,
+  useImage,
+} from './hooks';
 import { createFormDto, updateFormDto } from './utils';
+import { updateProductsList } from './utils/update-products-list';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -37,7 +31,7 @@ type Props = {
   open: boolean;
   onCancel: () => void;
   onOk: (item: Product) => void;
-  values?: Product;
+  product?: Product;
   mode?: 'edit' | 'create';
   id?: number;
 };
@@ -46,19 +40,17 @@ export const CreateEditProductModal = ({
   open,
   onCancel,
   onOk,
-  values,
+  product,
   mode = 'create',
   id,
 }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch<Product, unknown>();
   const categoryId = useSearchParamValue('id') || '';
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [uploadImageError, setUploadImageError] = useState('');
-  const { showSuccessNotification } = useNotificationContext();
   const beforeUpload = useBeforeUpload();
+  const { setPageProducts } = useProductsContext();
+
+  const { showSuccessNotification } = useNotificationContext();
   const { createProductStatus } = useSelector((state: RootState) => state.products);
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
@@ -87,28 +79,18 @@ export const CreateEditProductModal = ({
     },
   });
 
-  useEffect(() => {
-    if (values) {
-      reset({
-        title: values.title,
-        description: values.description,
-        price: values.price,
-        categoryId: Number(values.category.id),
-      });
-
-      // Обработка начального списка изображений, если они есть
-      if (values.images && values.images.length) {
-        const initialFileList = values.images.map((item, index) => ({
-          uid: item.id, // Убедитесь, что uid отрицательный для избежания конфликта с внутренней логикой Ant Design
-          name: item.originalName,
-          status: 'done',
-          url: import.meta.env.VITE_BASE_URL_FILES + item.path,
-        }));
-
-        setFileList(initialFileList as unknown as UploadFile[]);
-      }
-    }
-  }, [reset, values]);
+  const {
+    fileList,
+    setFileList,
+    previewOpen,
+    setPreviewOpen,
+    previewImage,
+    setPreviewImage,
+    uploadImageError,
+    setUploadImageError,
+    handleChange,
+    handlePreview,
+  } = useImage({ product, reset });
 
   const submitCreateProduct = (data: CreateProductFormType) => {
     if (!fileList.length) {
@@ -119,66 +101,60 @@ export const CreateEditProductModal = ({
 
       superDispatch({
         action: createProduct({ form: reqData }),
-        thenHandler: (response) => {
+        thenHandler: (product) => {
           showSuccessNotification({
             message: t('SUCCESS'),
             description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(response);
+          onOk(product);
           reset();
           setFileList([]);
+
+          setPageProducts((prevProducts) => [product, ...prevProducts]);
         },
       });
     }
   };
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
-    console.log('data: ', data);
-    if (!fileList.length && !values?.images.length) {
+    const allImagesIds = new Set(fileList.map((item) => item.uid));
+    const initialImagesIds = new Set(product?.images.map((item) => item.id));
+
+    // 1. Оставшиеся старые изображения (которые были и не удалены)
+    const remainingOldImages = product?.images.filter((image) => allImagesIds.has(image.id));
+
+    // 2. Новые изображения (те, у которых нет id из initialImagesIds)
+    const newImages = fileList.filter((file) => !initialImagesIds.has(file.uid));
+
+    if (!fileList.length && !product?.images.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const fileListIdsSet = new Set(fileList.map((item) => item.uid));
-      const initialImagesAfterChanges = values?.images.filter((item) =>
-        fileListIdsSet.has(String(item.id)),
-      );
       const reqData = updateFormDto({
         ...(data as EditProductFormType),
-        initialImages: initialImagesAfterChanges,
-        fileList,
+        remainingOldImages,
+        fileList: newImages,
       });
 
       superDispatch({
         action: updateProduct({ form: reqData, id: id! }),
-        thenHandler: (response) => {
+        thenHandler: (product) => {
+          if (!product) return;
+
           showSuccessNotification({
             message: t('SUCCESS'),
-            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+            description: t('PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(response);
+          onOk(product);
           reset();
           setFileList([]);
+
+          setPageProducts((prevProducts) =>
+            updateProductsList({ prevProducts, updatedProduct: product, categoryId }),
+          );
         },
       });
     }
-  };
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-  };
-
-  const handleChange: UploadProps['onChange'] = ({ fileList }) => {
-    if (!fileList || !fileList?.length) {
-      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
-    } else {
-      setUploadImageError('');
-    }
-    setFileList(fileList);
   };
 
   const handleCancel = () => {
@@ -194,7 +170,7 @@ export const CreateEditProductModal = ({
       confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
       onOk={handleSubmit(mode === 'create' ? submitCreateProduct : submitUpdateProduct)}
       onCancel={handleCancel}
-      okTitle={t('ADD')}>
+      okTitle={t(mode === 'create' ? 'ADD' : 'SAVE')}>
       <Form layout="vertical" className="flex flex-col gap-4">
         <Item
           className="!m-0"
@@ -246,8 +222,8 @@ export const CreateEditProductModal = ({
           <Item
             className="!m-0"
             label={t('CATEGORY')}
-            validateStatus={errors?.categoryId && 'error'}
-            help={errors?.categoryId?.message}>
+            validateStatus={'categoryId' in errors ? errors?.categoryId && 'error' : undefined}
+            help={'categoryId' in errors ? errors?.categoryId?.message : undefined}>
             <Controller
               name="categoryId"
               control={control}

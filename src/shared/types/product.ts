@@ -1,3 +1,4 @@
+import { ORDER_STATE } from '@shared/enum';
 import { Category } from './category';
 import { ProductImage } from './product-image';
 
@@ -8,5 +9,5 @@ export type Product = {
   price: number;
   images: ProductImage[];
   category: Category;
-  isVisible: boolean;
+  state: ORDER_STATE;
 };

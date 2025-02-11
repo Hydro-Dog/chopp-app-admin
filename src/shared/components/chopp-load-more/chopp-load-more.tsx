@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const ChoppLoadMore = ({ onLoadMore, totalPages, page, className }: Props) => {
+  console.log('totalPages: ', page, totalPages)
   return (
     (page || 1) < totalPages && (
       <Button onClick={onLoadMore} className={className}>

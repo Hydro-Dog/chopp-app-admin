@@ -25,7 +25,7 @@ export const ProductsLayoutMain = () => {
       }),
       thenHandler: (response) => {
         setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ page: response.pageNumber + 1 });
+        setPagination({ page: response.pageNumber });
       },
     });
   };

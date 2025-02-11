@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { updateListItemById, useNotificationContext } from '@shared/index';
+import { ORDER_STATE, updateListItemById, useNotificationContext } from '@shared/index';
 import { FETCH_STATUS, Product } from '@shared/types';
 import { RootState } from '@store/index';
 import { updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
@@ -34,10 +34,8 @@ export const ProductsGrid = ({ items, loading }: Props) => {
     toggle: toggleCreateProductModal,
   } = useBoolean();
   const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
-  const { showSuccessNotification } = useNotificationContext();
   const { setPageProducts } = useProductsContext();
   const { superDispatch } = useSuperDispatch<Product, UpdateProductVisibilityDTO>();
-
   const [currentItemData, setCurrentItemData] = useState<Product>();
 
   const onSettingClicked = (item: Product) => {
@@ -45,17 +43,10 @@ export const ProductsGrid = ({ items, loading }: Props) => {
     openCreateProductModal();
   };
 
-  const onVisibilityToggled = ({ id, isVisible }: UpdateProductVisibilityDTO) => {
+  const onVisibilityToggled = ({ id, state }: UpdateProductVisibilityDTO) => {
     superDispatch({
-      action: updateProductVisibility({ id, isVisible }),
+      action: updateProductVisibility({ id, state }),
       thenHandler: (product) => {
-        showSuccessNotification({
-          message: t('SUCCESS'),
-          description: t(product.isVisible ? 'PRODUCT_IS_NOW_VISIBLE' : 'PRODUCT_IS_NOW_HIDDEN', {
-            title: product.title,
-          }),
-        });
-
         setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
       },
     });
@@ -89,13 +80,20 @@ export const ProductsGrid = ({ items, loading }: Props) => {
                     <Tooltip
                       key="isVisible"
                       title={t(
-                        item.isVisible ? 'PRODUCT_VISIBLE_TOOLTIP' : 'PRODUCT_HIDDEN_TOOLTIP',
+                        item.state === ORDER_STATE.DEFAULT
+                          ? 'PRODUCT_VISIBLE_TOOLTIP'
+                          : 'PRODUCT_HIDDEN_TOOLTIP',
                       )}>
                       <Switch
-                        onChange={(isVisible) => onVisibilityToggled({ id: item.id, isVisible })}
+                        onChange={(isVisible) =>
+                          onVisibilityToggled({
+                            id: item.id,
+                            state: isVisible ? ORDER_STATE.DEFAULT : ORDER_STATE.HIDDEN,
+                          })
+                        }
                         checkedChildren={<EyeOutlined />}
                         unCheckedChildren={<EyeInvisibleOutlined />}
-                        checked={item.isVisible}
+                        checked={item.state === ORDER_STATE.DEFAULT}
                         loading={
                           updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING
                         }

@@ -81,9 +81,9 @@ export const updateProductVisibility = createAsyncThunk<
   Product,
   UpdateProductVisibilityDTO,
   { rejectValue: ErrorResponse }
->('products/updateProductVisibility', async ({ isVisible, id }, thunkAPI) => {
+>('products/updateProductState', async ({ state, id }, thunkAPI) => {
   try {
-    const response = await axiosPrivate.patch<Product>(`/products/${id}/visibility`, { isVisible });
+    const response = await axiosPrivate.patch<Product>(`/products/${id}/state`, { state });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

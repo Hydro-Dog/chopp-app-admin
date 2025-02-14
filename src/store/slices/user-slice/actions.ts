@@ -84,7 +84,7 @@ export const loginUser = createAsyncThunk<
   try {
     const response = await axiosPrivate.post<UserAuthorization>(
       `/auth/login`,
-      sanitizedUser(userData),
+      { ...sanitizedUser(userData), context: 'ADMIN'},
     );
     return response.data;
   } catch (error) {

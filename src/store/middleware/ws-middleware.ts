@@ -1,6 +1,8 @@
 import { Middleware } from '@reduxjs/toolkit';
 import { STORAGE_KEYS } from '@shared/enum';
 import {
+  AppDispatch,
+  fetchCurrentUser,
   pushWsMessage,
   setWsConnected,
   setWsError,
@@ -63,9 +65,23 @@ export const wsMiddleware: Middleware = (store) => {
             store.dispatch(pushWsNotification(data));
           });
 
-          socket.on('tokenExpired', (data) => {
-            console.log('Token expired message:', data);
+          socket.on('tokenExpired', async (data) => {
+            console.log('%c Token expired message!', 'color: red; font-weight: bold; font-size: 16px;', data);
+          
+            const dispatch: AppDispatch = store.dispatch;
+          
+            try {
+              await dispatch(fetchCurrentUser()).unwrap();
+              dispatch(
+                wsConnect({
+                  url: `${import.meta.env.VITE_BASE_WS}`,
+                })
+              );
+            } catch (error) {
+              console.error('%c Failed to refresh token, user will be logged out!', 'color: red; font-weight: bold; font-size: 14px;', error);
+            }
           });
+          
 
           break;
 

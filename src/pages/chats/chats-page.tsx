@@ -28,7 +28,9 @@ export const ChatsPage = () => {
   useClearChatMessagesStoreOnLeave();
   useFetchMessages();
   // useReadAllChatMessages();
-  useNewIncomingMessageChatHandler();
+
+  // сейчас новое сообщение добавляется через стор в chats.newChatMessages
+  // useNewIncomingMessageChatHandler();
 
   useEffect(() => {
     if (chatMessages) {

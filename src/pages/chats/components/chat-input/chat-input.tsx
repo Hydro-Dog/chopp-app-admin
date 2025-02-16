@@ -34,18 +34,9 @@ export const ChatInput = () => {
       };
 
       dispatch(wsSend(newMessage));
-      setText(''); // Очистка TextArea после отправки сообщения
-      //Обновить открытые сообщения
+      setText('');
+
       pushNewMessageToChat(newMessage.payload);
-      // setMessages((prev) => {
-      //   return [...prev, newMessage.payload];
-      // });
-      // //Обновить превью чатов сообщения
-      // setChats((prev) =>
-      //   prev?.map((item) =>
-      //     item.chatId === urlChatId ? { ...item, lastMessage: newMessage.payload } : item,
-      //   ),
-      // );
     }
   }, [text, currentUser, urlChatId]);
 

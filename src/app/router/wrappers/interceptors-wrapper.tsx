@@ -8,8 +8,6 @@ import { useAxiosInterceptors } from '@store/middleware';
 export const InterceptorsWrapper = ({ children }: PropsWithChildrenOnly) => {
   const { pathname = '' } = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  // TODO: перенести это в обработку специального события в WSMiddleware
-  // const { lastMessage: tokenExpiredMessage } = useFilterWsMessages(WS_MESSAGE_TYPE.TOKEN_EXPIRED);
 
   useAxiosInterceptors();
 

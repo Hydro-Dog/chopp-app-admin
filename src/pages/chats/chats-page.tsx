@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
-import { TitlePage } from '@shared/components';
-import { useThemeToken } from '@shared/index';
+import { FETCH_STATUS, useThemeToken } from '@shared/index';
 import { RootState } from '@store/index';
-import { Card, Form, Splitter, Typography } from 'antd';
+import { Card, Spin, Splitter, Typography } from 'antd';
 import classNames from 'classnames';
 import { useChatsContext } from './chats-context';
 import { ChatInput, Sidebar } from './components/index';
@@ -20,23 +18,24 @@ const { Text } = Typography;
 
 export const ChatsPage = () => {
   const themeToken = useThemeToken();
-  const { messages, setMessages } = useChatsContext();
-  const { chatMessages } = useSelector((state: RootState) => state.chatsRepository);
+  const { messages } = useChatsContext();
+  const { fetchChatMessagesStatus } = useSelector((state: RootState) => state.chatsRepository);
   const { currentUser } = useSelector((state: RootState) => state.user);
+
+  const messagesListRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useTranslation();
 
   //Очистка стора при уходе из компонента чата
   useClearChatMessagesStoreOnLeave();
   useFetchMessages();
-  // useReadAllChatMessages();
+  useReadAllChatMessages();
 
-  // сейчас новое сообщение добавляется через стор в chats.newChatMessages
-  // useNewIncomingMessageChatHandler();
-
-  useEffect(() => {
-    if (chatMessages) {
-      setMessages(chatMessages);
+  useLayoutEffect(() => {
+    if (messagesListRef.current) {
+      messagesListRef.current.scrollTop = messagesListRef.current.scrollHeight;
     }
-  }, [chatMessages]);
+  }, [messages]);
 
   const getCardContainerClasses = (isUserMessage: boolean, isNewMessage = false) =>
     classNames('flex', !isUserMessage ? 'justify-end' : 'justify-start', {
@@ -56,7 +55,17 @@ export const ChatsPage = () => {
       </Splitter.Panel>
       <Splitter.Panel>
         <div className="flex flex-col h-full p-1">
-          <div className="flex flex-col p-4 gap-2 overflow-y-auto flex-grow shrink">
+          <div ref={messagesListRef} className="flex flex-col p-4 gap-2 overflow-y-auto flex-grow shrink">
+            {fetchChatMessagesStatus === FETCH_STATUS.LOADING && (
+              <div className="flex flex-col items-center mt-5">
+                <Spin size="default" />
+              </div>
+            )}
+            {fetchChatMessagesStatus === FETCH_STATUS.SUCCESS && !messages.length && (
+              <div className="flex flex-col items-center mt-5">
+                <Text>{t('CHATS_CONTEXT.EMPTY_CHAT')}</Text>
+              </div>
+            )}
             {messages?.map((message) => {
               const isUserMessage = message?.senderId !== currentUser?.id;
 
@@ -88,7 +97,7 @@ export const ChatsPage = () => {
             })}
           </div>
 
-          <ChatInput />
+          <ChatInput messagesListRef={messagesListRef} />
         </div>
       </Splitter.Panel>
     </Splitter>

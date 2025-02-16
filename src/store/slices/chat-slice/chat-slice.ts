@@ -16,7 +16,7 @@ export type ChatsState = {
   fetchChatsStatus: FETCH_STATUS;
   fetchChatsError: ErrorResponse | null;
 
-  // state of cahtStats
+  // state of chatStats
   chatsStats: ChatStats | null;
   fetchChatsStatsStatus: FETCH_STATUS;
   fetchChatStatsError: ErrorResponse | null;
@@ -25,6 +25,9 @@ export type ChatsState = {
   createdChat: Chat | null;
   createChatStatus: FETCH_STATUS;
   createChatError: ErrorResponse | null;
+
+  // chat page state
+  openedChat: Chat['id'] | null;
 };
 
 const initialState: ChatsState = {
@@ -40,6 +43,7 @@ const initialState: ChatsState = {
   createdChat: null,
   createChatStatus: FETCH_STATUS.IDLE,
   createChatError: null,
+  openedChat: null,
 };
 
 export const chatSlice = createSlice({
@@ -69,6 +73,10 @@ export const chatSlice = createSlice({
         console.error(error);
       }
     },
+    setOpenedChat: (state, action: PayloadAction<string | null>) => {
+      // string, когда новый чат открыт, null когда чат удален
+      state.openedChat = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -135,6 +143,7 @@ export const chatSlice = createSlice({
 export const {
   clearChatMessages,
   clearChatCreatingHistory,
+  setOpenedChat,
   updateChats,
   updateMessages,
   pushWsMessage,

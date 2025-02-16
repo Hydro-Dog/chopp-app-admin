@@ -38,12 +38,12 @@ export const useReadAllChatMessages = () => {
 
   const sendMessagesRead = () => {
     if (wsConnected) {
-      // dispatch(
-      //   wsSend({
-      //     type: WS_MESSAGE_TYPE.MESSAGES_READ,
-      //     payload: { currentChatId },
-      //   }),
-      // );
+      dispatch(
+        wsSend({
+          type: WS_MESSAGE_TYPE.MESSAGES_READ,
+          payload: { currentChatId },
+        }),
+      );
     }
   };
 
@@ -51,5 +51,5 @@ export const useReadAllChatMessages = () => {
     if (currentChatId) {
       sendMessagesRead();
     }
-  }, [currentChatId]);
+  }, [currentChatId, wsConnected]);
 };

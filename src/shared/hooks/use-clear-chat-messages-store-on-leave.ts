@@ -8,6 +8,8 @@ export const useClearChatMessagesStoreOnLeave = () => {
 
   //Очистка стора при уходе из компонента чата
   useEffect(() => {
-    // return () => dispatch(clearChatMessages());
-  }, []);
+    return () => {
+      dispatch(clearChatMessages())
+    };
+  }, [dispatch]);
 };

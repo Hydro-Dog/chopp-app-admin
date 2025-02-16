@@ -62,7 +62,14 @@ export const ChatsContextProvider = ({ children }: PropsWithChildren<any>) => {
 
   const pushNewMessageToChat = (newChatMessage: ChatMessage) => {
     const changesChatMessages = [...chatMessages, newChatMessage];
+
     dispatch(updateMessages(changesChatMessages));
+
+    const updatedChats = chats.map(chat =>
+        `${chat.id}` === newChatMessage.chatId ? { ...chat, lastMessage: newChatMessage } : chat
+    );
+
+    setChats(updatedChats);
   }
 
   return (

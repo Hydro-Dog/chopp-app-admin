@@ -95,8 +95,9 @@ export const wsMiddleware: Middleware = (store) => {
 
         case wsSend.toString():
           if (socket !== null) {
+            const { type, payload } = action.payload;
             console.log('Sending message via Socket.IO:', action.payload);
-            socket.emit('message', action.payload);
+            socket.emit(type, payload);
           }
           break;
 

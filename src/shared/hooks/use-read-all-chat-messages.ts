@@ -11,37 +11,36 @@ export const useReadAllChatMessages = () => {
   const { wsConnected } = useSelector((state: RootState) => state.ws);
   const [searchParams] = useSearchParams();
   const currentChatId = searchParams.get('id');
-  const { setMessages, messages, setChatsStats } = useChatsContext();
+  const { setMessages, messages } = useChatsContext();
   const { currentUser } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    if (currentChatId === messages?.[messages?.length - 1]?.chatId) {
-      let readCounter = 0;
-      setMessages((prev) =>
-        prev.map((item) => {
-          if (item.wasReadBy.includes(currentUser?.id)) {
-            return item;
-          }
+    if (currentChatId && currentUser) {
 
-          readCounter = readCounter + 1;
-          return { ...item, wasReadBy: [...item.wasReadBy, currentUser.id] };
-        }),
-      );
+      const updatedMessages = messages.map((message) => {
+        return message.wasReadBy.includes(currentUser.id)
+          ? message
+          : { ...message, wasReadBy: [...message.wasReadBy, currentUser.id] };
+      });
 
-      setChatsStats((prev) => ({
-        total: prev.total,
-        read: prev.read + readCounter,
-        unRead: prev.unRead - readCounter,
-      }));
+      setMessages(updatedMessages);
+
+      // setChatsStats((prev) => ({
+      //   total: prev.total,
+      //   read: prev.read + readCounter,
+      //   unRead: prev.unRead - readCounter,
+      // }));
     }
-  }, [messages?.length, messages?.[0]]);
+  }, [messages.length]);
 
   const sendMessagesRead = () => {
     if (wsConnected) {
       dispatch(
         wsSend({
           type: WS_MESSAGE_TYPE.MESSAGES_READ,
-          payload: { currentChatId },
+          payload: {
+            chatId: currentChatId,
+          },
         }),
       );
     }

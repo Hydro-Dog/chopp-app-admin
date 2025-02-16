@@ -10,7 +10,6 @@ import { ChatInput, Sidebar } from './components/index';
 import {
   useClearChatMessagesStoreOnLeave,
   useFetchMessages,
-  useNewIncomingMessageChatHandler,
   useReadAllChatMessages,
 } from '../../shared/hooks/index';
 
@@ -97,7 +96,7 @@ export const ChatsPage = () => {
             })}
           </div>
 
-          <ChatInput messagesListRef={messagesListRef} />
+          <ChatInput />
         </div>
       </Splitter.Panel>
     </Splitter>

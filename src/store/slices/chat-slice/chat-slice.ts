@@ -66,9 +66,16 @@ export const chatSlice = createSlice({
     updateMessages: (state, action: PayloadAction<ChatMessage[]>) => {
       state.chatMessages = action.payload;
     },
-    pushWsMessage: (state, action: PayloadAction<{ message: ChatMessage}>) => {
+    pushWsMessage: (state, action: PayloadAction<{ message: ChatMessage }>) => {
       try {
-        state.chatMessages.push(action.payload.message);
+        const { message } = action.payload
+        state.chatMessages.push(message);
+
+        const updatedChats = state.chats.map(chat =>
+          `${chat.id}` === `${message.chatId}` ? { ...chat, lastMessage: message } : chat
+        );
+
+        state.chats = updatedChats;
       } catch (error) {
         console.error(error);
       }

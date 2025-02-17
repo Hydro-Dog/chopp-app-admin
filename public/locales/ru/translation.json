@@ -47,7 +47,8 @@
     "CONTENT_TOO_LONG": "Слишком длинный текст",
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
-    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB"
+    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
+    "MORE_1_SYMBOL_REQUIRED": "Введите 1 или более символов"
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -107,7 +108,10 @@
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная."
   },
   "PAYMENT_PAGE": {
-  
+    "SHOP_ID": "Shop Id", 
+  "SHOP_ID_INFO": "Id вашего магазина в 'ЮКассе",
+  "ENTER_SHOP_ID": "Введите Shop Id"
+
   },
   "DELIVERY": "Доставка",
   "PATHS": {
@@ -146,6 +150,6 @@
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
   "LOAD_MORE": "Загрузить еще",
-  "PAYMENT": "Платежная информация",
-  "PAYMENT_SETTINGS": "Данные для настройки системы платежей"
+  "PAYMENT_SETTINGS": "Платежная информация",
+  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей"
 }

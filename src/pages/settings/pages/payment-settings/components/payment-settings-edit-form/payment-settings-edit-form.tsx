@@ -1,44 +1,66 @@
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
 import { Form, Input, Tooltip, Button, Space } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useCreatePaymentFormSchema } from './hooks';
 
-export const PaymentSettingsEditForm = () => {
-  const { register, handleSubmit, reset } = useForm({
-    mode: 'onBlur',
-  });
+const { Item } = Form;
+
+type Props = {
+  toggle: () => void;
+};
+
+export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const onSubmit = (data) => {
-    console.log(data);
+  const createPaymentFormSchema = useCreatePaymentFormSchema();
+  type CreatePaymentFormType = z.infer<typeof createPaymentFormSchema>;
+  const { handleSubmit, control } = useForm<CreatePaymentFormType>({
+    resolver: zodResolver(createPaymentFormSchema),
+  });
+
+  const onSubmit: SubmitHandler<CreatePaymentFormType> = (paymentData) => {
+    console.log(paymentData);
   };
-  const handleCancel = () => {
-    reset();
+
+  const onCancel = () => {
+    toggle();
   };
+
   return (
-    <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
-      <Form.Item
+    <Form layout="vertical" className="flex flex-col gap-4">
+      <Item
+        className="!m-0"
         label={
-          <span>
-            Shop Id&nbsp;
-            <Tooltip title="Id вашего магазина в 'ЮКассе'">
-              <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+          <Space size={4}>
+            {'Shop Id'}
+            <Tooltip title={t('PAYMENT_PAGE.SHOP_ID_INFO')}>
+              <InfoCircleOutlined />
             </Tooltip>
-          </span>
+          </Space>
         }>
-        <Input
-          {...register('shopId', { required: 'Shop Id is required' })}
-          placeholder="Введите Shop Id"
+        <Controller
+          name="enteredShopId"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="string"
+              className="w-full"
+              min={1}
+              placeholder={t('PAYMENT_PAGE.ENTER_SHOP_ID')}
+            />
+          )}
         />
-      </Form.Item>
-      <Form.Item>
-        <Space>
-          <Button onClick={handleCancel}>{t('CANCEL')}</Button>
-          <Button type="primary">{t('SAVE')}</Button>
-          <Button type="primary">{t('EDIT')}</Button>
-        </Space>
-      </Form.Item>
+      </Item>
+
+      <Space>
+        <Button onClick={onCancel}>{t('CANCEL')}</Button>
+        <Button onClick={handleSubmit(onSubmit)} type="primary">
+          {t('SAVE')}
+        </Button>
+      </Space>
     </Form>
   );
 };

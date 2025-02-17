@@ -1,3 +1,4 @@
+import { LIMIT } from '@pages/products/context';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorResponse, PaginationResponse, PaginationRequestQuery, Product } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
@@ -10,10 +11,9 @@ export const fetchProducts = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('products/fetchProducts', async ({ categoryId, page, limit, search, sort, order }, thunkAPI) => {
   try {
-    console.log('search: ', search);
     const params = new URLSearchParams({
       page: String(page || 1),
-      limit: String(limit || 10),
+      limit: String(limit || LIMIT),
       search: search || '',
       sort: sort || '',
       order: order || 'desc',
@@ -95,55 +95,3 @@ export const updateProductVisibility = createAsyncThunk<
     }
   }
 });
-
-// export const updateCategories = createAsyncThunk<
-//   Category[],
-//   Category[],
-//   { rejectValue: ErrorResponse }
-// >('goods/updateCategories', async (categories, thunkAPI) => {
-//   try {
-//     const response = await axiosPrivate.put<Category[]>('/categories', categories);
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error) && error.response) {
-//       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-//     } else {
-//       return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
-//     }
-//   }
-// });
-
-// export const deleteCategory = createAsyncThunk<Category[], string, { rejectValue: ErrorResponse }>(
-//   'goods/deleteCategory',
-//   async (id, thunkAPI) => {
-//     try {
-//       const response = await axiosPrivate.delete<Category[]>(`/categories/${id}`);
-//       return response.data;
-//     } catch (error) {
-//       if (axios.isAxiosError(error) && error.response) {
-//         return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-//       } else {
-//         return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
-//       }
-//     }
-//   },
-// );
-
-// export type UpdateCategoryTitleDTO = { id: string; title: string };
-
-// export const updateCategoryTitle = createAsyncThunk<
-//   Category,
-//   UpdateCategoryTitleDTO,
-//   { rejectValue: ErrorResponse }
-// >('goods/updateCategoryTitle', async ({ id, title }, thunkAPI) => {
-//   try {
-//     const response = await axiosPrivate.put<Category>(`categories/${id}/title`, { title });
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error) && error.response) {
-//       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-//     } else {
-//       return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
-//     }
-//   }
-// });

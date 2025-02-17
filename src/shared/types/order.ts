@@ -1,4 +1,5 @@
 import { PAYMENT_STATUS } from '@shared/enum';
+import { Product } from './product';
 
 // TODO: вынести в отдельный файл
 export enum ORDER_STATUS {
@@ -11,37 +12,6 @@ export enum ORDER_STATUS {
   DELIVERED = 'delivered',
   // FINISHED = 'finished',
 }
-
-type Image = {
-  id: number;
-  hash: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-//   TODO: вынести в отдельный файл
-type Category = {
-  id: number;
-  title: string;
-  order: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-//   TODO: вынести в отдельный файл
-type Product = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  categoryId: number;
-  imagesOrder: number[];
-  images: Image[];
-  category: Category;
-  createdAt: string;
-  updatedAt: string;
-};
 
 type OrderItem = {
   id: number;

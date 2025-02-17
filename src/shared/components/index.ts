@@ -11,7 +11,7 @@ export * from './chopp-draggable-list';
 export * from './basic-modal';
 export * from './chopp-clickable-icon';
 export * from './chopp-breadcrumbs';
-export * from './chopp-info-text';
+export * from './chopp-text-with-tooltip';
 export * from './chopp-descriptions-tree';
 export * from './chopp-info-modal';
 export * from './chopp-ok-modal';

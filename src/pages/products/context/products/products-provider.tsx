@@ -1,43 +1,68 @@
-import { createContext, Dispatch, SetStateAction, useContext, useState } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { PaginationRequestQuery, Product, PropsWithChildrenOnly } from '@shared/index';
+import { Product, PropsWithChildrenOnly } from '@shared/index';
 
-const LIMIT = 2;
-const FIRST_PAGE_NUMBER = 1;
+export const FIRST_PAGE_NUMBER = 1;
+export const LIMIT = 2;
 
 type ProductsContextType = {
   pageProducts: Product[];
   setPageProducts: Dispatch<SetStateAction<Product[]>>;
-  pagination: PaginationRequestQuery;
-  setPagination: Dispatch<SetStateAction<PaginationRequestQuery>>;
+  categoryId: string;
+  setCategoryId: Dispatch<SetStateAction<string>>;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
+  limit: number;
+  setLimit: Dispatch<SetStateAction<number>>;
+  totalPages: number;
+  setTotalPages: Dispatch<SetStateAction<number>>;
+  totalItems: number;
+  setTotalItems: Dispatch<SetStateAction<number>>;
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
-  searchParams: URLSearchParams;
-  setSearchParams: Dispatch<SetStateAction<URLSearchParams>>;
 };
 
 const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
 export const ProductsProvider = ({ children }: PropsWithChildrenOnly) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState('');
+  const initialLimit = Number(searchParams.get('limit')) || LIMIT;
+  const initialSearch = searchParams.get('search') || '';
+  const initialCategoryId = searchParams.get('categoryId') || '';
+
+  const [search, setSearch] = useState(initialSearch);
+  const [categoryId, setCategoryId] = useState(initialCategoryId);
   const [pageProducts, setPageProducts] = useState<Product[]>([]);
-  const [pagination, setPagination] = useState<Pick<PaginationRequestQuery, 'page' | 'limit'>>({
-    page: FIRST_PAGE_NUMBER,
-    limit: LIMIT,
-  });
+  const [page, setPage] = useState(FIRST_PAGE_NUMBER);
+  const [limit, setLimit] = useState(initialLimit);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set('limit', String(limit));
+    params.set('search', String(search));
+    params.set('categoryId', String(categoryId));
+    setSearchParams(params);
+  }, [limit, search, categoryId, setSearchParams]);
 
   return (
     <ProductsContext.Provider
       value={{
         pageProducts,
         setPageProducts,
-        pagination,
-        setPagination,
+        categoryId,
+        setCategoryId,
+        page,
+        setPage,
+        limit,
+        setLimit,
+        totalPages,
+        setTotalPages,
+        totalItems,
+        setTotalItems,
         search,
         setSearch,
-        searchParams,
-        setSearchParams,
       }}>
       {children}
     </ProductsContext.Provider>

@@ -1,31 +1,46 @@
 import { useSelector } from 'react-redux';
 import { useProductsContext } from '@pages/products/context';
-import { useSearchParamValue, useSuperDispatch } from '@shared/hooks';
-import { ChoppLoadMore } from '@shared/index';
+import { useSuperDispatch } from '@shared/hooks';
 import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
+import { Pagination, PaginationProps } from 'antd';
 import { ProductsGrid } from '../products-grid';
 
-const LIMIT = 2;
+const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
 
 export const ProductsLayoutMain = () => {
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
-  const { search, pageProducts, pagination, setPagination, setPageProducts } = useProductsContext();
-  const categoryId = useSearchParamValue('id') || '';
+  const {
+    search,
+    pageProducts,
+    totalPages,
+    totalItems,
+    limit,
+    categoryId,
+    page,
+    setPage,
+    setPageProducts,
+    setTotalPages,
+    setTotalItems,
+    setLimit,
+  } = useProductsContext();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
 
-  const onLoadMore = () => {
+  const onPaginationChange = (page: number, size: number) => {
     superDispatch({
       action: fetchProducts({
         categoryId,
-        limit: LIMIT,
-        page: pagination.page + 1,
+        page: size !== limit ? 1 : page,
         search,
+        limit: size,
       }),
       thenHandler: (response) => {
-        setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ page: response.pageNumber });
+        setPageProducts(response.items);
+        setPage(response.pageNumber);
+        setTotalPages(response.totalPages);
+        setTotalItems(response.totalItems);
+        setLimit(response.limit);
       },
     });
   };
@@ -34,12 +49,18 @@ export const ProductsLayoutMain = () => {
     products?.totalPages !== undefined && (
       <div className="p-3">
         <ProductsGrid items={pageProducts} loading={fetchProductsStatus === FETCH_STATUS.LOADING} />
-
-        <ChoppLoadMore
-          onLoadMore={onLoadMore}
-          totalPages={products.totalPages}
-          page={pagination.page}
-          className="mt-3"
+        totalPages: {totalPages} - {page}
+        <Pagination
+          size="small"
+          current={page}
+          // TODO: установить нормальные занчения в pageSizeOptions
+          pageSizeOptions={[2, 8, 12]}
+          pageSize={limit}
+          total={totalItems}
+          showTotal={showTotal}
+          onChange={onPaginationChange}
+          showSizeChanger
+          showQuickJumper
         />
       </div>
     )

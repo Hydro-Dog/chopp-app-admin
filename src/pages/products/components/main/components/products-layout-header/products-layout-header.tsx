@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useProductsContext } from '@pages/products/context';
+import { useSuperDispatch } from '@shared/hooks';
+import { PaginationResponse, Product } from '@shared/types';
+import { fetchProducts } from '@store/slices';
 import { Flex, Tooltip, Button, Typography, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
@@ -11,27 +15,62 @@ const { Search } = Input;
 
 export const ProductsLayoutHeader = () => {
   const { t } = useTranslation();
-  const { search, searchParams, setSearchParams, setSearch } = useProductsContext();
+
   const {
     value: isCreateProductModalOpen,
     setTrue: openCreateProductModal,
     toggle: toggleCreateProductModal,
   } = useBoolean();
 
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSearchValue = e.target.value;
-    setSearch(newSearchValue);
-    updateUrlWithSearchValue(newSearchValue);
+  const {
+    search,
+    setSearch,
+    limit,
+    categoryId,
+    setPage,
+    setPageProducts,
+    setTotalPages,
+    setTotalItems,
+    setLimit,
+  } = useProductsContext();
+  const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
+
+  // Локальное состояние для ввода поиска
+  const [searchValue, setSearchValue] = useState(search);
+  const f = () => {
+    if (!categoryId) {
+      return console.error(`ERROR categoryId: ${categoryId}`);
+    }
+    setSearch(searchValue);
+    superDispatch({
+      action: fetchProducts({
+        categoryId,
+        page: 1,
+        search: searchValue,
+        limit,
+      }),
+      thenHandler: (response) => {
+        setPageProducts(response.items);
+        setPage(response.pageNumber);
+        setTotalItems(response.totalItems);
+        setTotalPages(response.totalPages);
+        setLimit(response.limit);
+      },
+    });
   };
 
-  const updateUrlWithSearchValue = (value: string) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (value) {
-      newSearchParams.set('search', value);
-    } else {
-      newSearchParams.delete('search');
-    }
-    setSearchParams(newSearchParams);
+  useEffect(() => {
+    setSearchValue(search);
+  }, [search]);
+
+  // const debouncedSetSearch = useDebounceCallback(f, 1500);
+
+  useEffect(() => {
+    f();
+  }, [searchValue]);
+
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
   };
 
   return (
@@ -53,7 +92,7 @@ export const ProductsLayoutHeader = () => {
 
         <Search
           className="px-3"
-          value={search}
+          value={searchValue}
           placeholder={t('SEARCH')}
           onChange={onSearchChange}
           allowClear

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Table, Spin, Modal } from 'antd';
+import dayjs from 'dayjs';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
 import { ActionValue } from './types';
@@ -17,10 +19,22 @@ export const PaymentsTable = () => {
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    dispatch(fetchPayments({}));
-  }, []);
+    const searchRequest: Record<string, string> = {};
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
+    if (startDate) {
+      searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
+    }
+    if (endDate) {
+      searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
+    }
+
+    dispatch(fetchPayments(searchRequest));
+  }, [searchParams, dispatch]);
 
   useEffect(() => {
     if (payments?.items) {
@@ -40,7 +54,6 @@ export const PaymentsTable = () => {
 
   const handleRefundConfirm = () => {
     if (!selectedPayment) return;
-    //TODO: Пройти по всем асинхронным запросам и добавить обработку ошибок.
     dispatch(refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }));
     setIsRefundModalOpen(false);
     setSelectedPayment(null);

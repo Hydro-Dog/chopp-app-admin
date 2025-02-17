@@ -1,45 +1,37 @@
-import { useEffect, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ConfirmModal } from '@shared/components';
+import { useProductsContext } from '@pages/products/context';
+import { CustomModal } from '@shared/components';
 import {
-  getBase64,
   useNotificationContext,
   useSearchParamValue,
   useSuperDispatch,
   FETCH_STATUS,
-  Product
+  Product,
 } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
-import {
-  Alert,
-  Form,
-  Input,
-  InputNumber,
-  Typography,
-  Upload,
-  UploadFile,
-  UploadProps,
-  Image,
-  Select,
-} from 'antd';
+import { Alert, Form, Input, InputNumber, Typography, Upload, Image, Select } from 'antd';
 import { z } from 'zod';
-import { useBeforeUpload, useCreateProductFormSchema } from './hooks';
+import {
+  useBeforeUpload,
+  useCreateProductFormSchema,
+  useEditProductFormSchema,
+  useImage,
+  useResetProductList,
+} from './hooks';
 import { createFormDto, updateFormDto } from './utils';
 
 const { Item } = Form;
 const { Text } = Typography;
 
-type FormType = { title: string; description: string; price: number; categoryId?: number };
-
 type Props = {
   open: boolean;
   onCancel: () => void;
-  onOk: (item: Product) => void;
-  values?: Product;
+  onOk: () => void;
+  product?: Product;
   mode?: 'edit' | 'create';
   id?: number;
 };
@@ -48,34 +40,36 @@ export const CreateEditProductModal = ({
   open,
   onCancel,
   onOk,
-  values,
+  product,
   mode = 'create',
   id,
 }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch<Product, unknown>();
   const categoryId = useSearchParamValue('id') || '';
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [uploadImageError, setUploadImageError] = useState('');
-  const { showSuccessNotification } = useNotificationContext();
   const beforeUpload = useBeforeUpload();
+  const { showSuccessNotification } = useNotificationContext();
   const { createProductStatus } = useSelector((state: RootState) => state.products);
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
 
-  const createProductFormSchema = useCreateProductFormSchema(mode);
+  const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
+
+  const editProductFormSchema = useEditProductFormSchema();
+  type EditProductFormType = z.infer<typeof editProductFormSchema>;
+
+  const productFormSchema = mode === 'create' ? createProductFormSchema : editProductFormSchema;
+  type ProductFormType = CreateProductFormType | EditProductFormType;
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
-  } = useForm<FormType>({
-    resolver: zodResolver(createProductFormSchema),
+  } = useForm<ProductFormType>({
+    resolver: zodResolver(productFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -83,111 +77,80 @@ export const CreateEditProductModal = ({
     },
   });
 
-  useEffect(() => {
-    if (values) {
-      reset({
-        title: values.title,
-        description: values.description,
-        price: values.price,
-        categoryId: Number(values.category.id),
-      });
-
-      // Обработка начального списка изображений, если они есть
-      if (values.images && values.images.length) {
-        const initialFileList = values.images.map((item, index) => ({
-          uid: item.id, // Убедитесь, что uid отрицательный для избежания конфликта с внутренней логикой Ant Design
-          name: item.originalName,
-          status: 'done',
-          url: import.meta.env.VITE_BASE_URL_FILES + item.path,
-        }));
-
-        setFileList(initialFileList as unknown as UploadFile[]);
-      }
-    }
-  }, [reset, values]);
+  const {
+    fileList,
+    setFileList,
+    previewOpen,
+    setPreviewOpen,
+    previewImage,
+    setPreviewImage,
+    uploadImageError,
+    setUploadImageError,
+    handleChange,
+    handlePreview,
+  } = useImage({ product, reset, isOpened: open });
 
   const submitCreateProduct = (data: CreateProductFormType) => {
     if (!fileList.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      const reqData = createFormDto({
-        ...data,
-        categoryId,
-        fileList,
-      });
+      const reqData = createFormDto({ ...data, categoryId, fileList });
+
       superDispatch({
         action: createProduct({ form: reqData }),
-        thenHandler: (response) => {
+        thenHandler: (product) => {
           showSuccessNotification({
             message: t('SUCCESS'),
-            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE') + product.title,
           });
-          onOk(response);
+          onOk();
           reset();
           setFileList([]);
+          resetProductList();
         },
       });
     }
   };
+  const { resetProductList } = useResetProductList();
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
-    if (!fileList.length && !values?.images.length) {
+    const allImagesIds = new Set(fileList.map((item) => item.uid));
+    const initialImagesIds = new Set(product?.images.map((item) => item.id));
+
+    // 1. Оставшиеся старые изображения (которые были и не удалены)
+    const remainingOldImages = product?.images.filter((image) => allImagesIds.has(image.id));
+
+    // 2. Новые изображения (те, у которых нет id из initialImagesIds)
+    const newImages = fileList.filter((file) => !initialImagesIds.has(file.uid));
+
+    if (!fileList.length && !product?.images.length) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {
-      console.log('submitUpdateProduct fileList: ', fileList);
-      const fileListIdsSet = new Set(fileList.map((item) => item.uid));
-      const initialImagesAfterChanges = values?.images.filter((item) =>
-        fileListIdsSet.has(String(item.id)),
-      );
       const reqData = updateFormDto({
-        ...data,
-        categoryId,
-        initialImages: initialImagesAfterChanges,
-        fileList,
+        ...(data as EditProductFormType),
+        remainingOldImages,
+        fileList: newImages,
       });
 
       superDispatch({
         action: updateProduct({ form: reqData, id: id! }),
-        thenHandler: (response) => {
+        thenHandler: (product) => {
+          if (!product) return;
+
           showSuccessNotification({
             message: t('SUCCESS'),
-            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE'),
+            description: t('PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE'),
           });
-          onOk(response);
+          onOk();
           reset();
           setFileList([]);
+
+          resetProductList();
         },
       });
     }
-  };
-
-  const onSubmit: SubmitHandler<CreateProductFormType> = async (data) => {
-    if (mode === 'create') {
-      submitCreateProduct(data);
-    } else {
-      submitUpdateProduct(data);
-    }
-  };
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-  };
-
-  const handleChange: UploadProps['onChange'] = ({ fileList }) => {
-    console.log('fileList: ', fileList);
-    if (!fileList || !fileList?.length) {
-      setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
-    } else {
-      setUploadImageError('');
-    }
-    setFileList(fileList);
   };
 
   const handleCancel = () => {
@@ -197,13 +160,13 @@ export const CreateEditProductModal = ({
   };
 
   return (
-    <ConfirmModal
-      title={t('ADD_PRODUCT')}
+    <CustomModal
+      title={t(mode === 'create' ? 'ADD_PRODUCT' : 'EDIT_PRODUCT')}
       open={open}
       confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
-      onOk={handleSubmit(onSubmit)}
+      onOk={handleSubmit(mode === 'create' ? submitCreateProduct : submitUpdateProduct)}
       onCancel={handleCancel}
-      okTitle={t('ADD')}>
+      okTitle={t(mode === 'create' ? 'ADD' : 'SAVE')}>
       <Form layout="vertical" className="flex flex-col gap-4">
         <Item
           className="!m-0"
@@ -255,8 +218,8 @@ export const CreateEditProductModal = ({
           <Item
             className="!m-0"
             label={t('CATEGORY')}
-            validateStatus={errors.categoryId && 'error'}
-            help={errors.categoryId?.message}>
+            validateStatus={'categoryId' in errors ? errors?.categoryId && 'error' : undefined}
+            help={'categoryId' in errors ? errors?.categoryId?.message : undefined}>
             <Controller
               name="categoryId"
               control={control}
@@ -316,6 +279,6 @@ export const CreateEditProductModal = ({
           type="info"
         />
       </Form>
-    </ConfirmModal>
+    </CustomModal>
   );
 };

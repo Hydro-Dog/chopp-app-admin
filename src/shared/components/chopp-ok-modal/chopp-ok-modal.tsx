@@ -28,12 +28,15 @@ export const ChoppOkModal = ({
   confirmLoading,
   ...props
 }: PropsWithChildren<Props>) => {
+  console.log('onClose: ', onClose)
+  console.log('onOk: ', onOk)
   return (
     <Modal
       zIndex={1000}
       open={open}
       title={title}
       onOk={onOk}
+      onCancel={onClose || onOk}
       onClose={onClose || onOk}
       confirmLoading={confirmLoading}
       // @ts-ignore

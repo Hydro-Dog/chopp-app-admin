@@ -91,9 +91,18 @@ export const PaymentsTable = () => {
 
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
-      <ChoppInfoModal open={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} value={selectedPayment || undefined} />
+      <ChoppInfoModal
+        open={isInfoModalOpen}
+        onOk={() => setIsInfoModalOpen(false)}
+        value={selectedPayment || undefined}
+      />
 
-      <Modal open={isRefundModalOpen} title={t('CONFIRM_REFUND')} onOk={handleRefundConfirm} onCancel={() => setIsRefundModalOpen(false)} width={400}>
+      <Modal
+        open={isRefundModalOpen}
+        title={t('CONFIRM_REFUND')}
+        onOk={handleRefundConfirm}
+        onCancel={() => setIsRefundModalOpen(false)}
+        width={400}>
         {selectedPayment && (
           <p>
             {t('REFUND_AMOUNT')}:{' '}

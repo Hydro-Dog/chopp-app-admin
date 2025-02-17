@@ -65,7 +65,7 @@ export const SignInPage = () => {
       }
     };
   
-    superDispatch({ action: loginUser({ ...data }), thenHandler });
+    superDispatch({ action: loginUser(data), thenHandler });
   };
 
   const handleChangePhoneNumber = (e: any) => {

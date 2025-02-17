@@ -4,7 +4,7 @@
  * @param updatedItem - Обновленный элемент
  * @returns Новый массив с обновленным элементом
  */
-export const updateArrayItemById = <T extends { id: number | string }>(
+export const updateListItemById = <T extends { id: number | string }>(
   items: T[],
   updatedItem: T,
 ): T[] => {

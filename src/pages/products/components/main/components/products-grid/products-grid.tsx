@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DeleteOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
-import { Product } from '@store/index';
-import { Col, Row, Spin, Tooltip } from 'antd';
+import { useSelector } from 'react-redux';
+import {
+  DeleteOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { useProductsContext } from '@pages/products/context';
+import { useSuperDispatch } from '@shared/hooks';
+import { ORDER_STATE, updateListItemById, useNotificationContext } from '@shared/index';
+import { FETCH_STATUS, Product } from '@shared/types';
+import { RootState } from '@store/index';
+import { updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
+import { Col, Row, Spin, Switch, Tooltip } from 'antd';
 import { Card } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
@@ -22,12 +33,23 @@ export const ProductsGrid = ({ items, loading }: Props) => {
     setTrue: openCreateProductModal,
     toggle: toggleCreateProductModal,
   } = useBoolean();
-
+  const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
+  const { setPageProducts } = useProductsContext();
+  const { superDispatch } = useSuperDispatch<Product, UpdateProductVisibilityDTO>();
   const [currentItemData, setCurrentItemData] = useState<Product>();
 
   const onSettingClicked = (item: Product) => {
     setCurrentItemData(item);
     openCreateProductModal();
+  };
+
+  const onVisibilityToggled = ({ id, state }: UpdateProductVisibilityDTO) => {
+    superDispatch({
+      action: updateProductVisibility({ id, state }),
+      thenHandler: (product) => {
+        setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
+      },
+    });
   };
 
   if (loading && !items.length) {
@@ -37,47 +59,69 @@ export const ProductsGrid = ({ items, loading }: Props) => {
   return (
     <>
       <div style={{ width: `calc(100% - 12px)` }}>
-        <Row gutter={[12, 12]}>
+        <Row gutter={[8, 8]}>
           {items?.map((item) => {
             return (
               <Col key={item.id} span={6}>
                 <Card
-                  // onClick={() => {}}
+                  size="small"
                   hoverable
                   cover={
-                    <img
-                      className="aspect-square object-cover "
-                      alt={item.title}
-                      src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
-                    />
+                    <div className="!flex items-center justify-center">
+                      <img
+                        className="aspect-square object-cover !size-[95%] "
+                        alt={item.title}
+                        src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
+                      />
+                    </div>
+                  }
+                  title={item.title}
+                  extra={
+                    <Tooltip
+                      key="isVisible"
+                      title={t(
+                        item.state === ORDER_STATE.DEFAULT
+                          ? 'PRODUCT_VISIBLE_TOOLTIP'
+                          : 'PRODUCT_HIDDEN_TOOLTIP',
+                      )}>
+                      <Switch
+                        onChange={(isVisible) =>
+                          onVisibilityToggled({
+                            id: item.id,
+                            state: isVisible ? ORDER_STATE.DEFAULT : ORDER_STATE.HIDDEN,
+                          })
+                        }
+                        checkedChildren={<EyeOutlined />}
+                        unCheckedChildren={<EyeInvisibleOutlined />}
+                        checked={item.state === ORDER_STATE.DEFAULT}
+                        loading={
+                          updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING
+                        }
+                      />
+                    </Tooltip>
                   }
                   actions={[
                     <Tooltip key="edit" title={t('EDIT')}>
                       <SettingOutlined onClick={() => onSettingClicked(item)} />
                     </Tooltip>,
-                    <Tooltip key="settings" title={t('PREVIEW')}>
-                      <EyeOutlined />
-                    </Tooltip>,
-                    <Tooltip key="delete" title={t('DELETE')}>
+                    <Tooltip key="delete" title={t('MOVE_TO_TRASH')}>
                       <DeleteOutlined />
                     </Tooltip>,
                   ]}>
-                  <Meta
-                    title={item.title}
-                    description={<div className="line-clamp-2">{item.description}</div>}
-                  />
+                  <Meta description={<div className="line-clamp-2">{item.description}</div>} />
                 </Card>
               </Col>
             );
           })}
         </Row>
       </div>
+
       <CreateEditProductModal
         open={isCreateProductModalOpen}
         onCancel={toggleCreateProductModal}
         onOk={toggleCreateProductModal}
         mode="edit"
-        values={currentItemData}
+        product={currentItemData}
         id={currentItemData?.id}
       />
     </>

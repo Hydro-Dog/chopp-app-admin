@@ -14,9 +14,9 @@ import { useChatsContext } from '@pages/chats/chats-context';
 import { ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
 import { useNotificationContext, useTheme } from '@shared/index';
+import { FETCH_STATUS } from '@shared/index';
 import { logoutUser, setLogoutStatus } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
-import { FETCH_STATUS } from '@shared/index';
 import { Badge, Layout, Menu, Tooltip } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetMenuItemByUrl } from './hooks/index';
@@ -121,12 +121,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   return (
     <Layout>
       <Sider theme={theme as SiderTheme}>
-        <Menu
-          style={{ border: 'none' }}
-          selectedKeys={selectedMenuKeys}
-          mode="inline"
-          items={menuItems}
-        />
+        <Menu className="pt-3" selectedKeys={selectedMenuKeys} mode="inline" items={menuItems} />
       </Sider>
       <Layout>{children}</Layout>
     </Layout>

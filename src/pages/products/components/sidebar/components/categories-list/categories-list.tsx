@@ -19,7 +19,11 @@ export const CategoriesList = () => {
   const { superDispatch } = useSuperDispatch<Category[], string>();
   const urlChatId = useSearchParamValue('id');
   const { categories, fetchCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
-  const { value: isDeleteCategoryModalOpen, setTrue: openDeleteCategoryModal, setFalse: closeDeleteCategoryModal } = useBoolean();
+  const {
+    value: isDeleteCategoryModalOpen,
+    setTrue: openDeleteCategoryModal,
+    setFalse: closeDeleteCategoryModal,
+  } = useBoolean();
   const [, setSearchParams] = useSearchParams();
   const [categoryToDelete, setCategoryToDelete] = useState<Category>();
   const { showErrorNotification } = useNotificationContext();
@@ -53,6 +57,11 @@ export const CategoriesList = () => {
   const onDeleteCategory = () => {
     superDispatch({
       action: deleteCategory(categoryToDelete!.id),
+      thenHandler: () => {
+        setSearchParams({
+          id: categories?.[0].id || 'noCategoriesError',
+        });
+      },
       catchHandler: (error) => showErrorNotification({ message: t('ERROR'), description: error.message }),
     });
     onCloseDeleteCategory();
@@ -69,7 +78,7 @@ export const CategoriesList = () => {
   return (
     <>
       <ChopDraggableList
-        unchangeableItems={['Без категории']}
+        unchangeableItems={['Другое']}
         items={categories || []}
         onDragEnd={onCategoriesOrderChange}
         onDeleteItem={onDeleteCategoryModalOpen}
@@ -78,7 +87,12 @@ export const CategoriesList = () => {
         // @ts-ignore
         ListItem={ListItem}
       />
-      <DeleteCategoryModal category={categoryToDelete} open={isDeleteCategoryModalOpen} onOk={onDeleteCategory} onCancel={onCloseDeleteCategory} />
+      <DeleteCategoryModal
+        category={categoryToDelete}
+        open={isDeleteCategoryModalOpen}
+        onOk={onDeleteCategory}
+        onCancel={onCloseDeleteCategory}
+      />
     </>
   );
 };

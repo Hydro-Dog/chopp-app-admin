@@ -47,7 +47,8 @@
     "CONTENT_TOO_LONG": "Слишком длинный текст",
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
-    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB"
+    "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
+    "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\""
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -56,6 +57,7 @@
   "CATEGORIES": "Категории",
   "CATEGORY": "Категория",
   "ADD_PRODUCT": "Добавить товар",
+  "EDIT_PRODUCT": "Редактировать товар",
   "ADD_CATEGORY": "Добавить категорию",
   "ADD_CATEGORY_DESCRIPTION": "",
   "DRAG_CATEGORY_TOOLTIP_TEXT": "Перетащите, чтобы изменить порядок",
@@ -99,7 +101,7 @@
     "PAYMENT_SUCCEEDED_TOOLTIP": "Оплата успешно завершена, заказ готовится к отправке.",
     "PAYMENT_CANCELED": "Платеж отменен",
     "PAYMENT_CANCELED_TOOLTIP": "Оплата была отменена, заказ не может быть выполнен.",
-    "IN_PROGRESS": "В обработке",
+    "IN_PROGRESS": "Собирается",
     "IN_PROGRESS_TOOLTIP": "Заказ передан в работу и готовится к отправке.",
     "IN_DELIVERY_PROCESS": "Доставляется",
     "IN_DELIVERY_PROCESS_TOOLTIP": "Заказ передан в службу доставки и находится в пути.",
@@ -137,6 +139,10 @@
     "FREE_SHIPPING": "Бесплатная доставка включена",
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная."
   },
+  "CHATS_CONTEXT": {
+    "EMPTY_CHAT": "Здесь пока ничего нет...",
+    "EMPTY_LAST_MESSAGE": "Нет сообщений"
+  },
   "DELIVERY": "Доставка",
   "ROOT": "Главная",
   "VISUAL_SETTINGS": "Тема",
@@ -160,10 +166,20 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
+  "PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE": "Товар обновлен",
   "LOAD_MORE": "Загрузить еще",
   "CREATED_AT": "Дата создания",
   "AMOUNT": "Сумма",
   "PAID": "Оплачено",
   "REFUND_AMOUNT": "Сумма возврата",
-  "FAILED": "Отказ"
+  "FAILED": "Отказ",
+  "YOU_ARE_GOING_TO_REMOVE_CATEGORY": "Высобираетесь удалить категорию",
+  "ALL_PRODUCTS_WILL_BE_MOVED_TO": "Все товары будут перенесены в категорию",
+  "NO_CATEGORY": "Другое",
+  "INPUT_CATEGORY_TO_DELETE_NAME": "Введите название категории, которую хотите удалить",
+  "PRODUCT_VISIBLE_TOOLTIP": "Товар отображается пользователям",
+  "PRODUCT_HIDDEN_TOOLTIP": "Товар скрыт от пользователей",
+  "PRODUCT_IS_NOW_VISIBLE": "Товар '{{title}}' теперь виден пользователям",
+  "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей",
+  "MOVE_TO_TRASH": "Переместить в корзину"
 }

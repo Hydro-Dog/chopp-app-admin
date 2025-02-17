@@ -1,6 +1,6 @@
 //Синхронизировано с бэком! Менять только во всех местах однвоременно
 export type PaginationRequestQuery = {
-  page?: number;
+  page: number;
   limit?: number;
   search?: string;
   sort?: string;

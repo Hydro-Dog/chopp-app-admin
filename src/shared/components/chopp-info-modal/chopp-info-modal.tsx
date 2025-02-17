@@ -4,11 +4,11 @@ import { ChoppDescriptionsTree } from '../chopp-descriptions-tree';
 type Props = {
   value?: object;
   open: boolean;
-  onClose: () => void;
+  onOk: () => void;
 };
 
-export const ChoppInfoModal = ({ value, open, onClose }: Props) => (
-  <ChoppOkModal onOk={onClose} open={open}>
+export const ChoppInfoModal = ({ value, open, onOk }: Props) => (
+  <ChoppOkModal onOk={onOk} open={open}>
     <ChoppDescriptionsTree value={value} />
   </ChoppOkModal>
 );

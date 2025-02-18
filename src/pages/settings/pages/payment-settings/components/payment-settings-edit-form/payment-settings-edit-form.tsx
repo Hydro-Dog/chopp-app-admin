@@ -4,7 +4,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, Input, Tooltip, Button, Space } from 'antd';
 import { z } from 'zod';
-import { useCreatePaymentFormSchema } from './hooks';
+import { usePaymentSettingsFormSchema } from './hooks';
 
 const { Item } = Form;
 
@@ -14,21 +14,21 @@ type Props = {
 
 export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const createPaymentFormSchema = useCreatePaymentFormSchema();
-  type CreatePaymentFormType = z.infer<typeof createPaymentFormSchema>;
+  const createPaymentSettingsFormSchema = usePaymentSettingsFormSchema();
+  type CreatePaymentSettingsFormType = z.infer<typeof createPaymentSettingsFormSchema>;
   const {
     handleSubmit,
     control,
     //оставил тебе подсказку  с errors что-то надо сделать, посмотри как в других формах сделано
     formState: { errors },
-  } = useForm<CreatePaymentFormType>({
-    resolver: zodResolver(createPaymentFormSchema),
+  } = useForm<CreatePaymentSettingsFormType>({
+    resolver: zodResolver(createPaymentSettingsFormSchema),
     defaultValues: {
-      enteredShopId: '',
+      shopId: '',
     },
   });
 
-  const onSubmit: SubmitHandler<CreatePaymentFormType> = (paymentData) => {
+  const onSubmit: SubmitHandler<CreatePaymentSettingsFormType> = (paymentData) => {
     console.log(paymentData);
   };
 
@@ -39,6 +39,8 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   return (
     <Form layout="vertical" className="flex flex-col gap-4">
       <Item
+        validateStatus={errors.shopId && 'error'}
+        help={errors.shopId?.message}
         className="!m-0"
         label={
           <Space size={4}>
@@ -49,7 +51,7 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
           </Space>
         }>
         <Controller
-          name="enteredShopId"
+          name="shopId"
           control={control}
           render={({ field }) => (
             <Input

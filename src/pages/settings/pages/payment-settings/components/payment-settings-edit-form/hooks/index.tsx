@@ -1,1 +1,1 @@
-export * from './use-create-payment-form-schema';
+export * from './use-payment-settings-form-schema';

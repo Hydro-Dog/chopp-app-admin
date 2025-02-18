@@ -1,2 +1,2 @@
-export * from './edit-view'
-export * from './read-view'
+export * from './edit-view';
+export * from './read-view';

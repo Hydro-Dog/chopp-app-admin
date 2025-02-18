@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { AsyncThunkAction } from '@reduxjs/toolkit';
+import { ORDER_STATUS } from '@shared/enum';
+import { ChoppInfoModal } from '@shared/index';
 import { ErrorResponse, Order, PaginationQuery, PaginationResponse } from '@shared/types';
-import { AppDispatch, CallsTableRecord } from '@store/index'; // Update the path as necessary
 import { Table } from 'antd';
-
-import { Tooltip, Tag } from 'antd';
-import dayjs from 'dayjs';
+import { useBoolean } from 'usehooks-ts';
+import { ChangeOrderStatusModal } from './components';
+import { ACTION_MENU_ITEMS } from './enums';
+import { useGetOrderTableColumns } from './hooks';
+import { ActionValue } from './types';
 
 type FetchDataFunction = (
   params: PaginationQuery,
@@ -16,96 +17,56 @@ type FetchDataFunction = (
 type Props = {
   fetchData: FetchDataFunction;
   data?: PaginationResponse<Order>;
+  onStatusChange: ({
+    orderStatus,
+    transactionId,
+  }: {
+    orderStatus: ORDER_STATUS;
+    transactionId: string;
+  }) => void;
 };
 
-export const OrdersTable = ({ data }: Props) => {
-  console.log('data: ', data)
-  const { t } = useTranslation();
+export const OrdersTable = ({ data, onStatusChange }: Props) => {
+  const {
+    value: isStatusModalOpened,
+    setTrue: openStatusModal,
+    setFalse: closeStatusModal,
+  } = useBoolean();
+  const {
+    value: isInfoModalOpened,
+    setTrue: openInfoModal,
+    setFalse: closeInfoModal,
+  } = useBoolean();
+  const [clickedOrder, setClickedOrder] = useState<Order>();
 
-  const columns = [
-    {
-      title: t('DATE'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: string) => dayjs(text).format('DD.MM.YYYY HH:mm'),
+  const actionsMap: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
+    [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
+      setClickedOrder(record);
+      openInfoModal();
     },
-    {
-      title: t('ORDER ID'),
-      dataIndex: 'id',
-      key: 'id',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: number) => <span>{text}</span>,
+    [ACTION_MENU_ITEMS.CHANGE_ORDER_STATUS]: ({ record }) => {
+      setClickedOrder(record);
+      openStatusModal();
     },
-    {
-      title: t('TOTAL PRICE'),
-      dataIndex: 'totalPrice',
-      key: 'totalPrice',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: number) => (
-        <span>
-          {text?.toLocaleString('ru-RU', {
-            style: 'currency',
-            currency: 'RUB',
-          })}
-        </span>
-      ),
-    },
-    {
-      title: t('QUANTITY'),
-      dataIndex: 'quantity',
-      key: 'quantity',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: number) => <span>{text}</span>,
-    },
-    {
-      title: t('ORDER STATUS'),
-      dataIndex: 'orderStatus',
-      key: 'orderStatus',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: string) => (
-        <Tooltip title={text}>
-          <Tag style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {t(`ORDER_STATUS.${text?.toUpperCase()}`)}
-          </Tag>
-        </Tooltip>
-      ),
-    },
-    {
-      title: t('PAYMENT STATUS'),
-      dataIndex: 'paymentStatus',
-      key: 'paymentStatus',
-      sorter: true,
-      className: 'cursor-pointer',
-      render: (text: string) => (
-        <Tooltip title={text}>
-          <Tag style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {t(`PAYMENT_STATUS.${text?.toUpperCase()}`)}
-          </Tag>
-        </Tooltip>
-      ),
-    },
-    {
-      title: t('TRANSACTION ID'),
-      dataIndex: 'transactionId',
-      key: 'transactionId',
-      className: 'cursor-pointer',
-      render: (text: string) => (
-        <Tooltip title={text}>
-          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </span>
-        </Tooltip>
-      ),
-    },
-  ];
+  };
+
+  const onActionClick = (action: ActionValue) => {
+    actionsMap[action.key](action);
+  };
+
+  const { columns } = useGetOrderTableColumns({ onActionClick });
 
   return (
-    <Table className="!p-0" size="small" columns={columns} dataSource={data?.items} rowKey="id" />
+    <>
+      <Table className="!p-0" size="small" columns={columns} dataSource={data?.items} rowKey="id" />
+      <ChangeOrderStatusModal
+        open={isStatusModalOpened}
+        onSubmit={onStatusChange}
+        onClose={closeStatusModal}
+        order={clickedOrder}
+      />
+
+      <ChoppInfoModal open={isInfoModalOpened} onOk={closeInfoModal} value={clickedOrder} />
+    </>
   );
 };

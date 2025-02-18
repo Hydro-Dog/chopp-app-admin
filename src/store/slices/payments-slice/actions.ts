@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ErrorResponse } from '@shared/index';
-import { PaymentsResponse } from '@shared/types/payment';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 
@@ -17,7 +16,7 @@ type FetchPaymentsParams = {
 };
 
 export const fetchPayments = createAsyncThunk<
-  PaymentsResponse, // Тип успешного ответа
+  any, // TODO: убрть any
   FetchPaymentsParams, // Тип параметров запроса
   { rejectValue: ErrorResponse } // Тип для ошибок
 >(
@@ -50,7 +49,8 @@ export const fetchPayments = createAsyncThunk<
       if (status) params.status = status;
       if (pageNumber) params.pageNumber = String(pageNumber);
 
-      const response = await axiosPrivate.get<PaymentsResponse>('/payments', { params });
+      // TODO: убрать any
+      const response = await axiosPrivate.get<any>('/payments', { params });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -80,7 +80,7 @@ export const refundPayment = createAsyncThunk<
     if (axios.isAxiosError(error) && error.response) {
       return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
     } else {
-      return thunkAPI.rejectWithValue({ errorMessage: 'An unknown error occurred' });
+      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
     }
   }
 });

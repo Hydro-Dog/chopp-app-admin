@@ -14,28 +14,23 @@ import { useChatsContext } from '@pages/chats/chats-context';
 import { ROUTES } from '@shared/enum';
 import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
 import { useNotificationContext, useTheme } from '@shared/index';
-import { logoutUser, setLogoutStatus, wsSend } from '@store/slices';
+import { FETCH_STATUS } from '@shared/index';
+import { logoutUser, setLogoutStatus } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
-import { FETCH_STATUS } from '@store/types/fetch-status';
-import { Badge, Layout, Menu, Tooltip, Typography } from 'antd';
+import { Badge, Layout, Menu, Tooltip } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
-import { useGetCurrentRoot } from './hooks/index';
+import { useGetMenuItemByUrl } from './hooks/index';
 
 const { Sider } = Layout;
-const { Text } = Typography;
 
 export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any>>) => {
-  const dispatch = useDispatch<AppDispatch>();
   const { theme } = useTheme();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { wsConnected } = useSelector((state: RootState) => state.ws);
+  const dispatch = useDispatch<AppDispatch>();
   const { logoutStatus } = useSelector((state: RootState) => state.user);
-  // const { lastMessage: ordersStats } = useFilterWsMessages<Record<ORDER_STATUS, number>>(
-  //   WS_MESSAGE_TYPE.CALL_HISTORY_STATS,
-  // );
-  // const { lastMessage: chatsData } = useFilterWsMessages<ChatData[]>(WS_MESSAGE_TYPE.CHAT_STATS);
-
+  const { selectedMenuKeys } = useGetMenuItemByUrl();
+  const { chatsStats } = useChatsContext();
   const { showNotification } = useNotificationContext();
 
   const onMenuItemClick = (path: string) => {
@@ -45,8 +40,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const onLogout = () => {
     dispatch(logoutUser());
   };
-
-  const { selectedMenuKeys } = useGetCurrentRoot();
 
   useEffect(() => {
     if (logoutStatus === FETCH_STATUS.ERROR) {
@@ -58,7 +51,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   }, [dispatch, logoutStatus, navigate, showNotification]);
 
   useFetchChatStats();
-  const { chatsStats } = useChatsContext();
+
   const menuItems = [
     {
       key: ROUTES.GOODS,
@@ -78,7 +71,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       label: (
         <div className="flex items-center gap-1">
           <div>{t('ORDERS')}</div>
-          {/* <Badge size="default" count={ordersStats?.payload?.idle} /> */}
         </div>
       ),
       onClick: () => onMenuItemClick(ROUTES.ORDERS),
@@ -89,7 +81,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       label: (
         <div className="flex items-center gap-1">
           <div>{t('PAYMENTS')}</div>
-          {/* <Badge size="default" count={ordersStats?.payload?.idle} /> */}
         </div>
       ),
       onClick: () => onMenuItemClick(ROUTES.PAYMENTS),
@@ -101,7 +92,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
         <Tooltip title={JSON.stringify(chatsStats)}>
           <div className="flex items-center gap-1">
             <div>{t('CHATS')}</div>
-            <Badge size="default" count={chatsStats.unRead} />
+            <Badge size="default" count={0} />
           </div>
         </Tooltip>
       ),
@@ -129,26 +120,8 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
   return (
     <Layout>
-      <Sider
-        theme={theme as SiderTheme}
-        // collapsible={width > SCREEN_SIZE.SM}
-        // collapsed={width > SCREEN_SIZE.SM ? collapsed : true}
-        // onCollapse={(value) => setCollapsed(value)}
-      >
-        <div className="mt-3 flex flex-col justify-between h-screen">
-          <Menu
-            style={{ border: 'none' }}
-            selectedKeys={selectedMenuKeys}
-            mode="inline"
-            items={menuItems}
-          />
-
-          <Tooltip title={t('COPYRIGHT', { ns: 'phrases' })}>
-            <Text type="secondary" className="w-full text-center mb-5">
-              ©2024
-            </Text>
-          </Tooltip>
-        </div>
+      <Sider theme={theme as SiderTheme}>
+        <Menu className="pt-3" selectedKeys={selectedMenuKeys} mode="inline" items={menuItems} />
       </Sider>
       <Layout>{children}</Layout>
     </Layout>

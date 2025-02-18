@@ -23,15 +23,7 @@ module.exports = {
     'import/order': [
       'warn',
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          ['sibling', 'parent'],
-          'index',
-          'object',
-          'type',
-        ],
+        groups: ['builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'object', 'type'],
         pathGroups: [
           {
             pattern: 'react',
@@ -56,6 +48,6 @@ module.exports = {
     'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    'max-len': ['error', { code: 140 }],
+    'max-len': ['warn', { code: 120 }],
   },
 };

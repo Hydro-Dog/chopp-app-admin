@@ -48,7 +48,8 @@
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
     "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
-    "MORE_1_SYMBOL_REQUIRED": "Введите 1 или более символов"
+    "MORE_1_SYMBOL_REQUIRED": "Введите 1 или более символов",
+    "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\""
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -57,6 +58,7 @@
   "CATEGORIES": "Категории",
   "CATEGORY": "Категория",
   "ADD_PRODUCT": "Добавить товар",
+  "EDIT_PRODUCT": "Редактировать товар",
   "ADD_CATEGORY": "Добавить категорию",
   "ADD_CATEGORY_DESCRIPTION": "",
   "DRAG_CATEGORY_TOOLTIP_TEXT": "Перетащите, чтобы изменить порядок",
@@ -75,19 +77,50 @@
   "COMMENT": "Комментарий",
   "USER": "Пользователь",
   "ACTION": "Действие",
+  "ACTIONS": "Действия",
+  "INFO": "Инфо",
+  "REFUND": "Возврат средств",
+  "CHANGE_ORDER_STATUS": "Изменить статус заказа",
   "ADDRESS": "Адрес",
   "ALL": "Все",
   "CHATS": "Чаты",
   "CHAT": "Чат",
   "SETTINGS": "Управление",
+  "QUANTITY": "Количество",
+  "TRANSACTION_ID": "ID Транзакции",
+  "TRANSACTION_ID_TOOLTIP": "ID Транзакции в Юкассе",
+  "ORDER_STATUS_TITLE": "Статус заказа",
+  "CURRENT_STATUS": "Текущий сатус",
+  "NEW_STATUS": "Новый сатус",
+  "PICK_STATUS": "Выбрать статус",
   "ORDER_STATUS": {
-    "PROCESSING": "В обработке",
-    "ACCEPTED": "Принят",
-    "ON_THE_WAY": "В пути",
-    "ON_THE_SPOT": "На месте",
-    "COMPLETED": "Завершено",
-    "CANCELED": "Отменено",
-    "ALL": "Все"
+    "AWAITING_PAYMENT": "Ожидает оплаты",
+    "AWAITING_PAYMENT_TOOLTIP": "Заказ создан и ожидает оплаты от пользователя.",
+    "PENDING": "В обработке",
+    "PENDING_TOOLTIP": "Заказ принят и обрабатывается продавцом.",
+    "PAYMENT_SUCCEEDED": "Платеж принят",
+    "PAYMENT_SUCCEEDED_TOOLTIP": "Оплата успешно завершена, заказ готовится к отправке.",
+    "PAYMENT_CANCELED": "Платеж отменен",
+    "PAYMENT_CANCELED_TOOLTIP": "Оплата была отменена, заказ не может быть выполнен.",
+    "IN_PROGRESS": "Собирается",
+    "IN_PROGRESS_TOOLTIP": "Заказ передан в работу и готовится к отправке.",
+    "IN_DELIVERY_PROCESS": "Доставляется",
+    "IN_DELIVERY_PROCESS_TOOLTIP": "Заказ передан в службу доставки и находится в пути.",
+    "DELIVERED": "Доставлен",
+    "DELIVERED_TOOLTIP": "Заказ успешно доставлен получателю.",
+    "CANCELED": "Отменен",
+    "CANCELED_TOOLTIP": "Заказ был отменен по запросу пользователя или продавца."
+  },
+  "PAYMENT_STATUS_TITLE": "Статус платежа",
+  "PAYMENT_STATUS": {
+    "PENDING": "Ожидание",
+    "PENDING_TOOLTIP": "Платеж создан и ожидает действий от пользователя.",
+    "WAITING_FOR_CAPTURE": "Оплачен",
+    "WAITING_FOR_CAPTURE_TOOLTIP": "Платеж оплачен, деньги авторизованы и ожидают списания. Из этого статуса платеж может перейти в succeeded (если вы списали оплату) или canceled (если вы отменили платеж или что-то пошло не так).",
+    "SUCCEEDED": "Успешно завершен",
+    "SUCCEEDED_TOOLTIP": "Платеж успешно завершен, деньги будут перечислены на ваш расчетный счет в соответствии с вашим договором с ЮKassa.",
+    "CANCELED": "Отменен",
+    "CANCELED_TOOLTIP": "Платеж отменен. Вы увидите этот статус, если вы отменили платеж самостоятельно, истекло время на принятие платежа или платеж был отклонен ЮKassa или платежным провайдером."
   },
   "SETTINGS_PAGE": {
     "VISUAL_SETTINGS": {
@@ -108,10 +141,13 @@
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная."
   },
   "PAYMENT_PAGE": {
-    "SHOP_ID": "Shop Id", 
+  "SHOP_ID": "Shop Id", 
   "SHOP_ID_INFO": "Id вашего магазина в 'ЮКассе",
-  "ENTER_SHOP_ID": "Введите Shop Id"
+  "ENTER_SHOP_ID": "Введите Shop Id",
 
+  "CHATS_CONTEXT": {
+    "EMPTY_CHAT": "Здесь пока ничего нет...",
+    "EMPTY_LAST_MESSAGE": "Нет сообщений"
   },
   "DELIVERY": "Доставка",
   "PATHS": {
@@ -149,7 +185,23 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
-  "LOAD_MORE": "Загрузить еще",
   "PAYMENT_SETTINGS": "Платежная информация",
-  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей"
-}
+  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
+  "PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE": "Товар обновлен",
+  "LOAD_MORE": "Загрузить еще",
+  "CREATED_AT": "Дата создания",
+  "AMOUNT": "Сумма",
+  "PAID": "Оплачено",
+  "REFUND_AMOUNT": "Сумма возврата",
+  "FAILED": "Отказ",
+  "YOU_ARE_GOING_TO_REMOVE_CATEGORY": "Высобираетесь удалить категорию",
+  "ALL_PRODUCTS_WILL_BE_MOVED_TO": "Все товары будут перенесены в категорию",
+  "NO_CATEGORY": "Другое",
+  "INPUT_CATEGORY_TO_DELETE_NAME": "Введите название категории, которую хотите удалить",
+  "PRODUCT_VISIBLE_TOOLTIP": "Товар отображается пользователям",
+  "PRODUCT_HIDDEN_TOOLTIP": "Товар скрыт от пользователей",
+  "PRODUCT_IS_NOW_VISIBLE": "Товар '{{title}}' теперь виден пользователям",
+  "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей",
+  "MOVE_TO_TRASH": "Переместить в корзину",
+  "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение"
+}}

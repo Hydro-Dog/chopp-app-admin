@@ -15,7 +15,7 @@ import {
   setLoginStatus,
   wsConnect,
 } from '@store/index';
-import { FETCH_STATUS } from '@store/types/fetch-status';
+import { FETCH_STATUS } from '@shared/index';
 import { Button, Flex, Form, Input, Tooltip, Typography, Tabs } from 'antd';
 import { z } from 'zod';
 import { useSignInFormSchema } from './hooks/useSignInFormSchema';
@@ -27,7 +27,7 @@ const { Text } = Typography;
 export const SignInPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const superDispatch = useSuperDispatch();
+  const { superDispatch } = useSuperDispatch();
   const { loginStatus, loginError } = useSelector((state: RootState) => state.user);
   const navigate = useNavigate();
   const { showErrorNotification } = useNotificationContext();
@@ -65,7 +65,7 @@ export const SignInPage = () => {
       }
     };
   
-    superDispatch({ action: loginUser({ ...data }), thenHandler });
+    superDispatch({ action: loginUser(data), thenHandler });
   };
 
   const handleChangePhoneNumber = (e: any) => {

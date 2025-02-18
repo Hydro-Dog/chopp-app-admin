@@ -1,3 +1,4 @@
+import { ORDER_STATE } from '@shared/index';
 import { UploadFile } from 'antd';
 
 type Args = {
@@ -20,6 +21,7 @@ export const createFormDto = ({ title, description, price, fileList, categoryId 
   formData.append('description', description);
   formData.append('price', String(price));
   formData.append('categoryId', categoryId);
+  formData.append('state', ORDER_STATE.DEFAULT);
 
   return formData;
 };

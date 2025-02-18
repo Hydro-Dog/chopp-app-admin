@@ -3,9 +3,9 @@ import {
   createContext,
   useContext,
 } from 'react';
-import { Chat, ChatMessage, ChatStats } from '@shared/types';
+import { Chat, ChatMessage, ChatStats, FETCH_STATUS } from '@shared/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, fetchChats as fetchChatsAction, RootState, updateChats, updateMessages } from '@store/index';
+import { AppDispatch, RootState, updateChats, updateMessages } from '@store/index';
 import { noop } from 'antd/es/_util/warning';
 
 export type ChatsContextType = {
@@ -13,8 +13,10 @@ export type ChatsContextType = {
   setMessages: (chatMessages: ChatMessage[]) => void;
   pushNewMessageToChat: (chatMessage: ChatMessage) => void;
   chats: Chat[];
+  openedChat: string | null;
+  fetchChatsStatus: FETCH_STATUS;
+  fetchChatMessagesStatus: FETCH_STATUS;
   setChats: (chats: Chat[]) => void;
-  fetchChats: () => void;
   chatsStats: ChatStats;
   // setChatsStats: Dispatch<SetStateAction<ChatStats>>;
 };
@@ -24,8 +26,10 @@ const chatsContextInitialValue: ChatsContextType = {
   setMessages: () => [],
   pushNewMessageToChat: () => noop,
   chats: [],
+  openedChat: null,
+  fetchChatsStatus: FETCH_STATUS.IDLE,
+  fetchChatMessagesStatus: FETCH_STATUS.IDLE,
   setChats: () => [],
-  fetchChats: () => noop,
   chatsStats: {} as ChatStats,
   // setChatsStats: () => ({}) as ChatStats,
 };
@@ -40,7 +44,13 @@ export const ChatsContextProvider = ({ children }: PropsWithChildren<any>) => {
 
   const chatsStats = { total: 1, read: 1, unread: 1 };
 
-  const { chats = [], chatMessages } = useSelector((state: RootState) => state.chatsRepository);
+  const {
+    chats = [],
+    chatMessages,
+    fetchChatsStatus,
+    fetchChatMessagesStatus,
+    openedChat,
+  } = useSelector((state: RootState) => state.chatsRepository);
 
   const setChats = (chats: Chat[]) => {
     dispatch(updateChats(chats));
@@ -50,13 +60,16 @@ export const ChatsContextProvider = ({ children }: PropsWithChildren<any>) => {
     dispatch(updateMessages(chatMessages));
   };
 
-  const fetchChats = () => {
-    dispatch(fetchChatsAction());
-  };
-
   const pushNewMessageToChat = (newChatMessage: ChatMessage) => {
     const changesChatMessages = [...chatMessages, newChatMessage];
+
     dispatch(updateMessages(changesChatMessages));
+
+    const updatedChats = chats.map(chat =>
+        `${chat.id}` === newChatMessage.chatId ? { ...chat, lastMessage: newChatMessage } : chat
+    );
+
+    setChats(updatedChats);
   }
 
   return (
@@ -64,11 +77,13 @@ export const ChatsContextProvider = ({ children }: PropsWithChildren<any>) => {
       value={{
         chats,
         setChats,
-        fetchChats,
         messages: chatMessages,
         pushNewMessageToChat,
         setMessages,
         chatsStats,
+        fetchChatsStatus,
+        fetchChatMessagesStatus,
+        openedChat,
         // setChatsStats
         }}>
       {children}

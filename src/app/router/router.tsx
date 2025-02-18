@@ -18,8 +18,8 @@ import {
   PaymentSettingsPage,
 } from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
-import { GuardedRoute } from './guarded-route';
-import { WsWrapper } from '../ws/ws-wrapper';
+import { GuardedRoute } from './utils/guarded-route';
+import { InterceptorsWrapper } from './wrappers/interceptors-wrapper';
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
     path: ROUTES.ROOT,
     element: (
       <GuardedRoute>
-        <WsWrapper />
+        <InterceptorsWrapper />
         <MainMenu />
       </GuardedRoute>
     ),

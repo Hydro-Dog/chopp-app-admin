@@ -3,7 +3,7 @@ import { Chat, ChatStats, ErrorResponse } from '@shared/index';
 import { ChatMessage } from '@shared/types/chat-message';
 import { WsMessage } from '@shared/types/ws-message';
 import { fetchChatMessages, fetchChats, fetchChatStats, createChatAction } from './actions';
-import { FETCH_STATUS } from '../../types/fetch-status';
+import { FETCH_STATUS } from '@shared/index';
 
 export type ChatsState = {
   // state of messages
@@ -16,7 +16,7 @@ export type ChatsState = {
   fetchChatsStatus: FETCH_STATUS;
   fetchChatsError: ErrorResponse | null;
 
-  // state of cahtStats
+  // state of chatStats
   chatsStats: ChatStats | null;
   fetchChatsStatsStatus: FETCH_STATUS;
   fetchChatStatsError: ErrorResponse | null;
@@ -25,6 +25,9 @@ export type ChatsState = {
   createdChat: Chat | null;
   createChatStatus: FETCH_STATUS;
   createChatError: ErrorResponse | null;
+
+  // chat page state
+  openedChat: Chat['id'] | null;
 };
 
 const initialState: ChatsState = {
@@ -40,6 +43,7 @@ const initialState: ChatsState = {
   createdChat: null,
   createChatStatus: FETCH_STATUS.IDLE,
   createChatError: null,
+  openedChat: null,
 };
 
 export const chatSlice = createSlice({
@@ -62,17 +66,28 @@ export const chatSlice = createSlice({
     updateMessages: (state, action: PayloadAction<ChatMessage[]>) => {
       state.chatMessages = action.payload;
     },
-    pushWsMessage: (state, action: PayloadAction<{ message: ChatMessage}>) => {
+    pushWsMessage: (state, action: PayloadAction<{ message: ChatMessage }>) => {
       try {
-        state.chatMessages.push(action.payload.message);
+        const { message } = action.payload
+        state.chatMessages.push(message);
+
+        const updatedChats = state.chats.map(chat =>
+          `${chat.id}` === `${message.chatId}` ? { ...chat, lastMessage: message } : chat
+        );
+
+        state.chats = updatedChats;
       } catch (error) {
         console.error(error);
       }
     },
+    setOpenedChat: (state, action: PayloadAction<string | null>) => {
+      // string, когда новый чат открыт, null когда чат удален
+      state.openedChat = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
-      // messages actions
+      //messages actions
       .addCase(fetchChatMessages.pending, (state) => {
         state.fetchChatMessagesStatus = FETCH_STATUS.LOADING;
       })
@@ -135,6 +150,7 @@ export const chatSlice = createSlice({
 export const {
   clearChatMessages,
   clearChatCreatingHistory,
+  setOpenedChat,
   updateChats,
   updateMessages,
   pushWsMessage,

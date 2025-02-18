@@ -13,11 +13,12 @@ import { Button, Flex, Form, Input } from 'antd';
 import { Tooltip } from 'antd/lib';
 import { z } from 'zod';
 import { useEditCategoryFormSchema } from './hooks';
+import { LIST_ITEM_MODE } from '../../enum';
 
 const { Item } = Form;
 
 type Props = {
-  setMode: Dispatch<SetStateAction<'edit' | 'read'>>;
+  setMode: Dispatch<SetStateAction<LIST_ITEM_MODE>>;
   editError?: boolean;
   value: string;
   id: string;
@@ -35,7 +36,6 @@ export const EditView = ({ setMode, value, id }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
-    reset,
   } = useForm<EditCategoryFormType>({
     resolver: zodResolver(editCategoryFormSchema),
     reValidateMode: 'onChange',
@@ -48,21 +48,14 @@ export const EditView = ({ setMode, value, id }: Props) => {
   const onSubmit: SubmitHandler<EditCategoryFormType> = ({ title }) => {
     dispatch(updateCategoryTitle({ id, title }))
       .unwrap()
-      .then(() => setMode('read'))
+      .then(() => setMode(LIST_ITEM_MODE.VIEW))
       .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
   };
 
   return (
-    <Form
-      className="pt-3 w-full"
-      labelAlign="left"
-      labelWrap
-      colon={false}
-      onFinish={handleSubmit(onSubmit)}>
+    <Form className="pt-3 w-full" labelAlign="left" labelWrap colon={false} onFinish={handleSubmit(onSubmit)}>
       <Flex align="start" justify="space-between">
-        <Item<EditCategoryFormType>
-          validateStatus={errors.title ? 'error' : ''}
-          help={errors.title?.message || t('ADD_CATEGORY_DESCRIPTION')}>
+        <Item<EditCategoryFormType> validateStatus={errors.title ? 'error' : ''} help={errors.title?.message || t('ADD_CATEGORY_DESCRIPTION')}>
           <Controller
             name="title"
             control={control}
@@ -94,7 +87,7 @@ export const EditView = ({ setMode, value, id }: Props) => {
               type="text"
               onClick={(e) => {
                 e.stopPropagation();
-                setMode('read');
+                setMode(LIST_ITEM_MODE.VIEW);
               }}>
               <CloseRoundedIcon />
             </Button>

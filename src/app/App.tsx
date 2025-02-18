@@ -3,7 +3,6 @@ import { initReactI18next } from 'react-i18next';
 import { Provider as StoreProvider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { ChatsContextProvider } from '@pages/chats/chats-context';
-import { OrderNotifications } from '@pages/orders/components/orders-table/orders-notifications';
 import {
   useNotificationApi,
   useTheme,
@@ -25,6 +24,7 @@ import { router } from './router/router';
 import 'dayjs/locale/ru';
 
 import './index.css';
+import { useAxiosInterceptors } from '@store/middleware';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -46,17 +46,13 @@ i18n
     },
   });
 
-export const AudioLevelContext = createContext<any>(null);
-
 export const App = () => {
   const { theme } = useTheme();
 
   const themeConfig = {
-    //TODO: Использовать енам со значением 'dark'
     algorithm: theme === THEME.DARK ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
   };
 
-  //TODO: проверить нельзя ли отказаться от NotificationContextProvider и использвоать везде useNotification()
   const {
     showNotification,
     showInfoNotification,
@@ -79,7 +75,6 @@ export const App = () => {
             showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
             closeAllNotifications={closeAllNotifications}>
-            <OrderNotifications />
             <div className="w-full h-screen overflow-hidden">
               <ChatsContextProvider>
                 <RouterProvider router={router} />

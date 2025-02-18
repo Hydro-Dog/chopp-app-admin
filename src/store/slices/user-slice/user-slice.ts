@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ErrorResponse, SearchResponse, STORAGE_KEYS } from '@shared/index';
+import { ErrorResponse, PaginationResponse, STORAGE_KEYS, User } from '@shared/index';
+import { FETCH_STATUS } from '@shared/types/fetch-status';
 import {
   updateCurrentUser,
   fetchCurrentUser,
@@ -7,12 +8,9 @@ import {
   logoutUser,
   registerUser,
   fetchUsers,
-  fetchCallHistory,
   fetchUser,
-  fetchActiveCalls,
 } from './actions';
-import { CallsTableRecord, User, UserAuthorization } from './types';
-import { FETCH_STATUS } from '../../types/fetch-status';
+import { UserAuthorization } from './types';
 
 export type UserState = {
   currentUser: User | null;
@@ -29,15 +27,9 @@ export type UserState = {
   logoutError: ErrorResponse | null;
   loginStatus: FETCH_STATUS;
   loginError: ErrorResponse | null;
-  users: SearchResponse<User> | null;
+  users: PaginationResponse<User> | null;
   fetchUsersStatus: FETCH_STATUS;
   fetchUsersError: ErrorResponse | null;
-  orders: SearchResponse<CallsTableRecord> | null;
-  fetchCallHistoryStatus: FETCH_STATUS;
-  fetchCallHistoryError: ErrorResponse | null;
-  activeCalls: SearchResponse<CallsTableRecord> | null;
-  fetchActiveCallsStatus: FETCH_STATUS;
-  fetchActiveCallsError: ErrorResponse | null;
 };
 
 const initialState: UserState = {
@@ -55,15 +47,15 @@ const initialState: UserState = {
   logoutError: null,
   loginStatus: FETCH_STATUS.IDLE,
   loginError: null,
-  users: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
+  users: {
+    items: [],
+    totalPages: 0,
+    pageNumber: 0,
+    totalItems: 0,
+    limit: 0,
+  },
   fetchUsersStatus: FETCH_STATUS.IDLE,
   fetchUsersError: null,
-  orders: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
-  fetchCallHistoryStatus: FETCH_STATUS.IDLE,
-  fetchCallHistoryError: null,
-  activeCalls: { items: [], totalPages: 0, totalRecords: 0, pageNumber: 0 },
-  fetchActiveCallsStatus: FETCH_STATUS.IDLE,
-  fetchActiveCallsError: null,
 };
 
 export const userSlice = createSlice({
@@ -89,7 +81,7 @@ export const userSlice = createSlice({
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.currentUserStatus = FETCH_STATUS.ERROR;
         state.currentUserError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Failed to fetch user information',
         };
       })
       .addCase(fetchUser.pending, (state) => {
@@ -102,7 +94,7 @@ export const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.fetchUserStatus = FETCH_STATUS.ERROR;
         state.fetchUserError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Failed to fetch user information',
         };
       })
       .addCase(updateCurrentUser.pending, (state) => {
@@ -116,7 +108,7 @@ export const userSlice = createSlice({
       .addCase(updateCurrentUser.rejected, (state, action) => {
         state.updateCurrentUserStatus = FETCH_STATUS.ERROR;
         state.updateCurrentUserError = action.payload ?? {
-          errorMessage: 'Failed to fetch user information',
+          message: 'Failed to fetch user information',
         };
         state.updateCurrentUserStatus = FETCH_STATUS.IDLE;
       })
@@ -128,7 +120,7 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.registerUserStatus = FETCH_STATUS.ERROR;
-        state.registerUserError = action.payload ?? { errorMessage: 'Failed to register user' };
+        state.registerUserError = action.payload ?? { message: 'Failed to register user' };
       })
       .addCase(loginUser.pending, (state) => {
         state.loginStatus = FETCH_STATUS.LOADING;
@@ -141,7 +133,7 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginStatus = FETCH_STATUS.ERROR;
-        state.loginError = action.payload ?? { errorMessage: 'Failed to login user' };
+        state.loginError = action.payload ?? { message: 'Failed to login user' };
       })
       .addCase(logoutUser.pending, (state) => {
         state.logoutStatus = FETCH_STATUS.LOADING;
@@ -152,7 +144,7 @@ export const userSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.logoutStatus = FETCH_STATUS.ERROR;
-        state.logoutError = action.payload ?? { errorMessage: 'Failed to logout user' };
+        state.logoutError = action.payload ?? { message: 'Failed to logout user' };
       })
       .addCase(fetchUsers.pending, (state) => {
         state.fetchUsersStatus = FETCH_STATUS.LOADING;
@@ -162,45 +154,14 @@ export const userSlice = createSlice({
         state.users = {
           items: action.payload.items,
           pageNumber: action.payload.pageNumber,
+          limit: action.payload.limit,
+          totalItems: action.payload.totalItems,
           totalPages: action.payload.totalPages,
-          totalRecords: action.payload.totalRecords,
-        }; // Предполагаем, что ответ включает массив users
+        };
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.fetchUsersStatus = FETCH_STATUS.ERROR;
-        state.fetchUsersError = action.payload ?? { errorMessage: 'Failed to fetch users' };
-      })
-      .addCase(fetchCallHistory.pending, (state) => {
-        state.fetchCallHistoryStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(fetchCallHistory.fulfilled, (state, action) => {
-        state.fetchCallHistoryStatus = FETCH_STATUS.SUCCESS;
-        state.orders = {
-          items: action.payload.items,
-          pageNumber: action.payload.pageNumber,
-          totalPages: action.payload.totalPages,
-          totalRecords: action.payload.totalRecords,
-        };
-      })
-      .addCase(fetchActiveCalls.rejected, (state, action) => {
-        state.fetchActiveCallsStatus = FETCH_STATUS.ERROR;
-        state.fetchCallHistoryError = action.payload ?? { errorMessage: 'Failed to fetch users' };
-      })
-      .addCase(fetchActiveCalls.pending, (state) => {
-        state.fetchActiveCallsStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(fetchActiveCalls.fulfilled, (state, action) => {
-        state.fetchActiveCallsStatus = FETCH_STATUS.SUCCESS;
-        state.activeCalls = {
-          items: action.payload.items,
-          pageNumber: action.payload.pageNumber,
-          totalPages: action.payload.totalPages,
-          totalRecords: action.payload.totalRecords,
-        };
-      })
-      .addCase(fetchCallHistory.rejected, (state, action) => {
-        state.fetchActiveCallsStatus = FETCH_STATUS.ERROR;
-        state.fetchActiveCallsError = action.payload ?? { errorMessage: 'Failed to fetch users' };
+        state.fetchUsersError = action.payload ?? { message: 'Failed to fetch users' };
       });
   },
 });

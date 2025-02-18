@@ -1,4 +1,4 @@
-import { ProductImage } from '@store/index';
+import { ProductImage } from '@shared/index';
 
 export const sortImages = ({
   images = [],

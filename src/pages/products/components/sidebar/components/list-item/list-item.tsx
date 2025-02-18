@@ -1,10 +1,10 @@
-import { ReactNode, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { useThemeToken } from '@shared/hooks';
 import { Flex } from 'antd';
 import { EditView } from './components';
 import { ReadView } from './components/read-view';
+import { LIST_ITEM_MODE } from './enum';
 
 type Props = {
   id: string;
@@ -15,24 +15,13 @@ type Props = {
   activeId?: string;
   changeable: boolean;
   onDeleteItem?: (id: string) => void;
-  onEditItem?: ({ id, title }: { id: string; title: string }) => void;
   onClick?: (id: string) => void;
 };
 
-export const ListItem = ({
-  id,
-  overId,
-  title,
-  order,
-  activeId,
-  changeable,
-  onDeleteItem,
-  onEditItem,
-  onClick,
-}: Props) => {
+export const ListItem = ({ id, overId, title, order, activeId, changeable, onDeleteItem, onClick }: Props) => {
   const themeToken = useThemeToken();
   const [hovered, setHovered] = useState(false);
-  const [mode, setMode] = useState<'edit' | 'read'>('read');
+  const [mode, setMode] = useState<LIST_ITEM_MODE>(LIST_ITEM_MODE.VIEW);
   const { attributes, listeners, setNodeRef } = useSortable({ id });
   const [isPressed, setIsPressed] = useState(false);
 
@@ -57,7 +46,7 @@ export const ListItem = ({
       onClick={() => {
         onClick?.(id);
       }}>
-      {mode === 'read' ? (
+      {mode === LIST_ITEM_MODE.VIEW ? (
         <ReadView
           order={order}
           hovered={hovered}

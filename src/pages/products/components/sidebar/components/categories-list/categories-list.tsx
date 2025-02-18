@@ -1,65 +1,55 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useProductsContext } from '@pages/products/context';
 import { ChopDraggableList } from '@shared/components';
 import { useNotificationContext } from '@shared/context';
-import { useSearchParamValue } from '@shared/hooks';
-import {
-  Category,
-  fetchCategories,
-  updateCategories,
-  deleteCategory,
-  FETCH_STATUS,
-} from '@store/index';
+import { useSuperDispatch } from '@shared/hooks';
+import { Category, FETCH_STATUS } from '@shared/index';
+import { fetchCategories, updateCategories, deleteCategory } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { useBoolean } from 'usehooks-ts';
-import { CreateCategoryModal } from '../create-category-modal';
-import { DeleteCategoryModal } from '../delete-category-modal';
 import { Spin } from 'antd';
+import { useBoolean } from 'usehooks-ts';
+import { DeleteCategoryModal } from '../delete-category-modal';
 import { ListItem } from '../list-item';
 
 export const CategoriesList = () => {
-  const urlCategoryId = useSearchParamValue('id');
-  const [, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
-  const urlChatId = useSearchParamValue('id');
-
-  const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
+  const { categoryId, setCategoryId, setSearch, setPage } = useProductsContext();
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
-
   const {
     value: isDeleteCategoryModalOpen,
     setTrue: openDeleteCategoryModal,
     setFalse: closeDeleteCategoryModal,
   } = useBoolean();
-
   const [categoryToDelete, setCategoryToDelete] = useState<Category>();
+  const { showErrorNotification } = useNotificationContext();
+  const { superDispatch } = useSuperDispatch<Category[], unknown>();
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    superDispatch({
+      action: fetchCategories(),
+      thenHandler: (categories) => {
+        if (!categoryId) {
+          setCategoryId(
+            categories.find((item) => item.order === 1)?.id ||
+              categories.find((item) => item.order === 0)?.id ||
+              '',
+          );
+        }
+      },
+    });
   }, []);
-
-  useEffect(() => {
-    if (!urlChatId && categories) {
-      setSearchParams({
-        id:
-          categories.find((item) => item.order === 1)?.id ||
-          categories.find((item) => item.order === 0)?.id ||
-          '',
-      });
-    }
-  }, [categories, setSearchParams, urlChatId]);
 
   const onCategoriesOrderChange = (newCategories: Category[]) => {
     dispatch(updateCategories(newCategories));
   };
 
   const onDeleteCategoryModalOpen = (id: string) => {
-    setCategoryToDelete(categories?.find((item) => item.id == id));
+    setCategoryToDelete(categories?.find((item) => item.id === id));
     openDeleteCategoryModal();
   };
 
@@ -69,29 +59,37 @@ export const CategoriesList = () => {
   };
 
   const onDeleteCategory = () => {
-    dispatch(deleteCategory(categoryToDelete!.id))
-      .unwrap()
-      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
+    superDispatch({
+      action: deleteCategory(categoryToDelete!.id),
+      thenHandler: () => {
+        setCategoryId(categories?.[0].id || 'noCategoriesError');
+      },
+      catchHandler: (error) =>
+        showErrorNotification({ message: t('ERROR'), description: error.message }),
+    });
     onCloseDeleteCategory();
   };
 
   const onClickItem = (id: string) => {
-    setSearchParams({ id });
+    setCategoryId(id);
+    setSearch('');
+    setPage(1);
   };
 
   if (fetchCategoriesStatus === FETCH_STATUS.LOADING) {
-    return <Spin size="large" />;
+    return <Spin size="small" />;
   }
 
   return (
     <>
       <ChopDraggableList
-        unchangeableItems={['Без категории']}
+        unchangeableItems={['Другое']}
         items={categories || []}
         onDragEnd={onCategoriesOrderChange}
         onDeleteItem={onDeleteCategoryModalOpen}
         onClickItem={onClickItem}
-        initialCategoryId={urlCategoryId}
+        initialCategoryId={categoryId}
+        // @ts-ignore
         ListItem={ListItem}
       />
       <DeleteCategoryModal

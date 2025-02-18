@@ -1,117 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
-import InfoIcon from '@mui/icons-material/Info';
-import IconButton from '@mui/material/IconButton';
-import { ConfirmModal } from '@shared/index';
-import { FETCH_STATUS, fetchPayments, refundPayment } from '@store/index';
+import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
+import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { Descriptions, Spin, Table, TableColumnsType, Typography } from 'antd';
-import { useInfiniteScroll } from '../../../../shared/hooks/use-infinite-scroll';
-
-const { Text } = Typography;
-
-type RefundModalProps = {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  amount?: { value: string; currency: string };
-};
-
-export const RefundModal: React.FC<RefundModalProps> = ({ open, onClose, onConfirm, amount }) => {
-  return (
-    <ConfirmModal
-      open={open}
-      title="Confirm Refund"
-      onOk={onConfirm}
-      onCancel={onClose}
-      okTitle="Ok"
-      width={400}>
-      <Text>
-        You are about to refund the customer an amount of{' '}
-        <strong>
-          {amount?.value} {amount?.currency}
-        </strong>
-        .
-      </Text>
-    </ConfirmModal>
-  );
-};
-
-type PaymentDetailsProps = {
-  data?: Record<string, any>;
-  open: boolean;
-  onClose: () => void;
-};
-
-export const PaymentDetailsModal: React.FC<PaymentDetailsProps> = ({ data, open, onClose }) => {
-  return (
-    <ConfirmModal
-      open={open}
-      title={`Payment Details - ID: ${data?.id || 'Unknown'}`}
-      onOk={onClose}
-      onCancel={onClose}
-      okTitle="Close"
-      width={600}>
-      <Descriptions column={1} bordered size="small">
-        {Object.entries(data || {}).map(([key, value]) => (
-          <Descriptions.Item label={key} key={key}>
-            {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
-          </Descriptions.Item>
-        ))}
-      </Descriptions>
-    </ConfirmModal>
-  );
-};
+import { Table, Spin, Modal } from 'antd';
+import { ACTION_MENU_ITEMS } from './enums';
+import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
+import { ActionValue } from './types';
 
 export const PaymentsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { payments, fetchPaymentsStatus } = useSelector((state: RootState) => state.payments || {});
-  const [list, setList] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState<any>(null);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const { t } = useTranslation();
+  const [list, setList] = useState<Payment[]>([]);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPayments({}));
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (payments?.items) {
-      setList((prev) => [...prev, ...payments.items]);
+      setList((prev) => [...prev, ...(payments.items || [])]);
     }
   }, [payments]);
 
-  const handleDetailsClick = (record: any) => {
+  const handleInfoClick = (record: Payment) => {
     setSelectedPayment(record);
-    setIsDetailsModalOpen(true);
+    setIsInfoModalOpen(true);
   };
 
-  const handleRefundClick = (record: any) => {
+  const handleRefundClick = (record: Payment) => {
     setSelectedPayment(record);
     setIsRefundModalOpen(true);
   };
 
-  const handleDetailsModalClose = () => {
-    setIsDetailsModalOpen(false);
-    setSelectedPayment(null);
-  };
-
-  const handleRefundModalClose = () => {
-    setIsRefundModalOpen(false);
-    setSelectedPayment(null);
-  };
-
-  console.log('selectedPayment: ', selectedPayment);
   const handleRefundConfirm = () => {
+    if (!selectedPayment) return;
+    //TODO: Пройти по всем асинхронным запросам и добавить обработку ошибок.
+    dispatch(refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }));
     setIsRefundModalOpen(false);
-
-    dispatch(
-      refundPayment({
-        payment_id: selectedPayment.id,
-        amount: selectedPayment.amount,
-      }),
-    );
     setSelectedPayment(null);
   };
 
@@ -123,90 +54,51 @@ export const PaymentsTable = () => {
 
   const { setObserverElement } = useInfiniteScroll({ callback: handleLoadMore });
 
-  const columns: TableColumnsType<any> = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+  const map: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
+    [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
+      handleInfoClick(record);
+      setIsInfoModalOpen(true);
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+    [ACTION_MENU_ITEMS.REFUND]: ({ record }) => {
+      handleRefundClick(record);
+      setIsRefundModalOpen(true);
     },
-    {
-      title: 'Paid',
-      dataIndex: 'paid',
-      key: 'paid',
-      render: (paid: boolean) => (paid ? 'Yes' : 'No'),
-    },
-    {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
-      render: (amount: { value: string; currency: string }) => `${amount.value} ${amount.currency}`,
-    },
-    {
-      title: 'Refunded amount',
-      dataIndex: 'refunded_amount',
-      key: 'refunded_amount',
-      render: (amount: { value: string; currency: string }) =>
-        `${amount?.value} ${amount?.currency}`,
-    },
+  };
 
-    {
-      title: 'Created At',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (date: string) => new Date(date).toLocaleString(),
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (_: any, record: any) => {
-        return (
-          <>
-            <IconButton onClick={() => handleDetailsClick(record)}>
-              <InfoIcon />
-            </IconButton>
-            <IconButton disabled={!record?.refundable} onClick={() => handleRefundClick(record)}>
-              <CurrencyExchangeIcon />
-            </IconButton>
-          </>
-        );
-      },
-    },
-  ];
+  const onActionClick = (action: ActionValue) => {
+    map[action.key](action);
+  };
+
+  const { columns } = useGetPaymentsTableColumns({ onActionClick });
 
   return (
-    <>
-      <Table
-        size="middle"
-        columns={columns}
-        dataSource={list}
-        // loading={fetchPaymentsStatus === FETCH_STATUS.LOADING}
-        rowKey="id"
-        pagination={false}
-      />
+    <div>
+      <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
+
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
-      <PaymentDetailsModal
-        data={selectedPayment}
-        open={isDetailsModalOpen}
-        onClose={handleDetailsModalClose}
+      <ChoppInfoModal
+        open={isInfoModalOpen}
+        onOk={() => setIsInfoModalOpen(false)}
+        value={selectedPayment || undefined}
       />
-      <RefundModal
+
+      <Modal
         open={isRefundModalOpen}
-        onClose={handleRefundModalClose}
-        onConfirm={handleRefundConfirm}
-        amount={selectedPayment?.amount}
-      />
-    </>
+        title={t('CONFIRM_REFUND')}
+        onOk={handleRefundConfirm}
+        onCancel={() => setIsRefundModalOpen(false)}
+        width={400}>
+        {selectedPayment && (
+          <p>
+            {t('REFUND_AMOUNT')}:{' '}
+            <strong>
+              {selectedPayment.amount.value} {selectedPayment.amount.currency}
+            </strong>
+          </p>
+        )}
+      </Modal>
+    </div>
   );
 };

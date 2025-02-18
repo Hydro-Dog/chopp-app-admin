@@ -1,9 +1,9 @@
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Form, Input, Tooltip, Button, Space } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, Input, Tooltip, Button, Space } from 'antd';
+import { z } from 'zod';
 import { useCreatePaymentFormSchema } from './hooks';
 
 const { Item } = Form;
@@ -16,8 +16,16 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const createPaymentFormSchema = useCreatePaymentFormSchema();
   type CreatePaymentFormType = z.infer<typeof createPaymentFormSchema>;
-  const { handleSubmit, control } = useForm<CreatePaymentFormType>({
+  const {
+    handleSubmit,
+    control,
+    //оставил тебе подсказку  с errors что-то надо сделать, посмотри как в других формах сделано
+    formState: { errors },
+  } = useForm<CreatePaymentFormType>({
     resolver: zodResolver(createPaymentFormSchema),
+    defaultValues: {
+      enteredShopId: '',
+    },
   });
 
   const onSubmit: SubmitHandler<CreatePaymentFormType> = (paymentData) => {
@@ -35,7 +43,7 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
         label={
           <Space size={4}>
             {'Shop Id'}
-            <Tooltip title={t('PAYMENT_PAGE.SHOP_ID_INFO')}>
+            <Tooltip title={t('SHOP_ID_TOOLTIP')}>
               <InfoCircleOutlined />
             </Tooltip>
           </Space>
@@ -49,7 +57,7 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
               type="string"
               className="w-full"
               min={1}
-              placeholder={t('PAYMENT_PAGE.ENTER_SHOP_ID')}
+              placeholder={t('ENTER_SHOP_ID')}
             />
           )}
         />

@@ -10,8 +10,8 @@ export const PaymentSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const items: DescriptionsProps['items'] = [
     {
-      key: '1',
-      label: t('PAYMENT_PAGE.SHOP_ID'),
+      key: 'shopId',
+      label: t('SHOP_ID'),
       children: '-',
     },
   ];

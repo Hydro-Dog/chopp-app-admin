@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { TitlePage } from '@shared/index';
 import { Card } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-import { PaymentSettingsView } from './components/payment-settings-view';
 import { PaymentSettingsEditForm } from './components/payment-settings-edit-form';
+import { PaymentSettingsView } from './components/payment-settings-view';
 
 export const PaymentSettingsPage = () => {
   const { value: isEditing, toggle } = useBoolean();

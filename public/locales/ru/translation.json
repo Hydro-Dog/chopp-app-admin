@@ -48,7 +48,6 @@
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
     "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
-    "MORE_1_SYMBOL_REQUIRED": "Введите 1 или более символов",
     "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\""
   },
   "NAME": "Имя",
@@ -140,29 +139,16 @@
     "FREE_SHIPPING": "Бесплатная доставка включена",
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная."
   },
-  "PAYMENT_PAGE": {
-  "SHOP_ID": "Shop Id", 
-  "SHOP_ID_INFO": "Id вашего магазина в 'ЮКассе",
-  "ENTER_SHOP_ID": "Введите Shop Id",
-
   "CHATS_CONTEXT": {
     "EMPTY_CHAT": "Здесь пока ничего нет...",
     "EMPTY_LAST_MESSAGE": "Нет сообщений"
   },
+  "PAYMENT_SETTINGS": "Платежная информация",
+  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
+  "SHOP_ID": "Shop Id", 
+  "SHOP_ID_TOOLTIP": "Id вашего магазина в 'ЮКассе",
+  "ENTER_SHOP_ID": "Введите Shop Id",
   "DELIVERY": "Доставка",
-  "PATHS": {
-    "ROOT": "Главная",
-    "VISUAL_SETTINGS": "Тема",
-    "SETTINGS": "Управление",
-    "PRICING_SETTINGS": "Ценообразование",
-    "CHATS": "Чаты",
-    "ACTIVITY": "Вызовы",
-    "SIGN_IN": "Вход",
-    "REGISTER": "Регистрация",
-    "GOODS": "Товары",
-    "ANALYTICS": "Аналитика",
-    "PAYMENT_SETTINGS": "Платежная информация"
-  },
   "ROOT": "Главная",
   "VISUAL_SETTINGS": "Тема",
   "PRICING_SETTINGS": "Ценообразование",
@@ -185,8 +171,6 @@
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
-  "PAYMENT_SETTINGS": "Платежная информация",
-  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
   "PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE": "Товар обновлен",
   "LOAD_MORE": "Загрузить еще",
   "CREATED_AT": "Дата создания",
@@ -204,4 +188,4 @@
   "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей",
   "MOVE_TO_TRASH": "Переместить в корзину",
   "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение"
-}}
+}

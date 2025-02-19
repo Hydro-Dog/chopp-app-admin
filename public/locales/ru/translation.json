@@ -143,6 +143,11 @@
     "EMPTY_CHAT": "Здесь пока ничего нет...",
     "EMPTY_LAST_MESSAGE": "Нет сообщений"
   },
+  "PAYMENT_SETTINGS": "Платежная информация",
+  "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
+  "SHOP_ID": "Shop Id", 
+  "SHOP_ID_TOOLTIP": "Id вашего магазина в 'ЮКассе",
+  "ENTER_SHOP_ID": "Введите Shop Id",
   "DELIVERY": "Доставка",
   "ROOT": "Главная",
   "VISUAL_SETTINGS": "Тема",

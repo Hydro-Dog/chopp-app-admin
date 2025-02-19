@@ -11,4 +11,5 @@ export enum ROUTES {
   ANALYTICS = 'analytics',
   VISUAL_SETTINGS = 'visualSettings',
   PRICING_SETTINGS = 'pricingSettings',
+  PAYMENT_SETTINGS = 'paymentSettings',
 }

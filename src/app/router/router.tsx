@@ -12,7 +12,11 @@ import {
 } from '@pages/index';
 
 import { PaymentsPage } from '@pages/payments';
-import { PricingSettingsPage, VisualSettingsPage } from '@pages/settings/pages';
+import {
+  PricingSettingsPage,
+  VisualSettingsPage,
+  PaymentSettingsPage,
+} from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './utils/guarded-route';
 import { InterceptorsWrapper } from './wrappers/interceptors-wrapper';
@@ -62,6 +66,10 @@ export const router = createBrowserRouter([
           {
             path: ROUTES.PRICING_SETTINGS,
             element: <PricingSettingsPage />,
+          },
+          {
+            path: ROUTES.PAYMENT_SETTINGS,
+            element: <PaymentSettingsPage />,
           },
         ],
       },

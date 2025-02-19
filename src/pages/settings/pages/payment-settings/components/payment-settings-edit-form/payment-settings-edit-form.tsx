@@ -14,21 +14,20 @@ type Props = {
 
 export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const createPaymentSettingsFormSchema = usePaymentSettingsFormSchema();
-  type CreatePaymentSettingsFormType = z.infer<typeof createPaymentSettingsFormSchema>;
+  const paymentSettingsFormSchema = usePaymentSettingsFormSchema();
+  type PaymentSettingsFormType = z.infer<typeof paymentSettingsFormSchema>;
   const {
     handleSubmit,
     control,
-    //оставил тебе подсказку  с errors что-то надо сделать, посмотри как в других формах сделано
     formState: { errors },
-  } = useForm<CreatePaymentSettingsFormType>({
-    resolver: zodResolver(createPaymentSettingsFormSchema),
+  } = useForm<PaymentSettingsFormType>({
+    resolver: zodResolver(paymentSettingsFormSchema),
     defaultValues: {
       shopId: '',
     },
   });
 
-  const onSubmit: SubmitHandler<CreatePaymentSettingsFormType> = (paymentData) => {
+  const onSubmit: SubmitHandler<PaymentSettingsFormType> = (paymentData) => {
     console.log(paymentData);
   };
 

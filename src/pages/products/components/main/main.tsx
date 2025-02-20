@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { PaginationResponse, Product } from '@shared/types';
+import { PaginationRequestQuery, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/index';
 import { VerticalLayout } from '../vertical-layout';
 import { ProductsLayoutHeader } from './components/';
@@ -13,19 +13,23 @@ export const Main = () => {
     page,
     limit,
     categoryId,
+    productsState,
     setPage,
     setPageProducts,
     setTotalPages,
     setTotalItems,
     setLimit,
   } = useProductsContext();
-  const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
+  const { superDispatch } = useSuperDispatch<
+    PaginationResponse<Product>,
+    { categoryId: string } & PaginationRequestQuery
+  >();
 
   useEffect(() => {
     if (categoryId !== undefined) {
-      console.log('superDispatch---')
       superDispatch({
         action: fetchProducts({
+          state: productsState,
           categoryId,
           page,
           search,

@@ -1,11 +1,14 @@
 import { useSelector } from 'react-redux';
+import { PRODUCTS_STATE_BY_GRID_MODE } from '@pages/products/constants';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
+import { PRODUCT_GRID_VIEW_MODE } from '@shared/index';
 import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
 import { Pagination, PaginationProps } from 'antd';
 import { ProductsGrid } from '../products-grid';
+import { TrashButton } from './components';
 
 const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
 
@@ -19,11 +22,13 @@ export const ProductsLayoutMain = () => {
     limit,
     categoryId,
     page,
+    productsState,
     setPage,
     setPageProducts,
     setTotalPages,
     setTotalItems,
     setLimit,
+    setProductsState,
   } = useProductsContext();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
 
@@ -31,9 +36,30 @@ export const ProductsLayoutMain = () => {
     superDispatch({
       action: fetchProducts({
         categoryId,
+        state: productsState,
         page: size !== limit ? 1 : page,
         search,
         limit: size,
+      }),
+      thenHandler: (response) => {
+        setPageProducts(response.items);
+        setPage(response.pageNumber);
+        setTotalPages(response.totalPages);
+        setTotalItems(response.totalItems);
+        setLimit(response.limit);
+      },
+    });
+  };
+
+  const onTrashClicked = () => {
+    setProductsState(PRODUCTS_STATE_BY_GRID_MODE[PRODUCT_GRID_VIEW_MODE.TRASH]);
+    superDispatch({
+      action: fetchProducts({
+        categoryId,
+        state: PRODUCTS_STATE_BY_GRID_MODE[PRODUCT_GRID_VIEW_MODE.TRASH],
+        page: 1,
+        search,
+        limit,
       }),
       thenHandler: (response) => {
         setPageProducts(response.items);
@@ -54,7 +80,7 @@ export const ProductsLayoutMain = () => {
           size="small"
           current={page}
           // TODO: установить нормальные занчения в pageSizeOptions
-          pageSizeOptions={[2, 8, 12]}
+          pageSizeOptions={[2, 8, 12, 22]}
           pageSize={limit}
           total={totalItems}
           showTotal={showTotal}
@@ -62,6 +88,7 @@ export const ProductsLayoutMain = () => {
           showSizeChanger
           showQuickJumper
         />
+        <TrashButton />
       </div>
     )
   );

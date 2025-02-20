@@ -17,12 +17,12 @@ export function createFetchPaginationListThunkAction<
     try {
       // Создаем URLSearchParams и добавляем только непустые параметры
       const urlParams = new URLSearchParams();
-      if (params.pageNumber) urlParams.append('pageNumber', String(params.pageNumber));
+      if (params.page) urlParams.append('pageNumber', String(params.page));
       if (params.limit) urlParams.append('limit', String(params.limit));
       if (params.search) urlParams.append('search', params.search);
       if (params.sort) urlParams.append('sort', params.sort);
       if (params.order) urlParams.append('order', params.order);
-      if (params.filter) urlParams.append('filter', params.filter);
+      // if (params.filter) urlParams.append('filter', params.filter);
 
       const response = await axiosPrivate.get<PaginationResponse<T>>(endpoint, {
         params: urlParams,

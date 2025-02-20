@@ -48,12 +48,13 @@
     "UPLOAD_IMAGE": "Загрузите изображение",
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
     "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
-    "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\""
+    "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\"",
+    "PRODUCT_ID_IS_REQUIRED": "Недоступен ID товара"
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
   "USERS": "Пользователи",
-  "GOODS": "Товары",
+  "PRODUCTS": "Товары",
   "CATEGORIES": "Категории",
   "CATEGORY": "Категория",
   "ADD_PRODUCT": "Добавить товар",
@@ -186,6 +187,12 @@
   "PRODUCT_HIDDEN_TOOLTIP": "Товар скрыт от пользователей",
   "PRODUCT_IS_NOW_VISIBLE": "Товар '{{title}}' теперь виден пользователям",
   "PRODUCT_IS_NOW_HIDDEN": "Товар '{{title}}' теперь скрыт от пользователей",
+  "PRODUCT_MOVED_TO_TRASH": "Товар '{{title}}' отправлен в корзину",
+  "MOVE_TO_TRASH_HELPER_TEXT": "Товар станет недоступен для заказа. Товары из корзины можно восстановить. Вы можете окончательно удалить товар очистив корзину.",
   "MOVE_TO_TRASH": "Переместить в корзину",
+  "TRASH_BIN": "Корзина",
+  "DELETE_PRODUCT": "Удалить товар",
+  "DELETE_PRODUCT_HELPER_TEXT": "Товар будет удален безвозвратно. Вы не сможете его восстановить",
+  "PRODUCT_DELETED": "Товар '{{title}}' удален",
   "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение"
 }

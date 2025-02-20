@@ -1,16 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
-import { Flex, Tooltip, Button, Typography, Input } from 'antd';
+import { Flex, Tooltip, Button, Input } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
+import { HeaderTitle } from './components';
 
-const { Title } = Typography;
 const { Search } = Input;
 
 export const ProductsLayoutHeader = () => {
@@ -24,10 +23,12 @@ export const ProductsLayoutHeader = () => {
 
   const {
     search,
-    setSearch,
     limit,
     categoryId,
+    page,
+    productsState,
     setPage,
+    setSearch,
     setPageProducts,
     setTotalPages,
     setTotalItems,
@@ -37,16 +38,18 @@ export const ProductsLayoutHeader = () => {
 
   // Локальное состояние для ввода поиска
   const [searchValue, setSearchValue] = useState(search);
-  const f = () => {
+  const fetch = (val: string) => {
     if (!categoryId) {
       return console.error(`ERROR categoryId: ${categoryId}`);
     }
-    setSearch(searchValue);
+    setSearch(val);
+    setSearchValue(val);
     superDispatch({
       action: fetchProducts({
         categoryId,
-        page: 1,
-        search: searchValue,
+        state: productsState,
+        page,
+        search: val,
         limit,
       }),
       thenHandler: (response) => {
@@ -59,18 +62,8 @@ export const ProductsLayoutHeader = () => {
     });
   };
 
-  useEffect(() => {
-    setSearchValue(search);
-  }, [search]);
-
-  // const debouncedSetSearch = useDebounceCallback(f, 1500);
-
-  useEffect(() => {
-    f();
-  }, [searchValue]);
-
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    fetch(e.target.value);
   };
 
   return (
@@ -78,10 +71,7 @@ export const ProductsLayoutHeader = () => {
       <Flex vertical>
         <Flex align="center" justify="space-between" className="m-2">
           <Flex align="center" gap={20} className="ml-4">
-            <StorefrontOutlinedIcon />
-            <Title className="!m-0" level={4}>
-              {t('GOODS')}
-            </Title>
+            <HeaderTitle />
           </Flex>
           <Tooltip title={t('ADD_PRODUCT')}>
             <Button onClick={openCreateProductModal} type="primary">

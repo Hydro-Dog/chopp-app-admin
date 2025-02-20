@@ -9,6 +9,7 @@ export const useRefetchProductList = () => {
     page,
     limit,
     pageProducts,
+    productsState,
     setPage,
     setPageProducts,
     setTotalPages,
@@ -27,6 +28,7 @@ export const useRefetchProductList = () => {
     superDispatch({
       action: fetchProducts({
         categoryId,
+        state: productsState,
         page: pageProducts.length === 1 ? page - 1 : page,
         search,
         limit,

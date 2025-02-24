@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { TitlePage, updateListItemById, useNotificationContext, useSuperDispatch } from '@shared/index';
+import {
+  TitlePage,
+  updateListItemById,
+  useNotificationContext,
+  useSuperDispatch,
+} from '@shared/index';
 import { PaginationQuery, PaginationResponse, Order, ORDER_STATUS } from '@shared/types';
 import { AppDispatch } from '@store/index';
 import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
@@ -37,7 +42,13 @@ export const OrdersPage = () => {
 
   const onPaginationChange = (page: number, pageSize: number) => {};
 
-  const onOrderStatusChange = ({ orderStatus, transactionId }: { orderStatus: ORDER_STATUS; transactionId: string }) => {
+  const onOrderStatusChange = ({
+    orderStatus,
+    transactionId,
+  }: {
+    orderStatus: ORDER_STATUS;
+    transactionId: string;
+  }) => {
     superDispatch({
       action: updateOrderPaymentStatus({
         transactionId,
@@ -58,7 +69,12 @@ export const OrdersPage = () => {
   return (
     <TitlePage title={t('ORDERS')}>
       <Card className="h-full" size="small">
-        <OrdersTable data={ordersData} fetchData={fetchOrdersData} onStatusChange={onOrderStatusChange} onPaginationChange={onPaginationChange} />
+        <OrdersTable
+          data={ordersData}
+          fetchData={fetchOrdersData}
+          onStatusChange={onOrderStatusChange}
+          onPaginationChange={onPaginationChange}
+        />
       </Card>
     </TitlePage>
   );

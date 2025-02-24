@@ -1,6 +1,11 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { PRODUCT_STATE, Product, PRODUCT_GRID_VIEW_MODE, PropsWithChildrenOnly } from '@shared/index';
+import {
+  PRODUCT_STATE,
+  Product,
+  PRODUCT_GRID_VIEW_MODE,
+  PropsWithChildrenOnly,
+} from '@shared/index';
 
 export const FIRST_PAGE_NUMBER = 1;
 export const LIMIT = 2;

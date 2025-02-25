@@ -73,7 +73,7 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
 export const useOrdersContext = () => {
   const context = useContext(OrdersContext);
   if (!context) {
-    throw new Error('useProductsContext must be used within a ProductsProvider');
+    throw new Error('useOrderContext must be used with OrderProvider.');
   }
   return context;
 };

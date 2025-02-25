@@ -11,6 +11,7 @@ import {
   SettingsPage,
 } from '@pages/index';
 
+import { OrdersProvider } from '@pages/orders/context';
 import { PaymentsPage } from '@pages/payments';
 import {
   PricingSettingsPage,
@@ -75,7 +76,12 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.ORDERS,
-        element: <OrdersPage />,
+        element: (
+          //TODO сделать отдельный компонент, чтоб в роутере не было вложенности
+          <OrdersProvider>
+            <OrdersPage />
+          </OrdersProvider>
+        ),
       },
       {
         path: ROUTES.PAYMENTS,

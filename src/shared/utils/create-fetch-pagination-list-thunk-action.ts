@@ -17,7 +17,7 @@ export function createFetchPaginationListThunkAction<
     try {
       // Создаем URLSearchParams и добавляем только непустые параметры
       const urlParams = new URLSearchParams();
-      if (params.page) urlParams.append('pageNumber', String(params.page));
+      if (params.page) urlParams.append('page', String(params.page));
       if (params.limit) urlParams.append('limit', String(params.limit));
       if (params.search) urlParams.append('search', params.search);
       if (params.sort) urlParams.append('sort', params.sort);

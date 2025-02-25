@@ -4,23 +4,17 @@ import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useProductsContext } from '@pages/products/context';
-import { CustomModal } from '@shared/components';
-import {
-  useNotificationContext,
-  useSearchParamValue,
-  useSuperDispatch,
-  FETCH_STATUS,
-  Product,
-} from '@shared/index';
+import { ChoppTextWithTooltip, CustomModal } from '@shared/components';
+import { useNotificationContext, useSuperDispatch, FETCH_STATUS, Product } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
-import { Alert, Form, Input, InputNumber, Typography, Upload, Image, Select } from 'antd';
+import { Alert, Form, Input, InputNumber, Typography, Upload, Image, Select, Space } from 'antd';
 import { z } from 'zod';
 import {
   useBeforeUpload,
   useCreateProductFormSchema,
   useEditProductFormSchema,
   useImage,
-  useResetProductList,
+  useRefetchProductList,
 } from './hooks';
 import { createFormDto, updateFormDto } from './utils';
 
@@ -46,13 +40,14 @@ export const CreateEditProductModal = ({
 }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch<Product, unknown>();
-  const categoryId = useSearchParamValue('id') || '';
+  const { categoryId } = useProductsContext();
   const beforeUpload = useBeforeUpload();
   const { showSuccessNotification } = useNotificationContext();
   const { createProductStatus } = useSelector((state: RootState) => state.products);
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
+  const { refetchProductList } = useRefetchProductList();
 
   const createProductFormSchema = useCreateProductFormSchema();
   type CreateProductFormType = z.infer<typeof createProductFormSchema>;
@@ -107,12 +102,11 @@ export const CreateEditProductModal = ({
           onOk();
           reset();
           setFileList([]);
-          resetProductList();
+          refetchProductList();
         },
       });
     }
   };
-  const { resetProductList } = useResetProductList();
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
     const allImagesIds = new Set(fileList.map((item) => item.uid));
@@ -146,8 +140,7 @@ export const CreateEditProductModal = ({
           onOk();
           reset();
           setFileList([]);
-
-          resetProductList();
+          refetchProductList();
         },
       });
     }
@@ -243,7 +236,12 @@ export const CreateEditProductModal = ({
         {/* TODO: вынести блок с изображениями в отдельный файл?  */}
         <Item
           className="!m-0"
-          label={t('IMAGES')}
+          label={
+            <Space>
+              <div>{t('IMAGES')}</div>
+              <ChoppTextWithTooltip tooltipText={t('FIRST_IMAGE_IS_COVER')} />
+            </Space>
+          }
           validateStatus={uploadImageError && 'error'}
           help={uploadImageError}>
           <Upload

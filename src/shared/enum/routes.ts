@@ -6,9 +6,10 @@ export enum ROUTES {
   PAYMENTS = 'payments',
   SIGN_IN = 'signin',
   REGISTER = 'register',
-  GOODS = 'goods',
+  PRODUCTS = 'products',
   SETTINGS = 'settings',
   ANALYTICS = 'analytics',
   VISUAL_SETTINGS = 'visualSettings',
   PRICING_SETTINGS = 'pricingSettings',
+  PAYMENT_SETTINGS = 'paymentSettings',
 }

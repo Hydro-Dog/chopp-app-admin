@@ -1,4 +1,4 @@
-import { ORDER_STATE } from '@shared/enum';
+import { PRODUCT_STATE } from '@shared/enum';
 import { Category } from './category';
 import { ProductImage } from './product-image';
 
@@ -9,7 +9,7 @@ export type Product = {
   price: number;
   images: ProductImage[];
   category: Category;
-  state: ORDER_STATE;
+  state: PRODUCT_STATE;
   categoryId: number;
   imagesOrder: number[];
   createdAt: string;

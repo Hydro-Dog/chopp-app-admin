@@ -10,7 +10,7 @@ export const ProductsPage = () => {
 
   return (
     <ProductsProvider>
-      <TitlePage title={t('GOODS')}>
+      <TitlePage title={t('PRODUCTS')}>
         <Card className="h-full" size="small">
           <Splitter
             style={{

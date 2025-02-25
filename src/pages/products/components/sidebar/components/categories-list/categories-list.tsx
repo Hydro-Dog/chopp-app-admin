@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useProductsContext } from '@pages/products/context';
 import { ChopDraggableList } from '@shared/components';
 import { useNotificationContext } from '@shared/context';
-import { useSearchParamValue, useSuperDispatch } from '@shared/hooks';
+import { useSuperDispatch } from '@shared/hooks';
 import { Category, FETCH_STATUS } from '@shared/index';
 import { fetchCategories, updateCategories, deleteCategory } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
@@ -16,29 +16,33 @@ import { ListItem } from '../list-item';
 export const CategoriesList = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { superDispatch } = useSuperDispatch<Category[], string>();
-  const urlChatId = useSearchParamValue('id');
-  const { categories, fetchCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
+  const { categoryId, setCategoryId, setSearch, setPage } = useProductsContext();
+  const { categories, fetchCategoriesStatus } = useSelector(
+    (state: RootState) => state.productCategory,
+  );
   const {
     value: isDeleteCategoryModalOpen,
     setTrue: openDeleteCategoryModal,
     setFalse: closeDeleteCategoryModal,
   } = useBoolean();
-  const [, setSearchParams] = useSearchParams();
   const [categoryToDelete, setCategoryToDelete] = useState<Category>();
   const { showErrorNotification } = useNotificationContext();
+  const { superDispatch } = useSuperDispatch<Category[], unknown>();
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    superDispatch({
+      action: fetchCategories(),
+      thenHandler: (categories) => {
+        if (!categoryId) {
+          setCategoryId(
+            categories.find((item) => item.order === 1)?.id ||
+              categories.find((item) => item.order === 0)?.id ||
+              '',
+          );
+        }
+      },
+    });
   }, []);
-
-  useEffect(() => {
-    if (!urlChatId && categories) {
-      setSearchParams({
-        id: categories.find((item) => item.order === 1)?.id || categories.find((item) => item.order === 0)?.id || '',
-      });
-    }
-  }, [categories, setSearchParams, urlChatId]);
 
   const onCategoriesOrderChange = (newCategories: Category[]) => {
     dispatch(updateCategories(newCategories));
@@ -58,17 +62,18 @@ export const CategoriesList = () => {
     superDispatch({
       action: deleteCategory(categoryToDelete!.id),
       thenHandler: () => {
-        setSearchParams({
-          id: categories?.[0].id || 'noCategoriesError',
-        });
+        setCategoryId(categories?.[0].id || 'noCategoriesError');
       },
-      catchHandler: (error) => showErrorNotification({ message: t('ERROR'), description: error.message }),
+      catchHandler: (error) =>
+        showErrorNotification({ message: t('ERROR'), description: error.message }),
     });
     onCloseDeleteCategory();
   };
 
   const onClickItem = (id: string) => {
-    setSearchParams({ id });
+    setCategoryId(id);
+    setSearch('');
+    setPage(1);
   };
 
   if (fetchCategoriesStatus === FETCH_STATUS.LOADING) {
@@ -83,7 +88,7 @@ export const CategoriesList = () => {
         onDragEnd={onCategoriesOrderChange}
         onDeleteItem={onDeleteCategoryModalOpen}
         onClickItem={onClickItem}
-        initialCategoryId={urlChatId}
+        initialCategoryId={categoryId}
         // @ts-ignore
         ListItem={ListItem}
       />

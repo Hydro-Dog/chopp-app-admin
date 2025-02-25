@@ -20,6 +20,7 @@ import { AppDispatch, RootState } from '@store/store';
 import { Badge, Layout, Menu, Tooltip } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetMenuItemByUrl } from './hooks/index';
+import { ShopFilled, ShopOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -54,13 +55,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
 
   const menuItems = [
     {
-      key: ROUTES.GOODS,
-      icon: <StoreIcon />,
-      label: t('GOODS'),
-      onClick: () => onMenuItemClick(ROUTES.GOODS),
+      key: ROUTES.PRODUCTS,
+      icon: selectedMenuKeys.includes(ROUTES.PRODUCTS) ? <ShopFilled /> : <ShopOutlined /> ,
+      label: t('PRODUCTS'),
+      onClick: () => onMenuItemClick(ROUTES.PRODUCTS),
     },
     {
       key: '',
+      //TODO: сделать иконки по аналогии с первым элементом
       icon: <GroupRoundedIcon />,
       label: t('USERS'),
       onClick: () => onMenuItemClick(ROUTES.ROOT),

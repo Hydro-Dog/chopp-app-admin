@@ -1,31 +1,72 @@
 import { useSelector } from 'react-redux';
+import { PRODUCTS_STATE_BY_GRID_MODE } from '@pages/products/constants';
 import { useProductsContext } from '@pages/products/context';
-import { useSearchParamValue, useSuperDispatch } from '@shared/hooks';
-import { ChoppLoadMore } from '@shared/index';
+import { useSuperDispatch } from '@shared/hooks';
+import { PRODUCT_GRID_VIEW_MODE } from '@shared/index';
 import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
+import { Pagination, PaginationProps } from 'antd';
 import { ProductsGrid } from '../products-grid';
+import { TrashButton } from './components';
 
-const LIMIT = 2;
+const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
 
 export const ProductsLayoutMain = () => {
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
-  const { search, pageProducts, pagination, setPagination, setPageProducts } = useProductsContext();
-  const categoryId = useSearchParamValue('id') || '';
+  const {
+    search,
+    pageProducts,
+    totalPages,
+    totalItems,
+    limit,
+    categoryId,
+    page,
+    productsState,
+    setPage,
+    setPageProducts,
+    setTotalPages,
+    setTotalItems,
+    setLimit,
+    setProductsState,
+  } = useProductsContext();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
 
-  const onLoadMore = () => {
+  const onPaginationChange = (page: number, size: number) => {
     superDispatch({
       action: fetchProducts({
         categoryId,
-        limit: LIMIT,
-        page: pagination.page + 1,
+        state: productsState,
+        page: size !== limit ? 1 : page,
         search,
+        limit: size,
       }),
       thenHandler: (response) => {
-        setPageProducts([...pageProducts, ...(response.items || [])]);
-        setPagination({ page: response.pageNumber });
+        setPageProducts(response.items);
+        setPage(response.pageNumber);
+        setTotalPages(response.totalPages);
+        setTotalItems(response.totalItems);
+        setLimit(response.limit);
+      },
+    });
+  };
+
+  const onTrashClicked = () => {
+    setProductsState(PRODUCTS_STATE_BY_GRID_MODE[PRODUCT_GRID_VIEW_MODE.TRASH]);
+    superDispatch({
+      action: fetchProducts({
+        categoryId,
+        state: PRODUCTS_STATE_BY_GRID_MODE[PRODUCT_GRID_VIEW_MODE.TRASH],
+        page: 1,
+        search,
+        limit,
+      }),
+      thenHandler: (response) => {
+        setPageProducts(response.items);
+        setPage(response.pageNumber);
+        setTotalPages(response.totalPages);
+        setTotalItems(response.totalItems);
+        setLimit(response.limit);
       },
     });
   };
@@ -34,13 +75,20 @@ export const ProductsLayoutMain = () => {
     products?.totalPages !== undefined && (
       <div className="p-3">
         <ProductsGrid items={pageProducts} loading={fetchProductsStatus === FETCH_STATUS.LOADING} />
-
-        <ChoppLoadMore
-          onLoadMore={onLoadMore}
-          totalPages={products.totalPages}
-          page={pagination.page}
-          className="mt-3"
+        totalPages: {totalPages} - {page}
+        <Pagination
+          size="small"
+          current={page}
+          // TODO: установить нормальные занчения в pageSizeOptions
+          pageSizeOptions={[2, 8, 12, 22]}
+          pageSize={limit}
+          total={totalItems}
+          showTotal={showTotal}
+          onChange={onPaginationChange}
+          showSizeChanger
+          showQuickJumper
         />
+        <TrashButton />
       </div>
     )
   );

@@ -1,7 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { PAYMENT_STATUS_MAP, PAYMENT_STATUS, ChoppInfoText, Order, ChoppPaymentStatus, ChoppOrderStatus, ORDER_STATUS } from '@shared/index';
-import { Tooltip, Tag, Dropdown, Space } from 'antd';
+import {
+  PAYMENT_STATUS,
+  ChoppTextWithTooltip,
+  Order,
+  ChoppPaymentStatus,
+  ChoppOrderStatus,
+  ORDER_STATUS,
+} from '@shared/index';
+import { Tooltip, Dropdown, Space } from 'antd';
 import dayjs from 'dayjs';
 import { useGetActionItems } from './use-get-action-items';
 import { ACTION_MENU_ITEMS } from '../enums';
@@ -37,11 +44,6 @@ export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
           currency: 'RUB',
         }),
     },
-    // {
-    //   title: t('QUANTITY'),
-    //   dataIndex: 'quantity',
-    //   key: 'quantity',
-    // },
     {
       title: t('ORDER_STATUS_TITLE'),
       dataIndex: 'orderStatus',
@@ -66,7 +68,10 @@ export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
     },
     {
       title: (
-        <ChoppInfoText title={t('TRANSACTION_ID')} tooltipText={t('TRANSACTION_ID_TOOLTIP')} />
+        <ChoppTextWithTooltip
+          title={t('TRANSACTION_ID')}
+          tooltipText={t('TRANSACTION_ID_TOOLTIP')}
+        />
       ),
       dataIndex: 'transactionId',
       key: 'transactionId',

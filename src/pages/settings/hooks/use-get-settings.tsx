@@ -22,5 +22,11 @@ export const useGetSettings = () => {
       title: t('PRICING'),
       description: t('PRICING'),
     },
+    {
+      path: ROUTES.PAYMENT_SETTINGS,
+      image: <SettingsGridIcon IconComponent={ColorLensIcon} />,
+      title: t('PAYMENT_SETTINGS'),
+      description: t('PAYMENT_SETTINGS_DATA'),
+    },
   ];
 };

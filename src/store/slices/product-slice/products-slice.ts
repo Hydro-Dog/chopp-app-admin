@@ -1,7 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ErrorResponse, PaginationResponse, Product } from '@shared/index';
 import { FETCH_STATUS } from '@shared/index';
-import { createProduct, fetchProducts, updateProduct, updateProductVisibility } from './actions';
+import {
+  createProduct,
+  deleteProduct,
+  fetchProducts,
+  updateProduct,
+  updateProductVisibility,
+} from './actions';
 
 export type ProductsState = {
   products?: PaginationResponse<Product>;
@@ -11,6 +17,8 @@ export type ProductsState = {
   fetchProductsError: ErrorResponse | null;
   updateProductStatus: FETCH_STATUS;
   updateProductError: ErrorResponse | null;
+  deleteProductStatus: FETCH_STATUS;
+  deleteProductError: ErrorResponse | null;
   updateProductVisibilityStatusMap: Record<string, FETCH_STATUS>;
   updateProductVisibilityError: ErrorResponse | null;
 };
@@ -23,6 +31,8 @@ const initialState: ProductsState = {
   fetchProductsError: null,
   updateProductStatus: FETCH_STATUS.IDLE,
   updateProductError: null,
+  deleteProductStatus: FETCH_STATUS.IDLE,
+  deleteProductError: null,
   updateProductVisibilityStatusMap: {},
   updateProductVisibilityError: null,
 };
@@ -81,6 +91,18 @@ export const productSlice = createSlice({
       })
       .addCase(updateProductVisibility.rejected, (state, action) => {
         state.updateProductVisibilityStatusMap[action.meta.arg.id] = FETCH_STATUS.ERROR;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.deleteProductStatus = FETCH_STATUS.LOADING;
+      })
+      .addCase(deleteProduct.fulfilled, (state) => {
+        state.deleteProductStatus = FETCH_STATUS.SUCCESS;
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.deleteProductStatus = FETCH_STATUS.ERROR;
+        state.deleteProductError = action.payload ?? {
+          message: 'Unknown error',
+        };
       });
   },
 });

@@ -30,10 +30,16 @@ export const PaymentsDateFilter = () => {
       const fetchWithSearchParams = (params: URLSearchParams) => {
         const searchRequest: Record<string, string> = {};
         if (params.get('startDate')) {
-          searchRequest['created_at.gte'] = dayjs(params.get('startDate'), 'DD.MM.YYYY').toISOString();
+          searchRequest['created_at.gte'] = dayjs(
+            params.get('startDate'),
+            'DD.MM.YYYY',
+          ).toISOString();
         }
         if (params.get('endDate')) {
-          searchRequest['created_at.lte'] = dayjs(params.get('endDate'), 'DD.MM.YYYY').toISOString();
+          searchRequest['created_at.lte'] = dayjs(
+            params.get('endDate'),
+            'DD.MM.YYYY',
+          ).toISOString();
         }
         dispatch(fetchPayments(searchRequest));
       };
@@ -52,7 +58,10 @@ export const PaymentsDateFilter = () => {
         allowEmpty={[true, true]}
         format={'DD.MM.YYYY'}
         onCalendarChange={handleDateChange}
-        defaultValue={[startDate ? dayjs(startDate, 'DD.MM.YYYY') : null, endDate ? dayjs(endDate, 'DD.MM.YYYY') : null]}
+        defaultValue={[
+          startDate ? dayjs(startDate, 'DD.MM.YYYY') : null,
+          endDate ? dayjs(endDate, 'DD.MM.YYYY') : null,
+        ]}
       />
     </Space>
   );

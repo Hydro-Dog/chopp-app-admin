@@ -3,7 +3,7 @@ import { TitlePage } from '@shared/index';
 import { Card } from 'antd';
 import styled from 'styled-components';
 import { PaymentsTable } from './components';
-import { PaymentsDateFilter } from './components/payments-filter/payments-date-filter';
+import { PaymentsDateFilter } from './components/payments-date-filter/payments-date-filter';
 
 const StyledCard = styled(Card)`
   .ant-card-body {

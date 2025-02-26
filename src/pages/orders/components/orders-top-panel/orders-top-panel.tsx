@@ -1,6 +1,6 @@
 import { DateSelector, SearchBar, StatusSelector } from './components';
 
-export const TopBar = () => (
+export const OrdersTopPanel = () => (
   <>
     <div className="lg:flex flex-row gap-5 mb-3">
       <SearchBar />

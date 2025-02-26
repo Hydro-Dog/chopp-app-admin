@@ -6,7 +6,7 @@ import { PaginationResponse, Order, ORDER_STATUS, PaginationRequestQuery } from 
 import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
 import { Card, Pagination } from 'antd';
 import { OrdersTable } from './components';
-import { TopBar } from './components/top-panel/top-bar';
+import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
 
 export const OrdersPage = () => {
@@ -101,7 +101,7 @@ export const OrdersPage = () => {
   return (
     <TitlePage title={t('ORDERS')}>
       <Card className="h-full" size="small">
-        <TopBar />
+        <OrdersTopPanel />
         <OrdersTable data={pageOrders} onStatusChange={onOrderStatusChange} />
         <Pagination
           size="small"

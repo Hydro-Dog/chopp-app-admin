@@ -4,6 +4,7 @@ import { Card } from 'antd';
 import styled from 'styled-components';
 import { PaymentsTable } from './components';
 import { PaymentsDateFilter } from './components/payments-date-filter/payments-date-filter';
+import { PaymentsProvider } from './context';
 
 const StyledCard = styled(Card)`
   .ant-card-body {
@@ -16,11 +17,13 @@ export const PaymentsPage = () => {
   const { t } = useTranslation();
 
   return (
-    <TitlePage title={t('ORDERS')}>
-      <StyledCard className="h-full" size="small">
-        <PaymentsDateFilter />
-        <PaymentsTable />
-      </StyledCard>
-    </TitlePage>
+    <PaymentsProvider>
+      <TitlePage title={t('ORDERS')}>
+        <StyledCard className="h-full" size="small">
+          <PaymentsDateFilter />
+          <PaymentsTable />
+        </StyledCard>
+      </TitlePage>
+    </PaymentsProvider>
   );
 };

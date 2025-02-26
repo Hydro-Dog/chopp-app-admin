@@ -16,13 +16,14 @@ export type FetchPaymentsParams = {
 };
 
 export const fetchPayments = createAsyncThunk<
-  any, // TODO: убрть any
+  any, // TODO: убрать any
   FetchPaymentsParams, // Тип параметров запроса
   { rejectValue: ErrorResponse } // Тип для ошибок
 >('payments/fetchPayments', async (fetchData, thunkAPI) => {
   try {
-    const { limit, cursor, created_at_gt, created_at_lt, payment_id, status, pageNumber } = fetchData;
-    // Формируем объект параметров, добавляя только переданные значения
+    const { limit, cursor, created_at_gt, created_at_lt, payment_id, status, pageNumber } =
+      fetchData;
+
     const params: Record<string, string> = {};
 
     if (limit) params.limit = String(limit);
@@ -30,13 +31,10 @@ export const fetchPayments = createAsyncThunk<
     if (fetchData['created_at.gte']) params['created_at.gte'] = fetchData['created_at.gte'];
     if (created_at_gt) params.created_at_gt = created_at_gt;
     if (fetchData['created_at.lte']) params['created_at.lte'] = fetchData['created_at.lte'];
-
     if (created_at_lt) params.created_at_lt = created_at_lt;
     if (payment_id) params.payment_id = payment_id;
     if (status) params.status = status;
     if (pageNumber) params.pageNumber = String(pageNumber);
-
-    // TODO: убрать any
 
     const response = await axiosPrivate.get<any>('/payments', { params });
     return response.data;

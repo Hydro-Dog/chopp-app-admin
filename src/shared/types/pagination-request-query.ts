@@ -4,5 +4,7 @@ export type PaginationRequestQuery = {
   limit?: number;
   search?: string;
   sort?: string;
+  startDate?: string;
+  endDate?: string;
   order?: 'ASC' | 'DESC';
 };

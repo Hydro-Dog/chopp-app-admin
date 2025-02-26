@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FIRST_PAGE_NUMBER, LIMIT } from '@pages/products/context';
+import { LIMIT } from '@pages/products/context';
 import { TitlePage, useNotificationContext, useSuperDispatch } from '@shared/index';
 import { PaginationResponse, Order, ORDER_STATUS, PaginationRequestQuery } from '@shared/types';
 import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
 import { Card, Pagination } from 'antd';
 import { OrdersTable } from './components';
+import { TopBar } from './components/top-panel/top-bar';
 import { useOrdersContext } from './context';
 
 export const OrdersPage = () => {
@@ -29,11 +30,10 @@ export const OrdersPage = () => {
     superDispatch({
       action: fetchOrders({
         //Для тестов. Так лимит я думаю нужно делать 6-8
-        page: FIRST_PAGE_NUMBER,
+        page: 1,
         limit: LIMIT,
       }),
       thenHandler: (response) => {
-        console.log(response);
         setPageOrders(response.items);
         setPage(response.pageNumber);
         setTotalPages(response.totalPages);
@@ -101,6 +101,7 @@ export const OrdersPage = () => {
   return (
     <TitlePage title={t('ORDERS')}>
       <Card className="h-full" size="small">
+        <TopBar />
         <OrdersTable data={pageOrders} onStatusChange={onOrderStatusChange} />
         <Pagination
           size="small"

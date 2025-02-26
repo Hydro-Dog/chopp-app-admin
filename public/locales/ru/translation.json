@@ -93,6 +93,12 @@
   "CURRENT_STATUS": "Текущий сатус",
   "NEW_STATUS": "Новый сатус",
   "PICK_STATUS": "Выбрать статус",
+  "ORDERS_PAGE":{
+    "ENTER_ID": "Введите ID заказа",
+    "END_DATE": "До",
+    "START_DATE": "От",
+    "CHOOSE_STATUS": "Выберете статус"
+  },
   "ORDER_STATUS": {
     "AWAITING_PAYMENT": "Ожидает оплаты",
     "AWAITING_PAYMENT_TOOLTIP": "Заказ создан и ожидает оплаты от пользователя.",

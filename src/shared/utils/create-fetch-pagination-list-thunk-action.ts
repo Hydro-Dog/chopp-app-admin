@@ -22,6 +22,8 @@ export function createFetchPaginationListThunkAction<
       if (params.search) urlParams.append('search', params.search);
       if (params.sort) urlParams.append('sort', params.sort);
       if (params.order) urlParams.append('order', params.order);
+      if (params.startDate) urlParams.append('startDate', params.startDate);
+      if (params.endDate) urlParams.append('endDate', params.endDate);
       // if (params.filter) urlParams.append('filter', params.filter);
 
       const response = await axiosPrivate.get<PaginationResponse<T>>(endpoint, {

@@ -1,16 +1,11 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { usePaymentsContext } from '@pages/payments/context';
-import { fetchPayments, resetPayments } from '@store/slices';
-import { AppDispatch } from '@store/store';
 import { DatePicker, Space } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 
 const { RangePicker } = DatePicker;
 
 export const PaymentsDateFilter = () => {
-  const dispatch = useDispatch<AppDispatch>();
-
   const { startDate, endDate, setStartDate, setEndDate } = usePaymentsContext();
 
   const handleDateChange = useCallback(
@@ -26,20 +21,8 @@ export const PaymentsDateFilter = () => {
       } else {
         setEndDate('');
       }
-
-      dispatch(resetPayments());
-
-      const searchRequest: Record<string, string> = {};
-      if (dates[0]) {
-        searchRequest['created_at.gte'] = dates[0].toISOString();
-      }
-      if (dates[1]) {
-        searchRequest['created_at.lte'] = dates[1].toISOString();
-      }
-
-      dispatch(fetchPayments(searchRequest));
     },
-    [setStartDate, setEndDate, dispatch],
+    [setStartDate, setEndDate],
   );
 
   return (

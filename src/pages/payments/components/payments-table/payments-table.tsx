@@ -23,15 +23,20 @@ export const PaymentsTable = () => {
 
   useEffect(() => {
     setList([]);
+
     const searchRequest: Record<string, string> = {};
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
+    const status = searchParams.get('status');
 
     if (startDate) {
       searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
     }
     if (endDate) {
       searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
+    }
+    if (status) {
+      searchRequest['status'] = status;
     }
 
     dispatch(fetchPayments(searchRequest));
@@ -65,12 +70,15 @@ export const PaymentsTable = () => {
       const searchRequest: Record<string, string> = {};
       const startDate = searchParams.get('startDate');
       const endDate = searchParams.get('endDate');
-
+      const status = searchParams.get('status');
       if (startDate) {
         searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
       }
       if (endDate) {
         searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
+      }
+      if (status) {
+        searchRequest['status'] = status.toString();
       }
 
       dispatch(fetchPayments({ ...searchRequest, cursor: payments.next_cursor }));

@@ -4,6 +4,7 @@ import { Card } from 'antd';
 import styled from 'styled-components';
 import { PaymentsTable } from './components';
 import { PaymentsDateFilter } from './components/payments-date-filter/payments-date-filter';
+import { PaymentsStatusFilter } from './components/payments-status-filter';
 import { PaymentsProvider } from './context';
 
 const StyledCard = styled(Card)`
@@ -21,6 +22,7 @@ export const PaymentsPage = () => {
       <TitlePage title={t('ORDERS')}>
         <StyledCard className="h-full" size="small">
           <PaymentsDateFilter />
+          <PaymentsStatusFilter />
           <PaymentsTable />
         </StyledCard>
       </TitlePage>

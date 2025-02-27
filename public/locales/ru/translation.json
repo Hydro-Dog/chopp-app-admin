@@ -97,7 +97,7 @@
     "ENTER_ID": "Введите ID заказа",
     "END_DATE": "До",
     "START_DATE": "От",
-    "CHOOSE_STATUS": "Выберете статус"
+    "CHOSEN_STATUS": "Выбранный статус: "
   },
   "ORDER_STATUS": {
     "AWAITING_PAYMENT": "Ожидает оплаты",

@@ -56,7 +56,7 @@ export const StatusSelector = () => {
 
   return (
     <Select
-      prefix={t('ORDERS_PAGE.CHOOSE_STATUS')}
+      prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
       defaultValue={items.map((item) => item.value)}
       mode="multiple"
       className="w-auto mb-3"

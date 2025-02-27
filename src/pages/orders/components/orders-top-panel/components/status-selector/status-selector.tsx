@@ -6,7 +6,7 @@ import { ORDER_STATUS } from '@shared/enum';
 import { useSuperDispatch } from '@shared/hooks';
 import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
 import { fetchOrders } from '@store/slices';
-import { Select } from 'antd';
+import { Checkbox, Select } from 'antd';
 
 export const StatusSelector = () => {
   const { t } = useTranslation();
@@ -51,17 +51,37 @@ export const StatusSelector = () => {
   }, [ordersStatus]);
 
   const changeRangeStatus = (value: ORDER_STATUS | ORDER_STATUS[]) => {
+    console.log(value);
+
     setOrdersStatus(value);
   };
 
+  const chooseAllStatus = () => {
+    if (ordersStatus?.length === Object.values(ORDER_STATUS).length) {
+      return setOrdersStatus([]);
+    } else setOrdersStatus(Object.values(ORDER_STATUS));
+  };
+
   return (
-    <Select
-      prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
-      defaultValue={items.map((item) => item.value)}
-      mode="multiple"
-      className="w-auto mb-3"
-      onChange={changeRangeStatus}
-      options={items}
-    />
+    <>
+      <div className="flex mb-3 items-center">
+        <Select
+          prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
+          defaultValue={items.map((item) => item.value)}
+          value={ordersStatus}
+          mode="multiple"
+          className=" w-3/4 mr-3"
+          onChange={changeRangeStatus}
+          options={items}
+          showSearch={false}
+        />
+        <Checkbox
+          checked={ordersStatus?.length === Object.values(ORDER_STATUS).length}
+          className="w-1/4"
+          onChange={chooseAllStatus}>
+          {t('ORDERS_PAGE.CHOOSE_ALL')}
+        </Checkbox>
+      </div>
+    </>
   );
 };

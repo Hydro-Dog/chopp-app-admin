@@ -7,7 +7,7 @@ import { Order, PropsWithChildrenOnly } from '@shared/types';
 type OrdersContextType = {
   pageOrders: Order[];
   setPageOrders: Dispatch<SetStateAction<Order[]>>;
-  ordersStatus: ORDER_STATUS | ORDER_STATUS[];
+  ordersStatus: ORDER_STATUS[] | null;
   setOrdersStatus: Dispatch<SetStateAction<ORDER_STATUS | ORDER_STATUS[]>>;
   // priceOfOrders: { from: number; to: number };
   // setPriceOfOrders: Dispatch<SetStateAction<{ from: number; to: number }>>;
@@ -33,7 +33,7 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialLimit = Number(searchParams.get('limit')) || LIMIT;
   const initialSearch = searchParams.get('search') || '';
-  const initialOrdersStatus = searchParams.get('statusOfOrders') || '';
+  const initialOrdersStatus = searchParams.get('statusOfOrders') || Object.values(ORDER_STATUS);
   const initialPage = searchParams.get('page') || '';
   const initialStartDate = searchParams.get('startDate') || '';
   const initialEndDate = searchParams.get('endDate') || '';

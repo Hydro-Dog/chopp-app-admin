@@ -2,10 +2,10 @@ import { DateSelector, SearchBar, StatusSelector } from './components';
 
 export const OrdersTopPanel = () => (
   <>
-    <div className="lg:flex flex-row gap-5 mb-3">
+    <div className="flex flex-col w-1/4 gap-3 mb-3">
       <SearchBar />
       <DateSelector />
+      <StatusSelector />
     </div>
-    <StatusSelector />
   </>
 );

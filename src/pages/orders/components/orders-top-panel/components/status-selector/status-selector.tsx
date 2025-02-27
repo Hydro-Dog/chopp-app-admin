@@ -1,86 +1,56 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOrdersContext } from '@pages/orders/context';
 import { ChoppOrderStatus } from '@shared/components';
 import { ORDER_STATUS } from '@shared/enum';
-import { useSuperDispatch } from '@shared/hooks';
-import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
-import { fetchOrders } from '@store/slices';
-import { Checkbox, Select } from 'antd';
+import { Select, SelectProps, Tag } from 'antd';
+import { useChangeTableOrders } from '../../../../hooks';
 
 export const StatusSelector = () => {
   const { t } = useTranslation();
-  const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();
-  const {
-    limit,
-    setLimit,
-    setPage,
-    setPageOrders,
-    setTotalItems,
-    setTotalPages,
-    ordersStatus,
-    setOrdersStatus,
-    search,
-    endDate,
-    startDate,
-  } = useOrdersContext();
+  const { ordersStatus, setOrdersStatus, search } = useOrdersContext();
+  const filters = useChangeTableOrders();
 
-  const items = Object.values(ORDER_STATUS).map((status) => ({
-    value: status,
-    label: <ChoppOrderStatus status={status} />,
-  }));
+  const all = 'all';
 
-  useEffect(() => {
-    superDispatch({
-      action: fetchOrders({
-        page: 1,
-        limit: limit,
-        //ordersStatus: ordersStatus,
-        search: search,
-        startDate: startDate,
-        endDate: endDate,
-      }),
-      thenHandler: (response) => {
-        setPageOrders(response.items);
-        setPage(response.pageNumber);
-        setTotalPages(response.totalPages);
-        setTotalItems(response.totalItems);
-        setLimit(response.limit);
-      },
-    });
-  }, [ordersStatus]);
+  const items = [
+    {
+      value: all,
+      label: <Tag color="black">{t('ORDERS_PAGE.CHOOSE_ALL')}</Tag>,
+    },
+    ...Object.values(ORDER_STATUS).map((status) => ({
+      value: status,
+      label: <ChoppOrderStatus status={status} />,
+    })),
+  ];
 
-  const changeRangeStatus = (value: ORDER_STATUS | ORDER_STATUS[]) => {
-    console.log(value);
-
-    setOrdersStatus(value);
+  const changeRangeStatus = (value: ORDER_STATUS[]) => {
+    if (value.includes(all as ORDER_STATUS)) {
+      setOrdersStatus(Object.values(ORDER_STATUS));
+      filters({ searchParam: search, orderStatusParam: value });
+    } else {
+      setOrdersStatus(value as ORDER_STATUS[]);
+      filters({ orderStatusParam: value });
+    }
   };
 
-  const chooseAllStatus = () => {
-    if (ordersStatus?.length === Object.values(ORDER_STATUS).length) {
-      return setOrdersStatus([]);
-    } else setOrdersStatus(Object.values(ORDER_STATUS));
+  const sharedProps: SelectProps = {
+    mode: 'multiple',
+    maxTagCount: 'responsive',
   };
 
   return (
     <>
-      <div className="flex mb-3 items-center">
+      <div className="flex items-center">
         <Select
+          {...sharedProps}
           prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
-          defaultValue={items.map((item) => item.value)}
+          defaultValue={items.map((item) => item.value) as ORDER_STATUS[]}
           value={ordersStatus}
-          mode="multiple"
-          className=" w-3/4 mr-3"
+          className="w-full"
           onChange={changeRangeStatus}
           options={items}
           showSearch={false}
         />
-        <Checkbox
-          checked={ordersStatus?.length === Object.values(ORDER_STATUS).length}
-          className="w-1/4"
-          onChange={chooseAllStatus}>
-          {t('ORDERS_PAGE.CHOOSE_ALL')}
-        </Checkbox>
       </div>
     </>
   );

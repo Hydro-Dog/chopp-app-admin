@@ -1,54 +1,20 @@
-import { useEffect } from 'react';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import SearchIcon from '@mui/icons-material/Search';
 import { useOrdersContext } from '@pages/orders/context';
-import { useSuperDispatch } from '@shared/hooks';
-import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
-import { fetchOrders } from '@store/slices';
+import { useChangeTableOrders } from '@pages/orders/hooks';
 import { Input } from 'antd';
+const { Search } = Input;
 
 export const SearchBar = () => {
-  const {
-    limit,
-    setLimit,
-    setPage,
-    setPageOrders,
-    setTotalItems,
-    setTotalPages,
-    search,
-    setSearch,
-    endDate,
-    startDate,
-  } = useOrdersContext();
+  const { search, setSearch } = useOrdersContext();
+  const filters = useChangeTableOrders();
 
   const { t } = useTranslation();
-  const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();
 
-  useEffect(() => {
-    superDispatch({
-      action: fetchOrders({
-        page: 1,
-        limit: limit,
-        search: search,
-        startDate: startDate,
-        endDate: endDate,
-      }),
-      thenHandler: (response) => {
-        setPageOrders(response.items);
-        setPage(response.pageNumber);
-        setTotalPages(response.totalPages);
-        setTotalItems(response.totalItems);
-        setLimit(response.limit);
-      },
-    });
-  }, [search]);
+  const changeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+    filters({ searchParam: event.target.value });
+  };
 
-  return (
-    <Input
-      value={search}
-      onChange={(event) => setSearch(event.target.value)}
-      placeholder={t('ORDERS_PAGE.ENTER_ID')}
-      prefix={<SearchIcon />}
-    />
-  );
+  return <Search value={search} onChange={changeSearch} placeholder={t('ORDERS_PAGE.ENTER_ID')} />;
 };

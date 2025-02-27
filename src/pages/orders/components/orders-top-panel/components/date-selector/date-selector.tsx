@@ -1,60 +1,25 @@
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOrdersContext } from '@pages/orders/context';
-import { useSuperDispatch } from '@shared/hooks';
-import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
-import { fetchOrders } from '@store/slices';
+import { useChangeTableOrders } from '@pages/orders/hooks';
 import { DatePicker } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
-const { RangePicker } = DatePicker;
 
 export const DateSelector = () => {
-  const {
-    limit,
-    setLimit,
-    setPage,
-    setPageOrders,
-    setTotalItems,
-    setTotalPages,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    search,
-  } = useOrdersContext();
+  const { setStartDate, setEndDate } = useOrdersContext();
+  const filters = useChangeTableOrders();
 
   const { t } = useTranslation();
-  const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();
-
-  useEffect(() => {
-    superDispatch({
-      action: fetchOrders({
-        page: 1,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
-        search: search,
-      }),
-      thenHandler: (response) => {
-        setPageOrders(response.items);
-        setPage(response.pageNumber);
-        setTotalPages(response.totalPages);
-        setTotalItems(response.totalItems);
-        setLimit(response.limit);
-      },
-    });
-  }, [startDate, endDate]);
 
   const changeDate: RangePickerProps['onChange'] = (dates, dateStrings) => {
     setStartDate(dateStrings[0]);
     setEndDate(dateStrings[1]);
+    filters({ startDateParam: dateStrings[0], endDateParam: dateStrings[1] });
   };
 
   return (
-    <RangePicker
-      className="min-w-56"
+    <DatePicker.RangePicker
       placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
-      format="YYYY-MM-DD"
+      allowEmpty={[false, true]}
       onChange={changeDate}
     />
   );

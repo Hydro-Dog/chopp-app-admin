@@ -1,62 +1,29 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LIMIT } from '@pages/products/context';
 import { TitlePage, useNotificationContext, useSuperDispatch } from '@shared/index';
-import { PaginationResponse, Order, ORDER_STATUS, PaginationRequestQuery } from '@shared/types';
-import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
+import { Order, ORDER_STATUS } from '@shared/types';
+import { updateOrderPaymentStatus } from '@store/slices';
+import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
 import { Card, Pagination } from 'antd';
 import { OrdersTable } from './components';
 import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
+import { useChangeTableOrders } from './hooks';
 
 export const OrdersPage = () => {
-  const {
-    limit,
-    setLimit,
-    page,
-    setPage,
-    pageOrders,
-    setPageOrders,
-    totalItems,
-    setTotalItems,
-    setTotalPages,
-  } = useOrdersContext();
+  const { limit, page, pageOrders, totalItems } = useOrdersContext();
+  const changeTableOrders = useChangeTableOrders();
 
   const { t } = useTranslation();
-  const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();
+  const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
   const { showErrorNotification } = useNotificationContext();
-  //TODO Тоже наверное можно как-то сделать лучше
+
   useEffect(() => {
-    superDispatch({
-      action: fetchOrders({
-        //Для тестов. Так лимит я думаю нужно делать 6-8
-        page: 1,
-        limit: LIMIT,
-      }),
-      thenHandler: (response) => {
-        setPageOrders(response.items);
-        setPage(response.pageNumber);
-        setTotalPages(response.totalPages);
-        setTotalItems(response.totalItems);
-        setLimit(response.limit);
-      },
-    });
+    changeTableOrders({});
   }, []);
 
   const onPaginationChange = (page: number, size: number) => {
-    superDispatch({
-      action: fetchOrders({
-        page: size !== limit ? 1 : page,
-        limit: size,
-      }),
-      thenHandler: (response) => {
-        setPageOrders(response.items);
-        setPage(response.pageNumber);
-        setTotalPages(response.totalPages);
-        setTotalItems(response.totalItems);
-        setLimit(response.limit);
-      },
-    });
+    changeTableOrders({ pageParam: page, limitParam: size });
   };
 
   const onOrderStatusChange = ({
@@ -66,28 +33,13 @@ export const OrdersPage = () => {
     orderStatus: ORDER_STATUS;
     transactionId: string;
   }) => {
-    superDispatch({
+    updatePaymentDispatch.superDispatch({
       action: updateOrderPaymentStatus({
         transactionId,
         orderStatus,
       }),
       thenHandler: () => {
-        //TODO изменить логику чтобы не перегружать сервер запросами
-        superDispatch({
-          action: fetchOrders({
-            page: page,
-            limit: limit,
-          }),
-          thenHandler: (response) => {
-            console.log(response.pageNumber, page);
-
-            setPageOrders(response.items);
-            setPage(response.pageNumber);
-            setTotalPages(response.totalPages);
-            setTotalItems(response.totalItems);
-            setLimit(response.limit);
-          },
-        });
+        changeTableOrders({});
       },
       catchHandler: (error) => {
         showErrorNotification({
@@ -100,7 +52,7 @@ export const OrdersPage = () => {
 
   return (
     <TitlePage title={t('ORDERS')}>
-      <Card className="h-full" size="small">
+      <Card className="h-full relative" size="small">
         <OrdersTopPanel />
         <OrdersTable data={pageOrders} onStatusChange={onOrderStatusChange} />
         <Pagination
@@ -112,6 +64,7 @@ export const OrdersPage = () => {
           onChange={onPaginationChange}
           showSizeChanger
           showQuickJumper
+          className="absolute bottom-0 left-0 w-full justify-center pb-3"
         />
       </Card>
     </TitlePage>

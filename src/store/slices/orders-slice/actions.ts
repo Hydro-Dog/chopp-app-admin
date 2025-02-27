@@ -9,7 +9,7 @@ import { UpdateOrderDTO } from './types';
 
 export const fetchOrders = createFetchPaginationListThunkAction<
   Order,
-  { categoryId?: string } & PaginationRequestQuery,
+  PaginationRequestQuery,
   ErrorResponse
 >({
   actionName: 'orders/fetchOrders',

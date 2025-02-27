@@ -20,6 +20,7 @@ export const DateSelector = () => {
     setStartDate,
     endDate,
     setEndDate,
+    search,
   } = useOrdersContext();
 
   const { t } = useTranslation();
@@ -32,6 +33,7 @@ export const DateSelector = () => {
         limit: limit,
         startDate: startDate,
         endDate: endDate,
+        search: search,
       }),
       thenHandler: (response) => {
         setPageOrders(response.items);

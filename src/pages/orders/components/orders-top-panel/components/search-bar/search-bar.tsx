@@ -17,6 +17,8 @@ export const SearchBar = () => {
     setTotalPages,
     search,
     setSearch,
+    endDate,
+    startDate,
   } = useOrdersContext();
 
   const { t } = useTranslation();
@@ -28,6 +30,8 @@ export const SearchBar = () => {
         page: 1,
         limit: limit,
         search: search,
+        startDate: startDate,
+        endDate: endDate,
       }),
       thenHandler: (response) => {
         setPageOrders(response.items);

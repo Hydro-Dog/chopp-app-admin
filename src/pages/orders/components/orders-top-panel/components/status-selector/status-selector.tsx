@@ -20,6 +20,9 @@ export const StatusSelector = () => {
     setTotalPages,
     ordersStatus,
     setOrdersStatus,
+    search,
+    endDate,
+    startDate,
   } = useOrdersContext();
 
   const items = Object.values(ORDER_STATUS).map((status) => ({
@@ -33,6 +36,9 @@ export const StatusSelector = () => {
         page: 1,
         limit: limit,
         //ordersStatus: ordersStatus,
+        search: search,
+        startDate: startDate,
+        endDate: endDate,
       }),
       thenHandler: (response) => {
         setPageOrders(response.items);

@@ -82,7 +82,6 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.ORDERS,
         element: (
-          //TODO сделать отдельный компонент, чтоб в роутере не было вложенности
           <OrdersProvider>
             <OrdersPage />
           </OrdersProvider>

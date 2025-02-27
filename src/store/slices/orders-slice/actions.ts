@@ -5,8 +5,6 @@ import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 import { UpdateOrderDTO } from './types';
 
-//TODO Переделать search и убрать categoryId если она не нужна
-
 export const fetchOrders = createFetchPaginationListThunkAction<
   Order,
   PaginationRequestQuery,

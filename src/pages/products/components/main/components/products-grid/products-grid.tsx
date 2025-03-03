@@ -1,29 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import {
-  CloseOutlined,
-  DeleteOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  SettingOutlined,
-} from '@ant-design/icons';
-import { useProductsContext } from '@pages/products/context';
-import { useSuperDispatch } from '@shared/hooks';
-import { PRODUCT_STATE, updateListItemById } from '@shared/index';
-import { FETCH_STATUS, Product } from '@shared/types';
-import { RootState } from '@store/index';
-import { updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
-import { Col, Row, Slider, Spin, Switch, Tooltip } from 'antd';
-import { Card } from 'antd';
+import { STORAGE_KEYS } from '@shared/index';
+import { Product } from '@shared/types';
+import { Col, Row, Slider, Spin } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
 import { DeleteProductModal } from '../delete-product-modal';
-import { sortImages } from './utils/sort-images';
-import { useGetCardActions } from './hooks';
 import { MoveToTrashModal } from '../move-to-trash-modal';
-
-const { Meta } = Card;
+import { ProductCard } from './components';
 
 const colCounts: Record<PropertyKey, number> = { 0: 4, 1: 6, 2: 8 };
 
@@ -33,7 +17,6 @@ type Props = {
 };
 
 export const ProductsGrid = ({ items, loading }: Props) => {
-  const { t } = useTranslation();
   const {
     value: isCreateProductModalOpen,
     setTrue: openCreateProductModal,
@@ -50,42 +33,22 @@ export const ProductsGrid = ({ items, loading }: Props) => {
     setFalse: closeDeleteModal,
   } = useBoolean();
 
-  const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
-  const { setPageProducts } = useProductsContext();
-  const { superDispatch } = useSuperDispatch<Product, UpdateProductVisibilityDTO>();
   const [currentItemData, setCurrentItemData] = useState<Product>();
 
-  const onSettingClicked = (item: Product) => {
-    setCurrentItemData(item);
-    openCreateProductModal();
-  };
-
-  const onMoveToTrashClicked = (item: Product) => {
-    setCurrentItemData(item);
-    openMoveToTrashModal();
-  };
-
-  const onDeleteClicked = (item: Product) => {
-    setCurrentItemData(item);
-    openDeleteModal();
-  };
-
-  const onVisibilityToggled = ({ id, state }: UpdateProductVisibilityDTO) => {
-    superDispatch({
-      action: updateProductVisibility({ id, state }),
-      thenHandler: (product) => {
-        setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
-      },
-    });
-  };
-
-  const { getActions } = useGetCardActions({
-    onSettingClicked,
-    onMoveToTrashClicked,
-    onDeleteClicked,
-  });
+  useEffect(() => {
+    const savedColCountKey = localStorage.getItem(STORAGE_KEYS.PRODUCTS_GRID_SCALE);
+    if (savedColCountKey !== null) {
+      setColCountKey(Number(savedColCountKey));
+    }
+  }, []);
 
   const [colCountKey, setColCountKey] = useState(1);
+
+  const handleSliderChange = (value: number) => {
+    setColCountKey(value);
+    localStorage.setItem(STORAGE_KEYS.PRODUCTS_GRID_SCALE, value.toString());
+  };
+
   const colCount = colCounts[colCountKey];
 
   if (loading && !items.length) {
@@ -93,24 +56,23 @@ export const ProductsGrid = ({ items, loading }: Props) => {
   }
 
   return (
-    <>
-      <div style={{ width: '50%', marginBottom: 48 }}>
-        <Slider
-          min={0}
-          max={Object.keys(colCounts).length - 1}
-          value={colCountKey}
-          onChange={setColCountKey}
-          marks={colCounts}
-          step={null}
-          tooltip={{ formatter: (value) => colCounts[value as number] }}
-        />
-      </div>
+    <div>
+      <Slider
+        min={0}
+        max={Object.keys(colCounts).length - 1}
+        value={colCountKey}
+        onChange={handleSliderChange}
+        marks={colCounts}
+        step={null}
+        tooltip={{ formatter: (value) => colCounts[value as number] }}
+      />
+
       <div style={{ width: `calc(100% - 12px)` }}>
         <Row gutter={[8, 8]}>
           {items?.map((item) => {
             return (
               <Col key={item.id} span={`${24 / colCount}`}>
-                <Card
+                {/* <Card
                   size="small"
                   hoverable
                   cover={
@@ -149,7 +111,15 @@ export const ProductsGrid = ({ items, loading }: Props) => {
                   }
                   actions={getActions(item)}>
                   <Meta description={<div className="line-clamp-2">{item.description}</div>} />
-                </Card>
+                </Card> */}
+
+                <ProductCard
+                  item={item}
+                  openCreateProductModal={openCreateProductModal}
+                  openMoveToTrashModal={openMoveToTrashModal}
+                  openDeleteModal={openDeleteModal}
+                  setCurrentItemData={setCurrentItemData}
+                />
               </Col>
             );
           })}
@@ -180,6 +150,6 @@ export const ProductsGrid = ({ items, loading }: Props) => {
         product={currentItemData}
         id={currentItemData?.id}
       />
-    </>
+    </div>
   );
 };

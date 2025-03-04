@@ -1,19 +1,19 @@
 import { useOrdersContext } from '@pages/orders/context';
 import { useSetPagination } from '@pages/orders/hooks';
 import { useSuperDispatch } from '@shared/hooks';
-import { Order, ORDER_STATUS, PaginationRequestQuery, PaginationResponse } from '@shared/types';
+import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
 import { fetchOrders } from '@store/slices';
 type Args = {
   searchParam?: string;
   endDateParam?: string;
   startDateParam?: string;
-  orderStatusParam?: ORDER_STATUS[];
+  orderStatusParam?: string[];
   limitParam?: number;
   pageParam?: number;
 };
 
 export const useChangeTableOrders = () => {
-  const { limit, endDate, startDate, search } = useOrdersContext();
+  const { limit, endDate, startDate, search, status } = useOrdersContext();
   const setPagination = useSetPagination();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();
 
@@ -32,6 +32,7 @@ export const useChangeTableOrders = () => {
         search: searchParam === undefined ? search : searchParam,
         startDate: startDateParam === undefined ? startDate : startDateParam,
         endDate: endDateParam === undefined ? endDate : endDateParam,
+        status: orderStatusParam === undefined ? status : orderStatusParam,
       }),
       thenHandler: (response) => {
         setPagination({ response });

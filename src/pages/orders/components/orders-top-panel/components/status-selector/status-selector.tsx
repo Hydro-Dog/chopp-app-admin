@@ -7,7 +7,7 @@ import { useChangeTableOrders } from '../../../../hooks';
 
 export const StatusSelector = () => {
   const { t } = useTranslation();
-  const { ordersStatus, setOrdersStatus, search } = useOrdersContext();
+  const { status, setStatus, search } = useOrdersContext();
   const filters = useChangeTableOrders();
 
   const all = 'all';
@@ -23,12 +23,14 @@ export const StatusSelector = () => {
     })),
   ];
 
-  const changeRangeStatus = (value: ORDER_STATUS[]) => {
+  const changeRangeStatus = (value: string[]) => {
     if (value.includes(all as ORDER_STATUS)) {
-      setOrdersStatus(Object.values(ORDER_STATUS));
-      filters({ searchParam: search, orderStatusParam: value });
+      const statusIfAll =
+        status.length === Object.values(ORDER_STATUS).length ? [] : Object.values(ORDER_STATUS);
+      setStatus(statusIfAll);
+      filters({ searchParam: search, orderStatusParam: statusIfAll });
     } else {
-      setOrdersStatus(value as ORDER_STATUS[]);
+      setStatus(value);
       filters({ orderStatusParam: value });
     }
   };
@@ -45,7 +47,7 @@ export const StatusSelector = () => {
           {...sharedProps}
           prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
           defaultValue={items.map((item) => item.value) as ORDER_STATUS[]}
-          value={ordersStatus}
+          value={status}
           className="w-full"
           onChange={changeRangeStatus}
           options={items}

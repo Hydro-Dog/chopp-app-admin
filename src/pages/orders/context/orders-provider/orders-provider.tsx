@@ -7,10 +7,8 @@ import { Order, PropsWithChildrenOnly } from '@shared/types';
 type OrdersContextType = {
   pageOrders: Order[];
   setPageOrders: Dispatch<SetStateAction<Order[]>>;
-  ordersStatus: ORDER_STATUS[];
-  setOrdersStatus: Dispatch<SetStateAction<ORDER_STATUS[]>>;
-  // priceOfOrders: { from: number; to: number };
-  // setPriceOfOrders: Dispatch<SetStateAction<{ from: number; to: number }>>;
+  status: string[];
+  setStatus: Dispatch<SetStateAction<string[]>>;
   limit: number;
   setLimit: Dispatch<SetStateAction<number>>;
   totalPages: number;
@@ -34,11 +32,12 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   const initialLimit = Number(searchParams.get('limit')) || LIMIT;
   const initialSearch = searchParams.get('search') || '';
   const initialOrdersStatus =
-    searchParams
-      .get('statusOfOrders')
-      ?.split(',')
-      .map((status) => ORDER_STATUS[status as keyof typeof ORDER_STATUS]) ||
-    Object.values(ORDER_STATUS);
+    searchParams.get('status') !== ''
+      ? searchParams
+          .get('status')!
+          .split(',')
+          .filter((status) => Object.values(ORDER_STATUS).includes(status as ORDER_STATUS))
+      : Object.values(ORDER_STATUS);
   const initialPage = searchParams.get('page') || '';
   const initialStartDate = searchParams.get('startDate') || '';
   const initialEndDate = searchParams.get('endDate') || '';
@@ -46,9 +45,9 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   const [limit, setLimit] = useState(initialLimit);
   const [endDate, setEndDate] = useState(initialEndDate);
   const [startDate, setStartDate] = useState(initialStartDate);
-  const [ordersStatus, setOrdersStatus] = useState(initialOrdersStatus);
+  const [status, setStatus] = useState(initialOrdersStatus);
+
   const [search, setSearch] = useState(initialSearch);
-  // const [statusOfOrders, setStatusOfOrders] = useState(initialStatusOfOrder);
   const [pageOrders, setPageOrders] = useState<Order[]>([]);
   const [page, setPage] = useState(Number(initialPage) || 1);
   const [totalPages, setTotalPages] = useState(0);
@@ -58,12 +57,12 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
     const params = new URLSearchParams(searchParams);
     params.set('limit', String(limit));
     params.set('search', String(search));
-    // params.set('statusOfOrders', String(statusOfOrders));
+    params.set('status', String(status));
     params.set('startDate', String(startDate));
     params.set('endDate', String(endDate));
     params.set('page', String(page));
     setSearchParams(params);
-  }, [limit, search, page, startDate, endDate, ordersStatus, setSearchParams]);
+  }, [limit, search, page, startDate, endDate, status, setSearchParams]);
 
   return (
     <OrdersContext.Provider
@@ -84,8 +83,8 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
         setEndDate,
         startDate,
         setStartDate,
-        ordersStatus,
-        setOrdersStatus,
+        status,
+        setStatus,
       }}>
       {children}
     </OrdersContext.Provider>

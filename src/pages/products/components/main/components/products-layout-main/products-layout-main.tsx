@@ -1,18 +1,18 @@
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PRODUCTS_STATE_BY_GRID_MODE } from '@pages/products/constants';
 import { useProductsContext } from '@pages/products/context';
-import { useSuperDispatch } from '@shared/hooks';
+import { useShowTotalPagination, useSuperDispatch } from '@shared/hooks';
 import { PRODUCT_GRID_VIEW_MODE } from '@shared/index';
 import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
-import { Pagination, PaginationProps } from 'antd';
+import { Flex, Pagination, Space } from 'antd';
 import { ProductsGrid } from '../products-grid';
 import { TrashButton } from './components';
 
-const showTotal: PaginationProps['showTotal'] = (total) => `Total ${total} items`;
-
 export const ProductsLayoutMain = () => {
+  const { t } = useTranslation();
   const { products, fetchProductsStatus } = useSelector((state: RootState) => state.products);
   const {
     search,
@@ -31,6 +31,7 @@ export const ProductsLayoutMain = () => {
     setProductsState,
   } = useProductsContext();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
+  const showTotal = useShowTotalPagination();
 
   const onPaginationChange = (page: number, size: number) => {
     superDispatch({
@@ -73,23 +74,29 @@ export const ProductsLayoutMain = () => {
 
   return (
     products?.totalPages !== undefined && (
-      <div className="p-3">
+      <Flex vertical justify='space-between' className="h-full p-3">
         <ProductsGrid items={pageProducts} loading={fetchProductsStatus === FETCH_STATUS.LOADING} />
-        totalPages: {totalPages} - {page}
-        <Pagination
-          size="small"
-          current={page}
-          // TODO: установить нормальные занчения в pageSizeOptions
-          pageSizeOptions={[2, 8, 12, 22]}
-          pageSize={limit}
-          total={totalItems}
-          showTotal={showTotal}
-          onChange={onPaginationChange}
-          showSizeChanger
-          showQuickJumper
-        />
+
+        <Space>
+          <div>
+            {t('TOTAL_PAGES')}: {totalPages}
+          </div>
+          <Pagination
+            size="small"
+            current={page}
+            // TODO: установить нормальные занчения в pageSizeOptions
+            pageSizeOptions={[2, 8, 12, 22]}
+            pageSize={limit}
+            total={totalItems}
+            showTotal={showTotal}
+            onChange={onPaginationChange}
+            showSizeChanger
+            showQuickJumper
+          />
+        </Space>
+
         <TrashButton />
-      </div>
+      </Flex>
     )
   );
 };

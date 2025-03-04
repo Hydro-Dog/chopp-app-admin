@@ -201,5 +201,8 @@
   "DELETE_PRODUCT": "Удалить товар",
   "DELETE_PRODUCT_HELPER_TEXT": "Товар будет удален безвозвратно. Вы не сможете его восстановить",
   "PRODUCT_DELETED": "Товар '{{title}}' удален",
-  "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение"
+  "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение",
+  "TOTAL_PAGINATION_ITEMS": "Товаров",
+  "TOTAL_PAGES": "Страниц",
+  "REVERT_MOVE_TO_TRASH": "Восстановить"
 }

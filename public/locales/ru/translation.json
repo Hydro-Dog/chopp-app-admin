@@ -203,6 +203,7 @@
   "PRODUCT_DELETED": "Товар '{{title}}' удален",
   "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение",
   "TOTAL_PAGINATION_ITEMS": "Товаров",
+  "TOTAL_PAGINATION_ITEMS_ORDER": "Заказов",
   "TOTAL_PAGES": "Страниц",
   "REVERT_MOVE_TO_TRASH": "Восстановить"
 }

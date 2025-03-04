@@ -9,18 +9,11 @@ export const PaymentsDateFilter = () => {
   const { startDate, endDate, setStartDate, setEndDate } = usePaymentsContext();
 
   const handleDateChange = useCallback(
-    (dates: [Dayjs | null, Dayjs | null], dateStrings: [string, string]) => {
-      if (dates[0]) {
-        setStartDate(dates[0].format('DD.MM.YYYY'));
-      } else {
-        setStartDate('');
-      }
+    (dates: [Dayjs | null, Dayjs | null]) => {
+      const [start, end] = dates;
 
-      if (dates[1]) {
-        setEndDate(dates[1].format('DD.MM.YYYY'));
-      } else {
-        setEndDate('');
-      }
+      setStartDate(start ? start.format('DD.MM.YYYY') : '');
+      setEndDate(end ? end.format('DD.MM.YYYY') : '');
     },
     [setStartDate, setEndDate],
   );

@@ -26,13 +26,7 @@ const initialState: PaymentsState = {
 export const paymentsSlice = createSlice({
   name: 'payments',
   initialState,
-  reducers: {
-    resetPayments(state) {
-      state.payments = undefined;
-      state.fetchPaymentsStatus = FETCH_STATUS.IDLE;
-      state.fetchPaymentsError = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchPayments.pending, (state) => {
@@ -63,5 +57,3 @@ export const paymentsSlice = createSlice({
       });
   },
 });
-
-export const { resetPayments } = paymentsSlice.actions;

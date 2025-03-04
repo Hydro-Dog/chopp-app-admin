@@ -12,6 +12,7 @@ import {
 } from '@pages/index';
 
 import { PaymentsPage } from '@pages/payments';
+import { PaymentsProvider } from '@pages/payments/context';
 import {
   PricingSettingsPage,
   VisualSettingsPage,
@@ -79,7 +80,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.PAYMENTS,
-        element: <PaymentsPage />,
+        element: (
+          <PaymentsProvider>
+            <PaymentsPage />
+          </PaymentsProvider>
+        ),
       },
       {
         path: ROUTES.ANALYTICS,

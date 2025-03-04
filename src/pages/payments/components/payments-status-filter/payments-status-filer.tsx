@@ -1,31 +1,41 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePaymentsContext } from '@pages/payments/context';
-import { Select, Space } from 'antd';
+import { Select } from 'antd';
+import type { SelectProps } from 'antd';
 
-const { Option } = Select;
+const sharedProps: SelectProps = {
+  mode: 'multiple',
+  maxTagCount: 'responsive',
+};
 
 export const PaymentsStatusFilter = () => {
   const { t } = useTranslation();
   const { status, setStatus } = usePaymentsContext();
 
   const handleStatusChange = useCallback(
-    (value: string) => {
-      setStatus(value || '');
+    (value: string | string[]) => {
+      setStatus(Array.isArray(value) ? value.join(',') : value);
     },
     [setStatus],
   );
 
+  const items = [
+    { value: 'succeeded', label: t('PAYMENT_STATUS.SUCCEEDED') },
+    { value: 'canceled', label: t('PAYMENT_STATUS.CANCELED') },
+  ];
+
   return (
-    <Space direction="vertical" size={12}>
+    <div className="flex mb-3 items-center mt-2">
       <Select
-        placeholder={t('PICK_STATUS')}
+        {...sharedProps}
+        defaultValue={items.map((item) => item.value)}
+        value={status ? status.split(',') : []}
+        className="w-full"
         onChange={handleStatusChange}
-        value={status || undefined}
-        allowClear>
-        <Option value="succeeded">{t('PAYMENT_STATUS.SUCCEEDED')}</Option>
-        <Option value="canceled">{t('PAYMENT_STATUS.CANCELED')}</Option>
-      </Select>
-    </Space>
+        options={items}
+        showSearch={false}
+      />
+    </div>
   );
 };

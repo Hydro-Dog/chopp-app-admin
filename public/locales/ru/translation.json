@@ -93,6 +93,13 @@
   "CURRENT_STATUS": "Текущий сатус",
   "NEW_STATUS": "Новый сатус",
   "PICK_STATUS": "Выбрать статус",
+  "ORDERS_PAGE":{
+    "ENTER_ID": "Введите ID заказа",
+    "END_DATE": "До",
+    "START_DATE": "От",
+    "CHOSEN_STATUS": "Статусы: ",
+    "CHOOSE_ALL": "Выбрать все"
+  },
   "ORDER_STATUS": {
     "AWAITING_PAYMENT": "Ожидает оплаты",
     "AWAITING_PAYMENT_TOOLTIP": "Заказ создан и ожидает оплаты от пользователя.",
@@ -196,6 +203,7 @@
   "PRODUCT_DELETED": "Товар '{{title}}' удален",
   "FIRST_IMAGE_IS_COVER": "Обложкой станет первое в списке изображение",
   "TOTAL_PAGINATION_ITEMS": "Товаров",
+  "TOTAL_PAGINATION_ITEMS_ORDER": "Заказов",
   "TOTAL_PAGES": "Страниц",
   "REVERT_MOVE_TO_TRASH": "Восстановить"
 }

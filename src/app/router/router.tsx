@@ -11,7 +11,9 @@ import {
   SettingsPage,
 } from '@pages/index';
 
+import { OrdersProvider } from '@pages/orders/context';
 import { PaymentsPage } from '@pages/payments';
+import { ProductsProvider } from '@pages/products/context';
 import {
   PricingSettingsPage,
   VisualSettingsPage,
@@ -45,7 +47,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.PRODUCTS,
-        element: <ProductsPage />,
+        element: (
+          <ProductsProvider>
+            <ProductsPage />
+          </ProductsProvider>
+        ),
       },
       {
         path: ROUTES.CHATS,
@@ -75,7 +81,11 @@ export const router = createBrowserRouter([
       },
       {
         path: ROUTES.ORDERS,
-        element: <OrdersPage />,
+        element: (
+          <OrdersProvider>
+            <OrdersPage />
+          </OrdersProvider>
+        ),
       },
       {
         path: ROUTES.PAYMENTS,

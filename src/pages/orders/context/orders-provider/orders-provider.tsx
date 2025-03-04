@@ -32,7 +32,7 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   const initialLimit = Number(searchParams.get('limit')) || LIMIT;
   const initialSearch = searchParams.get('search') || '';
   const initialOrdersStatus =
-    searchParams.get('status') !== ''
+    searchParams.get('status') !== null
       ? searchParams
           .get('status')!
           .split(',')

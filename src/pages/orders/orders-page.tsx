@@ -6,6 +6,7 @@ import { updateOrderPaymentStatus } from '@store/slices';
 import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
 import { Card, Pagination } from 'antd';
 import { OrdersTable } from './components';
+import { ShowTotalItems } from './components/orders-table/components';
 import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
 import { useChangeTableOrders } from './hooks';
@@ -13,6 +14,8 @@ import { useChangeTableOrders } from './hooks';
 export const OrdersPage = () => {
   const { limit, page, pageOrders, totalItems } = useOrdersContext();
   const changeTableOrders = useChangeTableOrders();
+
+  const showTotalItems = ShowTotalItems(totalItems);
 
   const { t } = useTranslation();
   const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
@@ -60,6 +63,7 @@ export const OrdersPage = () => {
           current={page}
           pageSizeOptions={[2, 8, 12, 22]}
           pageSize={limit}
+          //showTotal={showTotalItems}
           total={totalItems}
           onChange={onPaginationChange}
           showSizeChanger

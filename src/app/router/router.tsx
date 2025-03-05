@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import {
   AnalyticsPage,
   SignInPage,
@@ -38,13 +38,14 @@ export const router = createBrowserRouter([
       <GuardedRoute>
         <InterceptorsWrapper />
         <MainMenu />
+        <Navigate to={ROUTES.ORDERS} replace />
       </GuardedRoute>
     ),
     children: [
-      {
-        path: '',
-        element: <UsersPage />,
-      },
+      // {
+      //   path: '',
+      //   element: <UsersPage />,
+      // },
       {
         path: ROUTES.PRODUCTS,
         element: (
@@ -53,10 +54,10 @@ export const router = createBrowserRouter([
           </ProductsProvider>
         ),
       },
-      {
-        path: ROUTES.CHATS,
-        element: <ChatsPage />,
-      },
+      // {
+      //   path: ROUTES.CHATS,
+      //   element: <ChatsPage />,
+      // },
       {
         path: ROUTES.SETTINGS,
         element: <Outlet />,
@@ -91,18 +92,18 @@ export const router = createBrowserRouter([
         path: ROUTES.PAYMENTS,
         element: <PaymentsPage />,
       },
-      {
-        path: ROUTES.ANALYTICS,
-        element: <AnalyticsPage />,
-      },
-      {
-        path: `${ROUTES.USERS}/:id`, // Updated path for user profiles
-        element: <UserPage />,
-      },
+      // {
+      //   path: ROUTES.ANALYTICS,
+      //   element: <AnalyticsPage />,
+      // },
+      // {
+      //   path: `${ROUTES.USERS}/:id`, // Updated path for user profiles
+      //   element: <UserPage />,
+      // },
     ],
   },
-  // {
-  //   path: '*', // Wildcard route for unknown paths
-  //   element: <Navigate to={ROUTES.USERS} replace />,
-  // },
+  {
+    path: '*',
+    element: <Navigate to={ROUTES.ORDERS} replace />,
+  },
 ]);

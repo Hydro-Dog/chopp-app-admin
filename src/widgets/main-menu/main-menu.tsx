@@ -20,7 +20,16 @@ import { AppDispatch, RootState } from '@store/store';
 import { Badge, Layout, Menu, Tooltip } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetMenuItemByUrl } from './hooks/index';
-import { ShopFilled, ShopOutlined } from '@ant-design/icons';
+import {
+  BankFilled,
+  BankOutlined,
+  BellFilled,
+  BellOutlined,
+  ShopFilled,
+  ShopOutlined,
+  SlidersFilled,
+  SlidersOutlined,
+} from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -56,20 +65,20 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const menuItems = [
     {
       key: ROUTES.PRODUCTS,
-      icon: selectedMenuKeys.includes(ROUTES.PRODUCTS) ? <ShopFilled /> : <ShopOutlined /> ,
+      icon: selectedMenuKeys.includes(ROUTES.PRODUCTS) ? <ShopFilled /> : <ShopOutlined />,
       label: t('PRODUCTS'),
       onClick: () => onMenuItemClick(ROUTES.PRODUCTS),
     },
-    {
-      key: '',
-      //TODO: сделать иконки по аналогии с первым элементом
-      icon: <GroupRoundedIcon />,
-      label: t('USERS'),
-      onClick: () => onMenuItemClick(ROUTES.ROOT),
-    },
+    // {
+    //   key: '',
+    //   //TODO: сделать иконки по аналогии с первым элементом
+    //   icon: <GroupRoundedIcon />,
+    //   label: t('USERS'),
+    //   onClick: () => onMenuItemClick(ROUTES.ROOT),
+    // },
     {
       key: ROUTES.ORDERS,
-      icon: <RoomServiceIcon color="primary" />,
+      icon: selectedMenuKeys.includes(ROUTES.ORDERS) ? <BellFilled /> : <BellOutlined />,
       label: (
         <div className="flex items-center gap-1">
           <div>{t('ORDERS')}</div>
@@ -79,7 +88,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
     {
       key: ROUTES.PAYMENTS,
-      icon: <CreditCardIcon color="primary" />,
+      icon: selectedMenuKeys.includes(ROUTES.PAYMENTS) ? <BankFilled /> : <BankOutlined />,
       label: (
         <div className="flex items-center gap-1">
           <div>{t('PAYMENTS')}</div>
@@ -87,31 +96,31 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       ),
       onClick: () => onMenuItemClick(ROUTES.PAYMENTS),
     },
-    {
-      key: ROUTES.CHATS,
-      icon: <ChatRoundedIcon />,
-      label: (
-        <Tooltip title={JSON.stringify(chatsStats)}>
-          <div className="flex items-center gap-1">
-            <div>{t('CHATS')}</div>
-            <Badge size="default" count={0} />
-          </div>
-        </Tooltip>
-      ),
-      onClick: () => onMenuItemClick(ROUTES.CHATS),
-    },
+    // {
+    //   key: ROUTES.CHATS,
+    //   icon: <ChatRoundedIcon />,
+    //   label: (
+    //     <Tooltip title={JSON.stringify(chatsStats)}>
+    //       <div className="flex items-center gap-1">
+    //         <div>{t('CHATS')}</div>
+    //         <Badge size="default" count={0} />
+    //       </div>
+    //     </Tooltip>
+    //   ),
+    //   onClick: () => onMenuItemClick(ROUTES.CHATS),
+    // },
     {
       key: ROUTES.SETTINGS,
-      icon: <SettingsIcon fontSize="medium" />,
+      icon: selectedMenuKeys.includes(ROUTES.SETTINGS) ? <SlidersFilled /> : <SlidersOutlined />,
       label: t('SETTINGS'),
       onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
-    {
-      key: ROUTES.ANALYTICS,
-      icon: <AnalyticsIcon />,
-      label: t('ANALYTICS'),
-      onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
-    },
+    // {
+    //   key: ROUTES.ANALYTICS,
+    //   icon: <AnalyticsIcon />,
+    //   label: t('ANALYTICS'),
+    //   onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
+    // },
     {
       key: 'logout',
       icon: <LogoutRoundedIcon rotate={180} />,

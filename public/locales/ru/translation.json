@@ -186,7 +186,7 @@
   "PAID": "Оплачено",
   "REFUND_AMOUNT": "Сумма возврата",
   "FAILED": "Отказ",
-  "YOU_ARE_GOING_TO_REMOVE_CATEGORY": "Высобираетесь удалить категорию",
+  "YOU_ARE_GOING_TO_REMOVE_CATEGORY": "Вы собираетесь удалить категорию",
   "ALL_PRODUCTS_WILL_BE_MOVED_TO": "Все товары будут перенесены в категорию",
   "NO_CATEGORY": "Другое",
   "INPUT_CATEGORY_TO_DELETE_NAME": "Введите название категории, которую хотите удалить",

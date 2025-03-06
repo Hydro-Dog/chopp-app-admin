@@ -1,10 +1,17 @@
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNotificationContext } from '@shared/context';
 import { Form, Input, Tooltip, Button, Space } from 'antd';
 import { z } from 'zod';
 import { usePaymentSettingsFormSchema } from './hooks';
+import { useSuperDispatch } from '@shared/hooks';
+import { postPaymentSettings } from '@store/slices';
+import { RootState } from '@store/store';
+import { FETCH_STATUS } from '@shared/index';
 
 const { Item } = Form;
 
@@ -14,11 +21,19 @@ type Props = {
 
 export const PaymentSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
+  const { superDispatch } = useSuperDispatch();
+  const { showErrorNotification } = useNotificationContext();
+  const { paymentSettings, postPaymentSettingsStatus } = useSelector(
+    (state: RootState) => state.paymentSettings,
+  );
+
   const paymentSettingsFormSchema = usePaymentSettingsFormSchema();
   type PaymentSettingsFormType = z.infer<typeof paymentSettingsFormSchema>;
+
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<PaymentSettingsFormType>({
     resolver: zodResolver(paymentSettingsFormSchema),
@@ -27,8 +42,25 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<PaymentSettingsFormType> = (paymentData) => {
-    console.log(paymentData);
+  useEffect(() => {
+    if (paymentSettings) {
+      reset({
+        shopId: paymentSettings.shopId,
+      });
+    }
+  }, [paymentSettings, reset]);
+
+  const onSubmit: SubmitHandler<PaymentSettingsFormType> = (paymentSettings) => {
+    superDispatch({
+      action: postPaymentSettings(paymentSettings),
+      thenHandler: onCancel,
+      catchHandler: (error) => {
+        showErrorNotification({
+          message: t('ERROR'),
+          description: error.message,
+        });
+      },
+    });
   };
 
   const onCancel = () => {
@@ -66,8 +98,12 @@ export const PaymentSettingsEditForm = ({ toggle }: Props) => {
 
       <Space>
         <Button onClick={onCancel}>{t('CANCEL')}</Button>
-        <Button onClick={handleSubmit(onSubmit)} type="primary">
-          {t('SAVE')}
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          type="primary"
+          loading={postPaymentSettingsStatus === FETCH_STATUS.LOADING}
+          disabled={postPaymentSettingsStatus === FETCH_STATUS.LOADING}>
+          {postPaymentSettingsStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

@@ -1,3 +1,3 @@
 export type PaymentSettings = {
-  shopId?: string;
+  shopId: string;
 };

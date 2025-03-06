@@ -1,6 +1,12 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Descriptions, Button, Flex, Space } from 'antd';
-import type { DescriptionsProps } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNotificationContext } from '@shared/context';
+import { fetchPaymentSettings } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
+import { FETCH_STATUS } from '@shared/index';
+import { Descriptions, Button, Flex, Space, Spin } from 'antd';
+import { useGetDescriptionItems } from './hooks';
 
 type Props = {
   toggle: () => void;
@@ -8,13 +14,22 @@ type Props = {
 
 export const PaymentSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
-  const items: DescriptionsProps['items'] = [
-    {
-      key: 'shopId',
-      label: t('SHOP_ID'),
-      children: '-',
-    },
-  ];
+  const { showErrorNotification } = useNotificationContext();
+  const dispatch = useDispatch<AppDispatch>();
+  const { fetchPaymentSettingsStatus } = useSelector((state: RootState) => state.paymentSettings);
+
+  useEffect(() => {
+    dispatch(fetchPaymentSettings())
+      .unwrap()
+      .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
+  }, [dispatch]);
+
+  const items = useGetDescriptionItems();
+
+  if (fetchPaymentSettingsStatus === FETCH_STATUS.LOADING) {
+    return <Spin tip={t('LOADING')} />;
+  }
+
   return (
     <Flex vertical gap={16}>
       <Descriptions column={1} size={'default'} items={items} />

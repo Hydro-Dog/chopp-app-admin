@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { AsyncThunkAction } from '@reduxjs/toolkit';
 import { ORDER_STATUS } from '@shared/enum';
 import { ChoppInfoModal } from '@shared/index';
-import { ErrorResponse, Order, PaginationQuery, PaginationResponse } from '@shared/types';
+import { Order } from '@shared/types';
 import { Table } from 'antd';
 import { useBoolean } from 'usehooks-ts';
 import { ChangeOrderStatusModal } from './components';
@@ -10,13 +9,8 @@ import { ACTION_MENU_ITEMS } from './enums';
 import { useGetOrderTableColumns } from './hooks';
 import { ActionValue } from './types';
 
-type FetchDataFunction = (
-  params: PaginationQuery,
-) => AsyncThunkAction<PaginationResponse<Order>, PaginationQuery, { rejectValue: ErrorResponse }>;
-
 type Props = {
-  fetchData: FetchDataFunction;
-  data?: PaginationResponse<Order>;
+  data: Order[];
   onStatusChange: ({
     orderStatus,
     transactionId,
@@ -58,7 +52,14 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
 
   return (
     <>
-      <Table className="!p-0" size="small" columns={columns} dataSource={data?.items} rowKey="id" />
+      <Table
+        className="!p-0"
+        size="small"
+        columns={columns}
+        dataSource={data}
+        rowKey="id"
+        pagination={false}
+      />
       <ChangeOrderStatusModal
         open={isStatusModalOpened}
         onSubmit={onStatusChange}

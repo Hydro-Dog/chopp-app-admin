@@ -1,8 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { PRODUCT_STATE, Product, PRODUCT_GRID_VIEW_MODE, PropsWithChildrenOnly } from '@shared/index';
+import { PRODUCT_STATE, Product, PropsWithChildrenOnly } from '@shared/index';
 
-export const FIRST_PAGE_NUMBER = 1;
 export const LIMIT = 2;
 
 type ProductsContextType = {
@@ -39,7 +38,7 @@ export const ProductsProvider = ({ children }: PropsWithChildrenOnly) => {
   const [search, setSearch] = useState(initialSearch);
   const [categoryId, setCategoryId] = useState(initialCategoryId);
   const [productsState, setProductsState] = useState(initialProductsState);
-  const [page, setPage] = useState(initialPage || FIRST_PAGE_NUMBER);
+  const [page, setPage] = useState(initialPage || 1);
   const [limit, setLimit] = useState(initialLimit);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);

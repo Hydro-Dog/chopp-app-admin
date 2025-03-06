@@ -1,50 +1,51 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { TitlePage, updateListItemById, useNotificationContext, useSuperDispatch } from '@shared/index';
-import { PaginationQuery, PaginationResponse, Order, ORDER_STATUS } from '@shared/types';
-import { AppDispatch } from '@store/index';
-import { fetchOrders, updateOrderPaymentStatus } from '@store/slices';
+import {
+  TitlePage,
+  useNotificationContext,
+  useShowTotalPaginationOrders,
+  useSuperDispatch,
+} from '@shared/index';
+import { Order, ORDER_STATUS } from '@shared/types';
+import { updateOrderPaymentStatus } from '@store/slices';
 import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
-import { Card } from 'antd';
+import { Card, Pagination, Space } from 'antd';
 import { OrdersTable } from './components';
-import { useNewOrderNotificationHandler } from './hooks';
+import { OrdersTopPanel } from './components/orders-top-panel';
+import { useOrdersContext } from './context';
+import { useChangeTableOrders } from './hooks';
 
 export const OrdersPage = () => {
+  const { limit, page, pageOrders, totalItems, totalPages } = useOrdersContext();
+  const changeTableOrders = useChangeTableOrders();
+  const showTotal = useShowTotalPaginationOrders();
+
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const { superDispatch } = useSuperDispatch<Order, UpdateOrderDTO>();
+  const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
   const { showErrorNotification } = useNotificationContext();
 
-  const [ordersData, setOrdersData] = useState<PaginationResponse<Order>>({
-    items: [],
-    totalItems: 0,
-    totalPages: 0,
-    pageNumber: 1,
-    limit: 10,
-  });
-
-  useNewOrderNotificationHandler({ setOrdersData });
-
-  const fetchOrdersData = async (params: PaginationQuery) => {
-    const result = await dispatch(fetchOrders(params)).unwrap();
-    setOrdersData(result);
-  };
-
   useEffect(() => {
-    fetchOrdersData({ page: 1, limit: 10 });
+    changeTableOrders({});
   }, []);
 
-  const onPaginationChange = (page: number, pageSize: number) => {};
+  const onPaginationChange = (page: number, size: number) => {
+    changeTableOrders({ pageParam: page, limitParam: size });
+  };
 
-  const onOrderStatusChange = ({ orderStatus, transactionId }: { orderStatus: ORDER_STATUS; transactionId: string }) => {
-    superDispatch({
+  const onOrderStatusChange = ({
+    orderStatus,
+    transactionId,
+  }: {
+    orderStatus: ORDER_STATUS;
+    transactionId: string;
+  }) => {
+    updatePaymentDispatch.superDispatch({
       action: updateOrderPaymentStatus({
         transactionId,
         orderStatus,
       }),
-      thenHandler: (value) => {
-        setOrdersData((prev) => ({ ...prev, items: updateListItemById(prev.items, value) }));
+      thenHandler: () => {
+        changeTableOrders({});
       },
       catchHandler: (error) => {
         showErrorNotification({
@@ -57,8 +58,25 @@ export const OrdersPage = () => {
 
   return (
     <TitlePage title={t('ORDERS')}>
-      <Card className="h-full" size="small">
-        <OrdersTable data={ordersData} fetchData={fetchOrdersData} onStatusChange={onOrderStatusChange} onPaginationChange={onPaginationChange} />
+      <Card className="h-full relative" size="small">
+        <OrdersTopPanel />
+        <OrdersTable data={pageOrders} onStatusChange={onOrderStatusChange} />
+        <Space className="absolute bottom-0 left-0 w-full px-3 pb-3">
+          <div>
+            {t('TOTAL_PAGES')}: {totalPages}
+          </div>
+          <Pagination
+            size="small"
+            current={page}
+            pageSizeOptions={[2, 8, 12, 22]}
+            pageSize={limit}
+            total={totalItems}
+            onChange={onPaginationChange}
+            showTotal={showTotal}
+            showSizeChanger
+            showQuickJumper
+          />
+        </Space>
       </Card>
     </TitlePage>
   );

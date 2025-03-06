@@ -10,3 +10,5 @@ export * from './use-search-param-value';
 export * from './use-super-dispatch';
 export * from './use-infinite-scroll';
 export * from './use-auto-focus';
+export * from './use-show-total-pagination';
+export * from './use-show-total-pagination-orders';

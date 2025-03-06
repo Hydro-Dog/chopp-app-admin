@@ -11,7 +11,6 @@ export const PaymentsDateFilter = () => {
   const handleDateChange = useCallback(
     (dates: [Dayjs | null, Dayjs | null]) => {
       const [start, end] = dates;
-
       setStartDate(start ? start.format('DD.MM.YYYY') : '');
       setEndDate(end ? end.format('DD.MM.YYYY') : '');
     },
@@ -21,6 +20,7 @@ export const PaymentsDateFilter = () => {
   return (
     <Space direction="vertical" size={12}>
       <RangePicker
+        className="w-2/6"
         allowEmpty={[true, true]}
         format={'DD.MM.YYYY'}
         onCalendarChange={handleDateChange}

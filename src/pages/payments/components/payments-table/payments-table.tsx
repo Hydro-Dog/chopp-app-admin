@@ -20,6 +20,7 @@ export const PaymentsTable = () => {
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
+    console.log('Fetching payments with:', { startDate, endDate, status, payment_id });
     setList([]);
     const searchRequest = { startDate, endDate, status, payment_id };
     dispatch(fetchPayments(searchRequest));

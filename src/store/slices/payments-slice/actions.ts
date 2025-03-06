@@ -25,7 +25,6 @@ export const fetchPayments = createAsyncThunk<
       fetchData;
 
     const params: Record<string, string> = {};
-
     if (limit) params.limit = String(limit);
     if (cursor) params.cursor = cursor;
     if (fetchData['created_at.gte']) params['created_at.gte'] = fetchData['created_at.gte'];

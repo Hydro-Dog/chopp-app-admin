@@ -35,7 +35,7 @@ export const PaymentsProvider = ({ children }: PropsWithChildrenOnly) => {
     params.set('status', status);
     params.set('payment_id', payment_id);
     setSearchParams(params);
-  }, [startDate, endDate, status, payment_id, setSearchParams]);
+  }, [startDate, endDate, status, payment_id, setSearchParams, searchParams]);
 
   return (
     <PaymentsContext.Provider

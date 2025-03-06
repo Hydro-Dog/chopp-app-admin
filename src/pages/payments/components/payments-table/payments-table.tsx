@@ -6,6 +6,7 @@ import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@share
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Table, Spin, Modal } from 'antd';
+import dayjs from 'dayjs';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
 import { ActionValue } from './types';
@@ -20,12 +21,24 @@ export const PaymentsTable = () => {
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
-    console.log('Fetching payments with:', { startDate, endDate, status, payment_id });
     setList([]);
-    const searchRequest = { startDate, endDate, status, payment_id };
+
+    const searchRequest: Record<string, string> = {};
+    if (startDate) {
+      searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
+    }
+    if (endDate) {
+      searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
+    }
+    if (status) {
+      searchRequest['status'] = status;
+    }
+    if (payment_id) {
+      searchRequest['payment_id'] = payment_id;
+    }
+
     dispatch(fetchPayments(searchRequest));
   }, [startDate, endDate, status, payment_id, dispatch, setList]);
-
   useEffect(() => {
     if (payments?.items) {
       setList((prev) => [...prev, ...(payments.items || [])]);
@@ -51,14 +64,21 @@ export const PaymentsTable = () => {
 
   const handleLoadMore = () => {
     if (payments?.next_cursor && fetchPaymentsStatus !== FETCH_STATUS.LOADING) {
-      const searchRequest = {
-        startDate,
-        endDate,
-        status,
-        payment_id,
-        cursor: payments.next_cursor,
-      };
-      dispatch(fetchPayments(searchRequest));
+      const searchRequest: Record<string, string> = {};
+      if (startDate) {
+        searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
+      }
+      if (endDate) {
+        searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
+      }
+      if (status) {
+        searchRequest['status'] = status;
+      }
+      if (payment_id) {
+        searchRequest['payment_id'] = payment_id;
+      }
+
+      dispatch(fetchPayments({ ...searchRequest, cursor: payments.next_cursor }));
     }
   };
 

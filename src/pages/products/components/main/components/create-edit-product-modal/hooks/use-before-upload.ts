@@ -39,7 +39,7 @@ export const useBeforeUpload = () => {
     if (!isImageFile) {
       showErrorNotification({
         message: t('ERROR'),
-        description: t('ERRORS.IMAGE_INVALID_CONTENT'),
+        description: t('ERRORS.IMAGE_INVALID_FORMAT', { format: 'JPG, JPEG, PNG' }),
       });
       return Upload.LIST_IGNORE;
     }

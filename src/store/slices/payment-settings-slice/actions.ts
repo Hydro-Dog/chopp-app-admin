@@ -9,7 +9,7 @@ export const fetchPaymentSettings = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('paymentSettings/fetchPaymentSettings', async (_, thunkAPI) => {
   try {
-    const response = await axiosPrivate.get<PaymentSettings>('/paymentSettings');
+    const response = await axiosPrivate.get<PaymentSettings>('pricing/settings');
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -28,7 +28,7 @@ export const postPaymentSettings = createAsyncThunk<
   }
 >('paymentSettings/postPaymentSettings', async (data, thunkAPI) => {
   try {
-    const response = await axiosPrivate.post<PaymentSettings>('/paymentSettings', data);
+    const response = await axiosPrivate.post<PaymentSettings>('pricing/settings', data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

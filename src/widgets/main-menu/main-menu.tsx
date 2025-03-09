@@ -77,14 +77,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     //   onClick: () => onMenuItemClick(ROUTES.ROOT),
     // },
     {
-      key: ROUTES.ORDERS,
-      icon: selectedMenuKeys.includes(ROUTES.ORDERS) ? <BellFilled /> : <BellOutlined />,
+      key: '',
+      icon: selectedMenuKeys.includes('') ? <BellFilled /> : <BellOutlined />,
       label: (
         <div className="flex items-center gap-1">
           <div>{t('ORDERS')}</div>
         </div>
       ),
-      onClick: () => onMenuItemClick(ROUTES.ORDERS),
+      onClick: () => onMenuItemClick(''),
     },
     {
       key: ROUTES.PAYMENTS,

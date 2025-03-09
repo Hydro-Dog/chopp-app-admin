@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
       <GuardedRoute>
         <InterceptorsWrapper />
         <MainMenu />
-        <Navigate to={ROUTES.ORDERS} replace />
+        {/* <Navigate to={ROUTES.ORDERS} replace /> */}
       </GuardedRoute>
     ),
     children: [
@@ -46,6 +46,14 @@ export const router = createBrowserRouter([
       //   path: '',
       //   element: <UsersPage />,
       // },
+      {
+        path: '',
+        element: (
+          <OrdersProvider>
+            <OrdersPage />
+          </OrdersProvider>
+        ),
+      },
       {
         path: ROUTES.PRODUCTS,
         element: (
@@ -79,14 +87,6 @@ export const router = createBrowserRouter([
             element: <PaymentSettingsPage />,
           },
         ],
-      },
-      {
-        path: ROUTES.ORDERS,
-        element: (
-          <OrdersProvider>
-            <OrdersPage />
-          </OrdersProvider>
-        ),
       },
       {
         path: ROUTES.PAYMENTS,

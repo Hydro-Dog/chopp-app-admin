@@ -3,6 +3,7 @@ import { useOrdersContext } from '@pages/orders/context';
 import { useChangeTableOrders } from '@pages/orders/hooks';
 import { DatePicker } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
+import dayjs from 'dayjs';
 
 export const DateSelector = () => {
   const { setStartDate, setEndDate } = useOrdersContext();
@@ -21,6 +22,8 @@ export const DateSelector = () => {
       placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
       allowEmpty={[false, true]}
       onChange={changeDate}
+      minDate={dayjs('2000-01-01', 'YYYY-MM-DD')}
+      maxDate={dayjs('2100-01-01', 'YYYY-MM-DD')}
     />
   );
 };

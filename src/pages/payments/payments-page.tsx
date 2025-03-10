@@ -7,7 +7,7 @@ export const PaymentsPage = () => {
   const { t } = useTranslation();
 
   return (
-    <TitlePage title={t('ORDERS')}>
+    <TitlePage title={t('PAYMENTS')}>
       <Card className="h-full relative" size="small">
         <PaymentsTopPanel />
         <PaymentsTable />

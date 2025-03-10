@@ -39,6 +39,7 @@ export const PaymentsStatusFilter = () => {
         onChange={handleStatusChange}
         options={items}
         showSearch={false}
+        allowClear
       />
     </div>
   );

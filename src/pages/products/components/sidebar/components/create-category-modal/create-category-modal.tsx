@@ -7,7 +7,7 @@ import { BasicModal, Category, useAutoFocus } from '@shared/index';
 import { useSuperDispatch } from '@shared/index';
 import { createCategory, CreateCategoryDTO } from '@store/slices/product-category-slice';
 import { RootState } from '@store/store';
-import { Form, Input, InputRef } from 'antd';
+import { Form, Input, InputRef, Modal } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
 import { useSearchParams } from 'react-router-dom';
@@ -62,7 +62,7 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   useAutoFocus({ open, inputRef });
 
   return (
-    <BasicModal
+    <Modal
       title={t('ADD_CATEGORY')}
       open={open}
       onOk={handleSubmit(onSubmit)}
@@ -79,6 +79,6 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
           />
         </Item>
       </Form>
-    </BasicModal>
+    </Modal>
   );
 };

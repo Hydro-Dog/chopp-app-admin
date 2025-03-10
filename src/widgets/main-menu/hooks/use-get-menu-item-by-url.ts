@@ -13,9 +13,10 @@ export const useGetMenuItemByUrl = () => {
 
   useEffect(() => {
     setSelectedMenuKeys([
-      getFirstPathSegment(location.pathname) === ROUTES.USERS
-        ? ('' as ROUTES)
-        : getFirstPathSegment(location.pathname),
+      getFirstPathSegment(location.pathname),
+      // getFirstPathSegment(location.pathname) === ROUTES.USERS
+      //   ? ('' as ROUTES)
+      //   : getFirstPathSegment(location.pathname),
     ]);
   }, [location.pathname]);
 

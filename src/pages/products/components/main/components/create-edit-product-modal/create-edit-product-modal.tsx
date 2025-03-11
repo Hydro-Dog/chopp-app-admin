@@ -250,6 +250,7 @@ export const CreateEditProductModal = ({
             onPreview={handlePreview}
             onChange={handleChange}
             beforeUpload={beforeUpload}>
+            {/* Временное ограничение до одного изображения. */}
             {fileList.length >= 1 ? null : (
               <button style={{ border: 0, background: 'none' }} type="button">
                 <PlusOutlined />

@@ -250,7 +250,7 @@ export const CreateEditProductModal = ({
             onPreview={handlePreview}
             onChange={handleChange}
             beforeUpload={beforeUpload}>
-            {fileList.length >= 8 ? null : (
+            {fileList.length >= 1 ? null : (
               <button style={{ border: 0, background: 'none' }} type="button">
                 <PlusOutlined />
                 <div style={{ marginTop: 8 }}>Upload</div>

@@ -9,15 +9,13 @@ export const useFetchChatStats = () => {
   const { chatsStats } = useSelector((state: RootState) => state.chatsRepository);
   // const { setChatsStats } = useChatsContext();
 
-  
+  // useEffect(() => {
+  //   dispatch(fetchChatStats());
+  // }, [currentUser]);
 
-  useEffect(() => {
-    dispatch(fetchChatStats());
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (chatsStats) {
-      setChatsStats(chatsStats);
-    }
-  }, [chatsStats]);
+  // useEffect(() => {
+  //   if (chatsStats) {
+  //     setChatsStats(chatsStats);
+  //   }
+  // }, [chatsStats]);
 };

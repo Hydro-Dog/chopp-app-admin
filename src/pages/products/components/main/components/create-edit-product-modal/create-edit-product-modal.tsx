@@ -239,7 +239,10 @@ export const CreateEditProductModal = ({
           label={
             <Space>
               <div>{t('IMAGES')}</div>
-              <ChoppTextWithTooltip tooltipText={t('FIRST_IMAGE_IS_COVER')} />
+              <ChoppTextWithTooltip
+              //TODO: закомментировано пока не отладим работу с несколькими изображениями
+              // tooltipText={t('FIRST_IMAGE_IS_COVER')}
+              />
             </Space>
           }
           validateStatus={uploadImageError && 'error'}

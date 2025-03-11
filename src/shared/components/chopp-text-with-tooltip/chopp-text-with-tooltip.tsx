@@ -4,7 +4,7 @@ import { Space, Tooltip } from 'antd';
 
 type Props = {
   title?: string;
-  tooltipText: string;
+  tooltipText?: string;
   space?: number;
   className?: string;
   icon?: ReactNode;
@@ -13,6 +13,6 @@ type Props = {
 export const ChoppTextWithTooltip = ({ title, tooltipText, space = 4, className, icon }: Props) => (
   <Space size={space} className={className}>
     {title}
-    <Tooltip title={tooltipText}>{icon || <InfoCircleOutlined />}</Tooltip>
+    {tooltipText && <Tooltip title={tooltipText}>{icon || <InfoCircleOutlined />}</Tooltip>}
   </Space>
 );

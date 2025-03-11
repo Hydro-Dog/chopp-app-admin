@@ -74,7 +74,7 @@ export const ProductsLayoutMain = () => {
 
   return (
     products?.totalPages !== undefined && (
-      <Flex vertical justify='space-between' className="h-full p-3">
+      <Flex vertical justify="space-between" className="h-full p-3">
         <ProductsGrid items={pageProducts} loading={fetchProductsStatus === FETCH_STATUS.LOADING} />
 
         <Space>

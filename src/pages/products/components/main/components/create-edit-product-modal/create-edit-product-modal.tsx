@@ -245,6 +245,7 @@ export const CreateEditProductModal = ({
           validateStatus={uploadImageError && 'error'}
           help={uploadImageError}>
           <Upload
+            accept=".png,.jpeg,.jpg"
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}

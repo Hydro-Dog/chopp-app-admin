@@ -239,18 +239,23 @@ export const CreateEditProductModal = ({
           label={
             <Space>
               <div>{t('IMAGES')}</div>
-              <ChoppTextWithTooltip tooltipText={t('FIRST_IMAGE_IS_COVER')} />
+              <ChoppTextWithTooltip
+              //TODO: закомментировано пока не отладим работу с несколькими изображениями
+              // tooltipText={t('FIRST_IMAGE_IS_COVER')}
+              />
             </Space>
           }
           validateStatus={uploadImageError && 'error'}
           help={uploadImageError}>
           <Upload
+            accept=".png,.jpeg,.jpg"
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
             beforeUpload={beforeUpload}>
-            {fileList.length >= 8 ? null : (
+            {/* Временное ограничение до одного изображения. */}
+            {fileList.length >= 1 ? null : (
               <button style={{ border: 0, background: 'none' }} type="button">
                 <PlusOutlined />
                 <div style={{ marginTop: 8 }}>Upload</div>

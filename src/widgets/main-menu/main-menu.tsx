@@ -2,24 +2,6 @@ import { PropsWithChildren, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AnalyticsIcon from '@mui/icons-material/Analytics';
-import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import RoomServiceIcon from '@mui/icons-material/RoomService';
-import SettingsIcon from '@mui/icons-material/Settings';
-import StoreIcon from '@mui/icons-material/Store';
-import { useChatsContext } from '@pages/chats/chats-context';
-import { ROUTES } from '@shared/enum';
-import { useFetchChatStats } from '@shared/hooks/use-fetch-chats-stats copy';
-import { useNotificationContext, useTheme } from '@shared/index';
-import { FETCH_STATUS } from '@shared/index';
-import { logoutUser, setLogoutStatus } from '@store/slices';
-import { AppDispatch, RootState } from '@store/store';
-import { Badge, Layout, Menu, Tooltip } from 'antd';
-import { SiderTheme } from 'antd/es/layout/Sider';
-import { useGetMenuItemByUrl } from './hooks/index';
 import {
   BankFilled,
   BankOutlined,
@@ -30,6 +12,15 @@ import {
   SlidersFilled,
   SlidersOutlined,
 } from '@ant-design/icons';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { ROUTES } from '@shared/enum';
+import { useNotificationContext, useTheme } from '@shared/index';
+import { FETCH_STATUS } from '@shared/index';
+import { logoutUser, setLogoutStatus } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
+import { Layout, Menu } from 'antd';
+import { SiderTheme } from 'antd/es/layout/Sider';
+import { useGetMenuItemByUrl } from './hooks/index';
 
 const { Sider } = Layout;
 
@@ -40,7 +31,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const dispatch = useDispatch<AppDispatch>();
   const { logoutStatus } = useSelector((state: RootState) => state.user);
   const { selectedMenuKeys } = useGetMenuItemByUrl();
-  const { chatsStats } = useChatsContext();
   const { showNotification } = useNotificationContext();
 
   const onMenuItemClick = (path: string) => {
@@ -59,8 +49,6 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       dispatch(setLogoutStatus(FETCH_STATUS.IDLE));
     }
   }, [dispatch, logoutStatus, navigate, showNotification]);
-
-  useFetchChatStats();
 
   const menuItems = [
     {

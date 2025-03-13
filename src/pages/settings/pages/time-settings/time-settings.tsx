@@ -14,9 +14,7 @@ export const TimeSettings = () => {
       <Card title={t('TIME_SETTINGS')}>
         <div className="flex flex-col gap-5">
           <div>
-            <Paragraph strong>
-              Выберете промежуток времени в течении которого будет работать ваш сервис.
-            </Paragraph>
+            <Paragraph strong>{t('TIME_SETTINGS_TOOLTIP')}</Paragraph>
             <TimePicker.RangePicker
               placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
               onChange={changeTime}

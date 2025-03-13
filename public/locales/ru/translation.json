@@ -156,6 +156,7 @@
   "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
   "TIME_SETTINGS": "Время работы",
   "TIME_SETTINGS_DATA": "Настройки времени работы сервиса",
+  "TIME_SETTINGS_TOOLTIP": "Укажите время работы вашего сервиса. В это время пользователи смогут делать заказы.",
   "SHOP_ID": "Shop Id", 
   "SHOP_ID_TOOLTIP": "Id вашего магазина в 'ЮКассе",
   "ENTER_SHOP_ID": "Введите Shop Id",

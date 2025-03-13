@@ -7,7 +7,7 @@ import dayjs, { Dayjs } from 'dayjs';
 const { RangePicker } = DatePicker;
 
 export const PaymentsDateFilter = () => {
-  const { setStartDate, setEndDate } = usePaymentsContext();
+  const { setStartDate, setEndDate, startDate, endDate } = usePaymentsContext();
   const { t } = useTranslation();
 
   const handleDateChange = useCallback(
@@ -22,6 +22,10 @@ export const PaymentsDateFilter = () => {
   return (
     <Space direction="vertical" size={12}>
       <RangePicker
+        value={[
+          startDate ? dayjs(startDate, 'DD.MM.YYYY') : null,
+          endDate ? dayjs(endDate, 'DD.MM.YYYY') : null,
+        ]}
         placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
         className="w-2/6"
         allowEmpty={[true, true]}

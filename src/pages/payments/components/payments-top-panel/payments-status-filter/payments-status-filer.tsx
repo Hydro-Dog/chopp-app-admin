@@ -17,8 +17,8 @@ export const PaymentsStatusFilter = () => {
   const statusArray = [PAYMENT_STATUS.SUCCEEDED, PAYMENT_STATUS.CANCELED];
 
   const handleStatusChange = useCallback(
-    (value: string) => {
-      setStatus(value);
+    (value: string | undefined) => {
+      setStatus(value ?? '');
     },
     [setStatus],
   );
@@ -33,8 +33,7 @@ export const PaymentsStatusFilter = () => {
       <Select
         prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
         {...sharedProps}
-        value={status}
-        defaultValue={PAYMENT_STATUS.SUCCEEDED}
+        value={status || undefined}
         className="w-full"
         onChange={handleStatusChange}
         options={items}

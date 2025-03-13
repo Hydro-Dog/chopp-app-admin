@@ -6,7 +6,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { postPricingData } from '@store/slices';
+import { postClientAppConfig } from '@store/slices';
 import { RootState } from '@store/store';
 import { FETCH_STATUS } from '@shared/index';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
@@ -24,7 +24,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch();
   const { showErrorNotification } = useNotificationContext();
-  const { pricingData, postPricingDataStatus } = useSelector((state: RootState) => state.pricing);
+  const { pricingData, postPricingDataStatus } = useSelector((state: RootState) => state.clientAppConfig);
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
 
@@ -63,7 +63,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (pricingData) => {
     superDispatch({
-      action: postPricingData(pricingData),
+      action: postClientAppConfig(pricingData),
       thenHandler: onCancel,
       catchHandler: (error) => {
         showErrorNotification({

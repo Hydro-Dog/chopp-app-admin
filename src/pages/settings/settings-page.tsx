@@ -1,14 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { TitlePage, useThemeToken } from '@shared/index';
-import { Row, Col, Typography, Switch, Card } from 'antd';
+import { ChoppTextWithTooltip, TitlePage } from '@shared/index';
+import { Row, Col, Switch, Card, Flex } from 'antd';
 import { SettingCard } from './components';
 import { useGetSettings } from './hooks';
-const { Paragraph } = Typography;
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
   const settingsList = useGetSettings();
-  const themeToken = useThemeToken();
 
   return (
     <TitlePage breadcrumbs title={t('SETTINGS')}>
@@ -30,10 +28,14 @@ export const SettingsPage = () => {
           position: 'fixed',
           bottom: '40px',
           right: '16px',
-          border: `2px solid ${themeToken.colorPrimaryBorder}`,
         }}>
-        <Paragraph strong>{t('SETTINGS_PAGE.SWITCH_OFF')}</Paragraph>
-        <Switch defaultChecked />
+        <Flex vertical gap={4}>
+          <ChoppTextWithTooltip
+            title={t('SETTINGS_PAGE.TURN_OFF_TITLE')}
+            tooltipText={t('SETTINGS_PAGE.TURN_OFF_DESCRIPTION')}
+          />
+          <Switch className="w-fit" defaultChecked />
+        </Flex>
       </Card>
     </TitlePage>
   );

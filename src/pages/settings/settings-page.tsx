@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { TitlePage, useThemeToken } from '@shared/index';
-import { Row, Col, Typography, Switch, Card } from 'antd';
+import { Row, Col, Switch, Card, Typography } from 'antd';
 import { SettingCard } from './components';
 import { useGetSettings } from './hooks';
 const { Paragraph } = Typography;

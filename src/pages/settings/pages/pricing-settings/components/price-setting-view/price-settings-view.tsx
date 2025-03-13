@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNotificationContext } from '@shared/context';
-import { fetchPricingData } from '@store/slices';
+import { fetchClientAppConfig } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@shared/index';
 import { Button, Descriptions, Flex, Space, Spin } from 'antd';
@@ -16,10 +16,10 @@ export const PriceSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
-  const { fetchPricingDataStatus } = useSelector((state: RootState) => state.pricing);
+  const { fetchPricingDataStatus } = useSelector((state: RootState) => state.clientAppConfig);
 
   useEffect(() => {
-    dispatch(fetchPricingData())
+    dispatch(fetchClientAppConfig())
       .unwrap()
       .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
   }, [dispatch]);

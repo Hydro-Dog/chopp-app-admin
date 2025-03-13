@@ -11,10 +11,10 @@ export const TimeSettings = () => {
   };
   return (
     <TitlePage breadcrumbs title={t('SETTINGS')}>
-      <Card title={t('TIME_SETTINGS')}>
+      <Card title={t('SETTINGS_PAGE.TIME_SETTINGS.TIME_SETTINGS_TITLE')}>
         <div className="flex flex-col gap-5">
           <div>
-            <Paragraph strong>{t('TIME_SETTINGS_TOOLTIP')}</Paragraph>
+            <Paragraph strong>{t('SETTINGS_PAGE.TIME_SETTINGS.TIME_SETTINGS_TOOLTIP')}</Paragraph>
             <TimePicker.RangePicker
               placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
               onChange={changeTime}

@@ -6,6 +6,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
+import { FETCH_STATUS } from '@shared/types';
 import { postClientAppConfig } from '@store/slices';
 import { RootState } from '@store/store';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';

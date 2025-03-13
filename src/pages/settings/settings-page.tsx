@@ -25,7 +25,7 @@ export const SettingsPage = () => {
         ))}
       </Row>
       <Card
-        className={`!w-96 !h-36 fixed bottom-10 right-4 border-2`}
+        className={`!w-72 !h-36 fixed bottom-10 right-4 border-2`}
         style={{ borderColor: themeToken.colorPrimaryBorder }}>
         <Flex vertical gap={20}>
           <ChoppTextWithTooltip

@@ -12,9 +12,8 @@ export const SettingsGridIcon = ({ IconComponent, isActive }: Props) => {
 
   return (
     <IconComponent
+      className="!text-8xl pt-5"
       style={{
-        fontSize: '100px',
-        paddingTop: '20px',
         color: isActive ? themeToken.colorPrimaryBorder : themeToken.colorPrimaryBgHover,
       }}
     />

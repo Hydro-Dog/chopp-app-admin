@@ -14,11 +14,7 @@ export const SettingCard = ({ image, title, description, path }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <Card
-      onClick={() => navigate(path)}
-      hoverable
-      style={{ width: 240, height: 240 }}
-      cover={image}>
+    <Card onClick={() => navigate(path)} hoverable className="!w-56 !h-64" cover={image}>
       <Meta
         title={title}
         description={

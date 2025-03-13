@@ -25,13 +25,8 @@ export const SettingsPage = () => {
         ))}
       </Row>
       <Card
-        style={{
-          width: 240,
-          position: 'fixed',
-          bottom: '40px',
-          right: '16px',
-          border: `2px solid ${themeToken.colorPrimaryBorder}`,
-        }}>
+        className={`!w-96 !h-36 fixed bottom-10 right-4 border-2`}
+        style={{ borderColor: themeToken.colorPrimaryBorder }}>
         <Paragraph strong>{t('SETTINGS_PAGE.SWITCH_OFF')}</Paragraph>
         <Switch defaultChecked />
       </Card>

@@ -31,8 +31,8 @@ export const useGetSettings = () => {
     {
       path: ROUTES.TIME_SETTINGS,
       image: <SettingsGridIcon IconComponent={ClockCircleOutlined} />,
-      title: t('SETTINGS_PAGE.TIME_SETTINGS.TIME_SETTINGS_TITLE'),
-      description: t('SETTINGS_PAGE.TIME_SETTINGS.TIME_SETTINGS_DATA'),
+      title: t('SETTINGS_PAGE.TIME_SETTINGS.TITLE'),
+      description: t('SETTINGS_PAGE.TIME_SETTINGS.DATA'),
     },
   ];
 };

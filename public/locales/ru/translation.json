@@ -137,7 +137,8 @@
       "DARK": "Темная",
       "LIGHT": "Светлая",
       "SYSTEM": "Системная"
-    }
+    },
+    "SWITCH_OFF": "Пользователи не смогут делать заказы. Приложение перейдет в режим обслуживания"
   },
   "PRICING_PAGE": {
     "AVERAGE_DELIVERY_COST": "Средняя стоимость доставки ",
@@ -153,6 +154,8 @@
   },
   "PAYMENT_SETTINGS": "Платежная информация",
   "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
+  "TIME_SETTINGS": "Время работы",
+  "TIME_SETTINGS_DATA": "Настройки времени работы сервиса",
   "SHOP_ID": "Shop Id", 
   "SHOP_ID_TOOLTIP": "Id вашего магазина в 'ЮКассе",
   "ENTER_SHOP_ID": "Введите Shop Id",

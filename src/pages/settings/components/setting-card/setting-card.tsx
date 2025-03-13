@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { Card } from 'antd';
-
+import { Card, Typography } from 'antd';
+const { Paragraph } = Typography;
 const { Meta } = Card;
 
 type Props = {
@@ -14,8 +14,17 @@ export const SettingCard = ({ image, title, description, path }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <Card onClick={() => navigate(path)} hoverable style={{ width: 240 }} cover={image}>
-      <Meta title={title} description={description} />
+    <Card
+      onClick={() => navigate(path)}
+      hoverable
+      style={{ width: 240, height: 240 }}
+      cover={image}>
+      <Meta
+        title={title}
+        description={
+          <Paragraph ellipsis={{ rows: 3, tooltip: description }}>{description}</Paragraph>
+        }
+      />
     </Card>
   );
 };

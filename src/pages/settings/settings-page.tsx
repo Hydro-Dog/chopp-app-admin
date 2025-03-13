@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { TitlePage, useThemeToken } from '@shared/index';
-import { Row, Col, Switch, Card, Typography } from 'antd';
+import { ChoppTextWithTooltip, TitlePage, useThemeToken } from '@shared/index';
+import { Row, Col, Switch, Card, Typography, Flex } from 'antd';
 import { SettingCard } from './components';
 import { useGetSettings } from './hooks';
 const { Paragraph } = Typography;
@@ -27,8 +27,13 @@ export const SettingsPage = () => {
       <Card
         className={`!w-96 !h-36 fixed bottom-10 right-4 border-2`}
         style={{ borderColor: themeToken.colorPrimaryBorder }}>
-        <Paragraph strong>{t('SETTINGS_PAGE.SWITCH_OFF')}</Paragraph>
-        <Switch defaultChecked />
+        <Flex vertical gap={20}>
+          <ChoppTextWithTooltip
+            title={t('SETTINGS_PAGE.TURN_OFF_TITLE')}
+            tooltipText={t('SETTINGS_PAGE.TURN_OFF_DESCRIPTION')}
+          />
+          <Switch className="w-fit" defaultChecked />
+        </Flex>
       </Card>
     </TitlePage>
   );

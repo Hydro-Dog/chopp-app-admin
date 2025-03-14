@@ -118,7 +118,7 @@ export const CreateEditProductModal = ({
     // 2. Новые изображения (те, у которых нет id из initialImagesIds)
     const newImages = fileList.filter((file) => !initialImagesIds.has(file.uid));
 
-    if (!fileList.length && !product?.images.length) {
+    if (uploadImageError || (!fileList.length && !product?.images.length)) {
       setUploadImageError(t('ERRORS.UPLOAD_IMAGE'));
       return;
     } else {

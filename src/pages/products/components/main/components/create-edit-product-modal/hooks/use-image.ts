@@ -51,6 +51,7 @@ export const useImage = ({ product, reset, isOpened }: Args) => {
         setFileList(initialFileList as unknown as UploadFile[]);
       }
     }
+    setUploadImageError('');
   }, [reset, product, isOpened]);
 
   const handlePreview = async (file: UploadFile) => {

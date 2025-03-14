@@ -8,7 +8,7 @@ const { Paragraph } = Typography;
 
 export const TimeSettings = () => {
   const { t } = useTranslation();
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isEditNode, setEditMode] = useState(false);
   const [time, setTime] = useState<string[]>(['', '']);
 
   useEffect(() => {
@@ -23,22 +23,17 @@ export const TimeSettings = () => {
             <Alert type="info" message={t('SETTINGS_PAGE.TIME_SETTINGS.TOOLTIP')} />
           </div>
 
-          {isDisabled === false ? (
+          {isEditNode === false ? (
             <div>
               <Paragraph>
                 {t('SETTINGS_PAGE.TIME_SETTINGS.INFO')} {time[0]} - {time[1]}
               </Paragraph>
-              <Button className="mt-5" type="primary" onClick={() => setIsDisabled(true)}>
+              <Button className="mt-5" type="primary" onClick={() => setEditMode(true)}>
                 {t('EDIT')}
               </Button>
             </div>
           ) : (
-            <TimeForm
-              time={time}
-              setTime={setTime}
-              isDisabled={isDisabled}
-              setIsDisabled={setIsDisabled}
-            />
+            <TimeForm time={time} setTime={setTime} setEditMode={setEditMode} />
           )}
         </div>
       </Card>

@@ -10,13 +10,12 @@ import { useSetTimeSchema } from '../hooks';
 const { Item } = Form;
 
 type Props = {
-  isDisabled: boolean;
-  setIsDisabled: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
   setTime: Dispatch<SetStateAction<string[]>>;
   time: string[];
 };
 
-export const TimeForm = ({ time, setIsDisabled, setTime }: Props) => {
+export const TimeForm = ({ time, setEditMode, setTime }: Props) => {
   const setTimeSchema = useSetTimeSchema();
   type setTimeSchemaFormType = z.infer<typeof setTimeSchema>;
   const { t } = useTranslation();
@@ -24,7 +23,7 @@ export const TimeForm = ({ time, setIsDisabled, setTime }: Props) => {
   const onSubmit = (data: setTimeSchemaFormType) => {
     if (data.timeRange !== null) setTime(data.timeRange as string[]);
     else setTime(['', '']);
-    setIsDisabled(false);
+    setEditMode(false);
   };
 
   const changeTime = (dates: [Dayjs | null, Dayjs | null] | null) => {
@@ -39,7 +38,7 @@ export const TimeForm = ({ time, setIsDisabled, setTime }: Props) => {
     reset({
       timeRange: null,
     });
-    setIsDisabled(false);
+    setEditMode(false);
   };
 
   const { handleSubmit, control, reset, setValue } = useForm<setTimeSchemaFormType>({

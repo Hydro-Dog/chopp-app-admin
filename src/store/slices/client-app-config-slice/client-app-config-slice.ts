@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { FETCH_STATUS } from '@shared/index';
-import { ErrorResponse, PricingData } from '@shared/types';
-import { postPricingData, fetchPricingData } from './actions';
+import { ErrorResponse, ClientAppConfig } from '@shared/types';
+import { postClientAppConfig, fetchClientAppConfig } from './actions';
 
-export type PricingState = {
-  pricingData?: PricingData;
+export type ClientAppConfigState = {
+  pricingData?: ClientAppConfig;
   fetchPricingDataStatus: FETCH_STATUS;
   fetchPricingDataError?: ErrorResponse;
   postPricingDataStatus: FETCH_STATUS;
   postPricingDataError?: ErrorResponse;
 };
 
-const initialState: PricingState = {
+const initialState: ClientAppConfigState = {
   pricingData: undefined,
   fetchPricingDataStatus: FETCH_STATUS.IDLE,
   fetchPricingDataError: undefined,
@@ -19,34 +19,34 @@ const initialState: PricingState = {
   postPricingDataError: undefined,
 };
 
-export const pricingSlice = createSlice({
-  name: 'pricing',
+export const clientAppConfigSlice = createSlice({
+  name: 'clientAppConfig',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPricingData.pending, (state) => {
+      .addCase(fetchClientAppConfig.pending, (state) => {
         state.fetchPricingDataStatus = FETCH_STATUS.LOADING;
       })
-      .addCase(fetchPricingData.fulfilled, (state, action) => {
+      .addCase(fetchClientAppConfig.fulfilled, (state, action) => {
         state.fetchPricingDataStatus = FETCH_STATUS.SUCCESS;
         state.pricingData = action.payload;
       })
-      .addCase(fetchPricingData.rejected, (state, action) => {
+      .addCase(fetchClientAppConfig.rejected, (state, action) => {
         state.fetchPricingDataStatus = FETCH_STATUS.ERROR;
         state.fetchPricingDataError = action.payload ?? {
           message: 'Unknown error',
         };
       })
-      .addCase(postPricingData.pending, (state) => {
+      .addCase(postClientAppConfig.pending, (state) => {
         state.postPricingDataStatus = FETCH_STATUS.LOADING;
         state.postPricingDataError = undefined;
       })
-      .addCase(postPricingData.fulfilled, (state, action) => {
+      .addCase(postClientAppConfig.fulfilled, (state, action) => {
         state.postPricingDataStatus = FETCH_STATUS.SUCCESS;
         state.pricingData = action.payload;
       })
-      .addCase(postPricingData.rejected, (state, action) => {
+      .addCase(postClientAppConfig.rejected, (state, action) => {
         state.postPricingDataStatus = FETCH_STATUS.ERROR;
         state.postPricingDataError = action.payload ?? {
           message: 'Unknown error',

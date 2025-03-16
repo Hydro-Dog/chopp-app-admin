@@ -6,7 +6,7 @@ import { Form, TimePicker } from 'antd';
 import { Button } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { z } from 'zod';
-import { useSetTimeSchema } from '../hooks';
+import { useSetWorkingHoursSchema } from '../hooks';
 const { Item } = Form;
 
 type Props = {
@@ -15,14 +15,17 @@ type Props = {
   time: string[];
 };
 
-export const TimeForm = ({ time, setEditMode, setTime }: Props) => {
-  const setTimeSchema = useSetTimeSchema();
-  type setTimeSchemaFormType = z.infer<typeof setTimeSchema>;
+export const WorkingHoursForm = ({ time, setEditMode, setTime }: Props) => {
+  const workingHoursSchema = useSetWorkingHoursSchema();
+  type setTimeSchemaFormType = z.infer<typeof workingHoursSchema>;
   const { t } = useTranslation();
 
   const onSubmit = (data: setTimeSchemaFormType) => {
-    if (data.timeRange !== null) setTime(data.timeRange as string[]);
-    else setTime(['', '']);
+    if (data.timeRange !== null) {
+      setTime(data.timeRange as string[]);
+    } else {
+      setTime(['', '']);
+    }
     setEditMode(false);
   };
 
@@ -42,7 +45,7 @@ export const TimeForm = ({ time, setEditMode, setTime }: Props) => {
   };
 
   const { handleSubmit, control, reset, setValue } = useForm<setTimeSchemaFormType>({
-    resolver: zodResolver(setTimeSchema),
+    resolver: zodResolver(workingHoursSchema),
     defaultValues: {
       timeRange: time[0] ? (time as [string, string]) : null,
     },
@@ -70,10 +73,8 @@ export const TimeForm = ({ time, setEditMode, setTime }: Props) => {
           </Item>
         </div>
         <div className="flex gap-3">
-          <Button className="mt-5" onClick={handleCancel}>
-            {t('CANCEL')}
-          </Button>
-          <Button className="mt-5" type="primary" onClick={handleSubmit(onSubmit)}>
+          <Button onClick={handleCancel}>{t('CANCEL')}</Button>
+          <Button type="primary" onClick={handleSubmit(onSubmit)}>
             {t('SAVE')}
           </Button>
         </div>

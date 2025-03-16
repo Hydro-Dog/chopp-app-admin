@@ -18,7 +18,7 @@ import {
   PricingSettingsPage,
   VisualSettingsPage,
   PaymentSettingsPage,
-  TimeSettings,
+  WorkingHoursSettings,
 } from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './utils/guarded-route';
@@ -89,7 +89,7 @@ export const router = createBrowserRouter([
           },
           {
             path: ROUTES.TIME_SETTINGS,
-            element: <TimeSettings />,
+            element: <WorkingHoursSettings />,
           },
         ],
       },

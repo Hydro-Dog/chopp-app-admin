@@ -29,7 +29,7 @@ export const PaymentsStatusFilter = () => {
   }));
 
   return (
-    <div className="flex mb-3 w-1/3 items-center mt-2">
+    <div className="flex mb-3 w-1/3 items-center">
       <Select
         prefix={t('ORDERS_PAGE.CHOSEN_STATUS')}
         {...sharedProps}

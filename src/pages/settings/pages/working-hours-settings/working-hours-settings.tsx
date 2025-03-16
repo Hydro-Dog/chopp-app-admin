@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChoppTextWithTooltip, TitlePage } from '@shared/components';
 import { Button, Card, Descriptions, Space } from 'antd';
@@ -9,9 +9,13 @@ export const WorkingHoursSettings = () => {
   const { t } = useTranslation();
   const [isEditNode, setEditMode] = useState(false);
   const [time, setTime] = useState<string[]>(['', '']);
+  const prevTimeRef = useRef<string[]>(time);
 
   useEffect(() => {
-    console.log(time);
+    if (JSON.stringify(prevTimeRef.current) !== JSON.stringify(time)) {
+      console.log(time);
+      prevTimeRef.current = time;
+    }
   }, [time]);
 
   return (

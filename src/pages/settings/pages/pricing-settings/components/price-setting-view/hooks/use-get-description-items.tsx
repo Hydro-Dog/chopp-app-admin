@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { RootState } from '@store/store';
 import { Alert, Checkbox, DescriptionsProps, Space, Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
 
 export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
   const { t } = useTranslation();
-  const { pricingData } = useSelector((state: RootState) => state.pricing);
+  const { clientAppConfigData: pricingData } = useSelector(
+    (state: RootState) => state.clientAppConfig,
+  );
 
   return [
     {

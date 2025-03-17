@@ -6,9 +6,9 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { postPricingData } from '@store/slices';
+import { FETCH_STATUS } from '@shared/types';
+import { postClientAppConfig } from '@store/slices';
 import { RootState } from '@store/store';
-import { FETCH_STATUS } from '@shared/index';
 import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { z } from 'zod';
@@ -24,7 +24,9 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch();
   const { showErrorNotification } = useNotificationContext();
-  const { pricingData, postPricingDataStatus } = useSelector((state: RootState) => state.pricing);
+  const { clientAppConfigData, postClientAppConfigStatus } = useSelector(
+    (state: RootState) => state.clientAppConfig,
+  );
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
 
@@ -45,14 +47,14 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
   useEffect(() => {
-    if (pricingData) {
+    if (clientAppConfigData) {
       reset({
-        averageDeliveryCost: pricingData.averageDeliveryCost,
-        freeDeliveryIncluded: pricingData.freeDeliveryIncluded,
-        freeDeliveryThreshold: pricingData.freeDeliveryThreshold,
+        averageDeliveryCost: clientAppConfigData.averageDeliveryCost,
+        freeDeliveryIncluded: clientAppConfigData.freeDeliveryIncluded,
+        freeDeliveryThreshold: clientAppConfigData.freeDeliveryThreshold,
       });
     }
-  }, [pricingData, reset]);
+  }, [clientAppConfigData, reset]);
 
   const onChangeCheckbox = (event: CheckboxChangeEvent) => {
     setValue('freeDeliveryIncluded', event.target.checked);
@@ -63,7 +65,7 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
 
   const onSubmit: SubmitHandler<CreatePricingFormType> = (pricingData) => {
     superDispatch({
-      action: postPricingData(pricingData),
+      action: postClientAppConfig(pricingData),
       thenHandler: onCancel,
       catchHandler: (error) => {
         showErrorNotification({
@@ -149,15 +151,15 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
       </Item>
 
       <Space>
-        <Button onClick={onCancel} disabled={postPricingDataStatus === FETCH_STATUS.LOADING}>
+        <Button onClick={onCancel} disabled={postClientAppConfigStatus === FETCH_STATUS.LOADING}>
           {t('CANCEL')}
         </Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           type="primary"
-          loading={postPricingDataStatus === FETCH_STATUS.LOADING}
-          disabled={postPricingDataStatus === FETCH_STATUS.LOADING}>
-          {postPricingDataStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
+          loading={postClientAppConfigStatus === FETCH_STATUS.LOADING}
+          disabled={postClientAppConfigStatus === FETCH_STATUS.LOADING}>
+          {postClientAppConfigStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

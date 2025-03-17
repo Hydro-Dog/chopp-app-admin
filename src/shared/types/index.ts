@@ -11,7 +11,7 @@ export * from './pagination-query';
 export * from './pagination-response';
 export * from './pagination';
 export * from './order';
-export * from './pricing-data';
+export * from './client-app-config';
 export * from './fetch-status';
 export * from './user';
 export * from './product-image';

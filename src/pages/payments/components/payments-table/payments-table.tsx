@@ -72,10 +72,10 @@ export const PaymentsTable = () => {
         searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
       }
       if (status) {
-        searchRequest['status'] = status;
+        searchRequest.status = status;
       }
       if (payment_id) {
-        searchRequest['payment_id'] = payment_id;
+        searchRequest.payment_id = payment_id;
       }
 
       dispatch(fetchPayments({ ...searchRequest, cursor: payments.next_cursor }));
@@ -121,12 +121,12 @@ export const PaymentsTable = () => {
         onCancel={() => setIsRefundModalOpen(false)}
         width={400}>
         {selectedPayment && (
-          <p>
-            {t('REFUND_AMOUNT')}:{' '}
+          <div>
+            {t('REFUND_AMOUNT')}:
             <strong>
               {selectedPayment.amount.value} {selectedPayment.amount.currency}
             </strong>
-          </p>
+          </div>
         )}
       </Modal>
     </div>

@@ -1,1 +1,1 @@
-export * from './payments-status-filer';
+export * from './payments-status-filter';

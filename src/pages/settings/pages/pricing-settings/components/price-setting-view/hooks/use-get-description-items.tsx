@@ -10,8 +10,6 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
     (state: RootState) => state.clientAppConfig,
   );
 
-  console.log('pricingData: ', pricingData);
-
   return [
     {
       key: 'averageDeliveryCost',

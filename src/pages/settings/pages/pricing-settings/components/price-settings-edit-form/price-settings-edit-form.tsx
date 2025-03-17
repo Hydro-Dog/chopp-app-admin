@@ -24,7 +24,9 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch();
   const { showErrorNotification } = useNotificationContext();
-  const { pricingData, postPricingDataStatus } = useSelector((state: RootState) => state.clientAppConfig);
+  const { clientAppConfigData, postClientAppConfigStatus } = useSelector(
+    (state: RootState) => state.clientAppConfig,
+  );
   const createPricingFormSchema = useCreatePricingFormSchema();
   type CreatePricingFormType = z.infer<typeof createPricingFormSchema>;
 
@@ -45,14 +47,14 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
   useEffect(() => {
-    if (pricingData) {
+    if (clientAppConfigData) {
       reset({
-        averageDeliveryCost: pricingData.averageDeliveryCost,
-        freeDeliveryIncluded: pricingData.freeDeliveryIncluded,
-        freeDeliveryThreshold: pricingData.freeDeliveryThreshold,
+        averageDeliveryCost: clientAppConfigData.averageDeliveryCost,
+        freeDeliveryIncluded: clientAppConfigData.freeDeliveryIncluded,
+        freeDeliveryThreshold: clientAppConfigData.freeDeliveryThreshold,
       });
     }
-  }, [pricingData, reset]);
+  }, [clientAppConfigData, reset]);
 
   const onChangeCheckbox = (event: CheckboxChangeEvent) => {
     setValue('freeDeliveryIncluded', event.target.checked);
@@ -149,15 +151,15 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
       </Item>
 
       <Space>
-        <Button onClick={onCancel} disabled={postPricingDataStatus === FETCH_STATUS.LOADING}>
+        <Button onClick={onCancel} disabled={postClientAppConfigStatus === FETCH_STATUS.LOADING}>
           {t('CANCEL')}
         </Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           type="primary"
-          loading={postPricingDataStatus === FETCH_STATUS.LOADING}
-          disabled={postPricingDataStatus === FETCH_STATUS.LOADING}>
-          {postPricingDataStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
+          loading={postClientAppConfigStatus === FETCH_STATUS.LOADING}
+          disabled={postClientAppConfigStatus === FETCH_STATUS.LOADING}>
+          {postClientAppConfigStatus === FETCH_STATUS.LOADING ? t('SAVING') : t('SAVE')}
         </Button>
       </Space>
     </Form>

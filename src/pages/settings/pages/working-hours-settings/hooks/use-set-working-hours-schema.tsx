@@ -4,6 +4,7 @@ export const useSetWorkingHoursSchema = () => {
   const timeString = z.string();
 
   return z.object({
-    timeRange: z.tuple([timeString, timeString]).nullish(),
+    openTime: timeString.nullish(),
+    closeTime: timeString.nullish(),
   });
 };

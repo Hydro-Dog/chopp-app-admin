@@ -4,19 +4,19 @@ import { ErrorResponse, ClientAppConfig } from '@shared/types';
 import { postClientAppConfig, fetchClientAppConfig } from './actions';
 
 export type ClientAppConfigState = {
-  pricingData?: ClientAppConfig;
-  fetchPricingDataStatus: FETCH_STATUS;
-  fetchPricingDataError?: ErrorResponse;
-  postPricingDataStatus: FETCH_STATUS;
-  postPricingDataError?: ErrorResponse;
+  clientAppConfigData?: ClientAppConfig;
+  fetchClientAppConfigDataStatus: FETCH_STATUS;
+  fetchClientAppConfigDataError?: ErrorResponse;
+  postClientAppConfigStatus: FETCH_STATUS;
+  postClientAppConfigDataError?: ErrorResponse;
 };
 
 const initialState: ClientAppConfigState = {
-  pricingData: undefined,
-  fetchPricingDataStatus: FETCH_STATUS.IDLE,
-  fetchPricingDataError: undefined,
-  postPricingDataStatus: FETCH_STATUS.IDLE,
-  postPricingDataError: undefined,
+  clientAppConfigData: undefined,
+  fetchClientAppConfigDataStatus: FETCH_STATUS.IDLE,
+  fetchClientAppConfigDataError: undefined,
+  postClientAppConfigStatus: FETCH_STATUS.IDLE,
+  postClientAppConfigDataError: undefined,
 };
 
 export const clientAppConfigSlice = createSlice({
@@ -26,29 +26,29 @@ export const clientAppConfigSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchClientAppConfig.pending, (state) => {
-        state.fetchPricingDataStatus = FETCH_STATUS.LOADING;
+        state.fetchClientAppConfigDataStatus = FETCH_STATUS.LOADING;
       })
       .addCase(fetchClientAppConfig.fulfilled, (state, action) => {
-        state.fetchPricingDataStatus = FETCH_STATUS.SUCCESS;
-        state.pricingData = action.payload;
+        state.fetchClientAppConfigDataStatus = FETCH_STATUS.SUCCESS;
+        state.clientAppConfigData = action.payload;
       })
       .addCase(fetchClientAppConfig.rejected, (state, action) => {
-        state.fetchPricingDataStatus = FETCH_STATUS.ERROR;
-        state.fetchPricingDataError = action.payload ?? {
+        state.fetchClientAppConfigDataStatus = FETCH_STATUS.ERROR;
+        state.fetchClientAppConfigDataError = action.payload ?? {
           message: 'Unknown error',
         };
       })
       .addCase(postClientAppConfig.pending, (state) => {
-        state.postPricingDataStatus = FETCH_STATUS.LOADING;
-        state.postPricingDataError = undefined;
+        state.postClientAppConfigStatus = FETCH_STATUS.LOADING;
+        state.postClientAppConfigDataError = undefined;
       })
       .addCase(postClientAppConfig.fulfilled, (state, action) => {
-        state.postPricingDataStatus = FETCH_STATUS.SUCCESS;
-        state.pricingData = action.payload;
+        state.postClientAppConfigStatus = FETCH_STATUS.SUCCESS;
+        state.clientAppConfigData = action.payload;
       })
       .addCase(postClientAppConfig.rejected, (state, action) => {
-        state.postPricingDataStatus = FETCH_STATUS.ERROR;
-        state.postPricingDataError = action.payload ?? {
+        state.postClientAppConfigStatus = FETCH_STATUS.ERROR;
+        state.postClientAppConfigDataError = action.payload ?? {
           message: 'Unknown error',
         };
       });

@@ -1,7 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNotificationContext } from '@shared/context';
+import { postClientAppConfig } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
 import { Form, TimePicker } from 'antd';
 import { Button } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -11,70 +15,82 @@ const { Item } = Form;
 
 type Props = {
   setEditMode: Dispatch<SetStateAction<boolean>>;
-  setTime: Dispatch<SetStateAction<string[]>>;
-  time: string[];
 };
 
-export const WorkingHoursForm = ({ time, setEditMode, setTime }: Props) => {
+export const WorkingHoursForm = ({ setEditMode }: Props) => {
   const workingHoursSchema = useSetWorkingHoursSchema();
   type setTimeSchemaFormType = z.infer<typeof workingHoursSchema>;
-  const { t } = useTranslation();
 
-  const onSubmit = (data: setTimeSchemaFormType) => {
-    if (data.timeRange !== null) {
-      setTime(data.timeRange as string[]);
-    } else {
-      setTime(['', '']);
+  const { t } = useTranslation();
+  const { clientAppConfigData } = useSelector((state: RootState) => state.clientAppConfig);
+  const dispatch = useDispatch<AppDispatch>();
+  const { showErrorNotification } = useNotificationContext();
+
+  const onSubmit: SubmitHandler<setTimeSchemaFormType> = (data) => {
+    if (
+      data.openTime !== clientAppConfigData?.openTime ||
+      data.closeTime !== clientAppConfigData?.closeTime
+    ) {
+      dispatch(
+        postClientAppConfig({
+          ...clientAppConfigData,
+          openTime: data.openTime ? data.openTime : '',
+          closeTime: data.closeTime ? data.closeTime : '',
+        }),
+      )
+        .unwrap()
+        .catch((error) => {
+          showErrorNotification({
+            message: t('ERROR'),
+            description: error.message,
+          });
+        });
     }
     setEditMode(false);
   };
 
   const changeTime = (dates: [Dayjs | null, Dayjs | null] | null) => {
     if (dates) {
-      setValue('timeRange', dates.map((date) => date?.format('HH:mm') || '') as [string, string]);
+      setValue('openTime', dates?.[0]?.format('HH:mm'));
+      setValue('closeTime', dates?.[1]?.format('HH:mm'));
     } else {
-      setValue('timeRange', null);
+      setValue('openTime', null);
+      setValue('closeTime', null);
     }
   };
 
   const handleCancel = () => {
     reset({
-      timeRange: null,
+      openTime: null,
+      closeTime: null,
     });
     setEditMode(false);
   };
 
-  const { handleSubmit, control, reset, setValue } = useForm<setTimeSchemaFormType>({
+  const { handleSubmit, reset, setValue } = useForm<setTimeSchemaFormType>({
     resolver: zodResolver(workingHoursSchema),
     defaultValues: {
-      timeRange: time[0] ? (time as [string, string]) : null,
+      openTime: clientAppConfigData?.openTime ? clientAppConfigData?.openTime : null,
+      closeTime: clientAppConfigData?.closeTime ? clientAppConfigData.closeTime : null,
     },
   });
   return (
     <Form onFinish={handleSubmit(onSubmit)}>
       <div className="flex flex-col">
-        <div>
-          <Item>
-            <Controller
-              name="timeRange"
-              control={control}
-              render={() => (
-                <TimePicker.RangePicker
-                  placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
-                  onChange={changeTime}
-                  format="HH:mm"
-                  defaultValue={[
-                    time[0] ? dayjs(time[0], 'HH:mm') : null,
-                    time[1] ? dayjs(time[1], 'HH:mm') : null,
-                  ]}
-                />
-              )}
-            />
-          </Item>
-        </div>
+        <Item>
+          <TimePicker.RangePicker
+            placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
+            onChange={changeTime}
+            format="HH:mm"
+            defaultValue={[
+              clientAppConfigData?.openTime ? dayjs(clientAppConfigData.openTime, 'HH:mm') : null,
+              clientAppConfigData?.closeTime ? dayjs(clientAppConfigData.closeTime, 'HH:mm') : null,
+            ]}
+          />
+        </Item>
         <div className="flex gap-3">
           <Button onClick={handleCancel}>{t('CANCEL')}</Button>
-          <Button type="primary" onClick={handleSubmit(onSubmit)}>
+          <Button type="primary" htmlType="submit">
             {t('SAVE')}
           </Button>
         </div>

@@ -6,7 +6,7 @@ import { RangePickerProps } from 'antd/es/date-picker';
 import dayjs from 'dayjs';
 
 export const DateSelector = () => {
-  const { setStartDate, setEndDate } = useOrdersContext();
+  const { setStartDate, startDate, setEndDate, endDate } = useOrdersContext();
   const filters = useChangeTableOrders();
 
   const { t } = useTranslation();
@@ -22,6 +22,7 @@ export const DateSelector = () => {
       placeholder={[t('ORDERS_PAGE.START_DATE'), t('ORDERS_PAGE.END_DATE')]}
       allowEmpty={[false, true]}
       onChange={changeDate}
+      value={[startDate ? dayjs(startDate) : null, endDate ? dayjs(endDate) : null]}
       minDate={dayjs('2000-01-01', 'YYYY-MM-DD')}
       maxDate={dayjs('2100-01-01', 'YYYY-MM-DD')}
     />

@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNotificationContext } from '@shared/context';
-import { fetchPricingData } from '@store/slices';
-import { AppDispatch, RootState } from '@store/store';
 import { FETCH_STATUS } from '@shared/index';
+import { fetchClientAppConfig } from '@store/slices';
+import { AppDispatch, RootState } from '@store/store';
 import { Button, Descriptions, Flex, Space, Spin } from 'antd';
 import { useGetDescriptionItems } from './hooks';
 
@@ -16,17 +16,19 @@ export const PriceSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
-  const { fetchPricingDataStatus } = useSelector((state: RootState) => state.pricing);
+  const { fetchClientAppConfigDataStatus } = useSelector(
+    (state: RootState) => state.clientAppConfig,
+  );
 
   useEffect(() => {
-    dispatch(fetchPricingData())
+    dispatch(fetchClientAppConfig())
       .unwrap()
       .catch((error) => showErrorNotification({ message: t('ERROR'), description: error.message }));
   }, [dispatch]);
 
-  const items = useGetDescriptionItems()
+  const items = useGetDescriptionItems();
 
-  if (fetchPricingDataStatus === FETCH_STATUS.LOADING) {
+  if (fetchClientAppConfigDataStatus === FETCH_STATUS.LOADING) {
     return <Spin tip={t('LOADING')} />;
   }
 

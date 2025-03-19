@@ -13,11 +13,13 @@ import {
 
 import { OrdersProvider } from '@pages/orders/context';
 import { PaymentsPage } from '@pages/payments';
+import { PaymentsProvider } from '@pages/payments/context';
 import { ProductsProvider } from '@pages/products/context';
 import {
   PricingSettingsPage,
   VisualSettingsPage,
   PaymentSettingsPage,
+  WorkingHoursSettings,
 } from '@pages/settings/pages';
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './utils/guarded-route';
@@ -86,11 +88,19 @@ export const router = createBrowserRouter([
             path: ROUTES.PAYMENT_SETTINGS,
             element: <PaymentSettingsPage />,
           },
+          {
+            path: ROUTES.TIME_SETTINGS,
+            element: <WorkingHoursSettings />,
+          },
         ],
       },
       {
         path: ROUTES.PAYMENTS,
-        element: <PaymentsPage />,
+        element: (
+          <PaymentsProvider>
+            <PaymentsPage />
+          </PaymentsProvider>
+        ),
       },
       {
         path: ROUTES.ANALYTICS,

@@ -1,3 +1,5 @@
+import { PAYMENT_STATUS } from '@shared/enum';
+
 // Тип суммы платежа
 export type PaymentAmount = {
   value: string;

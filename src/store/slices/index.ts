@@ -4,7 +4,7 @@ export * from './chat-slice';
 export * from './product-category-slice';
 export * from './product-slice';
 export * from './orders-slice';
-export * from './pricing-slice';
+export * from './client-app-config-slice';
 export * from './payments-slice';
 export * from './notifications-slice';
 export * from './analytics-chart-slice';

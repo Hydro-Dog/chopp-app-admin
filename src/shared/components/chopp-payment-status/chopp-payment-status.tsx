@@ -11,7 +11,9 @@ export const ChoppPaymentStatus = ({ status }: Props) => {
 
   return (
     <Tooltip title={t(PAYMENT_STATUS_MAP[status]?.tooltip)}>
-      <Tag className='cursor-pointer' color={PAYMENT_STATUS_MAP[status]?.color}>{t(PAYMENT_STATUS_MAP[status]?.title)}</Tag>
+      <Tag className="cursor-pointer" color={PAYMENT_STATUS_MAP[status]?.color}>
+        {t(PAYMENT_STATUS_MAP[status]?.title)}
+      </Tag>
     </Tooltip>
   );
 };

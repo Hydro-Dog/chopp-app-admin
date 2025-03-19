@@ -92,10 +92,10 @@ export const router = createBrowserRouter([
         path: ROUTES.PAYMENTS,
         element: <PaymentsPage />,
       },
-      // {
-      //   path: ROUTES.ANALYTICS,
-      //   element: <AnalyticsPage />,
-      // },
+      {
+        path: ROUTES.ANALYTICS,
+        element: <AnalyticsPage />,
+      },
       // {
       //   path: `${ROUTES.USERS}/:id`, // Updated path for user profiles
       //   element: <UserPage />,

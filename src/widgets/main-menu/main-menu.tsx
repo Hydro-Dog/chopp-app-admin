@@ -115,12 +115,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       label: t('SETTINGS'),
       onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
-    // {
-    //   key: ROUTES.ANALYTICS,
-    //   icon: <AnalyticsIcon />,
-    //   label: t('ANALYTICS'),
-    //   onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
-    // },
+    {
+      key: ROUTES.ANALYTICS,
+      icon: <AnalyticsIcon />,
+      label: t('ANALYTICS'),
+      onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
+    },
     {
       key: 'logout',
       icon: <LogoutRoundedIcon rotate={180} />,

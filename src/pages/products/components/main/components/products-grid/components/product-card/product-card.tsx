@@ -117,7 +117,7 @@ export const ProductCard = ({
       cover={
         <div className="!flex items-center justify-center">
           <img
-            className="aspect-square object-cover !size-[95%] "
+            className="aspect-video object-cover"
             alt={item.title}
             src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
           />

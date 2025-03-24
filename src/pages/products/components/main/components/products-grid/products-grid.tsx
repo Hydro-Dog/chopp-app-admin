@@ -58,6 +58,7 @@ export const ProductsGrid = ({ items, loading }: Props) => {
   return (
     <div>
       <Slider
+        className="m-0 mb-4"
         min={0}
         max={Object.keys(colCounts).length - 1}
         value={colCountKey}
@@ -72,47 +73,6 @@ export const ProductsGrid = ({ items, loading }: Props) => {
           {items?.map((item) => {
             return (
               <Col key={item.id} span={`${24 / colCount}`}>
-                {/* <Card
-                  size="small"
-                  hoverable
-                  cover={
-                    <div className="!flex items-center justify-center">
-                      <img
-                        className="aspect-square object-cover !size-[95%] "
-                        alt={item.title}
-                        src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
-                      />
-                    </div>
-                  }
-                  title={item.title}
-                  extra={
-                    <Tooltip
-                      key="isVisible"
-                      title={t(
-                        item.state === PRODUCT_STATE.DEFAULT
-                          ? 'PRODUCT_VISIBLE_TOOLTIP'
-                          : 'PRODUCT_HIDDEN_TOOLTIP',
-                      )}>
-                      <Switch
-                        onChange={(isVisible) =>
-                          onVisibilityToggled({
-                            id: item.id,
-                            state: isVisible ? PRODUCT_STATE.DEFAULT : PRODUCT_STATE.HIDDEN,
-                          })
-                        }
-                        checkedChildren={<EyeOutlined />}
-                        unCheckedChildren={<EyeInvisibleOutlined />}
-                        checked={item.state === PRODUCT_STATE.DEFAULT}
-                        loading={
-                          updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING
-                        }
-                      />
-                    </Tooltip>
-                  }
-                  actions={getActions(item)}>
-                  <Meta description={<div className="line-clamp-2">{item.description}</div>} />
-                </Card> */}
-
                 <ProductCard
                   item={item}
                   openCreateProductModal={openCreateProductModal}

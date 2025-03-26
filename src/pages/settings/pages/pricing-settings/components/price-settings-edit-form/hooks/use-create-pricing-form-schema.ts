@@ -9,6 +9,18 @@ export const useCreatePricingFormSchema = () => {
       averageDeliveryCost: z.number().nonnegative(t('ERRORS.NO_NEGATIVE')).nullish(),
       freeDeliveryIncluded: z.boolean(),
       freeDeliveryThreshold: z.number().nonnegative(t('ERRORS.NO_NEGATIVE')).nullish(),
+      deliveryAndPaymentsVerbose: z
+        .string()
+        .min(1, { message: t('ERRORS.REQUIRED') })
+        .nullish(),
+      publicOfferVerbose: z
+        .string()
+        .min(1, { message: t('ERRORS.REQUIRED') })
+        .nullish(),
+      description: z
+        .string()
+        .min(1, { message: t('ERRORS.REQUIRED') })
+        .nullish(),
     })
     .refine(
       (data) => {

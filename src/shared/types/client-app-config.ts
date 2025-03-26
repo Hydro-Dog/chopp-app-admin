@@ -5,4 +5,7 @@ export type ClientAppConfig = {
   openTime?: string;
   closeTime?: string;
   disabled?: boolean;
+  deliveryAndPaymentsVerbose?: string;
+  publicOfferVerbose?: string;
+  description?: string;
 };

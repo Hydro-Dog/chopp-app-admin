@@ -7,12 +7,12 @@ export const useGetSettings = () => {
   const { t } = useTranslation();
 
   return [
-    {
-      path: ROUTES.VISUAL_SETTINGS,
-      image: <SettingsGridIcon IconComponent={FormatPainterOutlined} />,
-      title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEME'),
-      description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING_THEME_ON_SITE'),
-    },
+    // {
+    //   path: ROUTES.VISUAL_SETTINGS,
+    //   image: <SettingsGridIcon IconComponent={FormatPainterOutlined} />,
+    //   title: t('SETTINGS_PAGE.VISUAL_SETTINGS.THEME'),
+    //   description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING_THEME_ON_SITE'),
+    // },
     {
       path: ROUTES.PRICING_SETTINGS,
       image: <SettingsGridIcon IconComponent={TagsOutlined} />,

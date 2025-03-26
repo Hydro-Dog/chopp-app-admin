@@ -51,5 +51,53 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
       ),
       children: pricingData?.freeDeliveryThreshold || '-',
     },
+    {
+      key: 'deliveryAndPaymentsVerbose',
+      label: (
+        <Space size={4}>
+          {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
+          <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      children: pricingData?.deliveryAndPaymentsVerbose ? (
+        <div className="line-clamp-4">{pricingData?.deliveryAndPaymentsVerbose}</div>
+      ) : (
+        '-'
+      ),
+    },
+    {
+      key: 'deliveryAndPaymentsVerbose',
+      label: (
+        <Space size={4}>
+          {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
+          <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      children: pricingData?.publicOfferVerbose ? (
+        <div className="line-clamp-4">{pricingData?.publicOfferVerbose}</div>
+      ) : (
+        '-'
+      ),
+    },
+    {
+      key: 'description',
+      label: (
+        <Space size={4}>
+          {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
+          <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      children: pricingData?.publicOfferVerbose ? (
+        <div className="line-clamp-4">{pricingData?.description}</div>
+      ) : (
+        '-'
+      ),
+    },
   ];
 };

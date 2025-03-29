@@ -105,7 +105,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
     {
       key: ROUTES.ANALYTICS,
-      icon: <AnalyticsIcon />,
+      icon: '',
       label: t('ANALYTICS'),
       onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
     },

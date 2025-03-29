@@ -1,13 +1,13 @@
 import { Line } from '@ant-design/plots';
 
-export const ChoppLineChart = ({ data }) => {
+export const ChoppLineChart = ({ data, xField, yField }) => {
   const config = {
     data,
-    xField: 'date',
-    yField: 'ordersQuantity',
+    xField,
+    yField,
     point: {
       shapeField: 'square',
-      sizeField: 2,
+      sizeField: 4,
     },
     interaction: {
       tooltip: {

@@ -20,7 +20,7 @@ export type GeneralAnalyticsData = {
   };
 };
 
-export type ChosenIdAnalyticsData = [
+export type ProductAnalyticsData = [
   {
     orderDate: string;
     product: {

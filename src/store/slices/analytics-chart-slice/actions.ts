@@ -1,9 +1,9 @@
 // import { createAsyncThunk } from '@reduxjs/toolkit';
-// import { GeneralAnalyticsData, ChosenIdAnalyticsData } from '@shared/types';
+// import { GeneralAnalyticsData, ProductAnalyticsData } from '@shared/types';
 
 // import { axiosPrivate } from '@store/middleware';
 
-// export type AnalyticsData = GeneralAnalyticsData | ChosenIdAnalyticsData;
+// export type AnalyticsData = GeneralAnalyticsData | ProductAnalyticsData;
 
 // export const fetchAnalyticsData = createAsyncThunk<AnalyticsData, { productsId?: string }>(
 //   'analytics/fetchAnalyticsData',

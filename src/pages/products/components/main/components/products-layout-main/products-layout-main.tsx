@@ -84,8 +84,7 @@ export const ProductsLayoutMain = () => {
           <Pagination
             size="small"
             current={page}
-            // TODO: установить нормальные занчения в pageSizeOptions
-            pageSizeOptions={[2, 8, 12, 22]}
+            pageSizeOptions={[10, 20, 40, 100]}
             pageSize={limit}
             total={totalItems}
             showTotal={showTotal}

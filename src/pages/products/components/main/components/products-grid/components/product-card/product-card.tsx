@@ -1,19 +1,16 @@
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { PRODUCTS_STATE_BY_GRID_MODE } from '@pages/products/constants';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { PRODUCT_GRID_VIEW_MODE, PRODUCT_STATE, updateListItemById } from '@shared/index';
-import { FETCH_STATUS, PaginationResponse, Product } from '@shared/types';
-import { RootState } from '@store/index';
+import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts, updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
-import { Switch, Tooltip } from 'antd';
+import { Typography } from 'antd';
 import { Card } from 'antd';
 
 import { useGetCardActions } from '../../hooks';
 import { sortImages } from '../../utils/sort-images';
 
+const { Text } = Typography;
 const { Meta } = Card;
 
 type Props = {
@@ -31,8 +28,6 @@ export const ProductCard = ({
   openDeleteModal,
   setCurrentItemData,
 }: Props) => {
-  const { t } = useTranslation();
-  const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
   const {
     setPageProducts,
     categoryId,
@@ -94,15 +89,6 @@ export const ProductCard = ({
     });
   };
 
-  const onVisibilityToggled = ({ id, state }: UpdateProductVisibilityDTO) => {
-    updateProductDispatch({
-      action: updateProductVisibility({ id, state }),
-      thenHandler: (product) => {
-        setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
-      },
-    });
-  };
-
   const { getActions } = useGetCardActions({
     onSettingClicked,
     onMoveToTrashClicked,
@@ -117,37 +103,13 @@ export const ProductCard = ({
       cover={
         <div className="!flex items-center justify-center">
           <img
-            className="aspect-square object-cover !size-[95%] "
+            className="aspect-video object-cover"
             alt={item.title}
             src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
           />
         </div>
       }
-      title={item.title}
-      extra={
-        item.state !== PRODUCT_STATE.MOVED_TO_TRASH && (
-          <Tooltip
-            key="isVisible"
-            title={t(
-              item.state === PRODUCT_STATE.DEFAULT
-                ? 'PRODUCT_VISIBLE_TOOLTIP'
-                : 'PRODUCT_HIDDEN_TOOLTIP',
-            )}>
-            <Switch
-              onChange={(isVisible) =>
-                onVisibilityToggled({
-                  id: item.id,
-                  state: isVisible ? PRODUCT_STATE.DEFAULT : PRODUCT_STATE.HIDDEN,
-                })
-              }
-              checkedChildren={<EyeOutlined />}
-              unCheckedChildren={<EyeInvisibleOutlined />}
-              checked={item.state === PRODUCT_STATE.DEFAULT}
-              loading={updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING}
-            />
-          </Tooltip>
-        )
-      }
+      title={<Text>{item.title}</Text>}
       actions={getActions(item)}>
       <Meta description={<div className="line-clamp-2">{item.description}</div>} />
     </Card>

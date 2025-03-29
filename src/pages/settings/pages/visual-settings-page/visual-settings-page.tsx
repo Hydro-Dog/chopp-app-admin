@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TitlePage, useTheme } from '@shared/index';
-import { Select } from 'antd';
+import { Select, Switch } from 'antd';
 import { Card } from 'antd';
 import { Form } from 'antd';
 import { THEME, STORAGE_KEYS } from '@shared/enum';
+import { CheckOutlined, CloseOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons';
 
 const { Item } = Form;
 
@@ -35,7 +36,14 @@ export const VisualSettingsPage = () => {
   return (
     <TitlePage breadcrumbs title={t('SETTINGS')}>
       <Card title={t('SETTINGS_PAGE.VISUAL_SETTINGS.COLOR_SETTINGS')}>
-        <Item className="w-52" label={t('THEME')}>
+        <Switch
+          value={pickedTheme === THEME.LIGHT}
+          onChange={(val) => onThemeChange(val ? THEME.LIGHT : THEME.DARK)}
+          checkedChildren={<SunOutlined />}
+          unCheckedChildren={<MoonOutlined />}
+          defaultChecked
+        />
+        {/* <Item className="w-52" label={t('THEME')}>
           <Select
             value={pickedTheme}
             onChange={(item) => onThemeChange(item)}
@@ -46,7 +54,7 @@ export const VisualSettingsPage = () => {
               { value: THEME.SYSTEM, label: t('SETTINGS_PAGE.VISUAL_SETTINGS.SYSTEM') },
             ]}
           />
-        </Item>
+        </Item> */}
       </Card>
     </TitlePage>
   );

@@ -2,7 +2,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useEffect, useStat
 import { useSearchParams } from 'react-router-dom';
 import { PRODUCT_STATE, Product, PropsWithChildrenOnly } from '@shared/index';
 
-export const LIMIT = 2;
+export const LIMIT = 10;
 
 type ProductsContextType = {
   pageProducts: Product[];

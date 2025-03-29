@@ -14,11 +14,11 @@ import {
 } from '@ant-design/icons';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { ROUTES } from '@shared/enum';
-import { useNotificationContext, useTheme } from '@shared/index';
+import { useNotificationContext, useTheme, useThemeSwitcher } from '@shared/index';
 import { FETCH_STATUS } from '@shared/index';
 import { logoutUser, setLogoutStatus } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
-import { Layout, Menu } from 'antd';
+import { Flex, Layout, Menu } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetMenuItemByUrl } from './hooks/index';
 
@@ -117,10 +117,15 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
   ];
 
+  const { themeSwitcher } = useThemeSwitcher();
+
   return (
     <Layout>
       <Sider theme={theme as SiderTheme}>
-        <Menu className="pt-3" selectedKeys={selectedMenuKeys} mode="inline" items={menuItems} />
+        <Flex vertical justify="space-between" className="h-full">
+          <Menu className="pt-3" selectedKeys={selectedMenuKeys} mode="inline" items={menuItems} />
+          <Flex className="mb-4 ml-4">{themeSwitcher}</Flex>
+        </Flex>
       </Sider>
       <Layout>{children}</Layout>
     </Layout>

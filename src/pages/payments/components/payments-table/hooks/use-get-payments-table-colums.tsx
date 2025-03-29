@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { PAYMENT_STATUS_MAP, PAYMENT_STATUS } from '@shared/index';
+import { PAYMENT_STATUS_MAP, PAYMENT_STATUS, ChoppPaymentStatus } from '@shared/index';
 import { Payment } from '@shared/types/payment';
 import { Tooltip, Tag, Dropdown, Space } from 'antd';
 import { useGetActionItems } from './use-get-action-items';
@@ -26,9 +26,10 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
       dataIndex: 'status',
       key: 'status',
       render: (status: PAYMENT_STATUS) => (
-        <Tooltip title={t(PAYMENT_STATUS_MAP[status].tooltip)}>
-          <Tag color={PAYMENT_STATUS_MAP[status].color}>{t(PAYMENT_STATUS_MAP[status].title)}</Tag>
-        </Tooltip>
+        <ChoppPaymentStatus status={status} />
+        // <Tooltip title={t(PAYMENT_STATUS_MAP[status].tooltip)}>
+        //   <Tag color={PAYMENT_STATUS_MAP[status].color}>{t(PAYMENT_STATUS_MAP[status].title)}</Tag>
+        // </Tooltip>
       ),
     },
     {

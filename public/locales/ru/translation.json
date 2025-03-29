@@ -153,7 +153,13 @@
     "ENTER_PRICE": "Введите цену",
     "PRICE_HINT": "Вы можете указать сумму заказа, начиная с которой доставка будет бесплатной.",
     "FREE_SHIPPING": "Бесплатная доставка включена",
-    "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная."
+    "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная.",
+    "DELIVERY_AND_PAYMENT_VERBOSE": "Доставка и оплата",
+    "DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Доставка и оплата\"",
+    "PUBLIC_OFFER_VERBOSE": "Публичаня оферта",
+    "PUBLIC_OFFER_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Публичаня оферта\"",
+    "DESCRIPTION_VERBOSE": "О нас",
+    "DESCRIPTION_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"О нас\""
   },
   "CHATS_CONTEXT": {
     "EMPTY_CHAT": "Здесь пока ничего нет...",

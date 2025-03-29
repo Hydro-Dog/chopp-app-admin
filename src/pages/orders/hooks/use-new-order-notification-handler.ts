@@ -8,8 +8,9 @@ type Args = {
 };
 
 export const useNewOrderNotificationHandler = ({ setOrdersData }: Args) => {
+  //TODO: использовать useWsNotification из клиентского приложения
   const { newOrder } = useSelector((state: RootState) => state.notifications);
-  const lastNotification = newOrder[newOrder?.length - 1]?.payload
+  const lastNotification = newOrder[newOrder?.length - 1]?.payload;
 
   useEffect(() => {
     if (lastNotification) {

@@ -9,7 +9,7 @@ import { useSuperDispatch } from '@shared/hooks';
 import { FETCH_STATUS } from '@shared/types';
 import { postClientAppConfig } from '@store/slices';
 import { RootState } from '@store/store';
-import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button } from 'antd';
+import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button, Input } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { z } from 'zod';
 import { useCreatePricingFormSchema } from './hooks/use-create-pricing-form-schema';
@@ -41,17 +41,23 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
     resolver: zodResolver(createPricingFormSchema),
     defaultValues: {
       freeDeliveryIncluded: false,
+      deliveryAndPaymentsVerbose: '',
+      publicOfferVerbose: '',
     },
   });
 
   const freeDeliveryIncluded = watch('freeDeliveryIncluded');
 
+  console.log('errors; ', errors);
   useEffect(() => {
     if (clientAppConfigData) {
       reset({
         averageDeliveryCost: clientAppConfigData.averageDeliveryCost,
         freeDeliveryIncluded: clientAppConfigData.freeDeliveryIncluded,
         freeDeliveryThreshold: clientAppConfigData.freeDeliveryThreshold,
+        deliveryAndPaymentsVerbose: clientAppConfigData.deliveryAndPaymentsVerbose,
+        publicOfferVerbose: clientAppConfigData.publicOfferVerbose,
+        description: clientAppConfigData.description,
       });
     }
   }, [clientAppConfigData, reset]);
@@ -145,6 +151,81 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
               min={0}
               placeholder={t('PRICING_PAGE.ENTER_PRICE')}
               disabled={!freeDeliveryIncluded}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
+        help={errors.deliveryAndPaymentsVerbose?.message}
+        validateStatus={errors.deliveryAndPaymentsVerbose && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="deliveryAndPaymentsVerbose"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={4}
+              placeholder={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
+        help={errors.publicOfferVerbose?.message}
+        validateStatus={errors.publicOfferVerbose && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="publicOfferVerbose"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={4}
+              placeholder={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
+        help={errors.publicOfferVerbose?.message}
+        validateStatus={errors.publicOfferVerbose && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={4}
+              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
             />
           )}
         />

@@ -19,3 +19,4 @@ export * from './product';
 export * from './payment';
 export * from './category';
 export * from './payment-settings';
+export * from './analytics-data';

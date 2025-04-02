@@ -1,18 +1,24 @@
-import { DownOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  CloseCircleOutlined,
+  CarOutlined,
+  DeliveredProcedureOutlined,
+  ShoppingOutlined,
+  ToolOutlined,
+} from '@ant-design/icons';
 import { ChoppOrderStatus } from '@shared/components';
 import { ORDER_STATUS } from '@shared/enum';
 import { Order } from '@shared/types';
-import { Dropdown, MenuProps, Modal, Space, Typography } from 'antd';
+import { ORDER_STATUS_MAP } from '@shared/index';
+import { Dropdown, MenuProps, Modal, Space, Typography, Button, theme } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGroupedOrderStatusItems } from './hooks';
 
 const { Text } = Typography;
-
-const items: MenuProps['items'] = Object.values(ORDER_STATUS).map((status) => ({
-  key: status,
-  label: <ChoppOrderStatus status={status} />,
-}));
 
 type Props = {
   order?: Order;
@@ -29,7 +35,9 @@ type Props = {
 
 export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props) => {
   const { t } = useTranslation();
+  const items = useGroupedOrderStatusItems()
   const [selectedStatus, setSelectedStatus] = useState<ORDER_STATUS>();
+  const { token: themeToken } = theme.useToken();
 
   const onNewStatusSelected = (value: MenuInfo) => {
     setSelectedStatus(value.key as ORDER_STATUS);
@@ -51,31 +59,63 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
   };
 
   return (
-    <Modal open={open} onOk={onOk} onCancel={onCancel} title={t('CHANGE_ORDER_STATUS')}>
-      <Space direction="vertical">
-        {order?.orderStatus && (
-          <Space align="center">
-            <Text>{t('CURRENT_STATUS')}</Text>
-            <ChoppOrderStatus status={order!.orderStatus!} />
-          </Space>
-        )}
+    <Modal
+      open={open}
+      onCancel={onCancel}
+      title={t('CHANGE_ORDER_STATUS')}
+      footer={[
+        <Button key="cancel" onClick={onCancel}>
+          {t('CANCEL')}
+        </Button>,
+        <Button
+          key="ok"
+          type="primary"
+          onClick={onOk}
+          disabled={!selectedStatus || selectedStatus === order?.orderStatus}>
+          {t('SAVE')}
+        </Button>,
+      ]}>
+      <Space direction="vertical" size="middle" className="w-full">
+        <Text type="secondary">{t('ORDER_STATUS_CHANGE_SUMMARY')}</Text>
 
-        <ArrowDownOutlined />
+        <div className="grid grid-cols-2 mb-4">
+          <div>
+            <Text className="font-extrabold" style={{ color: themeToken.colorTextSecondary }}>
+              {t('CURRENT_STATUS')}
+            </Text>
+            <div className="mt-2">
+              <ChoppOrderStatus
+                className="text-base"
+                status={order?.orderStatus!}
+              />
+            </div>
+          </div>
 
-        <Space align="center">
-          <Text>{t('NEW_STATUS')}</Text>
-          <Dropdown
-            menu={{
-              items,
-              onClick: onNewStatusSelected,
-            }}>
-            <Space>
-              {selectedStatus ? <ChoppOrderStatus status={selectedStatus} /> : t('PICK_STATUS')}
-              {/* {selectedStatus || t('PICK_STATUS')} */}
-              <DownOutlined />
-            </Space>
-          </Dropdown>
-        </Space>
+          <div>
+            <Text className="font-extrabold" style={{ color: themeToken.colorTextSecondary }}>
+              {t('NEW_STATUS')}
+            </Text>
+            <div className="mt-2">
+              <Dropdown
+                menu={{
+                  items,
+                  onClick: onNewStatusSelected,
+                }}
+                trigger={['click']}>
+                <Button block>
+                  <Space>
+                    {selectedStatus ? (
+                      <ChoppOrderStatus tooltipPlacement="right" status={selectedStatus} />
+                    ) : (
+                      t('PICK_STATUS')
+                    )}
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
       </Space>
     </Modal>
   );

@@ -79,8 +79,14 @@
   "ACTION": "Действие",
   "ACTIONS": "Действия",
   "INFO": "Инфо",
+  "DETAILS": "Подробнее",
   "REFUND": "Возврат средств",
   "CHANGE_ORDER_STATUS": "Изменить статус заказа",
+  "ORDER_STATUS_CHANGE_SUMMARY": "Выберите новый статус для заказа из списка справа",
+  "ORDER_STATUS_GROUP": {
+    "PAYMENT": "Оплата",
+    "DELIVERY": "Обработка и доставка"
+  },
   "ADDRESS": "Адрес",
   "ALL": "Все",
   "CHATS": "Чаты",
@@ -93,7 +99,7 @@
   "CURRENT_STATUS": "Текущий сатус",
   "NEW_STATUS": "Новый сатус",
   "PICK_STATUS": "Выбрать статус",
-  "ORDERS_PAGE":{
+  "ORDERS_PAGE": {
     "ENTER_ID": "Введите ID заказа",
     "END_DATE": "До",
     "START_DATE": "От",
@@ -140,11 +146,11 @@
     },
     "TURN_OFF_TITLE": "Выключить приложение",
     "TURN_OFF_DESCRIPTION": "Пользователи не смогут делать заказы",
-    "TIME_SETTINGS":{
+    "TIME_SETTINGS": {
       "TITLE": "Время работы",
       "DATA": "Настройки времени работы сервиса",
       "TOOLTIP": "Вы можете указать время работы вашего сервиса. В это время пользователи смогут делать заказы.",
-      "INFO":"Время работы сервиса "
+      "INFO": "Время работы сервиса "
     }
   },
   "PRICING_PAGE": {
@@ -167,7 +173,7 @@
   },
   "PAYMENT_SETTINGS": "Платежная информация",
   "PAYMENT_SETTINGS_DATA": "Данные для настройки системы платежей",
-  "SHOP_ID": "Shop Id", 
+  "SHOP_ID": "Shop Id",
   "SHOP_ID_TOOLTIP": "Id вашего магазина в 'ЮКассе",
   "ENTER_SHOP_ID": "Введите Shop Id",
   "DELIVERY": "Доставка",
@@ -180,6 +186,8 @@
   "NEW_MESSAGE": "Новое сообщение",
   "NEW_ORDER": "Новый заказ",
   "OPEN": "Открыть",
+  "SHOPPING_CART_ITEMS": "Товары в корзине",
+  "ITEM": "Элемент {{index}}",
   "TITLE_NAME": "Название",
   "DESCRIPTION": "Описание",
   "PRICE": "Цена",
@@ -193,6 +201,7 @@
   "UPLOAD_IMAGE_HELPER_TEXT": "{{format}}, не больше {{mb}}MB. Рекомендуем использовать квадратные изображения.",
   "IMAGES": "Изображения",
   "SUCCESS": "Успешно",
+  "PRODUCT": "Товар",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в список",
   "PRODUCT_UPDATED_SUCCESSFULLY_MESSAGE": "Товар обновлен",
   "LOAD_MORE": "Загрузить еще",

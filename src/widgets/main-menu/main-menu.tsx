@@ -21,6 +21,7 @@ import { AppDispatch, RootState } from '@store/store';
 import { Flex, Layout, Menu } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import { useGetMenuItemByUrl } from './hooks/index';
+import Link from 'antd/es/typography/Link';
 
 const { Sider } = Layout;
 
@@ -33,9 +34,9 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const { selectedMenuKeys } = useGetMenuItemByUrl();
   const { showNotification } = useNotificationContext();
 
-  const onMenuItemClick = (path: string) => {
-    navigate(path);
-  };
+  // const onMenuItemClick = (path: string) => {
+  //   navigate(path);
+  // };
 
   const onLogout = () => {
     dispatch(logoutUser());
@@ -54,8 +55,8 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.PRODUCTS,
       icon: selectedMenuKeys.includes(ROUTES.PRODUCTS) ? <ShopFilled /> : <ShopOutlined />,
-      label: t('PRODUCTS'),
-      onClick: () => onMenuItemClick(ROUTES.PRODUCTS),
+      label: <Link href={ROUTES.PRODUCTS}>{t('PRODUCTS')}</Link>,
+      // onClick: () => onMenuItemClick(ROUTES.PRODUCTS),
     },
     // {
     //   key: '',
@@ -67,22 +68,14 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: '',
       icon: selectedMenuKeys.includes('') ? <BellFilled /> : <BellOutlined />,
-      label: (
-        <div className="flex items-center gap-1">
-          <div>{t('ORDERS')}</div>
-        </div>
-      ),
-      onClick: () => onMenuItemClick(''),
+      label: <Link href="/">{t('ORDERS')}</Link>,
+      // onClick: () => onMenuItemClick(''),
     },
     {
       key: ROUTES.PAYMENTS,
       icon: selectedMenuKeys.includes(ROUTES.PAYMENTS) ? <BankFilled /> : <BankOutlined />,
-      label: (
-        <div className="flex items-center gap-1">
-          <div>{t('PAYMENTS')}</div>
-        </div>
-      ),
-      onClick: () => onMenuItemClick(ROUTES.PAYMENTS),
+      label: <Link href={ROUTES.PAYMENTS}>{t('PAYMENTS')}</Link>,
+      // onClick: () => onMenuItemClick(ROUTES.PAYMENTS),
     },
     // {
     //   key: ROUTES.CHATS,
@@ -100,8 +93,8 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.SETTINGS,
       icon: selectedMenuKeys.includes(ROUTES.SETTINGS) ? <SlidersFilled /> : <SlidersOutlined />,
-      label: t('SETTINGS'),
-      onClick: () => onMenuItemClick(ROUTES.SETTINGS),
+      label: <Link href={ROUTES.SETTINGS}>{t('SETTINGS')}</Link>,
+      // onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
     {
       key: ROUTES.ANALYTICS,

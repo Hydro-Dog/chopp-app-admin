@@ -10,7 +10,7 @@ export const useGetActionItems = () => {
   const actionItems = (record: Payment): MenuProps['items'] => [
     {
       key: ACTION_MENU_ITEMS.INFO,
-      label: t('INFO'),
+      label: t('DETAILS'),
       icon: <InfoCircleOutlined />,
     },
     {

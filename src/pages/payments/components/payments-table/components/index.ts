@@ -1,0 +1,1 @@
+../../../../orders/components/orders-table/components/order-details-modal

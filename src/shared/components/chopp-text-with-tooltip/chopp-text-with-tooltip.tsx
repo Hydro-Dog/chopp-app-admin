@@ -1,6 +1,9 @@
 import { ReactNode } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Space, Tooltip } from 'antd';
+import { Space, Tooltip, Typography } from 'antd';
+import { useThemeToken } from '@shared/index';
+
+const { Paragraph } = Typography;
 
 type Props = {
   title?: string;
@@ -8,11 +11,31 @@ type Props = {
   space?: number;
   className?: string;
   icon?: ReactNode;
+  copyable?: boolean;
+  showInfoIcon?: boolean;
 };
 
-export const ChoppTextWithTooltip = ({ title, tooltipText, space = 4, className, icon }: Props) => (
-  <Space size={space} className={className}>
-    {title}
-    {tooltipText && <Tooltip title={tooltipText}>{icon || <InfoCircleOutlined />}</Tooltip>}
-  </Space>
-);
+export const ChoppTextWithTooltip = ({
+  title,
+  tooltipText,
+  space = 4,
+  className,
+  icon,
+  copyable,
+  showInfoIcon = true,
+}: Props) => {
+  const themeToken = useThemeToken();
+
+  return (
+    <Space size={space} className={className}>
+      {tooltipText && (
+        <Tooltip title={tooltipText} className='flex items-center gap-1'>
+          <Paragraph ellipsis className="!m-0" copyable={copyable}>
+            {title}
+          </Paragraph>
+          {showInfoIcon && <InfoCircleOutlined style={{ color: themeToken.colorPrimary }} />}
+        </Tooltip>
+      )}
+    </Space>
+  );
+};

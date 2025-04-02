@@ -16,9 +16,10 @@ import { ActionValue } from '../types';
 
 type Args = {
   onActionClick: (info: ActionValue) => void;
+  onOrderStatusClick: (record: Order) => void;
 };
 
-export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
+export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: Args) => {
   const { t } = useTranslation();
   const { actionItems } = useGetActionItems();
 
@@ -48,21 +49,29 @@ export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
       title: t('ORDER_STATUS_TITLE'),
       dataIndex: 'orderStatus',
       key: 'orderStatus',
-      render: (status: ORDER_STATUS) => <ChoppOrderStatus status={status} />,
+      render: (status: ORDER_STATUS, record: Order) => (
+        <ChoppOrderStatus
+          tooltipPlacement="left"
+          onClick={() => onOrderStatusClick(record)}
+          status={status}
+        />
+      ),
     },
     {
       title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'paymentStatus',
       key: 'paymentStatus',
-      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
+      render: (status: PAYMENT_STATUS) => (
+        <ChoppPaymentStatus tooltipPlacement="right" status={status} />
+      ),
     },
     {
-      title: t('DESCRIPTION'),
-      dataIndex: 'description',
-      key: 'description',
-      render: (description: string) => (
-        <Tooltip title={description}>
-          <div>{description}</div>
+      title: t('COMMENT'),
+      dataIndex: 'comment',
+      key: 'comment',
+      render: (text: string) => (
+        <Tooltip title={text}>
+          <div>{text}</div>
         </Tooltip>
       ),
     },
@@ -77,12 +86,7 @@ export const useGetOrderTableColumns = ({ onActionClick }: Args) => {
       key: 'transactionId',
       className: 'cursor-pointer',
       render: (text: string) => (
-        <Tooltip title={text}>
-          {/* TODO: передатать на tailwind css */}
-          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {text}
-          </span>
-        </Tooltip>
+        <ChoppTextWithTooltip showInfoIcon={false} copyable title={text} tooltipText={text} />
       ),
     },
     {

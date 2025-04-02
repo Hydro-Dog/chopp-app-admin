@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
     path: ROUTES.SIGN_IN,
     element: <SignInPage />,
   },
-  {
-    path: ROUTES.REGISTER,
-    element: <RegisterPage />,
-  },
+  // {
+  //   path: ROUTES.REGISTER,
+  //   element: <RegisterPage />,
+  // },
   {
     path: ROUTES.ROOT,
     element: (

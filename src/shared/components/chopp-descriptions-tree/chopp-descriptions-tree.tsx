@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Space, Tree, Typography, Tooltip } from 'antd';
 import type { DataNode } from 'antd/es/tree';
+import { useTranslation } from 'react-i18next';
+import { ChoppTextWithTooltip } from '../chopp-text-with-tooltip';
 
 const { Text } = Typography;
 
 type Props = {
   value?: object;
-  defaultExpanded?: boolean; // Начальное состояние узлов
+  defaultExpanded?: boolean;
+  keyTranslations?: object;
 };
 
-export const ChoppDescriptionsTree: React.FC<Props> = ({ value = {}, defaultExpanded = true }) => {
+export const ChoppDescriptionsTree: React.FC<Props> = ({
+  value = {},
+  defaultExpanded = true,
+  keyTranslations,
+}) => {
+  const { t } = useTranslation();
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   // Функция рекурсивного построения структуры дерева
@@ -24,7 +32,7 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({ value = {}, defaultExpa
           title: (
             <Tooltip title={`Item ${index + 1}`}>
               <span className="truncate max-w-[200px] block pointer-events-none">
-                {`Item ${index + 1}`}
+                {t('ITEM', { index: index + 1 })}
               </span>
             </Tooltip>
           ),
@@ -42,12 +50,18 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({ value = {}, defaultExpa
         title: (
           <Space>
             <Text strong className="truncate max-w-[150px]">
-              {key}
+              {t(keyTranslations?.[key]) || key}
             </Text>
             {!children && (
-              <Tooltip title={String(val)}>
-                <Text className="truncate max-w-[200px] block">{String(val)}</Text>
-              </Tooltip>
+              // <Tooltip title={String(val)}>
+              //   <Text className="truncate max-w-[200px] block">{String(val)}</Text>
+              // </Tooltip>
+              <ChoppTextWithTooltip
+                title={String(val)}
+                tooltipText={String(val)}
+                copyable
+                showInfoIcon={false}
+              />
             )}
           </Space>
         ),

@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { ORDER_STATUS } from '@shared/enum';
-import { ChoppInfoModal } from '@shared/index';
+import { ChoppInfoModal, filterObjectByKeys } from '@shared/index';
 import { Order } from '@shared/types';
 import { Table } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-import { ChangeOrderStatusModal } from './components';
+import { ChangeOrderStatusModal, OrderDetailsModal } from './components';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetOrderTableColumns } from './hooks';
 import { ActionValue } from './types';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 type Props = {
   data: Order[];
@@ -48,7 +49,12 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
     actionsMap[action.key](action);
   };
 
-  const { columns } = useGetOrderTableColumns({ onActionClick });
+  const onOrderStatusClick = (order: Order) => {
+    setClickedOrder(order);
+    openStatusModal();
+  };
+
+  const { columns } = useGetOrderTableColumns({ onActionClick, onOrderStatusClick });
 
   return (
     <>
@@ -60,6 +66,7 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
         rowKey="id"
         pagination={false}
       />
+
       <ChangeOrderStatusModal
         open={isStatusModalOpened}
         onSubmit={onStatusChange}
@@ -67,7 +74,7 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
         order={clickedOrder}
       />
 
-      <ChoppInfoModal open={isInfoModalOpened} onOk={closeInfoModal} value={clickedOrder} />
+      <OrderDetailsModal open={isInfoModalOpened} onOk={closeInfoModal} order={clickedOrder} />
     </>
   );
 };

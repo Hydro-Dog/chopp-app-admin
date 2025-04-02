@@ -1,183 +1,33 @@
 import { ChoppLineChart } from '@shared/components/chopp-line-chart';
+import { GeneralAnalyticsData, ProductAnalyticsData } from '@shared/types'; // планировалось их использование при наличии и отсутствии productId
+import { useEffect, useState } from 'react';
 
-// import { GeneralAnalyticsData, ProductAnalyticsData } from '@shared/types'; // планировалось их использование при наличии и отсутствии productId
+const REQUEST_URL =
+  'http://localhost:6001/api/analytics/orders?endDate=2025-03-01&startDate=2025-02-17';
 
-const data = [
-  {
-    orderDate: '2025-02-21',
-    product: {
-      price: {
-        value: '100.00',
-        currency: 'RUB',
-      },
-      title: 'Product 1',
-      quantity: 2,
-    },
-  },
-
-  {
-    orderDate: '2025-02-25',
-    product: {
-      price: {
-        value: '200.00',
-        currency: 'RUB',
-      },
-      title: 'Product 1',
-      quantity: 4,
-    },
-  },
-  {
-    orderDate: '2025-02-26',
-    product: {
-      price: {
-        value: '100.00',
-        currency: 'RUB',
-      },
-      title: 'Product 1',
-      quantity: 2,
-    },
-  },
-  {
-    orderDate: '2025-02-27',
-    product: {
-      price: {
-        value: '100.00',
-        currency: 'RUB',
-      },
-      title: 'Product 1',
-      quantity: 2,
-    },
-  },
-  {
-    orderDate: '2025-02-28',
-    product: {
-      price: {
-        value: '00.00',
-        currency: 'RUB',
-      },
-      title: 'Product 1',
-      quantity: 0,
-    },
-  },
-];
-const transformedData = data.map((item) => ({
-  orderDate: item.orderDate,
-  quantity: item.product.quantity,
-}));
 export const AnalyticsChart = () => {
-  return (
-    <ChoppLineChart
-      data={transformedData}
-      xField={'orderDate'}
-      yField={'quantity'}></ChoppLineChart>
-  );
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      const response = await fetch(`${REQUEST_URL}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwiaWQiOjEsInJvbGVzIjpbeyJpZCI6MSwidmFsdWUiOiJBRE1JTiIsImRlc2NyaXB0aW9uIjoi0KDQvtC70Ywg0LDQtNC80LjQvdC40YHRgtGA0LDRgtC-0YDQsCIsImNyZWF0ZWRBdCI6IjIwMjUtMDMtMTlUMTQ6NTA6NDIuMjQwWiIsInVwZGF0ZWRBdCI6IjIwMjUtMDMtMTlUMTQ6NTA6NDIuMjQwWiIsIlVzZXJSb2xlcyI6eyJpZCI6MSwicm9sZUlkIjoxLCJ1c2VySWQiOjF9fV0sImlhdCI6MTc0MzQ0NTU0NiwiZXhwIjoxNzQzNDQ2MTQ2fQ.41szNzfuP089PitVZG2NJMHF64wpvZAujTra9C8klpk',
+        },
+      });
+      const data = await response.json();
+      setData(data);
+    };
+    fetchAnalyticsData();
+  }, []);
+
+  return <ChoppLineChart data={data} xField={'date'} yField={'ordersQuantity'}></ChoppLineChart>;
 };
-// const data = {
-//   items: [
-//     {
-//       date: '2025-02-17',
-//       ordersQuantity: 5,
-//       amount: {
-//         value: '1500.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-18',
-//       ordersQuantity: 4,
-//       amount: {
-//         value: '1200.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-19',
-//       ordersQuantity: 5,
-//       amount: {
-//         value: '1500.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-20',
-//       ordersQuantity: 0,
-//       amount: {
-//         value: '00.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-21',
-//       ordersQuantity: 3,
-//       amount: {
-//         value: '1000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-22',
-//       ordersQuantity: 10,
-//       amount: {
-//         value: '3000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-23',
-//       ordersQuantity: 8,
-//       amount: {
-//         value: '2000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-24',
-//       ordersQuantity: 8,
-//       amount: {
-//         value: '2000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-25',
-//       ordersQuantity: 7,
-//       amount: {
-//         value: '1800.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-26',
-//       ordersQuantity: 14,
-//       amount: {
-//         value: '5000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-27',
-//       ordersQuantity: 8,
-//       amount: {
-//         value: '2000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//     {
-//       date: '2025-02-28',
-//       ordersQuantity: 3,
-//       amount: {
-//         value: '1000.00',
-//         currency: 'RUB',
-//       },
-//     },
-//   ],
-//   summary: {
-//     totalAmount: {
-//       value: '1500.00',
-//       currency: 'RUB',
-//     },
-//     minOrderAmount: '200.00',
-//     maxOrderAmount: '500.00',
-//     averageOrderAmount: '300.00',
-//   },
-// };
+
+// const transformedData = data.map((item) => ({
+//   orderDate: item.orderDate,
+//   quantity: item.product.quantity,
+// }));

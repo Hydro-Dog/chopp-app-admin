@@ -7,7 +7,7 @@ export const AnalyticsPage = () => {
 
   return (
     <TitlePage title={t('ANALYTICS')}>
-      <AnalyticsChart></AnalyticsChart>
+      <AnalyticsChart />
     </TitlePage>
   );
 };

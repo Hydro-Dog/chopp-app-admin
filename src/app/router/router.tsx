@@ -102,10 +102,10 @@ export const router = createBrowserRouter([
           </PaymentsProvider>
         ),
       },
-      // {
-      //   path: ROUTES.ANALYTICS,
-      //   element: <AnalyticsPage />,
-      // },
+      {
+        path: ROUTES.ANALYTICS,
+        element: <AnalyticsPage />,
+      },
       // {
       //   path: `${ROUTES.USERS}/:id`, // Updated path for user profiles
       //   element: <UserPage />,

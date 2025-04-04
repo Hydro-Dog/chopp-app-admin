@@ -99,8 +99,8 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.ANALYTICS,
       icon: '',
-      label: t('ANALYTICS'),
-      onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
+      label: <Link href={ROUTES.ANALYTICS}>{t('ANALYTICS')}</Link>,
+      // onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
     },
     {
       key: 'logout',

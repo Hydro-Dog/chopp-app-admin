@@ -5,7 +5,7 @@ import {
   updateCurrentUser,
   fetchCurrentUser,
   loginUser,
-  logoutUser,
+  logout,
   registerUser,
   fetchUsers,
   fetchUser,
@@ -135,14 +135,16 @@ export const userSlice = createSlice({
         state.loginStatus = FETCH_STATUS.ERROR;
         state.loginError = action.payload ?? { message: 'Failed to login user' };
       })
-      .addCase(logoutUser.pending, (state) => {
+      .addCase(logout.pending, (state) => {
         state.logoutStatus = FETCH_STATUS.LOADING;
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logout.fulfilled, (state) => {
         state.logoutStatus = FETCH_STATUS.SUCCESS;
-        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+        window.location.reload();
       })
-      .addCase(logoutUser.rejected, (state, action) => {
+      .addCase(logout.rejected, (state, action) => {
         state.logoutStatus = FETCH_STATUS.ERROR;
         state.logoutError = action.payload ?? { message: 'Failed to logout user' };
       })

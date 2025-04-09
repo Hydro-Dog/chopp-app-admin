@@ -18,4 +18,3 @@ export * from './product-image';
 export * from './product';
 export * from './payment';
 export * from './category';
-export * from './payment-settings';

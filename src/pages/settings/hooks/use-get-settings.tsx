@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { ClockCircleOutlined, FormatPainterOutlined, TagsOutlined } from '@ant-design/icons';
 import { ROUTES } from '@shared/index';
 import { SettingsGridIcon } from '../components/settings-grid-icon';
+import { Tooltip } from 'antd';
 
 export const useGetSettings = () => {
   const { t } = useTranslation();
@@ -14,15 +15,29 @@ export const useGetSettings = () => {
     //   description: t('SETTINGS_PAGE.VISUAL_SETTINGS.CHOOSING_THEME_ON_SITE'),
     // },
     {
+      path: ROUTES.BASIC_INFO_SETTINGS,
+      image: <SettingsGridIcon IconComponent={ClockCircleOutlined} />,
+      title: (
+        <Tooltip title={t('SETTINGS_PAGE.BASIC_INFO_SETTINGS.TITLE')}>
+          {t('SETTINGS_PAGE.BASIC_INFO_SETTINGS.TITLE')}
+        </Tooltip>
+      ),
+      description: t('SETTINGS_PAGE.BASIC_INFO_SETTINGS.DATA'),
+    },
+    {
       path: ROUTES.PRICING_SETTINGS,
       image: <SettingsGridIcon IconComponent={TagsOutlined} />,
-      title: t('PRICING'),
+      title: <Tooltip title={t('PRICING')}>{t('PRICING')}</Tooltip>,
       description: t('PRICING'),
     },
     {
       path: ROUTES.TIME_SETTINGS,
       image: <SettingsGridIcon IconComponent={ClockCircleOutlined} />,
-      title: t('SETTINGS_PAGE.TIME_SETTINGS.TITLE'),
+      title: (
+        <Tooltip title={t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}>
+          {t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}
+        </Tooltip>
+      ),
       description: t('SETTINGS_PAGE.TIME_SETTINGS.DATA'),
     },
   ];

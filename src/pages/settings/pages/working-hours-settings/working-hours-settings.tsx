@@ -6,8 +6,10 @@ import { useNotificationContext } from '@shared/context';
 import { FETCH_STATUS } from '@shared/types';
 import { fetchClientAppConfig } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
-import { Button, Card, Descriptions, Space, Spin } from 'antd';
+import { Button, Card, Descriptions, Space, Spin, Typography } from 'antd';
 import { WorkingHoursForm } from './components';
+
+const { Title } = Typography;
 
 export const WorkingHoursSettings = () => {
   const { t } = useTranslation();
@@ -31,20 +33,19 @@ export const WorkingHoursSettings = () => {
 
   return (
     <TitlePage breadcrumbs title={t('SETTINGS')}>
-      <Card title={t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}>
+      <Card>
+        <Title level={4}>{t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}</Title>
         <div className="flex flex-col gap-5">
           {isEditNode === false ? (
             <div>
               <div className="flex items-center gap-5">
-                <Descriptions>
+                <Descriptions bordered>
                   <Descriptions.Item
                     label={
-                      <Space size={4}>
-                        {t('SETTINGS_PAGE.TIME_SETTINGS.INFO')}
-                        <ChoppTextWithTooltip
-                          tooltipText={t('SETTINGS_PAGE.TIME_SETTINGS.TOOLTIP')}
-                        />
-                      </Space>
+                      <ChoppTextWithTooltip
+                        title={t('SETTINGS_PAGE.TIME_SETTINGS.INFO')}
+                        tooltipText={t('SETTINGS_PAGE.TIME_SETTINGS.TOOLTIP')}
+                      />
                     }>
                     {clientAppConfigData?.openTime} - {clientAppConfigData?.closeTime}
                   </Descriptions.Item>

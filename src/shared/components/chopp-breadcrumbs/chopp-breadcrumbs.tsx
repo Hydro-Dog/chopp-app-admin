@@ -16,6 +16,8 @@ export const ChoppBreadcrumbs = () => {
     return <></>;
   }
 
+  console.log('ROUTES_MAP: ', ROUTES_MAP)
+
   return (
     <Breadcrumb className="my-5">
       {path.map((item, index) => (

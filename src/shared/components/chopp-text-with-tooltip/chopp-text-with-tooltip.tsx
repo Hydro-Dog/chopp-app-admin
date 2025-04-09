@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Space, Tooltip, Typography } from 'antd';
 import { useThemeToken } from '@shared/index';
+import { Space, Tooltip, Typography } from 'antd';
 
 const { Paragraph } = Typography;
 
@@ -29,7 +29,7 @@ export const ChoppTextWithTooltip = ({
   return (
     <Space size={space} className={className}>
       {tooltipText && (
-        <Tooltip title={tooltipText} className='flex items-center gap-1'>
+        <Tooltip title={tooltipText} className="flex items-center gap-1">
           <Paragraph ellipsis className="!m-0" copyable={copyable}>
             {title}
           </Paragraph>

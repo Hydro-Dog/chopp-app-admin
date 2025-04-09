@@ -12,7 +12,7 @@ type Props = {
   toggle: () => void;
 };
 
-export const PriceSettingsView = ({ toggle }: Props) => {
+export const BasicInfoSettingsView = ({ toggle }: Props) => {
   const { t } = useTranslation();
   const { showErrorNotification } = useNotificationContext();
   const dispatch = useDispatch<AppDispatch>();
@@ -34,7 +34,7 @@ export const PriceSettingsView = ({ toggle }: Props) => {
 
   return (
     <Flex vertical gap={16}>
-      <Descriptions bordered column={1} items={items} />
+      <Descriptions bordered column={1} size={'default'} items={items} />
       <Space>
         <Button className="mt-5" type="primary" onClick={toggle}>
           {t('EDIT')}

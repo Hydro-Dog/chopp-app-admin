@@ -24,6 +24,7 @@ import {
 import { MainMenu, ROUTES } from '@shared/index';
 import { GuardedRoute } from './utils/guarded-route';
 import { InterceptorsWrapper } from './wrappers/interceptors-wrapper';
+import { BasicInfoSettingsPage } from '@pages/settings/pages/basic-info-settings';
 
 export const router = createBrowserRouter([
   {
@@ -85,9 +86,13 @@ export const router = createBrowserRouter([
             element: <PricingSettingsPage />,
           },
           {
-            path: ROUTES.PAYMENT_SETTINGS,
-            element: <PaymentSettingsPage />,
+            path: ROUTES.BASIC_INFO_SETTINGS,
+            element: <BasicInfoSettingsPage />,
           },
+          // {
+          //   path: ROUTES.PAYMENT_SETTINGS,
+          //   element: <PaymentSettingsPage />,
+          // },
           {
             path: ROUTES.TIME_SETTINGS,
             element: <WorkingHoursSettings />,

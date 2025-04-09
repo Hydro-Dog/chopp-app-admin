@@ -1,5 +1,7 @@
 {
   "translateJ": "translateJ",
+  "YES": "Да",
+  "NO": "Нет",
   "PROFILE": "Профиль",
   "MONITORING": "Мониторинг",
   "EXIT": "Выход",
@@ -148,7 +150,9 @@
     "TURN_APP_ON_TITLE": "Включить приложение",
     "TURN_APP_ON_DESCRIPTION": "Сейчас ваше приложение выключено и не принимает заказы",
     "TURN_APP_OFF_TITLE": "Выключить приложение",
+    "TURN_APP_OFF_TITLE_FULL": "Вы уверены, что хотите выключить ваш сервис",
     "TURN_APP_OFF_DESCRIPTION": "Пользователи не смогут делать заказы",
+    "TURN_APP_OFF_DESCRIPTION_FULL": "Пользователи не смогут делать заказы, пока вы снова его не включите.",
     "TIME_SETTINGS": {
       "TITLE": "Время работы",
       "DATA": "Настройки времени работы сервиса",

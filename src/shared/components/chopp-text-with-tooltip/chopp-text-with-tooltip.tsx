@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Space, Tooltip, Typography } from 'antd';
 import { useThemeToken } from '@shared/index';
+import { Space, Tooltip, Typography } from 'antd';
+import { TooltipPlacement } from 'antd/es/tooltip';
 
 const { Paragraph } = Typography;
 
@@ -13,6 +14,7 @@ type Props = {
   icon?: ReactNode;
   copyable?: boolean;
   showInfoIcon?: boolean;
+  placement?: TooltipPlacement;
 };
 
 export const ChoppTextWithTooltip = ({
@@ -23,13 +25,14 @@ export const ChoppTextWithTooltip = ({
   icon,
   copyable,
   showInfoIcon = true,
+  placement,
 }: Props) => {
   const themeToken = useThemeToken();
 
   return (
     <Space size={space} className={className}>
       {tooltipText && (
-        <Tooltip title={tooltipText} className='flex items-center gap-1'>
+        <Tooltip placement={placement} title={tooltipText} className="flex items-center gap-1">
           <Paragraph ellipsis className="!m-0" copyable={copyable}>
             {title}
           </Paragraph>

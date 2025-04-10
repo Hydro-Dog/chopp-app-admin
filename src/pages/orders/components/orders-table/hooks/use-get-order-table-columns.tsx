@@ -94,6 +94,7 @@ export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: A
       key: 'actions',
       render: (_: any, record: Order) => (
         <Dropdown
+          className="cursor-pointer"
           menu={{
             items: actionItems,
             onClick: (info) => onActionClick({ key: info.key as ACTION_MENU_ITEMS, record }),

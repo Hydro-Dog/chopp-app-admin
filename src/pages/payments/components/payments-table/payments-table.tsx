@@ -2,11 +2,19 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePaymentsContext } from '@pages/payments/context';
-import { ChoppInfoModal, useInfiniteScroll, FETCH_STATUS, Payment } from '@shared/index';
+import {
+  ChoppInfoModal,
+  useInfiniteScroll,
+  FETCH_STATUS,
+  Payment,
+  useSuperDispatch,
+} from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
-import { Table, Spin, Modal } from 'antd';
+import { Table, Spin, Modal, Flex, Alert } from 'antd';
 import dayjs from 'dayjs';
+import { useBoolean } from 'usehooks-ts';
+import { PaymentDetailsModal } from './components/payment-details-modal';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
 import { ActionValue } from './types';
@@ -16,8 +24,12 @@ export const PaymentsTable = () => {
   const { payments, fetchPaymentsStatus } = useSelector((state: RootState) => state.payments || {});
   const { t } = useTranslation();
   const { startDate, endDate, status, list, payment_id, setList } = usePaymentsContext();
-  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState<Payment>();
+  const {
+    value: isInfoModalOpened,
+    setTrue: openInfoModal,
+    setFalse: closeInfoModal,
+  } = useBoolean();
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
   useEffect(() => {
@@ -47,7 +59,7 @@ export const PaymentsTable = () => {
 
   const handleInfoClick = (record: Payment) => {
     setSelectedPayment(record);
-    setIsInfoModalOpen(true);
+    openInfoModal();
   };
 
   const handleRefundClick = (record: Payment) => {
@@ -55,11 +67,36 @@ export const PaymentsTable = () => {
     setIsRefundModalOpen(true);
   };
 
+  const { superDispatch } = useSuperDispatch<any, any>();
+
   const handleRefundConfirm = () => {
     if (!selectedPayment) return;
-    dispatch(refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }));
+    superDispatch({
+      action: refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }),
+      thenHandler: (response) => {
+        console.log('response?.id: ', response)
+        if (!response?.id) return;
+
+        // Обновляем вручную list через setList
+        setList((prev) =>
+          prev.map((payment) =>
+            payment.id === response.payment_id
+              ? {
+                  ...payment,
+                  refundable: false,
+                  refunded_amount: {
+                    value: response.amount.value,
+                    currency: response.amount.currency,
+                  },
+                }
+              : payment,
+          ),
+        );
+      },
+    });
+
     setIsRefundModalOpen(false);
-    setSelectedPayment(null);
+    setSelectedPayment(undefined);
   };
 
   const handleLoadMore = () => {
@@ -87,7 +124,7 @@ export const PaymentsTable = () => {
   const map: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
     [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
       handleInfoClick(record);
-      setIsInfoModalOpen(true);
+      openInfoModal();
     },
     [ACTION_MENU_ITEMS.REFUND]: ({ record }) => {
       handleRefundClick(record);
@@ -108,25 +145,33 @@ export const PaymentsTable = () => {
 
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}
 
-      <ChoppInfoModal
-        open={isInfoModalOpen}
-        onOk={() => setIsInfoModalOpen(false)}
-        value={selectedPayment || undefined}
+      <PaymentDetailsModal
+        open={isInfoModalOpened}
+        onOk={closeInfoModal}
+        payment={selectedPayment}
       />
 
       <Modal
         open={isRefundModalOpen}
         title={t('CONFIRM_REFUND')}
         onOk={handleRefundConfirm}
-        onCancel={() => setIsRefundModalOpen(false)}
-        width={400}>
+        onCancel={() => setIsRefundModalOpen(false)}>
         {selectedPayment && (
-          <div>
-            {t('REFUND_AMOUNT')}:
-            <strong>
-              {selectedPayment.amount.value} {selectedPayment.amount.currency}
-            </strong>
-          </div>
+          <Flex gap={8} vertical>
+            <Flex gap={8}>
+              {t('REFUND_AMOUNT')}:
+              <strong>
+                {selectedPayment.amount.value} {selectedPayment.amount.currency}
+              </strong>
+            </Flex>
+            <Alert
+              message={t('WARNING')}
+              description={t('REFUND_WARNING')}
+              type="warning"
+              showIcon
+              closable
+            />
+          </Flex>
         )}
       </Modal>
     </div>

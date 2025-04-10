@@ -59,8 +59,6 @@ export const OrderDetailsModal = ({ open, onOk, order }: Props) => {
       open={open}
       onOk={onOk}
       value={filteredKeys}
-      getArrayItemLabel={(key, index) => t(`ARRAY_ITEM.${key}`, { index: index + 1 })}
-
     />
   );
 };

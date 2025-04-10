@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { DownOutlined } from '@ant-design/icons';
-import { PAYMENT_STATUS_MAP, PAYMENT_STATUS, ChoppPaymentStatus } from '@shared/index';
+import { PAYMENT_STATUS, ChoppPaymentStatus, ChoppTextWithTooltip } from '@shared/index';
 import { Payment } from '@shared/types/payment';
-import { Tooltip, Tag, Dropdown, Space } from 'antd';
+import { Checkbox, Dropdown, Space, Typography } from 'antd';
 import { useGetActionItems } from './use-get-action-items';
 import { ACTION_MENU_ITEMS } from '../enums';
 import { ActionValue } from '../types';
+
+const { Text } = Typography;
 
 type Args = {
   onActionClick: (info: ActionValue) => void;
@@ -17,20 +19,24 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
 
   const columns = [
     {
-      title: 'ID',
+      title: (
+        <ChoppTextWithTooltip
+          title={t('TRANSACTION_ID')}
+          tooltipText={t('TRANSACTION_ID_TOOLTIP')}
+        />
+      ),
       dataIndex: 'id',
+      className: 'cursor-pointer',
       key: 'id',
+      render: (text: string) => (
+        <ChoppTextWithTooltip showInfoIcon={false} copyable title={text} tooltipText={text} />
+      ),
     },
     {
       title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'status',
       key: 'status',
-      render: (status: PAYMENT_STATUS) => (
-        <ChoppPaymentStatus status={status} />
-        // <Tooltip title={t(PAYMENT_STATUS_MAP[status].tooltip)}>
-        //   <Tag color={PAYMENT_STATUS_MAP[status].color}>{t(PAYMENT_STATUS_MAP[status].title)}</Tag>
-        // </Tooltip>
-      ),
+      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
     },
     {
       title: t('AMOUNT'),
@@ -43,6 +49,25 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
               currency: amount.currency || 'RUB',
             })
           : '—',
+    },
+    {
+      title: (
+        <ChoppTextWithTooltip
+          title={t('REFUNDED_AMOUNT')}
+          tooltipText={t('REFUNDED_AMOUNT_VERBOSE')}
+        />
+      ),
+      dataIndex: 'refunded_amount',
+      key: 'refunded_amount',
+      render: (refunded_amount: { value: string; currency: string }) => (
+        <Space>
+          {refunded_amount?.value &&
+            Number(refunded_amount?.value)?.toLocaleString('ru-RU', {
+              style: 'currency',
+              currency: refunded_amount?.currency || 'RUB',
+            })}
+        </Space>
+      ),
     },
     {
       title: t('ACTIONS'),

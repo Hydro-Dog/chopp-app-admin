@@ -1,5 +1,7 @@
 {
   "translateJ": "translateJ",
+  "YES": "Да",
+  "NO": "Нет",
   "PROFILE": "Профиль",
   "MONITORING": "Мониторинг",
   "EXIT": "Выход",
@@ -35,6 +37,7 @@
   "MIC": "Микрофон",
   "START_NOW": "Запустить сейчас",
   "SCHEDULE_START": "Запланировать запуск",
+  "TURN_ON": "Включить",
   "TURN_OFF": "Выключить",
   "ERROR": "Ошибка",
   "ERRORS": {
@@ -100,7 +103,7 @@
   "NEW_STATUS": "Новый сатус",
   "PICK_STATUS": "Выбрать статус",
   "ORDERS_PAGE": {
-    "ENTER_ID": "Введите ID заказа",
+    "ENTER_ID": "ID заказа",
     "END_DATE": "До",
     "START_DATE": "От",
     "CHOSEN_STATUS": "Статусы: ",
@@ -144,15 +147,28 @@
       "LIGHT": "Светлая",
       "SYSTEM": "Системная"
     },
-    "TURN_OFF_TITLE": "Выключить приложение",
-    "TURN_OFF_DESCRIPTION": "Пользователи не смогут делать заказы",
+    "TURN_APP_ON_TITLE": "Включить приложение",
+    "TURN_APP_ON_DESCRIPTION": "Сейчас ваше приложение выключено и не принимает заказы",
+    "TURN_APP_OFF_TITLE": "Выключить приложение",
+    "TURN_APP_OFF_TITLE_FULL": "Вы уверены, что хотите выключить ваш сервис",
+    "TURN_APP_OFF_DESCRIPTION": "Пользователи не смогут делать заказы",
+    "TURN_APP_OFF_DESCRIPTION_FULL": "Пользователи не смогут делать заказы, пока вы снова его не включите.",
     "TIME_SETTINGS": {
       "TITLE": "Время работы",
       "DATA": "Настройки времени работы сервиса",
       "TOOLTIP": "Вы можете указать время работы вашего сервиса. В это время пользователи смогут делать заказы.",
       "INFO": "Время работы сервиса "
+    },
+    "BASIC_INFO_SETTINGS": {
+      "TITLE": "Основная информация",
+      "DATA": "Описания магазина и публичная оферта",
+      "PUBLIC_OFFER_TITLE": "Публичаня оферта",
+      "PUBLIC_OFFER_TOOLTIP": "Этот текст будет указан на странице \"Публичаня оферта\"",
+      "ABOUT_US_TITLE": "О нас",
+      "ABOUT_US_TOOLTIP": "Этот текст будет указан на странице \"О нас\""
     }
   },
+  "BASIC_INFO_SETTINGS": "Основная информация",
   "PRICING_PAGE": {
     "AVERAGE_DELIVERY_COST": "Средняя стоимость доставки ",
     "AVERAGE_DELIVERY_COST_TOOLTIP": "При оформлении заказа клиент увидит эту сумму в поле 'Средняя стоимость доставки'. Если сумма не указана, пользователь не будет проинформирован о стоимости доставки.",
@@ -229,5 +245,65 @@
   "TOTAL_PAGINATION_ITEMS": "Товаров",
   "TOTAL_PAGINATION_ITEMS_ORDER": "Заказов",
   "TOTAL_PAGES": "Страниц",
-  "REVERT_MOVE_TO_TRASH": "Восстановить"
+  "REVERT_MOVE_TO_TRASH": "Восстановить",
+  "AMOUNT_VALUE": "Сумма (значение)",
+
+  "AUTH_DETAILS": "Авторизация",
+  "AUTH_CODE": "Код авторизации",
+  "RRN": "RRN",
+  "3D_SECURE": "3D Secure",
+  "3DS_APPLIED": "3DS применён",
+  "3DS_CHALLENGE_COMPLETED": "3DS-челлендж пройден",
+  "3DS_METHOD_COMPLETED": "3DS-метод завершён",
+  "DESCRIPTION": "Описание",
+
+  "INCOME_AMOUNT": "Сумма к зачислению",
+  "INCOME_CURRENCY": "Валюта зачисления",
+  "INCOME_VALUE": "Сумма зачисления",
+  "METADATA": "Метаданные",
+  "ORDER_ID": "ID заказа",
+
+  "PAID": "Оплачено",
+  "STATUS": "Статус",
+  "TEST_PAYMENT": "Тестовый платёж",
+
+  "PAYMENT_METHOD": "Способ оплаты",
+  "PAYMENT_METHOD_ID": "ID способа оплаты",
+  "PAYMENT_METHOD_TYPE": "Тип способа оплаты",
+  "PAYMENT_METHOD_SAVED": "Сохранён",
+  "PAYMENT_METHOD_STATUS": "Статус метода оплаты",
+  "PAYMENT_METHOD_TITLE": "Название способа оплаты",
+
+  "CARD": "Карта",
+  "CARD_TYPE": "Тип карты",
+  "EXPIRY_MONTH": "Месяц истечения",
+  "EXPIRY_YEAR": "Год истечения",
+  "CARD_FIRST6": "Первые 6 цифр",
+  "CARD_LAST4": "Последние 4 цифры",
+
+  "WALLET": "Кошелёк",
+  "WALLET_TYPE": "Тип кошелька",
+  "WALLET_PROVIDER": "Провайдер кошелька",
+
+  "RECEIPT_REGISTRATION": "Регистрация чека",
+
+  "RECIPIENT": "Получатель",
+  "RECIPIENT_ACCOUNT_ID": "ID аккаунта получателя",
+  "RECIPIENT_GATEWAY_ID": "ID шлюза получателя",
+
+  "REFUNDABLE": "Можно вернуть",
+
+  "REFUNDED_AMOUNT": "Возвращённая сумма",
+  "REFUNDED_AMOUNT_VERBOSE": "сумма. возвращенная покупателю",
+  "REFUNDED_CURRENCY": "Валюта возврата",
+  "REFUNDED_VALUE": "Сумма возврата",
+  "CAPTURED_AT": "Дата зачисления",
+  "CURRENCY": "Валюта",
+  "TYPE": "Тип",
+  "TITLE": "Заголовок",
+  "SAVED": "Сохранено",
+  "CONFIRM_REFUND": "Вы уверены что хотите вернуть деньги покупателю?",
+  "REFUND_WARNING": "Вы собираетесь вернуть деньги покупателю. Сумма будет списана с вашего личевого счета Юкассы и бла-бла...",
+  "WARNING": "Внимание"
+  
 }

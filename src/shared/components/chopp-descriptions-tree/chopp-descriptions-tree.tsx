@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Tree, Typography, Tooltip } from 'antd';
+import { Space, Tree, Typography, Tooltip, Checkbox } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { useTranslation } from 'react-i18next';
 import { ChoppTextWithTooltip } from '../chopp-text-with-tooltip';
@@ -52,17 +52,20 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({
             <Text strong className="truncate max-w-[150px]">
               {t(keyTranslations?.[key]) || key}
             </Text>
-            {!children && (
-              // <Tooltip title={String(val)}>
-              //   <Text className="truncate max-w-[200px] block">{String(val)}</Text>
-              // </Tooltip>
-              <ChoppTextWithTooltip
-                title={String(val)}
-                tooltipText={String(val)}
-                copyable
-                showInfoIcon={false}
-              />
-            )}
+            {!children &&
+              (typeof val === 'boolean' ? (
+                <Tooltip title={val ? t('YES') : t('NO')}>
+                  <Checkbox checked={val} />
+                </Tooltip>
+              ) : (
+                <ChoppTextWithTooltip
+                  placement="bottom"
+                  title={String(val)}
+                  tooltipText={String(val)}
+                  copyable
+                  showInfoIcon={false}
+                />
+              ))}
           </Space>
         ),
         key: nodeKey,

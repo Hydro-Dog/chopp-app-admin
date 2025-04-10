@@ -13,15 +13,15 @@ import {
   SlidersOutlined,
 } from '@ant-design/icons';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { ROUTES } from '@shared/enum';
+import { ROUTES, STORAGE_KEYS } from '@shared/enum';
 import { useNotificationContext, useTheme, useThemeSwitcher } from '@shared/index';
 import { FETCH_STATUS } from '@shared/index';
-import { logoutUser, setLogoutStatus } from '@store/slices';
+import { logout, setLogoutStatus } from '@store/slices';
 import { AppDispatch, RootState } from '@store/store';
 import { Flex, Layout, Menu } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
-import { useGetMenuItemByUrl } from './hooks/index';
 import Link from 'antd/es/typography/Link';
+import { useGetMenuItemByUrl } from './hooks/index';
 
 const { Sider } = Layout;
 
@@ -39,7 +39,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   // };
 
   const onLogout = () => {
-    dispatch(logoutUser());
+    dispatch(logout({ refreshToken: String(localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)) }));
   };
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.SETTINGS,
       icon: selectedMenuKeys.includes(ROUTES.SETTINGS) ? <SlidersFilled /> : <SlidersOutlined />,
-      label: <Link href={ROUTES.SETTINGS}>{t('SETTINGS')}</Link>,
+      label: <Link href={`/${ROUTES.SETTINGS}`}>{t('SETTINGS')}</Link>,
       // onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
     {
@@ -104,7 +104,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     },
     {
       key: 'logout',
-      icon: <LogoutRoundedIcon rotate={180} />,
+      icon: <LogoutRoundedIcon />,
       label: t('EXIT'),
       onClick: onLogout,
     },

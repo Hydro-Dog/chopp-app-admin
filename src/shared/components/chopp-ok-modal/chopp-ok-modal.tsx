@@ -28,8 +28,6 @@ export const ChoppOkModal = ({
   confirmLoading,
   ...props
 }: PropsWithChildren<Props>) => {
-  console.log('onClose: ', onClose)
-  console.log('onOk: ', onOk)
   return (
     <Modal
       zIndex={1000}
@@ -58,7 +56,9 @@ export const ChoppOkModal = ({
         </>
       )}
       {...props}>
+        <div className='!max-h-[70vh] overflow-scroll'>
       {children}
+        </div>
     </Modal>
   );
 };

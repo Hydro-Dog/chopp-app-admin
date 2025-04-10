@@ -22,7 +22,7 @@ export const fetchClientAppConfig = createAsyncThunk<
 
 export const postClientAppConfig = createAsyncThunk<
   ClientAppConfig,
-  ClientAppConfig,
+  Partial<ClientAppConfig>,
   { rejectValue: ErrorResponse }
 >('clientAppConfig/postClientAppConfig', async (data, thunkAPI) => {
   try {

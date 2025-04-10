@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { ChoppTextWithTooltip } from '@shared/components';
 import { RootState } from '@store/store';
-import { Alert, Checkbox, DescriptionsProps, Space, Tooltip } from 'antd';
+import { Alert, Checkbox, DescriptionsProps } from 'antd';
 
 export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
   const { t } = useTranslation();
@@ -13,91 +13,40 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
   return [
     {
       key: 'averageDeliveryCost',
+      labelStyle: {width: 200},
       label: (
-        <Space size={4}>
-          {t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}
-          <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
+        <ChoppTextWithTooltip
+          title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}
+          tooltipText={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}
+        />
       ),
-      children: pricingData?.averageDeliveryCost || '-',
+      children: `${pricingData?.averageDeliveryCost}₽` || '-',
     },
-    {
-      key: 'averageDeliveryCost',
-      children: <Alert type="info" message={t('PRICING_PAGE.PRICE_HINT')} />,
-    },
+    // {
+    //   key: 'averageDeliveryCost',
+    //   children: <Alert type="info" message={t('PRICING_PAGE.PRICE_HINT')} />,
+    // },
     {
       key: 'freeDeliveryIncluded',
+      labelStyle: {width: 200},
       label: (
-        <Space size={4}>
-          {t('PRICING_PAGE.FREE_SHIPPING')}
-          <Tooltip title={t('PRICING_PAGE.PRICE_HINT')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
+        <ChoppTextWithTooltip
+          title={t('PRICING_PAGE.FREE_SHIPPING')}
+          tooltipText={t('PRICING_PAGE.PRICE_HINT')}
+        />
       ),
       children: <Checkbox disabled checked={pricingData?.freeDeliveryIncluded} />,
     },
     {
       key: 'freeDeliveryThreshold',
+      labelStyle: {width: 200},
       label: (
-        <Space size={4}>
-          {t('PRICE')}
-          <Tooltip title={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
+        <ChoppTextWithTooltip
+          title={t('PRICE')}
+          tooltipText={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}
+        />
       ),
-      children: pricingData?.freeDeliveryThreshold || '-',
-    },
-    {
-      key: 'deliveryAndPaymentsVerbose',
-      label: (
-        <Space size={4}>
-          {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
-          <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      children: pricingData?.deliveryAndPaymentsVerbose ? (
-        <div className="line-clamp-4">{pricingData?.deliveryAndPaymentsVerbose}</div>
-      ) : (
-        '-'
-      ),
-    },
-    {
-      key: 'deliveryAndPaymentsVerbose',
-      label: (
-        <Space size={4}>
-          {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
-          <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      children: pricingData?.publicOfferVerbose ? (
-        <div className="line-clamp-4">{pricingData?.publicOfferVerbose}</div>
-      ) : (
-        '-'
-      ),
-    },
-    {
-      key: 'description',
-      label: (
-        <Space size={4}>
-          {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
-          <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
-            <InfoCircleOutlined />
-          </Tooltip>
-        </Space>
-      ),
-      children: pricingData?.publicOfferVerbose ? (
-        <div className="line-clamp-4">{pricingData?.description}</div>
-      ) : (
-        '-'
-      ),
+      children: `${pricingData?.freeDeliveryThreshold}₽` || '-',
     },
   ];
 };

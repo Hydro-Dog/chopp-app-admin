@@ -13,6 +13,7 @@ import { InputNumber, Checkbox, Tooltip, Alert, Form, Space, Button, Input } fro
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { z } from 'zod';
 import { useCreatePricingFormSchema } from './hooks/use-create-pricing-form-schema';
+import { ChoppTextWithTooltip } from '@shared/components';
 
 const { Item } = Form;
 
@@ -93,12 +94,10 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
         help={errors.averageDeliveryCost?.message}
         validateStatus={errors.averageDeliveryCost && 'error'}
         label={
-          <Space size={4}>
-            {t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}
-            <Tooltip title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
+          <ChoppTextWithTooltip
+            title={t('PRICING_PAGE.AVERAGE_DELIVERY_COST')}
+            tooltipText={t('PRICING_PAGE.AVERAGE_DELIVERY_COST_TOOLTIP')}
+          />
         }>
         <Controller
           name="averageDeliveryCost"
@@ -130,12 +129,10 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
       <Item
         className="!m-0"
         label={
-          <Space size={4}>
-            {t('PRICE')}
-            <Tooltip title={t('PRICING_PAGE.PRICE_HINT')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
+          <ChoppTextWithTooltip
+            title={t('PRICE')}
+            tooltipText={t('PRICING_PAGE.DELIVERY_PRICE_TOOLTIP')}
+          />
         }
         help={freeDeliveryIncluded && errors.freeDeliveryThreshold?.message}
         validateStatus={freeDeliveryIncluded && errors.freeDeliveryThreshold ? 'error' : ''}>
@@ -151,81 +148,6 @@ export const PriceSettingsEditForm = ({ toggle }: Props) => {
               min={0}
               placeholder={t('PRICING_PAGE.ENTER_PRICE')}
               disabled={!freeDeliveryIncluded}
-            />
-          )}
-        />
-      </Item>
-
-      <Item
-        className="!m-0"
-        help={errors.deliveryAndPaymentsVerbose?.message}
-        validateStatus={errors.deliveryAndPaymentsVerbose && 'error'}
-        label={
-          <Space size={4}>
-            {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
-            <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
-        }>
-        <Controller
-          name="deliveryAndPaymentsVerbose"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              {...field}
-              rows={4}
-              placeholder={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}
-            />
-          )}
-        />
-      </Item>
-
-      <Item
-        className="!m-0"
-        help={errors.publicOfferVerbose?.message}
-        validateStatus={errors.publicOfferVerbose && 'error'}
-        label={
-          <Space size={4}>
-            {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
-            <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
-        }>
-        <Controller
-          name="publicOfferVerbose"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              {...field}
-              rows={4}
-              placeholder={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}
-            />
-          )}
-        />
-      </Item>
-
-      <Item
-        className="!m-0"
-        help={errors.publicOfferVerbose?.message}
-        validateStatus={errors.publicOfferVerbose && 'error'}
-        label={
-          <Space size={4}>
-            {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
-            <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
-        }>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              {...field}
-              rows={4}
-              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
             />
           )}
         />

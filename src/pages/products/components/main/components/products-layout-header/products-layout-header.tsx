@@ -6,7 +6,7 @@ import { useSuperDispatch } from '@shared/hooks';
 import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/slices';
 import { Flex, Tooltip, Button, Input } from 'antd';
-import { useBoolean } from 'usehooks-ts';
+import { useBoolean, useDebounceCallback } from 'usehooks-ts';
 import { CreateEditProductModal } from '../create-edit-product-modal';
 import { HeaderTitle } from './components';
 
@@ -36,14 +36,11 @@ export const ProductsLayoutHeader = () => {
   } = useProductsContext();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
 
-  // Локальное состояние для ввода поиска
-  const [searchValue, setSearchValue] = useState(search);
   const fetch = (val: string) => {
     if (!categoryId) {
       return console.error(`ERROR categoryId: ${categoryId}`);
     }
     setSearch(val);
-    setSearchValue(val);
     superDispatch({
       action: fetchProducts({
         categoryId,
@@ -62,9 +59,9 @@ export const ProductsLayoutHeader = () => {
     });
   };
 
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    fetch(e.target.value);
-  };
+  const debounce = useDebounceCallback((value) => {
+    fetch(value);
+  }, 500);
 
   return (
     <>
@@ -82,9 +79,9 @@ export const ProductsLayoutHeader = () => {
 
         <Search
           className="px-3"
-          value={searchValue}
+          defaultValue={search}
           placeholder={t('SEARCH')}
-          onChange={onSearchChange}
+          onChange={(e) => debounce(e.target.value)}
           allowClear
         />
       </Flex>

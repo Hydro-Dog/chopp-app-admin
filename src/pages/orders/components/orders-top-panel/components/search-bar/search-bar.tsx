@@ -6,7 +6,7 @@ import { useDebounceCallback } from 'usehooks-ts';
 const { Search } = Input;
 
 export const SearchBar = () => {
-  const { setSearch } = useOrdersContext();
+  const { setSearch, search } = useOrdersContext();
   const filters = useChangeTableOrders();
   const { t } = useTranslation();
 
@@ -16,6 +16,10 @@ export const SearchBar = () => {
   }, 500);
 
   return (
-    <Search onChange={(e) => debounce(e.target.value)} placeholder={t('ORDERS_PAGE.ENTER_ID')} />
+    <Search
+      defaultValue={search}
+      onChange={(e) => debounce(e.target.value)}
+      placeholder={t('ORDERS_PAGE.ENTER_ID')}
+    />
   );
 };

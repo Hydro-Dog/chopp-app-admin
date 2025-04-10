@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ORDER_STATUS } from '@shared/enum';
-import { ChoppInfoModal, filterObjectByKeys } from '@shared/index';
 import { Order } from '@shared/types';
 import { Table } from 'antd';
 import { useBoolean } from 'usehooks-ts';
@@ -8,7 +7,6 @@ import { ChangeOrderStatusModal, OrderDetailsModal } from './components';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetOrderTableColumns } from './hooks';
 import { ActionValue } from './types';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 type Props = {
   data: Order[];

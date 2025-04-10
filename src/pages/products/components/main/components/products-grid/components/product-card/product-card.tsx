@@ -4,7 +4,7 @@ import { useSuperDispatch } from '@shared/hooks';
 import { PRODUCT_GRID_VIEW_MODE, PRODUCT_STATE, updateListItemById } from '@shared/index';
 import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts, updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
-import { Typography } from 'antd';
+import { Tooltip, Typography } from 'antd';
 import { Card } from 'antd';
 
 import { useGetCardActions } from '../../hooks';
@@ -109,9 +109,13 @@ export const ProductCard = ({
           />
         </div>
       }
-      title={<Text>{item.title}</Text>}
+      title={
+        <Tooltip title={item.title}>
+          <Text>{item.title}</Text>
+        </Tooltip>
+      }
       actions={getActions(item)}>
-      <Meta description={<div className="line-clamp-2">{item.description}</div>} />
+      <Meta description={<div className="line-clamp-2 h-10">{item.description}</div>} />
     </Card>
   );
 };

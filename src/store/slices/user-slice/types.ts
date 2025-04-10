@@ -7,3 +7,7 @@ export type UserAuthorization = {
   accessToken: string;
   refreshToken: string;
 };
+
+export type UserLogout = {
+  refreshToken: string,
+};

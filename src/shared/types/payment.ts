@@ -56,6 +56,7 @@ export type Payment = {
   payment_method: PaymentMethod;
   recipient: PaymentRecipient;
   refundable: boolean;
+  refunded_amount: { value: string; currency: string };
   test: boolean;
   income_amount?: PaymentAmount;
 };

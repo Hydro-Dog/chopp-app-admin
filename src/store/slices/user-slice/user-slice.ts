@@ -5,7 +5,6 @@ import {
   updateCurrentUser,
   fetchCurrentUser,
   loginUser,
-  logout,
   registerUser,
   fetchUsers,
   fetchUser,
@@ -23,8 +22,6 @@ export type UserState = {
   updateCurrentUserError: ErrorResponse | null;
   registerUserStatus: FETCH_STATUS;
   registerUserError: ErrorResponse | null;
-  logoutStatus: FETCH_STATUS;
-  logoutError: ErrorResponse | null;
   loginStatus: FETCH_STATUS;
   loginError: ErrorResponse | null;
   users: PaginationResponse<User> | null;
@@ -43,8 +40,6 @@ const initialState: UserState = {
   updateCurrentUserError: null,
   registerUserStatus: FETCH_STATUS.IDLE,
   registerUserError: null,
-  logoutStatus: FETCH_STATUS.IDLE,
-  logoutError: null,
   loginStatus: FETCH_STATUS.IDLE,
   loginError: null,
   users: {
@@ -61,14 +56,7 @@ const initialState: UserState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    setLoginStatus: (state, action: PayloadAction<FETCH_STATUS>) => {
-      state.loginStatus = action.payload;
-    },
-    setLogoutStatus: (state, action: PayloadAction<FETCH_STATUS>) => {
-      state.logoutStatus = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCurrentUser.pending, (state) => {
@@ -135,19 +123,6 @@ export const userSlice = createSlice({
         state.loginStatus = FETCH_STATUS.ERROR;
         state.loginError = action.payload ?? { message: 'Failed to login user' };
       })
-      .addCase(logout.pending, (state) => {
-        state.logoutStatus = FETCH_STATUS.LOADING;
-      })
-      .addCase(logout.fulfilled, (state) => {
-        state.logoutStatus = FETCH_STATUS.SUCCESS;
-        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        window.location.reload();
-      })
-      .addCase(logout.rejected, (state, action) => {
-        state.logoutStatus = FETCH_STATUS.ERROR;
-        state.logoutError = action.payload ?? { message: 'Failed to logout user' };
-      })
       .addCase(fetchUsers.pending, (state) => {
         state.fetchUsersStatus = FETCH_STATUS.LOADING;
       })
@@ -168,4 +143,3 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLoginStatus, setLogoutStatus } = userSlice.actions;

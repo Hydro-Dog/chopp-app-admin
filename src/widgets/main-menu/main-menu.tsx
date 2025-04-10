@@ -1,6 +1,5 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   BankFilled,
@@ -13,11 +12,9 @@ import {
   SlidersOutlined,
 } from '@ant-design/icons';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { ROUTES, STORAGE_KEYS } from '@shared/enum';
-import { useNotificationContext, useTheme, useThemeSwitcher } from '@shared/index';
-import { FETCH_STATUS } from '@shared/index';
-import { logout, setLogoutStatus } from '@store/slices';
-import { AppDispatch, RootState } from '@store/store';
+import { ROUTES } from '@shared/enum';
+import { useTheme, useThemeSwitcher } from '@shared/index';
+import { removeAuthTokensFromStorage } from '@shared/utils/remove-auth-tokens-from-storage';
 import { Flex, Layout, Menu } from 'antd';
 import { SiderTheme } from 'antd/es/layout/Sider';
 import Link from 'antd/es/typography/Link';
@@ -29,27 +26,16 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
   const { theme } = useTheme();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const { logoutStatus } = useSelector((state: RootState) => state.user);
   const { selectedMenuKeys } = useGetMenuItemByUrl();
-  const { showNotification } = useNotificationContext();
 
   // const onMenuItemClick = (path: string) => {
   //   navigate(path);
   // };
 
   const onLogout = () => {
-    dispatch(logout({ refreshToken: String(localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN)) }));
+    removeAuthTokensFromStorage();
+    navigate(ROUTES.SIGN_IN);
   };
-
-  useEffect(() => {
-    if (logoutStatus === FETCH_STATUS.ERROR) {
-      showNotification({ type: 'error', message: 'Ошибка', description: 'Неудачный логаут' });
-    } else if (logoutStatus === FETCH_STATUS.SUCCESS) {
-      navigate(ROUTES.SIGN_IN);
-      dispatch(setLogoutStatus(FETCH_STATUS.IDLE));
-    }
-  }, [dispatch, logoutStatus, navigate, showNotification]);
 
   const menuItems = [
     {

@@ -8,7 +8,7 @@ import {
 } from '@shared/index';
 import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
-import { UserAuthorization, UserLoginDTO, UserLogout, UserRegisterDTO } from './types';
+import { UserAuthorization, UserLoginDTO, UserRegisterDTO } from './types';
 
 export const fetchCurrentUser = createAsyncThunk<User, void, { rejectValue: ErrorResponse }>(
   '/fetchCurrentUser',
@@ -96,22 +96,6 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-export const logout = createAsyncThunk<
-  { message: string },
-  UserLogout,
-  { rejectValue: ErrorResponse }
->('/logout', async (data, thunkAPI) => {
-  try {
-    const response = await axiosPrivate.post<{ message: string }>(`/auth/logout`, data);
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      return thunkAPI.rejectWithValue(error.response.data as ErrorResponse);
-    } else {
-      return thunkAPI.rejectWithValue({ message: 'An unknown error occurred' });
-    }
-  }
-});
 
 export const fetchUsers = createAsyncThunk<
   PaginationResponse<User>, // Тип возвращаемого значения

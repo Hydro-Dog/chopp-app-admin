@@ -12,7 +12,7 @@ export type FetchAnalyticsOrdersParams = {
   period?: string;
 };
 
-const url = '/api/analytics/orders';
+const url = 'http://localhost:6001/api/analytics/orders';
 
 export const fetchAnalyticsData = createAsyncThunk<
   GeneralAnalyticsData,
@@ -20,7 +20,9 @@ export const fetchAnalyticsData = createAsyncThunk<
   { rejectValue: ErrorResponse }
 >('analytics/fetchAnalyticsData', async (fetchData, thunkAPI) => {
   try {
-    const response = await axiosPrivate.get<GeneralAnalyticsData>(url);
+    const response = await axiosPrivate.get<GeneralAnalyticsData>(url, {
+      params: fetchData,
+    });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

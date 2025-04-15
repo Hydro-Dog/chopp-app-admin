@@ -96,12 +96,12 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
       label: <Link href={`/${ROUTES.SETTINGS}`}>{t('SETTINGS')}</Link>,
       // onClick: () => onMenuItemClick(ROUTES.SETTINGS),
     },
-    // {
-    //   key: ROUTES.ANALYTICS,
-    //   icon: <AnalyticsIcon />,
-    //   label: t('ANALYTICS'),
-    //   onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
-    // },
+    {
+      key: ROUTES.ANALYTICS,
+      icon: '',
+      label: <Link href={ROUTES.ANALYTICS}>{t('ANALYTICS')}</Link>,
+      // onClick: () => onMenuItemClick(ROUTES.ANALYTICS),
+    },
     {
       key: 'logout',
       icon: <LogoutRoundedIcon />,

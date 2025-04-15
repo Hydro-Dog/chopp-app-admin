@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Space, Tree, Typography, Tooltip, Checkbox } from 'antd';
-import type { DataNode } from 'antd/es/tree';
 import { useTranslation } from 'react-i18next';
+import { formatPhoneNumber } from '@shared/utils';
+import { Space, Tree, Typography, Tooltip, Checkbox } from 'antd';
 import { ChoppTextWithTooltip } from '../chopp-text-with-tooltip';
+import type { DataNode } from 'antd/es/tree';
 
 const { Text } = Typography;
 
@@ -60,7 +61,7 @@ export const ChoppDescriptionsTree: React.FC<Props> = ({
               ) : (
                 <ChoppTextWithTooltip
                   placement="bottom"
-                  title={String(val)}
+                  title={key === 'phoneNumber' ? formatPhoneNumber(String(val)) : String(val)}
                   tooltipText={String(val)}
                   copyable
                   showInfoIcon={false}

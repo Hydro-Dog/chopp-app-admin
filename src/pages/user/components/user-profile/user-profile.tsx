@@ -2,8 +2,14 @@ import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate, useParams } from 'react-router-dom';
-import { ROUTES, FETCH_STATUS } from '@shared/index';
-import { AppDispatch, clearChatCreatingHistory, createChatAction, fetchUser, RootState } from '@store/index';
+import { ROUTES, FETCH_STATUS, formatPhoneNumber } from '@shared/index';
+import {
+  AppDispatch,
+  clearChatCreatingHistory,
+  createChatAction,
+  fetchUser,
+  RootState,
+} from '@store/index';
 import { Button, Card, Typography } from 'antd';
 
 const { Title } = Typography;
@@ -14,7 +20,9 @@ export const UserProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { user, currentUser } = useSelector((state: RootState) => state.user);
-  const { createdChat, createChatStatus } = useSelector((state: RootState) => state.chatsRepository);
+  const { createdChat, createChatStatus } = useSelector(
+    (state: RootState) => state.chatsRepository,
+  );
 
   const chatId = createdChat?.id;
 
@@ -36,7 +44,7 @@ export const UserProfile = () => {
       dispatch(clearChatCreatingHistory());
       const path = {
         pathname: `/${ROUTES.CHATS}`,
-        search: createSearchParams({ id: `${chatId}` }).toString()
+        search: createSearchParams({ id: `${chatId}` }).toString(),
       };
       navigate(path);
     }
@@ -53,7 +61,7 @@ export const UserProfile = () => {
         {t('EMAIL')}: {user?.email}
       </p>
       <p>
-        {t('PHONE_NUMBER')}: {user?.phoneNumber}
+        {t('PHONE_NUMBER')}: {formatPhoneNumber(user?.phoneNumber)}
       </p>
 
       {currentUser?.id !== user?.id && (
@@ -61,8 +69,7 @@ export const UserProfile = () => {
           type="text"
           onClick={createChatWithUser}
           disabled={createChatStatus === FETCH_STATUS.LOADING}
-          loading={createChatStatus === FETCH_STATUS.LOADING}
-        >
+          loading={createChatStatus === FETCH_STATUS.LOADING}>
           Перейти в чат c пользователем
         </Button>
       )}

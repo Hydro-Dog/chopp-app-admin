@@ -9,7 +9,7 @@ import { useChatsContext } from './chats-context';
 import { ChatInput, Sidebar } from './components/index';
 import {
   useClearChatMessagesStoreOnLeave,
-  useFetchMessages,
+  
   useReadAllChatMessages,
 } from '../../shared/hooks/index';
 
@@ -27,7 +27,7 @@ export const ChatsPage = () => {
 
   //Очистка стора при уходе из компонента чата
   useClearChatMessagesStoreOnLeave();
-  useFetchMessages();
+  
   useReadAllChatMessages();
 
   useLayoutEffect(() => {

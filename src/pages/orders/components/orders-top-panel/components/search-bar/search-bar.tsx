@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useOrdersContext } from '@pages/orders/context';
-import { useChangeTableOrders } from '@pages/orders/hooks';
+import { useRefetchTableOrders } from '@pages/orders/hooks';
 import { Input } from 'antd';
 import { useDebounceCallback } from 'usehooks-ts';
 const { Search } = Input;
 
 export const SearchBar = () => {
   const { setSearch, search } = useOrdersContext();
-  const filters = useChangeTableOrders();
+  const filters = useRefetchTableOrders();
   const { t } = useTranslation();
 
   const debounce = useDebounceCallback((value) => {

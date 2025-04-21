@@ -2,13 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePaymentsContext } from '@pages/payments/context';
-import {
-  ChoppInfoModal,
-  useInfiniteScroll,
-  FETCH_STATUS,
-  Payment,
-  useSuperDispatch,
-} from '@shared/index';
+import { useInfiniteScroll, FETCH_STATUS, Payment, useSuperDispatch } from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Table, Spin, Modal, Flex, Alert } from 'antd';
@@ -74,7 +68,7 @@ export const PaymentsTable = () => {
     superDispatch({
       action: refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }),
       thenHandler: (response) => {
-        console.log('response?.id: ', response)
+        console.log('response?.id: ', response);
         if (!response?.id) return;
 
         // Обновляем вручную list через setList

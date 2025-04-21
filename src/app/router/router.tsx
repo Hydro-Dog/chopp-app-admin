@@ -18,13 +18,13 @@ import { ProductsProvider } from '@pages/products/context';
 import {
   PricingSettingsPage,
   VisualSettingsPage,
-  PaymentSettingsPage,
   WorkingHoursSettings,
 } from '@pages/settings/pages';
+import { BasicInfoSettingsPage } from '@pages/settings/pages/basic-info-settings';
 import { MainMenu, ROUTES } from '@shared/index';
+import { RootContainer } from '@widgets/index';
 import { GuardedRoute } from './utils/guarded-route';
 import { InterceptorsWrapper } from './wrappers/interceptors-wrapper';
-import { BasicInfoSettingsPage } from '@pages/settings/pages/basic-info-settings';
 
 export const router = createBrowserRouter([
   {
@@ -39,11 +39,22 @@ export const router = createBrowserRouter([
     path: ROUTES.ROOT,
     element: (
       <GuardedRoute>
-        <InterceptorsWrapper />
-        <MainMenu />
-        {/* <Navigate to={ROUTES.ORDERS} replace /> */}
+        <>
+          <InterceptorsWrapper />
+          <MainMenu />
+          <RootContainer />
+        </>
       </GuardedRoute>
     ),
+    // {
+    //   path: ROUTES.ROOT,
+    //   element: (
+    //     <GuardedRoute>
+    //       <InterceptorsWrapper />
+    //       <MainMenu />
+    //       {/* <Navigate to={ROUTES.ORDERS} replace /> */}
+    //     </GuardedRoute>
+    //   ),
     children: [
       // {
       //   path: '',

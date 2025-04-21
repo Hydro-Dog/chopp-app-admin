@@ -15,3 +15,4 @@ export * from './chopp-payment-status';
 export * from './chopp-custom-modal';
 export * from './chopp-load-more';
 export * from './chopp-phone-input';
+export * from './chopp-animated-icon';

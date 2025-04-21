@@ -4,7 +4,7 @@ import { axiosPrivate } from '@store/middleware';
 import axios from 'axios';
 
 export type FetchPaymentsParams = {
-  limit?: number;
+  // limit?: number;
   cursor?: string;
   ['created_at.gte']?: string;
   created_at_gt?: string;
@@ -12,7 +12,7 @@ export type FetchPaymentsParams = {
   created_at_lt?: string;
   payment_id?: string;
   status?: string;
-  pageNumber?: number;
+  // pageNumber?: number;
 };
 
 export const fetchPayments = createAsyncThunk<
@@ -21,11 +21,18 @@ export const fetchPayments = createAsyncThunk<
   { rejectValue: ErrorResponse } // Тип для ошибок
 >('payments/fetchPayments', async (fetchData, thunkAPI) => {
   try {
-    const { limit, cursor, created_at_gt, created_at_lt, payment_id, status, pageNumber } =
-      fetchData;
+    const {
+      // limit,
+      cursor,
+      created_at_gt,
+      created_at_lt,
+      payment_id,
+      status,
+      //  pageNumber
+    } = fetchData;
 
     const params: Record<string, string> = {};
-    if (limit) params.limit = String(limit);
+    // if (limit) params.limit = String(limit);
     if (cursor) params.cursor = cursor;
     if (fetchData['created_at.gte']) params['created_at.gte'] = fetchData['created_at.gte'];
     if (created_at_gt) params.created_at_gt = created_at_gt;
@@ -33,7 +40,7 @@ export const fetchPayments = createAsyncThunk<
     if (created_at_lt) params.created_at_lt = created_at_lt;
     if (payment_id) params.payment_id = payment_id;
     if (status) params.status = status;
-    if (pageNumber) params.pageNumber = String(pageNumber);
+    // if (pageNumber) params.pageNumber = String(pageNumber);
 
     const response = await axiosPrivate.get<any>('/payments', { params });
     return response.data;

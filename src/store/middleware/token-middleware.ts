@@ -75,7 +75,10 @@ export const useAxiosInterceptors = () => {
                 originalRequest.headers['Authorization'] = `Bearer ${token}`;
                 return axios(originalRequest);
               })
-              .catch((err) => Promise.reject(err));
+              .catch((err) => {
+console.log('----err: ', err)
+                return Promise.reject(err)
+              });
           }
 
           originalRequest._retry = true;

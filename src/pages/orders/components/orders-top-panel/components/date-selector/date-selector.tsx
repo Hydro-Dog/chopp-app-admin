@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useOrdersContext } from '@pages/orders/context';
-import { useChangeTableOrders } from '@pages/orders/hooks';
+import { useRefetchTableOrders } from '@pages/orders/hooks';
 import { DatePicker } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
 import dayjs from 'dayjs';
 
 export const DateSelector = () => {
   const { setStartDate, startDate, setEndDate, endDate } = useOrdersContext();
-  const filters = useChangeTableOrders();
+  const filters = useRefetchTableOrders();
 
   const { t } = useTranslation();
 

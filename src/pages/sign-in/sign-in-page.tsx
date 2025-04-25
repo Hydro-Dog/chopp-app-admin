@@ -4,9 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formatPhoneNumber, useSuperDispatch, useNotificationContext, useThemeToken } from '@shared/index';
+import { ChoppPhoneInput } from '@shared/components';
+import { useSuperDispatch, useNotificationContext, useThemeToken } from '@shared/index';
 import './sign-in-page.scss';
 
+import { FETCH_STATUS } from '@shared/index';
 import {
   AppDispatch,
   RootState,
@@ -15,7 +17,6 @@ import {
   setLoginStatus,
   wsConnect,
 } from '@store/index';
-import { FETCH_STATUS } from '@shared/index';
 import { Button, Flex, Form, Input, Tooltip, Typography, Tabs } from 'antd';
 import { z } from 'zod';
 import { useSignInFormSchema } from './hooks/useSignInFormSchema';
@@ -41,8 +42,6 @@ export const SignInPage = () => {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
-    register,
   } = useForm<UserLoginDTO>({
     resolver: zodResolver(signInFormSchema),
     reValidateMode: 'onChange',
@@ -64,13 +63,8 @@ export const SignInPage = () => {
         );
       }
     };
-  
-    superDispatch({ action: loginUser(data), thenHandler });
-  };
 
-  const handleChangePhoneNumber = (e: any) => {
-    const { value } = e.target;
-    setValue('phoneNumber', formatPhoneNumber(value));
+    superDispatch({ action: loginUser(data), thenHandler });
   };
 
   useEffect(() => {
@@ -129,21 +123,13 @@ export const SignInPage = () => {
             <Controller
               name="phoneNumber"
               control={control}
-              render={({ field }) => (
-                <div className="flex">
-                  {/* TODO: добавить маску номера из клиентской части */}
-                  <Input
-                  {...register('phoneNumber', { 
-                    onChange: handleChangePhoneNumber,
-                    maxLength: {
-                      value: 12,
-                      message: 'Максимальная длина 12 символов'
-                    } 
-                  })}
-                  {...field}
-                  placeholder={t('+7 ___ ___-__-__')}
-                  />
-                </div>
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ChoppPhoneInput
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  errors={errors.phoneNumber}
+                />
               )}
             />
           </Item>

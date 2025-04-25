@@ -64,7 +64,7 @@ export const registerUser = createAsyncThunk<User, UserRegisterDTO, { rejectValu
   '/registerUser',
   async (userData, thunkAPI) => {
     try {
-      const response = await axiosPrivate.post<User>(`/register`, userData);
+      const response = await axiosPrivate.post<User>(`/register`, sanitizedUser(userData));
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

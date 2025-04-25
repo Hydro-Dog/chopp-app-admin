@@ -15,7 +15,10 @@ const { Item } = Form;
 //TODO: вынести в отдельный файл
 const registerFormSchema = z.object({
   email: z.string().email({ message: 'Email is invalid' }).min(1, { message: 'Login is required' }),
-  password: z.string().min(8, { message: 'Password is too short' }).max(20, { message: 'Password is too long' }),
+  password: z
+    .string()
+    .min(8, { message: 'Password is too short' })
+    .max(20, { message: 'Password is too long' }),
   firstName: z.string().min(1, { message: 'firstName is required' }),
   lastName: z.string().min(1, { message: 'lastName is required' }),
   telegramUsername: z.string().min(1, { message: 'telegramUsername is required' }),

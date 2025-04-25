@@ -11,13 +11,11 @@ export const useThemeSwitcher = () => {
   );
 
   const onThemeChange = (val: string) => {
-    //TODO: Использовать енам со значением 'system'
     if (val === THEME.SYSTEM) {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? THEME.DARK
         : THEME.LIGHT;
       toggleTheme(systemTheme);
-      //TODO: Использовать енам со значением 'system'
       localStorage.setItem(STORAGE_KEYS.THEME, THEME.SYSTEM);
     } else {
       toggleTheme(val);

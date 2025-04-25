@@ -3,7 +3,7 @@ export * from './truncate-text';
 export * from './calc-table-rows-number-by-screen-height';
 export * from './to-screaming-snake-case';
 export * from './get-base-64';
-export * from './remove-dashes-from-phoneNumber';
+export * from './sanitize-phone-number';
 export * from './format-phone-number';
 export * from './sanitize-user-number';
 export * from './create-fetch-pagination-list-thunk-action';

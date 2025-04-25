@@ -12,7 +12,7 @@ type Args = {
   pageParam?: number;
 };
 
-export const useChangeTableOrders = () => {
+export const useRefetchTableOrders = () => {
   const { limit, endDate, startDate, search, status } = useOrdersContext();
   const setPagination = useSetPagination();
   const { superDispatch } = useSuperDispatch<PaginationResponse<Order>, PaginationRequestQuery>();

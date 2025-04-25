@@ -8,8 +8,11 @@ import { RootState } from '@store/index';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import { useAnalyticsContext } from '@pages/analytics/context';
 
 export const AnalyticsChart = () => {
+  const { startDate, endDate } = useAnalyticsContext();
   const { t } = useTranslation();
   const { analyticsData, fetchAnalyticsDataStatus } = useSelector(
     (state: RootState) => state.analytics,
@@ -18,13 +21,25 @@ export const AnalyticsChart = () => {
 
   const { superDispatch } = useSuperDispatch<GeneralAnalyticsData, FetchAnalyticsOrdersParams>();
 
+  const getDefaultStartDate = () => {
+    return dayjs().subtract(1, 'month').format('YYYY-MM-DD');
+  };
+  const getDefaultEndDate = () => {
+    return dayjs().format('YYYY-MM-DD');
+  };
+
+  const params: FetchAnalyticsOrdersParams = {
+    startDate: startDate || getDefaultStartDate(),
+    endDate: endDate || getDefaultEndDate(),
+  };
+
   useEffect(() => {
     superDispatch({
-      action: fetchAnalyticsData({ endDate: '2025-04-10', startDate: '2025-03-22' }),
+      action: fetchAnalyticsData(params),
       catchHandler: (error) =>
         showErrorNotification({ message: t('ERROR'), description: error.message }),
     });
-  }, []);
+  }, [startDate, endDate]);
 
   if (fetchAnalyticsDataStatus === FETCH_STATUS.LOADING) {
     return <Spin size="small" />;

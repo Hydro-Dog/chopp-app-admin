@@ -3,7 +3,7 @@ type Money = {
   currency: string;
 };
 
-type AnalyticsDataItem = {
+export type AnalyticsDataItem = {
   date: string;
   ordersQuantity: number;
   amount: Money;
@@ -26,8 +26,8 @@ type Product = {
     price: Money;
     title: string;
     quantity: number;
-  }
-}
+  };
+};
 
 export type AnalyticsDataProduct = {
   orderDate: string;

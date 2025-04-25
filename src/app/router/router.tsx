@@ -15,6 +15,7 @@ import { OrdersProvider } from '@pages/orders/context';
 import { PaymentsPage } from '@pages/payments';
 import { PaymentsProvider } from '@pages/payments/context';
 import { ProductsProvider } from '@pages/products/context';
+import { AnalyticsProvider } from '@pages/analytics/context';
 import {
   PricingSettingsPage,
   VisualSettingsPage,
@@ -118,10 +119,14 @@ export const router = createBrowserRouter([
           </PaymentsProvider>
         ),
       },
-      // {
-      //   path: ROUTES.ANALYTICS,
-      //   element: <AnalyticsPage />,
-      // },
+      {
+        path: ROUTES.ANALYTICS,
+        element: (
+          <AnalyticsProvider>
+            <AnalyticsPage />
+          </AnalyticsProvider>
+        ),
+      },
       // {
       //   path: `${ROUTES.USERS}/:id`, // Updated path for user profiles
       //   element: <UserPage />,

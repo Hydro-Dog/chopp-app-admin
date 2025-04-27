@@ -45,11 +45,9 @@ export const PaymentDetailsModal = ({ open, onOk, payment }: Props) => {
         first6: true,
         last4: true,
       },
-      id: true,
       saved: true,
       status: true,
       title: true,
-      type: true,
       wallet: {
         type: true,
         provider: true,

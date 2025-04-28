@@ -61,6 +61,9 @@ export const App = () => {
     closeNotification,
     closeAllNotifications,
     NotificationContext: NotificationCtx,
+    isMute,
+    mute,
+    unmute,
   } = useNotificationApi();
   const [lang, setLang] = useState(LANG.RU);
 
@@ -74,7 +77,10 @@ export const App = () => {
             showErrorNotification={showErrorNotification}
             showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
-            closeAllNotifications={closeAllNotifications}>
+            closeAllNotifications={closeAllNotifications}
+            isMute={isMute}
+            mute={mute}
+            unmute={unmute}>
             <div className="w-full h-screen overflow-hidden">
               <ChatsContextProvider>
                 <RouterProvider router={router} />

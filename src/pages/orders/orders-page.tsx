@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOnNewNotification } from '@shared/hooks/use-on-new-notification';
 import {
   TitlePage,
   useNotificationContext,
@@ -26,6 +25,10 @@ export const OrdersPage = () => {
 
   const { lastMessage: newOrderNotification } = useWsNotification<Order>(WS_MESSAGE_TYPE.NEW_ORDER);
 
+  const { t } = useTranslation();
+  const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
+  const { showErrorNotification, showSuccessNotification } = useNotificationContext();
+
   useEffect(() => {
     if (newOrderNotification) {
       refetchTableOrders({
@@ -36,12 +39,16 @@ export const OrdersPage = () => {
         startDateParam: startDate,
         orderStatusParam: status,
       });
+
+      showSuccessNotification({
+        message: t('NEW_ORDER_NOTIFICATION_TITLE'),
+        description: t('NEW_ORDER_NOTIFICATION_AMOUNT', {
+          amount: newOrderNotification?.payload?.totalPrice,
+        }),
+        placement: 'topRight',
+      });
     }
   }, [endDate, limit, newOrderNotification, page, search, startDate, status]);
-
-  const { t } = useTranslation();
-  const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
-  const { showErrorNotification } = useNotificationContext();
 
   useEffect(() => {
     refetchTableOrders({});

@@ -68,10 +68,8 @@ export const PaymentsTable = () => {
     superDispatch({
       action: refundPayment({ payment_id: selectedPayment.id, amount: selectedPayment.amount }),
       thenHandler: (response) => {
-        console.log('response?.id: ', response);
         if (!response?.id) return;
 
-        // Обновляем вручную list через setList
         setList((prev) =>
           prev.map((payment) =>
             payment.id === response.payment_id

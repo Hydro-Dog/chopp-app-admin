@@ -134,7 +134,14 @@ export const PaymentsTable = () => {
 
   return (
     <div>
-      <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
+      <Table
+        className="!p-0"
+        size="small"
+        columns={columns}
+        dataSource={list}
+        rowKey="id"
+        pagination={false}
+      />
       <div ref={setObserverElement} style={{ height: '1px' }} />
 
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}

@@ -5,7 +5,6 @@ import infoSound from 'src/assets/sounds/info-notification.mp3';
 import successSound from 'src/assets/sounds/success-notification.mp3';
 import warningSound from 'src/assets/sounds/warn-notification.mp3';
 
-// Мапа: тип нотификации -> путь к звуку
 const soundMap: Record<string, string> = {
   error: errorSound,
   info: infoSound,

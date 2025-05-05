@@ -39,14 +39,6 @@ export const OrdersPage = () => {
         startDateParam: startDate,
         orderStatusParam: status,
       });
-
-      showSuccessNotification({
-        message: t('NEW_ORDER_NOTIFICATION_TITLE'),
-        description: t('NEW_ORDER_NOTIFICATION_AMOUNT', {
-          amount: newOrderNotification?.payload?.totalPrice,
-        }),
-        placement: 'topRight',
-      });
     }
   }, [endDate, limit, newOrderNotification, page, search, startDate, status]);
 

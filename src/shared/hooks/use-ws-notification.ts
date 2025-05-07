@@ -7,6 +7,8 @@ export const useWsNotification = <T>(type: keyof NotificationsState) => {
     (state: RootState) => state.notifications[type] as WsMessage<T>[],
   );
 
+  console.log('notification: ', notification)
+
   const lastMessage = notification[notification.length - 1] || null;
 
   return { notification, lastMessage };

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { PropsWithChildren, createContext, useContext } from 'react';
 import { ArgsProps } from 'antd/es/notification';
+import { STORAGE_KEYS } from '@shared/enum';
 
 type NotificationContextType = {
   showNotification: ({ type, message, description, placement, ...rest }: ArgsProps) => void;
@@ -9,6 +10,9 @@ type NotificationContextType = {
   showSuccessNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
   closeNotification: (key: string) => void;
   closeAllNotifications: () => void;
+  isMute: boolean;
+  mute: () => void;
+  unmute: () => void;
 };
 
 const notificationContextTypeInitialValue = {
@@ -18,6 +22,9 @@ const notificationContextTypeInitialValue = {
   showErrorNotification: () => null,
   showInfoNotification: () => null,
   showSuccessNotification: () => null,
+  isMute: false,
+  mute: () => null,
+  unmute: () => null,
 };
 
 const NotificationContext = createContext<NotificationContextType>(
@@ -34,6 +41,9 @@ export const NotificationContextProvider = ({
   showSuccessNotification,
   closeNotification,
   closeAllNotifications,
+  isMute,
+  mute,
+  unmute,
 }: PropsWithChildren<NotificationContextType>) => {
   return (
     <NotificationContext.Provider
@@ -44,6 +54,9 @@ export const NotificationContextProvider = ({
         showErrorNotification,
         showInfoNotification,
         showSuccessNotification,
+        isMute,
+        mute,
+        unmute,
       }}>
       {children}
     </NotificationContext.Provider>

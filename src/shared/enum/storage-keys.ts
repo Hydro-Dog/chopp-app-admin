@@ -4,4 +4,5 @@ export enum STORAGE_KEYS {
   ACCESS_TOKEN = 'accessToken',
   REFRESH_TOKEN = 'refreshToken',
   PRODUCTS_GRID_SCALE = 'productsGridScale',
+  MUTE = 'mute',
 }

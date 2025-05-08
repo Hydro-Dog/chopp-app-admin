@@ -142,3 +142,14 @@ table {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Chrome, Safari, Edge */
+/* *::-webkit-scrollbar {
+  display: none;
+} */
+
+/* Firefox */
+/* * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+} */

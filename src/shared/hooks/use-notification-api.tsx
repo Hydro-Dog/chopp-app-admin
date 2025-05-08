@@ -1,86 +1,89 @@
-import { createContext } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
+import { STORAGE_KEYS } from '@shared/enum';
+import { playNotificationSound } from '@shared/utils';
 import { notification } from 'antd';
 import { ArgsProps } from 'antd/es/notification';
 
-const Context = createContext({ name: 'Default' });
+const Context = createContext({ name: 'Notification Context' });
 
+const useMuteState = () => {
+  const [isMute, setIsMute] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false; // SSR fallback
+    return localStorage.getItem(STORAGE_KEYS.MUTE) === 'true'; // корректный parse
+  });
+
+  const mute = () => {
+    setIsMute(true);
+    if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEYS.MUTE, 'true');
+  };
+
+  const unmute = () => {
+    setIsMute(false);
+    if (typeof window !== 'undefined') localStorage.setItem(STORAGE_KEYS.MUTE, 'false');
+  };
+
+  return { isMute, mute, unmute };
+};
+
+/**
+ * Основной хук для работы с системой уведомлений.
+ * Оборачивается в NotificationContextProvider для глобального доступа.
+ */
 export const useNotificationApi = () => {
   const [api, contextHolder] = notification.useNotification();
+  const { isMute, mute, unmute } = useMuteState();
 
-  const showNotification = ({ type, message, description, placement, ...rest }: ArgsProps) => {
-    let notificationApiCall = null;
-
-    if (type === 'error') {
-      notificationApiCall = api.error;
-    } else if (type === 'info') {
-      notificationApiCall = api.info;
-    } else if (type === 'success') {
-      notificationApiCall = api.success;
-    } else if (type === 'warning') {
-      notificationApiCall = api.warning;
+  /**
+   * Универсальный метод для показа уведомления любого типа.
+   * Перед показом может проигрывать звук (если не активирован mute).
+   */
+  const showNotification = ({
+    type = 'info',
+    message,
+    description,
+    placement = 'bottomRight',
+    ...rest
+  }: ArgsProps & { type?: 'success' | 'info' | 'warning' | 'error' }) => {
+    if (!isMute) {
+      playNotificationSound(type);
     }
 
-    notificationApiCall!({
+    const fn = (api as any)[type];
+    if (!fn) return;
+
+    fn({
       message,
       description: <Context.Consumer>{() => description}</Context.Consumer>,
-      placement: 'bottomRight',
+      placement,
       ...rest,
     });
   };
 
-  const showErrorNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
-    const notificationApiCall = api.error;
+  const showErrorNotification = (props: ArgsProps) => showNotification({ ...props, type: 'error' });
+  const showSuccessNotification = (props: ArgsProps) =>
+    showNotification({ ...props, type: 'success' });
+  const showInfoNotification = (props: ArgsProps) => showNotification({ ...props, type: 'info' });
+  const showWarningNotification = (props: ArgsProps) =>
+    showNotification({ ...props, type: 'warning' });
 
-    notificationApiCall!({
-      message,
-      description: <Context.Consumer>{() => description}</Context.Consumer>,
-      placement: 'bottomRight',
-      // type: 'error',
-      ...rest,
-    });
-  };
+  const closeNotification = (key: string) => api.destroy(key);
+  const closeAllNotifications = () => api.destroy();
 
-  const showSuccessNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
-    const successApiCall = api.success;
-
-    successApiCall!({
-      message,
-      description: <Context.Consumer>{() => description}</Context.Consumer>,
-      placement: 'bottomRight',
-      // type: 'error',
-      ...rest,
-    });
-  };
-
-  const showInfoNotification = ({ message, description, placement, ...rest }: ArgsProps) => {
-    const notificationApiCall = api.info;
-
-    notificationApiCall!({
-      message,
-      description: <Context.Consumer>{() => description}</Context.Consumer>,
-      placement: 'bottomRight',
-      // type: 'error',
-      ...rest,
-    });
-  };
-
-  const closeNotification = (key: string) => {
-    api.destroy(key);
-  };
-
-  const closeAllNotifications = () => {
-    api.destroy();
-  };
+  const NotificationContext = () => (
+    <Context.Provider value={{ name: 'snackbar_context' }}>{contextHolder}</Context.Provider>
+  );
 
   return {
     showNotification,
-    showInfoNotification,
     showErrorNotification,
     showSuccessNotification,
+    showInfoNotification,
+    showWarningNotification,
     closeNotification,
     closeAllNotifications,
-    NotificationContext: () => (
-      <Context.Provider value={{ name: 'snackbar_context' }}>{contextHolder}</Context.Provider>
-    ),
+    isMute,
+    mute,
+    unmute,
+    NotificationContext,
   };
 };

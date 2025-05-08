@@ -25,6 +25,8 @@ import 'dayjs/locale/ru';
 
 import './index.css';
 import { useAxiosInterceptors } from '@store/middleware';
+import { useNewOrderNotification } from './hooks';
+import { Wrapper } from './components/wrapper/wrapper';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -61,6 +63,9 @@ export const App = () => {
     closeNotification,
     closeAllNotifications,
     NotificationContext: NotificationCtx,
+    isMute,
+    mute,
+    unmute,
   } = useNotificationApi();
   const [lang, setLang] = useState(LANG.RU);
 
@@ -74,11 +79,16 @@ export const App = () => {
             showErrorNotification={showErrorNotification}
             showSuccessNotification={showSuccessNotification}
             closeNotification={closeNotification}
-            closeAllNotifications={closeAllNotifications}>
+            closeAllNotifications={closeAllNotifications}
+            isMute={isMute}
+            mute={mute}
+            unmute={unmute}>
             <div className="w-full h-screen overflow-hidden">
-              <ChatsContextProvider>
-                <RouterProvider router={router} />
-              </ChatsContextProvider>
+              <Wrapper>
+                <ChatsContextProvider>
+                  <RouterProvider router={router} />
+                </ChatsContextProvider>
+              </Wrapper>
             </div>
             <NotificationCtx />
           </NotificationContextProvider>

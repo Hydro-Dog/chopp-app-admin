@@ -11,20 +11,20 @@ export const RootContainer = () => {
   // TODO: вынести нотификации в отдельный компонент
   // TODO: сделать обработку разных видов нотификаций
 
-  useEffect(() => {
-    if (newOrderNotification) {
-      messageApi.open({
-        type: 'success',
-        content: (
-          <Space>
-            {`Новый заказ № ${newOrderNotification.payload?.id}`}
+  // useEffect(() => {
+  //   if (newOrderNotification) {
+  //     messageApi.open({
+  //       type: 'success',
+  //       content: (
+  //         <Space>
+  //           {`Новый заказ № ${newOrderNotification.payload?.id}`}
 
-            <ChoppAnimatedIcon animation="bounce" icon={<BellOutlined />} />
-          </Space>
-        ),
-      });
-    }
-  }, [messageApi, newOrderNotification]);
+  //           <ChoppAnimatedIcon animation="bounce" icon={<BellOutlined />} />
+  //         </Space>
+  //       ),
+  //     });
+  //   }
+  // }, [messageApi, newOrderNotification]);
 
   // useEffect(() => {
   //   if (localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)) {

@@ -35,7 +35,7 @@ type Props = {
 
 export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props) => {
   const { t } = useTranslation();
-  const items = useGroupedOrderStatusItems()
+  const items = useGroupedOrderStatusItems();
   const [selectedStatus, setSelectedStatus] = useState<ORDER_STATUS>();
   const { token: themeToken } = theme.useToken();
 
@@ -84,10 +84,7 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
               {t('CURRENT_STATUS')}
             </Text>
             <div className="mt-2">
-              <ChoppOrderStatus
-                className="text-base"
-                status={order?.orderStatus!}
-              />
+              <ChoppOrderStatus className="text-base" status={order?.orderStatus!} />
             </div>
           </div>
 
@@ -97,6 +94,7 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
             </Text>
             <div className="mt-2">
               <Dropdown
+                disabled={order?.orderStatus === ORDER_STATUS.DELIVERED}
                 menu={{
                   items,
                   onClick: onNewStatusSelected,

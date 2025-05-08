@@ -4,7 +4,7 @@ import { useWsNotification } from '@shared/hooks';
 import { Payment } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
-export const useUpdatePaymentsListByNotification = () => {
+export const useUpdateTableByNotification = () => {
   const { list, setList } = usePaymentsContext();
 
   const { lastMessage: newPaymentNotification } = useWsNotification<Payment>(

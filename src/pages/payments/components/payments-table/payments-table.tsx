@@ -2,14 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePaymentsContext } from '@pages/payments/context';
-import {
-  useInfiniteScroll,
-  FETCH_STATUS,
-  Payment,
-  useSuperDispatch,
-  useWsNotification,
-} from '@shared/index';
-import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
+import { useInfiniteScroll, FETCH_STATUS, Payment, useSuperDispatch } from '@shared/index';
 import { fetchPayments, refundPayment } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Table, Spin, Modal, Flex, Alert } from 'antd';
@@ -18,8 +11,9 @@ import { useBoolean } from 'usehooks-ts';
 import { PaymentDetailsModal } from './components/payment-details-modal';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetPaymentsTableColumns } from './hooks/use-get-payments-table-colums';
+import { useUpdateTableByNotification } from './hooks/use-update-table-by-notification';
+import { useUpdateTableOnFilters } from './hooks/use-update-table-on-filters';
 import { ActionValue } from './types';
-import { useUpdatePaymentsListByNotification } from './hooks/use-update-list-by-notification';
 
 export const PaymentsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,40 +28,8 @@ export const PaymentsTable = () => {
   } = useBoolean();
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
-  // const { lastMessage: newPaymentNotification } = useWsNotification<Payment>(
-  //   WS_MESSAGE_TYPE.NEW_PAYMENT,
-  // );
-
-  // useEffect(() => {
-  //   if (
-  //     newPaymentNotification?.payload?.id &&
-  //     !list.map((item) => item.id).includes(newPaymentNotification.payload.id)
-  //   ) {
-  //     setList((prev) => [newPaymentNotification!.payload!, ...prev]);
-  //   }
-  // }, [newPaymentNotification?.payload]);
-
-  useUpdatePaymentsListByNotification()
-
-  useEffect(() => {
-    setList([]);
-
-    const searchRequest: Record<string, string> = {};
-    if (startDate) {
-      searchRequest['created_at.gte'] = dayjs(startDate, 'DD.MM.YYYY').toISOString();
-    }
-    if (endDate) {
-      searchRequest['created_at.lte'] = dayjs(endDate, 'DD.MM.YYYY').toISOString();
-    }
-    if (status) {
-      searchRequest['status'] = status;
-    }
-    if (payment_id) {
-      searchRequest['payment_id'] = payment_id;
-    }
-
-    dispatch(fetchPayments(searchRequest));
-  }, [startDate, endDate, status, payment_id, dispatch, setList]);
+  useUpdateTableByNotification();
+  useUpdateTableOnFilters();
 
   useEffect(() => {
     if (payments?.items) {

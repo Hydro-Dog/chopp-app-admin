@@ -3,9 +3,9 @@ import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { PaginationRequestQuery, PaginationResponse, Product } from '@shared/types';
 import { fetchProducts } from '@store/index';
-import { VerticalLayout } from '../vertical-layout';
 import { ProductsLayoutHeader } from './components/';
 import { ProductsLayoutMain } from './components/products-layout-main';
+import { VerticalLayout } from '../../../../shared/index';
 
 export const Main = () => {
   const {

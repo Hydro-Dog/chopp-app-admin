@@ -20,13 +20,7 @@ type AllowedKeys = {
   [key: string]: true | AllowedKeys;
 };
 
-export function filterObjectByKeys({
-  input,
-  allowed,
-}: {
-  input: any;
-  allowed: AllowedKeys;
-}): any {
+export function filterObjectByKeys({ input, allowed }: { input: any; allowed: AllowedKeys }): any {
   if (typeof input !== 'object' || input === null) return input;
 
   const result: any = Array.isArray(input) ? [] : {};
@@ -50,9 +44,7 @@ export function filterObjectByKeys({
       } else if (typeof rule === 'object') {
         if (Array.isArray(value)) {
           const filtered = value
-            .map((item) =>
-              filterObjectByKeys({ input: item, allowed: rule['*'] as AllowedKeys })
-            )
+            .map((item) => filterObjectByKeys({ input: item, allowed: rule['*'] as AllowedKeys }))
             .filter((item) => item !== null && item !== undefined && Object.keys(item).length > 0); // ⬅️
 
           if (filtered.length > 0) {

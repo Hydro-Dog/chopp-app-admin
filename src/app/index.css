@@ -135,10 +135,13 @@ table {
   border-spacing: 0;
 }
 
+.payments-page-card > .ant-card-body {
+  height: 100%;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 /* Chrome, Safari, Edge */
 /* *::-webkit-scrollbar {

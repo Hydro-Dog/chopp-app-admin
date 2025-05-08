@@ -1,4 +1,4 @@
-import { VerticalLayout } from '../vertical-layout';
+import { VerticalLayout } from '@shared/components/vertical-layout';
 import { PaymentsTopPanel } from '..';
 import { PaymentsTable } from '..';
 

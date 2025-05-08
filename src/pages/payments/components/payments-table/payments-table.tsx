@@ -45,6 +45,7 @@ export const PaymentsTable = () => {
 
     dispatch(fetchPayments(searchRequest));
   }, [startDate, endDate, status, payment_id, dispatch, setList]);
+
   useEffect(() => {
     if (payments?.items) {
       setList((prev) => [...prev, ...(payments.items || [])]);
@@ -134,14 +135,7 @@ export const PaymentsTable = () => {
 
   return (
     <div>
-      <Table
-        className="!p-0"
-        size="small"
-        columns={columns}
-        dataSource={list}
-        rowKey="id"
-        pagination={false}
-      />
+      <Table size="small" columns={columns} dataSource={list} rowKey="id" pagination={false} />
       <div ref={setObserverElement} style={{ height: '1px' }} />
 
       {fetchPaymentsStatus === FETCH_STATUS.LOADING && <Spin size="small" />}

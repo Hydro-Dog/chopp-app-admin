@@ -22,17 +22,18 @@ export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) =
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const editCategoryFormSchema = useDeleteCategoryFormSchema({ categoryTitle: category?.title });
-  type EditCategoryForm = z.infer<typeof editCategoryFormSchema>;
+  const deleteCategoryFormSchema = useDeleteCategoryFormSchema({ categoryTitle: category?.title });
+  type DeleteCategoryForm = z.infer<typeof deleteCategoryFormSchema>;
 
   const {
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, ...other },
     reset,
     watch,
-  } = useForm<EditCategoryForm>({
-    resolver: zodResolver(editCategoryFormSchema),
+    setValue,
+  } = useForm<DeleteCategoryForm>({
+    resolver: zodResolver(deleteCategoryFormSchema),
     defaultValues: { name: '' },
     mode: 'onChange',
   });
@@ -40,9 +41,15 @@ export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) =
   const watchedCategoryName = watch('name');
 
   const handleClose = () => {
+    console.log('handleClose');
     reset();
     onCancel();
   };
+
+  const handleSubmitForm = handleSubmit(() => {
+    onOk();
+    reset();
+  });
 
   useAutoFocus({ open, inputRef });
 
@@ -50,7 +57,7 @@ export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) =
     <CustomModal
       title={t('DELETE_CATEGORY')}
       open={open}
-      onOk={handleSubmit(onOk)}
+      onOk={handleSubmitForm}
       onCancel={handleClose}
       okTitle={t('DELETE')}
       okColor="danger"
@@ -80,7 +87,9 @@ export const DeleteCategoryModal = ({ category, open, onCancel, onOk }: Props) =
               name="name"
               control={control}
               // @ts-ignore
-              render={({ field }) => <Input {...field} ref={inputRef} placeholder={t('CATEGORY')} />}
+              render={({ field }) => (
+                <Input {...field} ref={inputRef} placeholder={t('CATEGORY')} />
+              )}
             />
           </Item>
         </Form>

@@ -6,6 +6,8 @@ import { CreateCategoryModal } from './components';
 import { CategoriesList } from './components/categories-list/categories-list';
 import { SidebarHeader } from './components/sidebar-header';
 import { VerticalLayout } from '../../../../shared/index';
+import { TrashButton } from '../main/components/products-layout-main/components';
+import { Flex } from 'antd';
 
 export const Sidebar = () => {
   const { updateCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
@@ -25,7 +27,12 @@ export const Sidebar = () => {
             isLoading={updateCategoriesStatus === FETCH_STATUS.LOADING}
           />
         }
-        main={<CategoriesList />}
+        main={
+          <Flex vertical>
+            <CategoriesList />
+            <TrashButton />
+          </Flex>
+        }
       />
       <CreateCategoryModal open={isCreateCategoryModalOpen} onClose={closeCreateCategoryModal} />
     </>

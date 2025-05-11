@@ -255,16 +255,12 @@
   "3DS_APPLIED": "3DS применён",
   "3DS_CHALLENGE_COMPLETED": "3DS-челлендж пройден",
   "3DS_METHOD_COMPLETED": "3DS-метод завершён",
-  "DESCRIPTION": "Описание",
 
   "INCOME_AMOUNT": "Сумма к зачислению",
   "INCOME_CURRENCY": "Валюта зачисления",
   "INCOME_VALUE": "Сумма зачисления",
   "METADATA": "Метаданные",
   "ORDER_ID": "ID заказа",
-
-  "PAID": "Оплачено",
-  "STATUS": "Статус",
   "TEST_PAYMENT": "Тестовый платёж",
 
   "PAYMENT_METHOD": "Способ оплаты",
@@ -294,7 +290,7 @@
   "REFUNDABLE": "Можно вернуть",
 
   "REFUNDED_AMOUNT": "Возвращённая сумма",
-  "REFUNDED_AMOUNT_VERBOSE": "сумма. возвращенная покупателю",
+  "REFUNDED_AMOUNT_VERBOSE": "Cумма, возвращенная покупателю",
   "REFUNDED_CURRENCY": "Валюта возврата",
   "REFUNDED_VALUE": "Сумма возврата",
   "CAPTURED_AT": "Дата зачисления",

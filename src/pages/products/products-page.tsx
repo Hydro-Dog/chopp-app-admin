@@ -16,7 +16,7 @@ export const ProductsPage = () => {
             height: `calc(100% - 24px)`,
             width: `calc(100% - 24px)`,
           }}>
-          <Splitter.Panel defaultSize="20%" min="20%" max="30%">
+          <Splitter.Panel defaultSize="30%" min="20%" max="40%">
             <Sidebar />
           </Splitter.Panel>
           <Splitter.Panel>

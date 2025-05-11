@@ -37,7 +37,7 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
           .get('status')!
           .split(',')
           .filter((status) => Object.values(ORDER_STATUS).includes(status as ORDER_STATUS))
-      : Object.values(ORDER_STATUS);
+      : [];
   const initialPage = searchParams.get('page') || '';
   const initialStartDate = searchParams.get('startDate') || '';
   const initialEndDate = searchParams.get('endDate') || '';

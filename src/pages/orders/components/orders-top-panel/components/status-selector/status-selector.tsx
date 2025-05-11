@@ -13,10 +13,10 @@ export const StatusSelector = () => {
   const all = 'all';
 
   const items = [
-    {
-      value: all,
-      label: <Tag color="black">{t('ORDERS_PAGE.CHOOSE_ALL')}</Tag>,
-    },
+    // {
+    //   value: all,
+    //   label: <Tag color="black">{t('ORDERS_PAGE.CHOOSE_ALL')}</Tag>,
+    // },
     ...Object.values(ORDER_STATUS).map((status) => ({
       value: status,
       label: <ChoppOrderStatus status={status} />,
@@ -24,15 +24,15 @@ export const StatusSelector = () => {
   ];
 
   const changeRangeStatus = (value: string[]) => {
-    if (value.includes(all as ORDER_STATUS)) {
-      const statusIfAll =
-        status.length === Object.values(ORDER_STATUS).length ? [] : Object.values(ORDER_STATUS);
-      setStatus(statusIfAll);
-      filters({ searchParam: search, orderStatusParam: statusIfAll });
-    } else {
+    // if (value.includes(all as ORDER_STATUS)) {
+    //   const statusIfAll =
+    //     status.length === Object.values(ORDER_STATUS).length ? [] : Object.values(ORDER_STATUS);
+    //   setStatus(statusIfAll);
+    //   filters({ searchParam: search, orderStatusParam: statusIfAll });
+    // } else {
       setStatus(value);
       filters({ orderStatusParam: value });
-    }
+    // }
   };
 
   const sharedProps: SelectProps = {

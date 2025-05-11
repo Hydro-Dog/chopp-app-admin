@@ -5,7 +5,7 @@ import { useProductsContext } from '@pages/products/context';
 import { ChopDraggableList } from '@shared/components';
 import { useNotificationContext } from '@shared/context';
 import { useSuperDispatch } from '@shared/hooks';
-import { Category, FETCH_STATUS } from '@shared/index';
+import { Category, FETCH_STATUS, PRODUCT_STATE } from '@shared/index';
 import { fetchCategories, updateCategories, deleteCategory } from '@store/index';
 import { AppDispatch, RootState } from '@store/store';
 import { Spin } from 'antd';
@@ -16,7 +16,7 @@ import { ListItem } from '../list-item';
 export const CategoriesList = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const { categoryId, setCategoryId, setSearch, setPage } = useProductsContext();
+  const { categoryId, setCategoryId, setSearch, setPage, setProductsState } = useProductsContext();
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
@@ -71,6 +71,7 @@ export const CategoriesList = () => {
   };
 
   const onClickItem = (id: string) => {
+    setProductsState(PRODUCT_STATE.DEFAULT);
     setCategoryId(id);
     setSearch('');
     setPage(1);
@@ -92,6 +93,7 @@ export const CategoriesList = () => {
         // @ts-ignore
         ListItem={ListItem}
       />
+
       <DeleteCategoryModal
         category={categoryToDelete}
         open={isDeleteCategoryModalOpen}

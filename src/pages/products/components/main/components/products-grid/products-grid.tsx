@@ -57,7 +57,7 @@ export const ProductsGrid = ({ items, loading }: Props) => {
 
   return (
     <div>
-      <Slider
+      {/* <Slider
         className="m-0 mb-4"
         min={0}
         max={Object.keys(colCounts).length - 1}
@@ -66,7 +66,7 @@ export const ProductsGrid = ({ items, loading }: Props) => {
         marks={colCounts}
         step={null}
         tooltip={{ formatter: (value) => colCounts[value as number] }}
-      />
+      /> */}
 
       <div style={{ width: `calc(100% - 12px)` }}>
         <Row gutter={[8, 8]}>

@@ -33,10 +33,19 @@ export const ReadView = <T extends ReactNode>({
   changeable,
 }: Props<T>) => {
   return (
-    <>
-      <Flex onClick={() => onClick?.(id)}>
-        <div className="p-4 cursor-pointer whitespace-nowrap">
-          {order + 1}. {title}
+    <Flex justify="space-between" align="center" style={{ width: '100%' }}>
+      <Flex onClick={() => onClick?.(id)} style={{ minWidth: 0, flex: 1 }}>
+        <div
+          style={{
+            padding: '16px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+          <span className="truncate block" title={typeof title === 'string' ? title : undefined}>
+            {order + 1}. {title}
+          </span>
         </div>
       </Flex>
 
@@ -46,12 +55,11 @@ export const ReadView = <T extends ReactNode>({
             {hovered ? <MoveButton /> : <div className="w-8" />}
           </List.Item>
         )}
-
         {hovered && changeable && <EditButton setMode={setMode} />}
         {onDeleteItem && hovered && changeable && (
           <DeleteButton onDeleteItem={() => onDeleteItem(id)} />
         )}
       </Flex>
-    </>
+    </Flex>
   );
 };

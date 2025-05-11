@@ -9,7 +9,7 @@ import {
   useSuperDispatch,
 } from '@shared/index';
 import { fetchProducts } from '@store/slices';
-import { FloatButton } from 'antd';
+import { Button } from 'antd';
 import { t } from 'i18next';
 
 export const TrashButton = () => {
@@ -25,6 +25,7 @@ export const TrashButton = () => {
     setLimit,
     setProductsState,
   } = useProductsContext();
+
   const { superDispatch } = useSuperDispatch<PaginationResponse<Product>, unknown>();
 
   const onTrashClicked = () => {
@@ -67,20 +68,16 @@ export const TrashButton = () => {
     });
   };
 
-  return productsState === PRODUCT_STATE.MOVED_TO_TRASH ? (
-    <FloatButton
-      className="mr-4 -mb-2"
-      icon={<ArrowLeftOutlined />}
-      tooltip={t('BACK')}
-      onClick={onBackClicked}
-    />
-  ) : (
-    <FloatButton
-      className="mr-4 -mb-2"
-      icon={<DeleteOutlined />}
-      tooltip={t('TRASH_BIN')}
+  return (
+    <Button
       onClick={onTrashClicked}
-      // badge={{ count: 5, color: 'red' }}
-    />
+      disabled={productsState === PRODUCT_STATE.MOVED_TO_TRASH}
+      type={'text'}
+      danger
+      shape="round"
+      icon={<DeleteOutlined />}
+      size="middle">
+      {t('TRASH_BIN')}
+    </Button>
   );
 };

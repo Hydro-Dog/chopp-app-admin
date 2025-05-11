@@ -9,7 +9,6 @@ import { fetchProducts } from '@store/slices';
 import { RootState } from '@store/store';
 import { Flex, Pagination, Space } from 'antd';
 import { ProductsGrid } from '../products-grid';
-import { TrashButton } from './components';
 
 export const ProductsLayoutMain = () => {
   const { t } = useTranslation();
@@ -94,7 +93,7 @@ export const ProductsLayoutMain = () => {
           />
         </Space>
 
-        <TrashButton />
+        {/* <TrashButton /> */}
       </Flex>
     )
   );

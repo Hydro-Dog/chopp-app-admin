@@ -5,6 +5,8 @@ import { Flex } from 'antd';
 import { EditView } from './components';
 import { ReadView } from './components/read-view';
 import { LIST_ITEM_MODE } from './enum';
+import { useProductsContext } from '@pages/products/context';
+import { PRODUCT_STATE } from '@shared/index';
 
 type Props = {
   id: string;
@@ -18,12 +20,22 @@ type Props = {
   onClick?: (id: string) => void;
 };
 
-export const ListItem = ({ id, overId, title, order, activeId, changeable, onDeleteItem, onClick }: Props) => {
+export const ListItem = ({
+  id,
+  overId,
+  title,
+  order,
+  activeId,
+  changeable,
+  onDeleteItem,
+  onClick,
+}: Props) => {
   const themeToken = useThemeToken();
   const [hovered, setHovered] = useState(false);
   const [mode, setMode] = useState<LIST_ITEM_MODE>(LIST_ITEM_MODE.VIEW);
   const { attributes, listeners, setNodeRef } = useSortable({ id });
   const [isPressed, setIsPressed] = useState(false);
+  const { productsState } = useProductsContext();
 
   return (
     <Flex
@@ -33,7 +45,7 @@ export const ListItem = ({ id, overId, title, order, activeId, changeable, onDel
       style={{
         backgroundColor: isPressed
           ? themeToken.colorPrimaryBg + '90'
-          : String(activeId) === String(id)
+          : String(activeId) === String(id) && productsState !== PRODUCT_STATE.MOVED_TO_TRASH
             ? themeToken.colorPrimaryBg
             : hovered || String(overId) === String(id)
               ? themeToken.colorPrimaryBg + '60'

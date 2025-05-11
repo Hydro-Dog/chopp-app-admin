@@ -1,21 +1,11 @@
-import {
-  DownOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-  CarOutlined,
-  DeliveredProcedureOutlined,
-  ShoppingOutlined,
-  ToolOutlined,
-} from '@ant-design/icons';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DownOutlined } from '@ant-design/icons';
 import { ChoppOrderStatus } from '@shared/components';
 import { ORDER_STATUS } from '@shared/enum';
 import { Order } from '@shared/types';
-import { ORDER_STATUS_MAP } from '@shared/index';
-import { Dropdown, MenuProps, Modal, Space, Typography, Button, theme } from 'antd';
+import { Dropdown, Modal, Space, Typography, Button, theme } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useGroupedOrderStatusItems } from './hooks';
 
 const { Text } = Typography;
@@ -24,53 +14,57 @@ type Props = {
   order?: Order;
   open: boolean;
   onClose: () => void;
-  onSubmit: ({
-    orderStatus,
-    transactionId,
-  }: {
-    orderStatus: ORDER_STATUS;
-    transactionId: string;
-  }) => void;
+  onSubmit: (params: { orderStatus: ORDER_STATUS; transactionId: string }) => void;
 };
 
+/**
+ * Модалка для изменения статуса заказа.
+ * Позволяет выбрать новый статус из выпадающего списка и подтвердить изменения.
+ */
 export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props) => {
   const { t } = useTranslation();
   const items = useGroupedOrderStatusItems();
   const [selectedStatus, setSelectedStatus] = useState<ORDER_STATUS>();
   const { token: themeToken } = theme.useToken();
 
-  const onNewStatusSelected = (value: MenuInfo) => {
-    setSelectedStatus(value.key as ORDER_STATUS);
+  const handleStatusSelect = (info: MenuInfo) => {
+    setSelectedStatus(info.key as ORDER_STATUS);
   };
 
-  const resetModal = () => {
+  const handleReset = () => {
     setSelectedStatus(undefined);
   };
 
-  const onOk = () => {
-    resetModal();
-    onSubmit({ orderStatus: selectedStatus!, transactionId: order!.transactionId });
+  const handleSubmit = () => {
+    if (!selectedStatus || !order) return;
+
+    onSubmit({
+      orderStatus: selectedStatus,
+      transactionId: order.transactionId,
+    });
+
+    handleReset();
     onClose();
   };
 
-  const onCancel = () => {
-    resetModal();
+  const handleCancel = () => {
+    handleReset();
     onClose();
   };
 
   return (
     <Modal
       open={open}
-      onCancel={onCancel}
+      onCancel={handleCancel}
       title={t('CHANGE_ORDER_STATUS')}
       footer={[
-        <Button key="cancel" onClick={onCancel}>
+        <Button key="cancel" onClick={handleCancel}>
           {t('CANCEL')}
         </Button>,
         <Button
           key="ok"
           type="primary"
-          onClick={onOk}
+          onClick={handleSubmit}
           disabled={!selectedStatus || selectedStatus === order?.orderStatus}>
           {t('SAVE')}
         </Button>,
@@ -84,7 +78,7 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
               {t('CURRENT_STATUS')}
             </Text>
             <div className="mt-2">
-              <ChoppOrderStatus className="text-base" status={order?.orderStatus!} />
+              {order && <ChoppOrderStatus className="text-base" status={order.orderStatus} />}
             </div>
           </div>
 
@@ -95,10 +89,7 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
             <div className="mt-2">
               <Dropdown
                 disabled={order?.orderStatus === ORDER_STATUS.DELIVERED}
-                menu={{
-                  items,
-                  onClick: onNewStatusSelected,
-                }}
+                menu={{ items, onClick: handleStatusSelect }}
                 trigger={['click']}>
                 <Button block>
                   <Space>

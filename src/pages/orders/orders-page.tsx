@@ -17,40 +17,46 @@ import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
 import { useRefetchTableOrders } from './hooks';
 
+/**
+ * Страница заказов.
+ * Показывает таблицу заказов с фильтрацией, пагинацией и автообновлением по WebSocket.
+ */
 export const OrdersPage = () => {
   const { limit, page, pageOrders, totalItems, totalPages, search, endDate, startDate, status } =
     useOrdersContext();
+
   const refetchTableOrders = useRefetchTableOrders();
   const showTotal = useShowTotalPaginationOrders();
-
-  const { lastMessage: newOrderNotification } = useWsNotification<Order>(WS_MESSAGE_TYPE.NEW_ORDER);
-
   const { t } = useTranslation();
+  const { lastMessage: newOrderNotification } = useWsNotification<Order>(WS_MESSAGE_TYPE.NEW_ORDER);
+  const { showErrorNotification } = useNotificationContext();
+
   const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
-  const { showErrorNotification, showSuccessNotification } = useNotificationContext();
 
+  // Обновление таблицы при получении нового заказа через WS
   useEffect(() => {
-    if (newOrderNotification) {
-      refetchTableOrders({
-        pageParam: page,
-        limitParam: limit,
-        searchParam: search,
-        endDateParam: endDate,
-        startDateParam: startDate,
-        orderStatusParam: status,
-      });
-    }
-  }, [endDate, limit, newOrderNotification, page, search, startDate, status]);
+    if (!newOrderNotification) return;
 
+    refetchTableOrders({
+      pageParam: page,
+      limitParam: limit,
+      searchParam: search,
+      endDateParam: endDate,
+      startDateParam: startDate,
+      orderStatusParam: status,
+    });
+  }, [newOrderNotification, page, limit, search, startDate, endDate, status]);
+
+  // Первый fetch при монтировании страницы
   useEffect(() => {
     refetchTableOrders({});
   }, []);
 
-  const onPaginationChange = (page: number, size: number) => {
+  const handlePaginationChange = (page: number, size: number) => {
     refetchTableOrders({ pageParam: page, limitParam: size });
   };
 
-  const onOrderStatusChange = ({
+  const handleOrderStatusChange = ({
     orderStatus,
     transactionId,
   }: {
@@ -58,13 +64,8 @@ export const OrdersPage = () => {
     transactionId: string;
   }) => {
     updatePaymentDispatch.superDispatch({
-      action: updateOrderPaymentStatus({
-        transactionId,
-        orderStatus,
-      }),
-      thenHandler: () => {
-        refetchTableOrders({});
-      },
+      action: updateOrderPaymentStatus({ transactionId, orderStatus }),
+      thenHandler: () => refetchTableOrders({}),
       catchHandler: (error) => {
         showErrorNotification({
           message: t('ERROR'),
@@ -78,7 +79,9 @@ export const OrdersPage = () => {
     <TitlePage title={t('ORDERS')}>
       <Card className="h-full relative" size="small">
         <OrdersTopPanel />
-        <OrdersTable data={pageOrders} onStatusChange={onOrderStatusChange} />
+
+        <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
+
         <Space className="absolute bottom-0 left-0 w-full px-3 pb-3">
           <div>
             {t('TOTAL_PAGES')}: {totalPages}
@@ -89,7 +92,7 @@ export const OrdersPage = () => {
             pageSizeOptions={[2, 8, 12, 22]}
             pageSize={limit}
             total={totalItems}
-            onChange={onPaginationChange}
+            onChange={handlePaginationChange}
             showTotal={showTotal}
             showSizeChanger
             showQuickJumper

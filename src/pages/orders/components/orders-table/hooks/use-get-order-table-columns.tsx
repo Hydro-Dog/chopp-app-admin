@@ -19,6 +19,10 @@ type Args = {
   onOrderStatusClick: (record: Order) => void;
 };
 
+/**
+ * Хук возвращает конфигурацию колонок для таблицы заказов.
+ * Включает форматирование даты, суммы, статусов и действий с заказом.
+ */
 export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: Args) => {
   const { t } = useTranslation();
   const { actionItems } = useGetActionItems();

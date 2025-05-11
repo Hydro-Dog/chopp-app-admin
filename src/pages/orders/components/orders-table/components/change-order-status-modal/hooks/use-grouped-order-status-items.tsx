@@ -10,8 +10,12 @@ import {
 } from '@ant-design/icons';
 import { ChoppOrderStatus } from '@shared/components';
 import { ORDER_STATUS } from '@shared/enum';
-import { MenuProps, Space } from 'antd';
+import { Space, MenuProps } from 'antd';
 
+/**
+ * Хук, возвращающий сгруппированный список статусов заказа
+ * для отображения в выпадающем меню. Каждому статусу сопоставлен иконка и компонент отображения.
+ */
 export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
   const { t } = useTranslation();
 
@@ -76,7 +80,10 @@ export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
           label: (
             <Space>
               <CarOutlined />
-              <ChoppOrderStatus tooltipPlacement="right" status={ORDER_STATUS.IN_DELIVERY_PROCESS} />
+              <ChoppOrderStatus
+                tooltipPlacement="right"
+                status={ORDER_STATUS.IN_DELIVERY_PROCESS}
+              />
             </Space>
           ),
         },

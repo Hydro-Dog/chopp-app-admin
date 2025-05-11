@@ -3,6 +3,10 @@ import { InfoCircleOutlined, RocketOutlined } from '@ant-design/icons';
 import { MenuProps } from 'antd';
 import { ACTION_MENU_ITEMS } from '../enums';
 
+/**
+ * Хук возвращает список действий для контекстного меню в таблице заказов.
+ * Каждому действию сопоставлен ключ, иконка и локализованный заголовок.
+ */
 export const useGetActionItems = () => {
   const { t } = useTranslation();
 

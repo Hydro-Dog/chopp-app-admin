@@ -7,29 +7,29 @@ type Args = {
   setOrdersData: Dispatch<SetStateAction<PaginationResponse<Order>>>;
 };
 
+/**
+ * Хук отслеживает появление новых заказов через redux-состояние уведомлений
+ * и добавляет их в начало текущего списка заказов, если таких ещё нет.
+ * Используется в списке заказов для отображения в реальном времени.
+ */
 export const useNewOrderNotificationHandler = ({ setOrdersData }: Args) => {
-  //TODO: использовать useWsNotification из клиентского приложения
+  // TODO: заменить на useWsNotification из клиентского приложения, когда будет готов
   const { newOrder } = useSelector((state: RootState) => state.notifications);
-  const lastNotification = newOrder[newOrder?.length - 1]?.payload;
+  const lastNotification = newOrder?.[newOrder.length - 1]?.payload;
 
   useEffect(() => {
-    if (lastNotification) {
-      setOrdersData((prevData) => {
-        // Проверяем, есть ли уже элемент с таким ID
-        const orderExists = prevData.items.some((order) => order.id === lastNotification.id);
+    if (!lastNotification) return;
 
-        if (!orderExists) {
-          // Добавляем новый заказ в начало списка
-          return {
-            ...prevData,
-            items: [lastNotification, ...prevData.items],
-            totalItems: prevData.totalItems + 1, // Увеличиваем общее количество
-          };
-        }
+    setOrdersData((prevData) => {
+      const orderExists = prevData.items.some((order) => order.id === lastNotification.id);
 
-        // Если заказ уже существует, возвращаем прежнее состояние
-        return prevData;
-      });
-    }
+      if (orderExists) return prevData;
+
+      return {
+        ...prevData,
+        items: [lastNotification, ...prevData.items],
+        totalItems: prevData.totalItems + 1,
+      };
+    });
   }, [lastNotification]);
 };

@@ -10,49 +10,50 @@ import { ActionValue } from './types';
 
 type Props = {
   data: Order[];
-  onStatusChange: ({
-    orderStatus,
-    transactionId,
-  }: {
-    orderStatus: ORDER_STATUS;
-    transactionId: string;
-  }) => void;
+  onStatusChange: (params: { orderStatus: ORDER_STATUS; transactionId: string }) => void;
 };
 
+/**
+ * Таблица заказов с экшенами:
+ * - просмотр деталей заказа,
+ * - изменение статуса.
+ *
+ * Модалки открываются при выборе действия из таблицы.
+ */
 export const OrdersTable = ({ data, onStatusChange }: Props) => {
   const {
-    value: isStatusModalOpened,
+    value: isStatusModalOpen,
     setTrue: openStatusModal,
     setFalse: closeStatusModal,
   } = useBoolean();
-  const {
-    value: isInfoModalOpened,
-    setTrue: openInfoModal,
-    setFalse: closeInfoModal,
-  } = useBoolean();
-  const [clickedOrder, setClickedOrder] = useState<Order>();
 
-  const actionsMap: Record<ACTION_MENU_ITEMS, (item: ActionValue) => void> = {
-    [ACTION_MENU_ITEMS.INFO]: ({ record }) => {
-      setClickedOrder(record);
+  const { value: isInfoModalOpen, setTrue: openInfoModal, setFalse: closeInfoModal } = useBoolean();
+
+  const [selectedOrder, setSelectedOrder] = useState<Order>();
+
+  const handleActionClick = (action: ActionValue) => {
+    const { key, record } = action;
+
+    setSelectedOrder(record);
+
+    if (key === ACTION_MENU_ITEMS.INFO) {
       openInfoModal();
-    },
-    [ACTION_MENU_ITEMS.CHANGE_ORDER_STATUS]: ({ record }) => {
-      setClickedOrder(record);
+    }
+
+    if (key === ACTION_MENU_ITEMS.CHANGE_ORDER_STATUS) {
       openStatusModal();
-    },
+    }
   };
 
-  const onActionClick = (action: ActionValue) => {
-    actionsMap[action.key](action);
-  };
-
-  const onOrderStatusClick = (order: Order) => {
-    setClickedOrder(order);
+  const handleOrderStatusClick = (order: Order) => {
+    setSelectedOrder(order);
     openStatusModal();
   };
 
-  const { columns } = useGetOrderTableColumns({ onActionClick, onOrderStatusClick });
+  const { columns } = useGetOrderTableColumns({
+    onActionClick: handleActionClick,
+    onOrderStatusClick: handleOrderStatusClick,
+  });
 
   return (
     <>
@@ -66,13 +67,13 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
       />
 
       <ChangeOrderStatusModal
-        open={isStatusModalOpened}
+        open={isStatusModalOpen}
         onSubmit={onStatusChange}
         onClose={closeStatusModal}
-        order={clickedOrder}
+        order={selectedOrder}
       />
 
-      <OrderDetailsModal open={isInfoModalOpened} onOk={closeInfoModal} order={clickedOrder} />
+      <OrderDetailsModal open={isInfoModalOpen} onOk={closeInfoModal} order={selectedOrder} />
     </>
   );
 };

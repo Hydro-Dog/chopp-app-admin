@@ -27,40 +27,47 @@ type OrdersContextType = {
 
 const OrdersContext = createContext<OrdersContextType | undefined>(undefined);
 
+/**
+ * Провайдер контекста заказов.
+ * Содержит и синхронизирует фильтры, пагинацию, даты и статус заказов
+ * через URL-параметры и локальный стейт.
+ */
 export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const initialLimit = Number(searchParams.get('limit')) || LIMIT;
   const initialSearch = searchParams.get('search') || '';
-  const initialOrdersStatus =
-    searchParams.get('status') !== null
-      ? searchParams
-          .get('status')!
-          .split(',')
-          .filter((status) => Object.values(ORDER_STATUS).includes(status as ORDER_STATUS))
-      : [];
-  const initialPage = searchParams.get('page') || '';
+  const initialPage = Number(searchParams.get('page')) || 1;
   const initialStartDate = searchParams.get('startDate') || '';
   const initialEndDate = searchParams.get('endDate') || '';
+  const initialStatus = searchParams.get('status')
+    ? searchParams
+        .get('status')!
+        .split(',')
+        .filter((status) => Object.values(ORDER_STATUS).includes(status as ORDER_STATUS))
+    : [];
 
   const [limit, setLimit] = useState(initialLimit);
-  const [endDate, setEndDate] = useState(initialEndDate);
-  const [startDate, setStartDate] = useState(initialStartDate);
-  const [status, setStatus] = useState(initialOrdersStatus);
-
   const [search, setSearch] = useState(initialSearch);
+  const [page, setPage] = useState(initialPage);
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
+  const [status, setStatus] = useState(initialStatus);
+
   const [pageOrders, setPageOrders] = useState<Order[]>([]);
-  const [page, setPage] = useState(Number(initialPage) || 1);
   const [totalPages, setTotalPages] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
+  // Синхронизация параметров фильтрации и пагинации с URL
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
     params.set('limit', String(limit));
-    params.set('search', String(search));
-    params.set('status', String(status));
-    params.set('startDate', String(startDate));
-    params.set('endDate', String(endDate));
+    params.set('search', search);
+    params.set('status', status.join(','));
+    params.set('startDate', startDate);
+    params.set('endDate', endDate);
     params.set('page', String(page));
+
     setSearchParams(params);
   }, [limit, search, page, startDate, endDate, status, setSearchParams]);
 
@@ -91,10 +98,14 @@ export const OrdersProvider = ({ children }: PropsWithChildrenOnly) => {
   );
 };
 
+/**
+ * Хук для доступа к OrdersContext.
+ * Бросает ошибку, если используется вне провайдера.
+ */
 export const useOrdersContext = () => {
   const context = useContext(OrdersContext);
   if (!context) {
-    throw new Error('useOrderContext must be used with OrderProvider.');
+    throw new Error('useOrdersContext must be used within an OrdersProvider');
   }
   return context;
 };

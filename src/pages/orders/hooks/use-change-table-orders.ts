@@ -3,6 +3,7 @@ import { useSetPagination } from '@pages/orders/hooks';
 import { useSuperDispatch } from '@shared/hooks';
 import { Order, PaginationRequestQuery, PaginationResponse } from '@shared/types';
 import { fetchOrders } from '@store/slices';
+
 type Args = {
   searchParam?: string;
   endDateParam?: string;
@@ -12,6 +13,11 @@ type Args = {
   pageParam?: number;
 };
 
+/**
+ * Хук для повторного запроса заказов с обновлёнными параметрами.
+ * Использует параметры из контекста.
+ * После получения данных обновляет пагинацию.
+ */
 export const useRefetchTableOrders = () => {
   const { limit, endDate, startDate, search, status } = useOrdersContext();
   const setPagination = useSetPagination();
@@ -27,12 +33,12 @@ export const useRefetchTableOrders = () => {
   }: Args) => {
     superDispatch({
       action: fetchOrders({
-        page: pageParam === undefined ? 1 : pageParam,
-        limit: limitParam === undefined ? limit : limitParam,
-        search: searchParam === undefined ? search : searchParam,
-        startDate: startDateParam === undefined ? startDate : startDateParam,
-        endDate: endDateParam === undefined ? endDate : endDateParam,
-        status: orderStatusParam === undefined ? status : orderStatusParam,
+        page: pageParam ?? 1,
+        limit: limitParam ?? limit,
+        search: searchParam ?? search,
+        startDate: startDateParam ?? startDate,
+        endDate: endDateParam ?? endDate,
+        status: orderStatusParam ?? status,
       }),
       thenHandler: (response) => {
         setPagination({ response });

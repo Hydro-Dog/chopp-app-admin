@@ -15,7 +15,7 @@ import { Card, Flex, Pagination, Space } from 'antd';
 import { OrdersTable } from './components';
 import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
-import { useRefetchTableOrders } from './hooks';
+import { useAutoRefreshOrdersOnWs, useRefetchTableOrders } from './hooks';
 
 /**
  * Страница заказов.
@@ -33,19 +33,50 @@ export const OrdersPage = () => {
 
   const updatePaymentDispatch = useSuperDispatch<Order, UpdateOrderDTO>();
 
-  // Обновление таблицы при получении нового заказа через WS
-  useEffect(() => {
-    if (!newOrderNotification) return;
+  // Обновление таблицы при получении нового заказа или обновления платежа через WS
+  // useEffect(() => {
+  //   if (!newOrderNotification && !newPaymentNotification) return;
 
-    refetchTableOrders({
-      pageParam: page,
-      limitParam: limit,
-      searchParam: search,
-      endDateParam: endDate,
-      startDateParam: startDate,
-      orderStatusParam: status,
-    });
-  }, [newOrderNotification, page, limit, search, startDate, endDate, status]);
+  //   refetchTableOrders({
+  //     pageParam: page,
+  //     limitParam: limit,
+  //     searchParam: search,
+  //     endDateParam: endDate,
+  //     startDateParam: startDate,
+  //     orderStatusParam: status,
+  //   });
+  // }, [
+  //   newOrderNotification,
+  //   newPaymentNotification,
+  //   page,
+  //   limit,
+  //   search,
+  //   startDate,
+  //   endDate,
+  //   status,
+  // ]);
+
+  useAutoRefreshOrdersOnWs({
+    refetch: () =>
+      refetchTableOrders({
+        pageParam: page,
+        limitParam: limit,
+        searchParam: search,
+        endDateParam: endDate,
+        startDateParam: startDate,
+        orderStatusParam: status,
+      }),
+    deps: [
+      newOrderNotification,
+      newPaymentNotification,
+      page,
+      limit,
+      search,
+      startDate,
+      endDate,
+      status,
+    ],
+  });
 
   // Первый fetch при монтировании страницы
   useEffect(() => {

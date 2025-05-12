@@ -11,7 +11,7 @@ import { Order, ORDER_STATUS } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { updateOrderPaymentStatus } from '@store/slices';
 import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
-import { Card, Pagination, Space } from 'antd';
+import { Card, Flex, Pagination, Space } from 'antd';
 import { OrdersTable } from './components';
 import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
@@ -89,7 +89,7 @@ export const OrdersPage = () => {
         }}>
         <OrdersTopPanel />
 
-        <div className="flex-1 flex flex-col justify-between">
+        <Flex vertical justify="space-between" flex={1}>
           <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
 
           <Space className="w-full px-3 pt-2">
@@ -108,7 +108,7 @@ export const OrdersPage = () => {
               showQuickJumper
             />
           </Space>
-        </div>
+        </Flex>
       </Card>
     </TitlePage>
   );

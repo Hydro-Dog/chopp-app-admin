@@ -77,27 +77,38 @@ export const OrdersPage = () => {
 
   return (
     <TitlePage title={t('ORDERS')}>
-      <Card className="h-full relative" size="small">
+      <Card
+        className="min-h-full flex flex-col"
+        size="small"
+        styles={{
+          body: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+          },
+        }}>
         <OrdersTopPanel />
 
-        <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
+        <div className="flex-1 flex flex-col justify-between">
+          <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
 
-        <Space className="absolute bottom-0 left-0 w-full px-3 pb-3">
-          <div>
-            {t('TOTAL_PAGES')}: {totalPages}
-          </div>
-          <Pagination
-            size="small"
-            current={page}
-            pageSizeOptions={[2, 8, 12, 22]}
-            pageSize={limit}
-            total={totalItems}
-            onChange={handlePaginationChange}
-            showTotal={showTotal}
-            showSizeChanger
-            showQuickJumper
-          />
-        </Space>
+          <Space className="w-full px-3 pt-2">
+            <div>
+              {t('TOTAL_PAGES')}: {totalPages}
+            </div>
+            <Pagination
+              size="small"
+              current={page}
+              pageSizeOptions={[2, 8, 12, 22]}
+              pageSize={limit}
+              total={totalItems}
+              onChange={handlePaginationChange}
+              showTotal={showTotal}
+              showSizeChanger
+              showQuickJumper
+            />
+          </Space>
+        </div>
       </Card>
     </TitlePage>
   );

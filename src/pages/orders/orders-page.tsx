@@ -11,7 +11,7 @@ import { Order, ORDER_STATUS } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 import { updateOrderPaymentStatus } from '@store/slices';
 import { UpdateOrderDTO } from '@store/slices/orders-slice/types';
-import { Card, Pagination, Space } from 'antd';
+import { Card, Flex, Pagination, Space } from 'antd';
 import { OrdersTable } from './components';
 import { OrdersTopPanel } from './components/orders-top-panel';
 import { useOrdersContext } from './context';
@@ -77,27 +77,38 @@ export const OrdersPage = () => {
 
   return (
     <TitlePage title={t('ORDERS')}>
-      <Card className="h-full relative" size="small">
+      <Card
+        className="min-h-full flex flex-col"
+        size="small"
+        styles={{
+          body: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+          },
+        }}>
         <OrdersTopPanel />
 
-        <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
+        <Flex vertical justify="space-between" flex={1}>
+          <OrdersTable data={pageOrders} onStatusChange={handleOrderStatusChange} />
 
-        <Space className="absolute bottom-0 left-0 w-full px-3 pb-3">
-          <div>
-            {t('TOTAL_PAGES')}: {totalPages}
-          </div>
-          <Pagination
-            size="small"
-            current={page}
-            pageSizeOptions={[2, 8, 12, 22]}
-            pageSize={limit}
-            total={totalItems}
-            onChange={handlePaginationChange}
-            showTotal={showTotal}
-            showSizeChanger
-            showQuickJumper
-          />
-        </Space>
+          <Space className="w-full px-3 pt-2">
+            <div>
+              {t('TOTAL_PAGES')}: {totalPages}
+            </div>
+            <Pagination
+              size="small"
+              current={page}
+              pageSizeOptions={[2, 8, 12, 22]}
+              pageSize={limit}
+              total={totalItems}
+              onChange={handlePaginationChange}
+              showTotal={showTotal}
+              showSizeChanger
+              showQuickJumper
+            />
+          </Space>
+        </Flex>
       </Card>
     </TitlePage>
   );

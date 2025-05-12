@@ -66,16 +66,7 @@ export const OrdersPage = () => {
         startDateParam: startDate,
         orderStatusParam: status,
       }),
-    deps: [
-      newOrderNotification,
-      newPaymentNotification,
-      page,
-      limit,
-      search,
-      startDate,
-      endDate,
-      status,
-    ],
+    deps: [page, limit, search, startDate, endDate, status],
   });
 
   // Первый fetch при монтировании страницы

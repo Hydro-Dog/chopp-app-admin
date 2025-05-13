@@ -24,7 +24,6 @@ export const wsMiddleware: Middleware = (store) => {
 
   return (next) => (action: WsAction) => {
     if (action) {
-      console.log('action: ', action);
 
       switch (action?.type) {
         case wsConnect.toString():

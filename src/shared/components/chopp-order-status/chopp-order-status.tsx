@@ -16,6 +16,7 @@ export const ChoppOrderStatus = ({ status, className, tooltipPlacement, onClick 
 
   return (
     <Tooltip placement={tooltipPlacement} title={t(ORDER_STATUS_MAP[status]?.tooltip)}>
+      {/* TODO: заменить на ChoppTag */}
       <Tag
         className={`border-none cursor-pointer ${className}`}
         color={ORDER_STATUS_MAP[status]?.color}

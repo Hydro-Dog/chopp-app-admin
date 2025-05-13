@@ -3,10 +3,11 @@ import { ORDER_STATUS } from '@shared/enum';
 import { Order } from '@shared/types';
 import { Table } from 'antd';
 import { useBoolean } from 'usehooks-ts';
-import { ChangeOrderStatusModal, OrderDetailsModal } from './components';
+import { ChangeOrderStatusModal, OrderDetailsModal, RowProductCard } from './components';
 import { ACTION_MENU_ITEMS } from './enums';
 import { useGetOrderTableColumns } from './hooks';
 import { ActionValue } from './types';
+import { sortProductImages } from '@shared/utils/sort-product-images';
 
 type Props = {
   data: Order[];
@@ -64,6 +65,9 @@ export const OrdersTable = ({ data, onStatusChange }: Props) => {
         dataSource={data}
         rowKey="id"
         pagination={false}
+        expandable={{
+          expandedRowRender: (record: Order) => <RowProductCard record={record} />,
+        }}
       />
 
       <ChangeOrderStatusModal

@@ -1,6 +1,6 @@
 import { ProductImage } from '@shared/index';
 
-export const sortImages = ({
+export const sortProductImages = ({
   images = [],
   imagesOrder = [],
 }: {

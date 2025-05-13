@@ -1,14 +1,15 @@
+import { useMemo } from 'react';
 import { PRODUCTS_STATE_BY_GRID_MODE } from '@pages/products/constants';
 import { useProductsContext } from '@pages/products/context';
 import { useSuperDispatch } from '@shared/hooks';
 import { PRODUCT_GRID_VIEW_MODE, PRODUCT_STATE, updateListItemById } from '@shared/index';
 import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts, updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
-import { Tooltip, Typography } from 'antd';
+import { Skeleton, Tooltip, Typography } from 'antd';
 import { Card } from 'antd';
 
 import { useGetCardActions } from '../../hooks';
-import { sortImages } from '../../utils/sort-images';
+import { sortProductImages } from '../../../../../../../../shared/utils/sort-product-images';
 
 const { Text } = Typography;
 const { Meta } = Card;
@@ -96,6 +97,8 @@ export const ProductCard = ({
     onRevertTrashClicked,
   });
 
+  const sortedImages = useMemo(() => sortProductImages(item), [item]);
+
   return (
     <Card
       size="small"
@@ -105,7 +108,7 @@ export const ProductCard = ({
           <img
             className="aspect-video object-cover"
             alt={item.title}
-            src={import.meta.env.VITE_BASE_URL_FILES + sortImages(item)?.[0]?.path}
+            src={import.meta.env.VITE_BASE_URL_FILES + sortedImages?.[0]?.path}
           />
         </div>
       }

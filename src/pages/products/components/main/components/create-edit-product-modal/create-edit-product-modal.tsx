@@ -43,7 +43,9 @@ export const CreateEditProductModal = ({
   const { categoryId } = useProductsContext();
   const beforeUpload = useBeforeUpload();
   const { showSuccessNotification } = useNotificationContext();
-  const { createProductStatus } = useSelector((state: RootState) => state.products);
+  const { createProductStatus, updateProductStatus } = useSelector(
+    (state: RootState) => state.products,
+  );
   const { categories, fetchCategoriesStatus } = useSelector(
     (state: RootState) => state.productCategory,
   );
@@ -156,10 +158,22 @@ export const CreateEditProductModal = ({
     <CustomModal
       title={t(mode === 'create' ? 'ADD_PRODUCT' : 'EDIT_PRODUCT')}
       open={open}
-      confirmLoading={createProductStatus === FETCH_STATUS.LOADING}
+      confirmLoading={
+        createProductStatus === FETCH_STATUS.LOADING || updateProductStatus === FETCH_STATUS.LOADING
+      }
       onOk={handleSubmit(mode === 'create' ? submitCreateProduct : submitUpdateProduct)}
       onCancel={handleCancel}
-      okTitle={t(mode === 'create' ? 'ADD' : 'SAVE')}>
+      okTitle={t(mode === 'create' ? 'ADD' : 'SAVE')}
+      okButtonProps={{
+        loading:
+          createProductStatus === FETCH_STATUS.LOADING ||
+          updateProductStatus === FETCH_STATUS.LOADING,
+      }}
+      cancelButtonProps={{
+        disabled:
+          createProductStatus === FETCH_STATUS.LOADING ||
+          updateProductStatus === FETCH_STATUS.LOADING,
+      }}>
       <Form layout="vertical" className="flex flex-col gap-4">
         <Item
           className="!m-0"

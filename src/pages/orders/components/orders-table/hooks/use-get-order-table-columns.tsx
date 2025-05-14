@@ -35,9 +35,11 @@ export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: A
       render: (text: string) => dayjs(text).format('DD.MM.YYYY HH:mm'),
     },
     {
-      title: 'ID',
+      title: <ChoppTextWithTooltip title={t('ID')} tooltipText={t('ID_TOOLTIP')} />,
       dataIndex: 'id',
+      className: 'cursor-pointer',
       key: 'id',
+      render: (text: string) => <ChoppTextWithTooltip showInfoIcon={false} copyable title={text} />,
     },
     {
       title: t('AMOUNT'),
@@ -54,11 +56,7 @@ export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: A
       dataIndex: 'orderStatus',
       key: 'orderStatus',
       render: (status: ORDER_STATUS, record: Order) => (
-        <ChoppOrderStatus
-          tooltipPlacement="left"
-          onClick={() => onOrderStatusClick(record)}
-          status={status}
-        />
+        <ChoppOrderStatus onClick={() => onOrderStatusClick(record)} status={status} />
       ),
     },
     {
@@ -89,9 +87,7 @@ export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: A
       dataIndex: 'transactionId',
       key: 'transactionId',
       className: 'cursor-pointer',
-      render: (text: string) => (
-        <ChoppTextWithTooltip showInfoIcon={false} copyable title={text} tooltipText={text} />
-      ),
+      render: (text: string) => <ChoppTextWithTooltip showInfoIcon={false} copyable title={text} />,
     },
     {
       title: t('ACTIONS'),

@@ -31,14 +31,12 @@ export const ChoppTextWithTooltip = ({
 
   return (
     <Space size={space} className={className}>
-      {tooltipText && (
-        <Tooltip placement={placement} title={tooltipText} className="flex items-center gap-1">
-          <Paragraph ellipsis className="!m-0" copyable={copyable}>
-            {title}
-          </Paragraph>
-          {showInfoIcon && <InfoCircleOutlined style={{ color: themeToken.colorPrimary }} />}
-        </Tooltip>
-      )}
+      <Tooltip placement={placement} title={tooltipText} className="flex items-center gap-1">
+        <Paragraph ellipsis className="!m-0" copyable={copyable}>
+          {title}
+        </Paragraph>
+        {showInfoIcon && <InfoCircleOutlined style={{ color: themeToken.colorPrimary }} />}
+      </Tooltip>
     </Space>
   );
 };

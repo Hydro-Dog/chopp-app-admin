@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ORDER_STATUS, ORDER_STATUS_MAP } from '@shared/index';
 import { Tag, Tooltip } from 'antd';
@@ -8,10 +8,12 @@ type Props = {
   status: ORDER_STATUS;
   className?: string;
   tooltipPlacement?: TooltipPlacement;
+  icon?: ReactNode;
   onClick?: (value?: any) => void;
 };
 
-export const ChoppOrderStatus = ({ status, className, tooltipPlacement, onClick }: Props) => {
+export const ChoppOrderStatus = ({ icon, status, className, tooltipPlacement, onClick }: Props) => {
+  console.log('status: ', status);
   const { t } = useTranslation();
 
   return (
@@ -21,7 +23,7 @@ export const ChoppOrderStatus = ({ status, className, tooltipPlacement, onClick 
         className={`border-none cursor-pointer ${className}`}
         color={ORDER_STATUS_MAP[status]?.color}
         onClick={onClick}>
-        {t(ORDER_STATUS_MAP[status]?.title)}
+        {icon} {t(ORDER_STATUS_MAP[status]?.title)}
       </Tag>
     </Tooltip>
   );

@@ -88,13 +88,16 @@ export const ChangeOrderStatusModal = ({ order, open, onClose, onSubmit }: Props
             </Text>
             <div className="mt-2">
               <Dropdown
-                disabled={order?.orderStatus === ORDER_STATUS.DELIVERED}
+                disabled={
+                  order?.orderStatus === ORDER_STATUS.DELIVERED ||
+                  order?.orderStatus === ORDER_STATUS.REFUNDED
+                }
                 menu={{ items, onClick: handleStatusSelect }}
                 trigger={['click']}>
                 <Button block>
                   <Space>
                     {selectedStatus ? (
-                      <ChoppOrderStatus tooltipPlacement="right" status={selectedStatus} />
+                      <ChoppOrderStatus status={selectedStatus} />
                     ) : (
                       t('PICK_STATUS')
                     )}

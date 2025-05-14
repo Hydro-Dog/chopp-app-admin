@@ -15,12 +15,11 @@ export const useAutoRefreshOrdersOnWs = ({
     WS_MESSAGE_TYPE.ORDER_STATUS,
   );
 
-  console.log('newOrderNotification: ', newOrderNotification);
-  console.log('orderStatusNotification: ', orderStatusNotification);
+  // console.log('newOrderNotification: ', newOrderNotification);
+  // console.log('orderStatusNotification: ', orderStatusNotification);
 
   useEffect(() => {
     if (newOrderNotification || orderStatusNotification) {
-      console.log('refetch!!!');
       refetch();
     }
   }, [newOrderNotification, orderStatusNotification, ...deps]);

@@ -13,7 +13,7 @@ export const SidebarHeader = ({ onOpenCreateCategory, isLoading }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Flex align="center" justify="space-between" className="mr-2 mt-1">
+    <Flex align="center" justify="space-between" className="mr-2 mb-2">
       <Flex align="center" gap={10}>
         <AppstoreOutlined className="text-xl" />
         <Title className="!m-0 whitespace-nowrap" level={4}>

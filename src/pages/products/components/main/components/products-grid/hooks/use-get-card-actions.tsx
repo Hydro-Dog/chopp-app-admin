@@ -1,11 +1,25 @@
-import { SettingOutlined, DeleteOutlined, CloseOutlined, RollbackOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import {
+  SettingOutlined,
+  DeleteOutlined,
+  CloseOutlined,
+  RollbackOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
+} from '@ant-design/icons';
 import { useProductsContext } from '@pages/products/context';
-import { FETCH_STATUS, Product, PRODUCT_STATE, updateListItemById, useSuperDispatch } from '@shared/index';
+import {
+  FETCH_STATUS,
+  Product,
+  PRODUCT_STATE,
+  updateListItemById,
+  useSuperDispatch,
+} from '@shared/index';
 import { UpdateProductVisibilityDTO, updateProductVisibility } from '@store/slices';
 import { RootState } from '@store/store';
 import { Tooltip } from 'antd';
 import { Switch } from 'antd/lib';
 import { t } from 'i18next';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 type Args = {
@@ -21,38 +35,33 @@ export const useGetCardActions = ({
   onDeleteClicked,
   onRevertTrashClicked,
 }: Args) => {
-  
-  const {
-    setPageProducts,
-    productsState,
-    search,
-    limit,
-    page,
-    pageProducts,
-    setPage,
-    setTotalItems,
-    setTotalPages,
-    setLimit,
-  } = useProductsContext();
+  const { setPageProducts, productsState, categoryId } = useProductsContext();
   const { updateProductVisibilityStatusMap } = useSelector((state: RootState) => state.products);
   const { superDispatch: updateProductDispatch } = useSuperDispatch<
-      Product,
-      UpdateProductVisibilityDTO
-    >();
-    
+    Product,
+    UpdateProductVisibilityDTO
+  >();
+
+  const { categories } = useSelector((state: RootState) => state.productCategory);
+
+  const categoryTitle = useMemo(
+    () => categories?.find((item) => item.id === categoryId),
+    [categories, categoryId],
+  );
+
   const onVisibilityToggled = ({ id, state }: UpdateProductVisibilityDTO) => {
-      updateProductDispatch({
-        action: updateProductVisibility({ id, state }),
-        thenHandler: (product) => {
-          setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
-        },
-      });
-    };
+    updateProductDispatch({
+      action: updateProductVisibility({ id, state }),
+      thenHandler: (product) => {
+        setPageProducts((prevProducts) => updateListItemById(prevProducts, product));
+      },
+    });
+  };
 
   const getActions = (item: Product) => [
     productsState === PRODUCT_STATE.MOVED_TO_TRASH ? (
       <Tooltip key="revertMoveToTrash" title={t('REVERT_MOVE_TO_TRASH')}>
-        <RollbackOutlined onClick={() => onRevertTrashClicked(item)}/>
+        <RollbackOutlined onClick={() => onRevertTrashClicked(item)} />
       </Tooltip>
     ) : (
       <Tooltip key="edit" title={t('EDIT')}>
@@ -70,7 +79,7 @@ export const useGetCardActions = ({
       </Tooltip>
     ),
 
-    item.state !== PRODUCT_STATE.MOVED_TO_TRASH && (
+    item.state !== PRODUCT_STATE.MOVED_TO_TRASH && categoryTitle?.title !== 'Другое' && (
       <Tooltip
         key="isVisible"
         title={t(
@@ -79,7 +88,7 @@ export const useGetCardActions = ({
             : 'PRODUCT_HIDDEN_TOOLTIP',
         )}>
         <Switch
-        size='small'
+          size="small"
           onChange={(isVisible) =>
             onVisibilityToggled({
               id: item.id,
@@ -92,7 +101,7 @@ export const useGetCardActions = ({
           loading={updateProductVisibilityStatusMap[String(item.id)] === FETCH_STATUS.LOADING}
         />
       </Tooltip>
-    )
+    ),
   ];
 
   return { getActions };

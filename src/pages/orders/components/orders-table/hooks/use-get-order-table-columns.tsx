@@ -63,9 +63,7 @@ export const useGetOrderTableColumns = ({ onActionClick, onOrderStatusClick }: A
       title: t('PAYMENT_STATUS_TITLE'),
       dataIndex: 'paymentStatus',
       key: 'paymentStatus',
-      render: (status: PAYMENT_STATUS) => (
-        <ChoppPaymentStatus tooltipPlacement="right" status={status} />
-      ),
+      render: (status: PAYMENT_STATUS) => <ChoppPaymentStatus status={status} />,
     },
     {
       title: t('COMMENT'),

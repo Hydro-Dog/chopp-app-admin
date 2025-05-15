@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ChoppTag, PAYMENT_STATUS, PAYMENT_STATUS_MAP } from '@shared/index';
-import { Tag, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { TooltipPlacement } from 'antd/es/tooltip';
 
 type Props = {

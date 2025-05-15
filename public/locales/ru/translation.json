@@ -92,8 +92,9 @@
     "PROCESSING": "Обработка",
     "DELIVERY": "Доставка",
     "FINAL": "Завершение",
-    "FINAL_STATUSES_MESSAGE": "Это финальные сатусы, их нельзя будет поменять" 
+    "FINAL_STATUSES_MESSAGE": "Эти нельзя будет поменять" 
   },
+  "THIS_CATEGORY_IS_HIDDEN_FROM_USERS": "Эта категория скрыта от пользователей",
   "ADDRESS": "Адрес",
   "ALL": "Все",
   "CHATS": "Чаты",

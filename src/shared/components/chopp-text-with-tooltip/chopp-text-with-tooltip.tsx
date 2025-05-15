@@ -7,7 +7,7 @@ import { TooltipPlacement } from 'antd/es/tooltip';
 const { Paragraph } = Typography;
 
 type Props = {
-  title?: string;
+  title?: ReactNode;
   tooltipText?: string;
   space?: number;
   className?: string;

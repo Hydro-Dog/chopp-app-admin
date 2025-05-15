@@ -27,7 +27,7 @@ export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
   return [
     {
       type: 'group',
-      label: `💳 ${t('ORDER_STATUS_GROUP.PAYMENT')}`,
+      label: `💳 ${t('ORDER_STATUS_GROUP.PAYMENT')} (${t('ORDER_STATUS_GROUP.MANAGED_BY_YOOKASSA')})`,
       children: [
         {
           key: ORDER_STATUS.AWAITING_PAYMENT,
@@ -43,19 +43,6 @@ export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
           key: ORDER_STATUS.PAYMENT_CANCELED,
           disabled: true,
           label: <ChoppOrderStatus status={ORDER_STATUS.PAYMENT_CANCELED} />,
-        },
-        {
-          type: 'divider',
-        },
-        {
-          key: 'info-payment-managed',
-          disabled: true,
-          label: (
-            <Text type="secondary">
-              <LockOutlined style={{ marginRight: 4 }} />
-              {t('ORDER_STATUS_GROUP.MANAGED_BY_YOOKASSA')}
-            </Text>
-          ),
         },
       ],
     },
@@ -85,7 +72,7 @@ export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
     },
     {
       type: 'group',
-      label: `🏁 ${t('ORDER_STATUS_GROUP.FINAL')}`,
+      label: `🏁 ${t('ORDER_STATUS_GROUP.FINAL')} (${t('ORDER_STATUS_GROUP.FINAL_STATUSES_MESSAGE')})`,
       children: [
         {
           key: ORDER_STATUS.DELIVERED,
@@ -94,19 +81,6 @@ export const useGroupedOrderStatusItems = (): MenuProps['items'] => {
         {
           key: ORDER_STATUS.REFUNDED,
           label: <ChoppOrderStatus status={ORDER_STATUS.REFUNDED} tooltipPlacement="right" />,
-        },
-        {
-          type: 'divider',
-        },
-        {
-          key: 'info-payment-managed',
-          disabled: true,
-          label: (
-            <Text type="secondary">
-              <LockOutlined style={{ marginRight: 4 }} />
-              {t('ORDER_STATUS_GROUP.FINAL_STATUSES_MESSAGE')}
-            </Text>
-          ),
         },
       ],
     },

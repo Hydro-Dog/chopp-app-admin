@@ -66,7 +66,7 @@ export const ProductsLayoutHeader = () => {
   return (
     <>
       <Flex vertical>
-        <Flex align="center" justify="space-between" className="m-2">
+        <Flex align="center" justify="space-between" className="mb-2">
           <Flex align="center" gap={20} className="ml-4">
             <HeaderTitle />
           </Flex>

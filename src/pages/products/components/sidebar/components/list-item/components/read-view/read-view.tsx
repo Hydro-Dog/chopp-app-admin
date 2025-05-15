@@ -4,6 +4,8 @@ import { MoveButton } from './components';
 import { LIST_ITEM_MODE } from '../../enum';
 import { DeleteButton } from './components/delete-button';
 import { EditButton } from './components/edit-button';
+import { ChoppTextWithTooltip } from '@shared/index';
+import { useTranslation } from 'react-i18next';
 
 type Props<T> = {
   order: number;
@@ -32,6 +34,8 @@ export const ReadView = <T extends ReactNode>({
   setNodeRef,
   changeable,
 }: Props<T>) => {
+  const { t } = useTranslation();
+
   return (
     <Flex justify="space-between" align="center" style={{ width: '100%' }}>
       <Flex onClick={() => onClick?.(id)} style={{ minWidth: 0, flex: 1 }}>
@@ -44,7 +48,11 @@ export const ReadView = <T extends ReactNode>({
             textOverflow: 'ellipsis',
           }}>
           <span className="truncate block" title={typeof title === 'string' ? title : undefined}>
-            {order + 1}. {title}
+            <ChoppTextWithTooltip
+              tooltipText={title === 'Другое' ? t('THIS_CATEGORY_IS_HIDDEN_FROM_USERS') : undefined}
+              showInfoIcon={title === 'Другое'}
+              title={`${order + 1}. ${title}`}
+            />
           </span>
         </div>
       </Flex>

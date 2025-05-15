@@ -82,7 +82,7 @@ export const CategoriesList = () => {
   }
 
   return (
-    <>
+    <div className="mr-2">
       <ChopDraggableList
         unchangeableItems={['Другое']}
         items={categories || []}
@@ -100,6 +100,6 @@ export const CategoriesList = () => {
         onOk={onDeleteCategory}
         onCancel={onCloseDeleteCategory}
       />
-    </>
+    </div>
   );
 };

@@ -164,11 +164,6 @@ export const CreateEditProductModal = ({
       onOk={handleSubmit(mode === 'create' ? submitCreateProduct : submitUpdateProduct)}
       onCancel={handleCancel}
       okTitle={t(mode === 'create' ? 'ADD' : 'SAVE')}
-      okButtonProps={{
-        loading:
-          createProductStatus === FETCH_STATUS.LOADING ||
-          updateProductStatus === FETCH_STATUS.LOADING,
-      }}
       cancelButtonProps={{
         disabled:
           createProductStatus === FETCH_STATUS.LOADING ||

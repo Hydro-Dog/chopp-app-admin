@@ -12,7 +12,6 @@ type Props = {
   okType?: 'primary' | 'link' | 'text' | 'default' | 'dashed';
   okColor?: ButtonColorType;
   okVariant?: ButtonVariantType;
-  okButtonProps?: ButtonProps;
   cancelButtonProps?: ButtonProps;
   onOk: () => void;
   onCancel: () => void;
@@ -29,7 +28,6 @@ export const CustomModal = ({
   okVariant = 'solid',
   onCancel,
   title,
-  okButtonProps,
   cancelButtonProps,
   children,
   confirmLoading,
@@ -43,7 +41,6 @@ export const CustomModal = ({
       onOk={onOk}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
-      okButtonProps={okButtonProps}
       cancelButtonProps={cancelButtonProps}
       // @ts-ignore
       footer={(_: any, { OkBtn, CancelBtn }: any) => (

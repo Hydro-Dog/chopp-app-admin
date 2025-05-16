@@ -11,7 +11,7 @@ import { Form, Input, InputRef, Modal } from 'antd';
 import { z } from 'zod';
 import { useCreateCategoryFormSchema } from '../../hooks';
 import { useSearchParams } from 'react-router-dom';
-
+import { FETCH_STATUS } from '@shared/index';
 const { Item } = Form;
 
 type Props = {
@@ -23,7 +23,9 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
   const { t } = useTranslation();
   const { superDispatch } = useSuperDispatch<Category, CreateCategoryDTO>();
   const [_, setSearchParams] = useSearchParams();
-  const { categories } = useSelector((state: RootState) => state.productCategory);
+  const { categories, createCategoryStatus } = useSelector(
+    (state: RootState) => state.productCategory,
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   const createCategoryFormSchema = useCreateCategoryFormSchema();
@@ -67,8 +69,11 @@ export const CreateCategoryModal = ({ open, ...props }: Props) => {
       open={open}
       onOk={handleSubmit(onSubmit)}
       onCancel={onClose}
-      // confirmLoading={createCategoryStatus === FETCH_STATUS.LOADING}
-    >
+      okButtonProps={{
+        loading: createCategoryStatus === FETCH_STATUS.LOADING,
+        disabled: createCategoryStatus === FETCH_STATUS.LOADING,
+      }}
+      cancelButtonProps={{ disabled: createCategoryStatus === FETCH_STATUS.LOADING }}>
       <Form onFinish={handleSubmit(onSubmit)}>
         <Item validateStatus={errors.category && 'error'} help={errors.category?.message}>
           <Controller

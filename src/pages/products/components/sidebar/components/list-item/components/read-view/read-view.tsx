@@ -59,7 +59,7 @@ export const ReadView = <T extends ReactNode>({
 
       <Flex gap={8} align="center">
         {changeable && (
-          <List.Item ref={setNodeRef} className="!border-0" {...attributes} {...listeners}>
+          <List.Item ref={setNodeRef} className="!p-1" {...attributes} {...listeners}>
             {hovered ? <MoveButton /> : <div className="w-8" />}
           </List.Item>
         )}

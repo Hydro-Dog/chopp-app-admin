@@ -28,7 +28,7 @@ export const Sidebar = () => {
           />
         }
         main={
-          <Flex vertical>
+          <Flex vertical justify="space-between" className="h-full">
             <CategoriesList />
             <TrashButton />
           </Flex>

@@ -41,7 +41,7 @@ export const ListItem = ({
     <Flex
       align="center"
       justify="space-between"
-      className="px-2 rounded cursor-pointer"
+      className="px-2 mb-2 rounded cursor-pointer"
       style={{
         backgroundColor: isPressed
           ? themeToken.colorPrimaryBg + '90'

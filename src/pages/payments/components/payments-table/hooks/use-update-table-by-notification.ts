@@ -11,6 +11,11 @@ export const useUpdateTableByNotification = () => {
     WS_MESSAGE_TYPE.NEW_PAYMENT,
   );
 
+  const { lastMessage: orderStatusNotification } = useWsNotification<Payment>(
+    WS_MESSAGE_TYPE.ORDER_STATUS,
+  );
+
+  // Добавление нового платежа в начало списка
   useEffect(() => {
     if (
       newPaymentNotification?.payload?.id &&
@@ -19,4 +24,17 @@ export const useUpdateTableByNotification = () => {
       setList((prev) => [newPaymentNotification!.payload!, ...prev]);
     }
   }, [newPaymentNotification?.payload]);
+
+  // Обновление статуса существующего платежа
+  useEffect(() => {
+    if (!orderStatusNotification?.payload?.id) return;
+
+    setList((prev) =>
+      prev.map((item) =>
+        item.id === orderStatusNotification!.payload!.id
+          ? { ...item, ...orderStatusNotification.payload }
+          : item,
+      ),
+    );
+  }, [orderStatusNotification?.payload]);
 };

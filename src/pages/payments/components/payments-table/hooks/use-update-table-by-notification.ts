@@ -32,13 +32,13 @@ export const useUpdateTableByNotification = () => {
   // Обновление статуса платежа
   useEffect(() => {
     const incoming = orderStatusNotification?.payload;
-    if (!incoming?.id) return;
+    if (!incoming?.transactionId) return;
 
-    console.log('🔄 Обновляем статус для заказа:', incoming.id, '->', incoming.paymentStatus);
+    console.log('🔄 Обновляем статус для заказа:', incoming.transactionId, '->', incoming.paymentStatus);
 
     setList((prev) =>
       prev.map((item) => {
-        if (item.id === incoming.id) {
+        if (item.id === incoming.transactionId) {
           console.log('✅ Найден элемент, обновляем статус:', {
             old: item.status,
             new: incoming.paymentStatus,

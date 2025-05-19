@@ -7,6 +7,7 @@ import { CategoriesList } from './components/categories-list/categories-list';
 import { SidebarHeader } from './components/sidebar-header';
 import { VerticalLayout } from '../../../../shared/index';
 import { TrashButton } from '../main/components/products-layout-main/components';
+import { Divider } from 'antd';
 
 export const Sidebar = () => {
   const { updateCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
@@ -33,14 +34,7 @@ export const Sidebar = () => {
         }
         footer={
           <>
-            <div
-              style={{
-                content: '',
-                display: 'block',
-                height: '1px',
-                width: '100%',
-                background: 'rgba(0, 0, 0, 0.04)',
-              }}></div>
+            <Divider className="ant-divider-horizontal my-2" />
             <div className="flex justify-center">
               <TrashButton />
             </div>

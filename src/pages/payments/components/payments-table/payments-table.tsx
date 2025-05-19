@@ -28,6 +28,7 @@ export const PaymentsTable = () => {
   } = useBoolean();
   const [isRefundModalOpen, setIsRefundModalOpen] = useState(false);
 
+  console.log('PaymentsTable useUpdateTableByNotification')
   useUpdateTableByNotification();
   useUpdateTableOnFilters();
 

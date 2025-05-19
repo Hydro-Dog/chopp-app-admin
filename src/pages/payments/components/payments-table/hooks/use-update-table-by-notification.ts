@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { usePaymentsContext } from '@pages/payments/context';
 import { useWsNotification } from '@shared/hooks';
-import { Payment } from '@shared/types';
+import { Order, Payment } from '@shared/types';
 import { WS_MESSAGE_TYPE } from '@shared/types/ws-message-type';
 
 export const useUpdateTableByNotification = () => {
@@ -11,30 +11,42 @@ export const useUpdateTableByNotification = () => {
     WS_MESSAGE_TYPE.NEW_PAYMENT,
   );
 
-  const { lastMessage: orderStatusNotification } = useWsNotification<Payment>(
+  const { lastMessage: orderStatusNotification } = useWsNotification<Order>(
     WS_MESSAGE_TYPE.ORDER_STATUS,
   );
+
+  console.log('🔔 newPaymentNotification:', newPaymentNotification);
+  console.log('🔁 orderStatusNotification:', orderStatusNotification);
 
   // Добавление нового платежа в начало списка
   useEffect(() => {
     if (
       newPaymentNotification?.payload?.id &&
-      !list.map((item) => item.id).includes(newPaymentNotification.payload.id)
+      !list.some((item) => item.id === newPaymentNotification!.payload!.id)
     ) {
-      setList((prev) => [newPaymentNotification!.payload!, ...prev]);
+      console.log('➕ Добавляем новый платеж:', newPaymentNotification.payload.id);
+      setList((prev) => [newPaymentNotification.payload!, ...prev]);
     }
   }, [newPaymentNotification?.payload]);
 
-  // Обновление статуса существующего платежа
+  // Обновление статуса платежа
   useEffect(() => {
-    if (!orderStatusNotification?.payload?.id) return;
+    const incoming = orderStatusNotification?.payload;
+    if (!incoming?.id) return;
+
+    console.log('🔄 Обновляем статус для заказа:', incoming.id, '->', incoming.paymentStatus);
 
     setList((prev) =>
-      prev.map((item) =>
-        item.id === orderStatusNotification!.payload!.id
-          ? { ...item, ...orderStatusNotification.payload }
-          : item,
-      ),
+      prev.map((item) => {
+        if (item.id === incoming.id) {
+          console.log('✅ Найден элемент, обновляем статус:', {
+            old: item.status,
+            new: incoming.paymentStatus,
+          });
+          return { ...item, status: incoming.paymentStatus };
+        }
+        return item;
+      }),
     );
   }, [orderStatusNotification?.payload]);
 };

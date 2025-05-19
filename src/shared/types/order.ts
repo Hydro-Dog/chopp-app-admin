@@ -2,7 +2,7 @@ import { ORDER_STATUS, PAYMENT_STATUS } from '@shared/enum';
 import { Product } from './product';
 
 type OrderItem = {
-  id: number;
+  id: string;
   orderId: number;
   productId: number;
   quantity: number;
@@ -13,7 +13,7 @@ type OrderItem = {
 };
 
 export type Order = {
-  id: number;
+  id: string;
   userId: number;
   totalPrice: number;
   quantity: number;

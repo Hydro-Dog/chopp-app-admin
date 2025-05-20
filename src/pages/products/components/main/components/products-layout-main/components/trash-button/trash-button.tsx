@@ -75,6 +75,7 @@ export const TrashButton = () => {
       type={'text'}
       danger
       shape="round"
+      className="m-4"
       icon={<DeleteOutlined />}
       size="middle">
       {t('TRASH_BIN')}

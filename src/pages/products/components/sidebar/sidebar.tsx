@@ -7,7 +7,7 @@ import { CategoriesList } from './components/categories-list/categories-list';
 import { SidebarHeader } from './components/sidebar-header';
 import { VerticalLayout } from '../../../../shared/index';
 import { TrashButton } from '../main/components/products-layout-main/components';
-import { Flex } from 'antd';
+import { Divider } from 'antd';
 
 export const Sidebar = () => {
   const { updateCategoriesStatus } = useSelector((state: RootState) => state.productCategory);
@@ -28,10 +28,17 @@ export const Sidebar = () => {
           />
         }
         main={
-          <Flex vertical>
+          <>
             <CategoriesList />
-            <TrashButton />
-          </Flex>
+          </>
+        }
+        footer={
+          <>
+            <Divider className="ant-divider-horizontal my-2" />
+            <div className="flex justify-center">
+              <TrashButton />
+            </div>
+          </>
         }
       />
       <CreateCategoryModal open={isCreateCategoryModalOpen} onClose={closeCreateCategoryModal} />

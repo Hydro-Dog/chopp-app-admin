@@ -24,4 +24,7 @@ export type Order = {
   items: OrderItem[];
   createdAt: string;
   updatedAt: string;
+  name: string;
+  phoneNumber: string;
+  address: string;
 };

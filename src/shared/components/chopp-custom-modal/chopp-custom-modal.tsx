@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { Button, Modal } from 'antd';
-import { ButtonColorType, ButtonVariantType } from 'antd/es/button';
+import { ButtonColorType, ButtonVariantType, ButtonProps } from 'antd/es/button';
 
 type Props = {
   open: boolean;
@@ -12,6 +12,7 @@ type Props = {
   okType?: 'primary' | 'link' | 'text' | 'default' | 'dashed';
   okColor?: ButtonColorType;
   okVariant?: ButtonVariantType;
+  cancelButtonProps?: ButtonProps;
   onOk: () => void;
   onCancel: () => void;
 };
@@ -27,6 +28,7 @@ export const CustomModal = ({
   okVariant = 'solid',
   onCancel,
   title,
+  cancelButtonProps,
   children,
   confirmLoading,
   ...props
@@ -39,6 +41,7 @@ export const CustomModal = ({
       onOk={onOk}
       onCancel={onCancel}
       confirmLoading={confirmLoading}
+      cancelButtonProps={cancelButtonProps}
       // @ts-ignore
       footer={(_: any, { OkBtn, CancelBtn }: any) => (
         <>

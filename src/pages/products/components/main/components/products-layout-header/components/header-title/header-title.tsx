@@ -29,7 +29,7 @@ export const HeaderTitle = () => {
   ) : (
     <>
       <ShopOutlined className="text-xl" />
-      <Flex align="center" gap={4}>
+      <Flex align="center" gap={10}>
         <Title className="!m-0" level={4}>
           {t('PRODUCTS')}
         </Title>

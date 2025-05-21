@@ -67,7 +67,7 @@ export const ProductsLayoutHeader = () => {
     <>
       <Flex vertical>
         <Flex align="center" justify="space-between" className="mb-2">
-          <Flex align="center" gap={20} className="ml-4">
+          <Flex align="center" gap={10} className="ml-4">
             <HeaderTitle />
           </Flex>
           <Tooltip title={t('ADD_PRODUCT')}>

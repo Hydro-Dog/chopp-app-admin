@@ -99,7 +99,7 @@ export const CreateEditProductModal = ({
         thenHandler: (product) => {
           showSuccessNotification({
             message: t('SUCCESS'),
-            description: t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE') + product.title,
+            description: `${t('PRODUCT_CREATED_SUCCESSFULLY_MESSAGE')} '${product.category.title}'`,
           });
           onOk();
           reset();
@@ -248,10 +248,10 @@ export const CreateEditProductModal = ({
           label={
             <Space>
               <div>{t('IMAGES')}</div>
-              <ChoppTextWithTooltip
+              {/* <ChoppTextWithTooltip
               //TODO: закомментировано пока не отладим работу с несколькими изображениями
               // tooltipText={t('FIRST_IMAGE_IS_COVER')}
-              />
+              /> */}
             </Space>
           }
           validateStatus={uploadImageError && 'error'}

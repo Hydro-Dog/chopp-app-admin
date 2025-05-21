@@ -42,9 +42,10 @@ export const useNotificationApi = () => {
     message,
     description,
     placement = 'bottomRight',
+    muted = true,
     ...rest
-  }: ArgsProps & { type?: 'success' | 'info' | 'warning' | 'error' }) => {
-    if (!isMute) {
+  }: ArgsProps & { type?: 'success' | 'info' | 'warning' | 'error'; muted?: boolean }) => {
+    if (!isMute && !muted) {
       playNotificationSound(type);
     }
 

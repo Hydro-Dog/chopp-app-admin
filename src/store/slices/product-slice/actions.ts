@@ -79,7 +79,7 @@ export const createProduct = createAsyncThunk<
 
 export const updateProduct = createAsyncThunk<
   Product,
-  { form: FormData; id: number },
+  { form: FormData; id: string },
   { rejectValue: ErrorResponse }
 >('products/updateProduct', async ({ form, id }, thunkAPI) => {
   try {

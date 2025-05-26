@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable prettier/prettier */
 import { PropsWithChildren, createContext, useContext } from 'react';
 import { ArgsProps } from 'antd/es/notification';
-import { STORAGE_KEYS } from '@shared/enum';
+
+type ShowNotificationType = ArgsProps & { muted?: boolean };
 
 type NotificationContextType = {
-  showNotification: ({ type, message, description, placement, ...rest }: ArgsProps) => void;
-  showErrorNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
-  showInfoNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
-  showSuccessNotification: ({ message, description, placement, ...rest }: ArgsProps) => void;
+  showNotification: ({ type, message, description, placement, ...rest }: ShowNotificationType ) => void;
+  showErrorNotification: ({ message, description, placement, ...rest }: ShowNotificationType ) => void;
+  showInfoNotification: ({ message, description, placement, ...rest }: ShowNotificationType) => void;
+  showSuccessNotification: ({ message, description, placement, ...rest }: ShowNotificationType) => void;
   closeNotification: (key: string) => void;
   closeAllNotifications: () => void;
   isMute: boolean;

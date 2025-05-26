@@ -1,5 +1,5 @@
 export * from './use-throttle';
-export * from './use-notification-api';
+export * from '../context/notification-context-provider/use-notification-api';
 export * from './use-theme-token';
 export * from './use-connection';
 export * from './use-clear-chat-messages-store-on-leave';

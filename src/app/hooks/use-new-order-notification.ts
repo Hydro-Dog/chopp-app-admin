@@ -17,6 +17,7 @@ export const useNewOrderNotification = () => {
           amount: newOrderNotification?.payload?.totalPrice,
         }),
         placement: 'topRight',
+        muted: false,
       });
     }
   }, [newOrderNotification]);

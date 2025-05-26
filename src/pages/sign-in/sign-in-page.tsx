@@ -21,6 +21,7 @@ import { Button, Flex, Form, Input, Tooltip, Typography, Tabs } from 'antd';
 import { z } from 'zod';
 import { useSignInFormSchema } from './hooks/useSignInFormSchema';
 import { useSignInTabs } from './hooks/useSignInTabs';
+import { SIGN_IN_TYPE } from './sign-in-page.types';
 
 const { Item } = Form;
 const { Text } = Typography;
@@ -33,9 +34,9 @@ export const SignInPage = () => {
   const navigate = useNavigate();
   const { showErrorNotification } = useNotificationContext();
   const themeToken = useThemeToken();
-  const { signInType, setSignInType, isSignInByEmail, tabsItems } = useSignInTabs();
+  // const { signInType, setSignInType, isSignInByEmail, tabsItems } = useSignInTabs();
 
-  const signInFormSchema = useSignInFormSchema(signInType);
+  const signInFormSchema = useSignInFormSchema(SIGN_IN_TYPE.EMAIL);
   type SignInFormType = z.infer<typeof signInFormSchema>;
 
   const {
@@ -54,6 +55,7 @@ export const SignInPage = () => {
   });
 
   const onSubmit: SubmitHandler<UserLoginDTO> = (data) => {
+    console.log('data: ', data)
     const thenHandler = ({ payload }) => {
       if (payload) {
         dispatch(
@@ -90,15 +92,15 @@ export const SignInPage = () => {
         colon={false}
         wrapperCol={{ span: 16 }}
         onFinish={handleSubmit(onSubmit)}>
-        <Tabs
+        {/* <Tabs
           centered
           className="sign-in-tabs"
           defaultActiveKey={signInType}
           items={tabsItems}
           onChange={(key: any) => setSignInType(key)}
-        />
+        /> */}
 
-        {isSignInByEmail && (
+        {1 && (
           <Item<SignInFormType>
             label={t('EMAIL')}
             validateStatus={errors.email ? 'error' : ''}
@@ -115,7 +117,7 @@ export const SignInPage = () => {
           </Item>
         )}
 
-        {!isSignInByEmail && (
+        {/* {!isSignInByEmail && (
           <Item<SignInFormType>
             label={t('PHONE')}
             validateStatus={errors.phoneNumber ? 'error' : ''}
@@ -133,7 +135,7 @@ export const SignInPage = () => {
               )}
             />
           </Item>
-        )}
+        )} */}
 
         <Item<SignInFormType>
           label={t('PASSWORD')}

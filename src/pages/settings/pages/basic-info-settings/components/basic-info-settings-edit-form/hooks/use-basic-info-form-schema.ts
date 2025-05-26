@@ -13,5 +13,9 @@ export const useCreateBasicInfoFormSchema = () => {
       .string()
       .min(1, { message: t('ERRORS.REQUIRED') })
       .nullish(),
+    deliveryAndPaymentsVerbose: z
+      .string()
+      .min(1, { message: t('ERRORS.REQUIRED') })
+      .nullish(),
   });
 };

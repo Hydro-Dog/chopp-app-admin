@@ -40,6 +40,8 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
     resolver: zodResolver(basicInfoFormSchema),
     defaultValues: {
       publicOfferVerbose: '',
+      description: '',
+      deliveryAndPaymentsVerbose: '',
     },
   });
 
@@ -48,6 +50,7 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
       reset({
         publicOfferVerbose: clientAppConfigData.publicOfferVerbose,
         description: clientAppConfigData.description,
+        deliveryAndPaymentsVerbose: clientAppConfigData.deliveryAndPaymentsVerbose,
       });
     }
   }, [clientAppConfigData, reset]);
@@ -73,6 +76,56 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
     <Form layout="vertical" className="flex flex-col gap-4">
       <Item
         className="!m-0"
+        help={errors.deliveryAndPaymentsVerbose?.message}
+        validateStatus={errors.deliveryAndPaymentsVerbose && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="deliveryAndPaymentsVerbose"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={9}
+              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
+        help={errors.description?.message}
+        validateStatus={errors.description && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={9}
+              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
         help={errors.publicOfferVerbose?.message}
         validateStatus={errors.publicOfferVerbose && 'error'}
         label={
@@ -91,31 +144,6 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
               {...field}
               rows={9}
               placeholder={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}
-            />
-          )}
-        />
-      </Item>
-
-      <Item
-        className="!m-0"
-        help={errors.publicOfferVerbose?.message}
-        validateStatus={errors.publicOfferVerbose && 'error'}
-        label={
-          <Space size={4}>
-            {t('PRICING_PAGE.DESCRIPTION_VERBOSE')}
-            <Tooltip title={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}>
-              <InfoCircleOutlined />
-            </Tooltip>
-          </Space>
-        }>
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              {...field}
-              rows={9}
-              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
             />
           )}
         />

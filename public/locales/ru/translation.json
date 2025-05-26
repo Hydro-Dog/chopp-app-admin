@@ -232,6 +232,7 @@
   "IMAGE_REQUIRED": "Загрузите как минимум одно изображение",
   "UPLOAD_IMAGE_HELPER_TEXT": "{{format}}, не больше {{mb}}MB. Рекомендуем использовать квадратные изображения.",
   "IMAGES": "Изображения",
+  "IMAGE": "Изображение",
   "SUCCESS": "Успешно",
   "PRODUCT": "Товар",
   "PRODUCT_CREATED_SUCCESSFULLY_MESSAGE": "Товар добавлен в категорию",

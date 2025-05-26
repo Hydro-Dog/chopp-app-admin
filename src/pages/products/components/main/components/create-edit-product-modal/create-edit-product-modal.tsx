@@ -294,7 +294,7 @@ export const CreateEditProductModal = ({
           className="!m-0"
           label={
             <Space>
-              <div>{t('IMAGES')}</div>
+              <div>{t('IMAGE')}</div>
               {/* <ChoppTextWithTooltip
               //TODO: закомментировано пока не отладим работу с несколькими изображениями
               // tooltipText={t('FIRST_IMAGE_IS_COVER')}

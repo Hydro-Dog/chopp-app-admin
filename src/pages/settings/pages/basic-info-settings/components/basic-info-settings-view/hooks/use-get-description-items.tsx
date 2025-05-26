@@ -16,14 +16,14 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
       labelStyle: { width: 200 },
       label: (
         <Space size={4}>
-          {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
-          <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+          {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
+          <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
             <InfoCircleOutlined />
           </Tooltip>
         </Space>
       ),
-      children: pricingData?.publicOfferVerbose ? (
-        <div className="line-clamp-4">{pricingData?.publicOfferVerbose}</div>
+      children: pricingData?.deliveryAndPaymentsVerbose ? (
+        <div className="line-clamp-4">{pricingData?.deliveryAndPaymentsVerbose}</div>
       ) : (
         '-'
       ),
@@ -39,11 +39,29 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
           </Tooltip>
         </Space>
       ),
-      children: pricingData?.publicOfferVerbose ? (
+      children: pricingData?.description ? (
         <div className="line-clamp-4">{pricingData?.description}</div>
       ) : (
         '-'
       ),
     },
+    {
+      key: 'publicOfferVerbose',
+      labelStyle: { width: 200 },
+      label: (
+        <Space size={4}>
+          {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
+          <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+            <InfoCircleOutlined />
+          </Tooltip>
+        </Space>
+      ),
+      children: pricingData?.publicOfferVerbose ? (
+        <div className="line-clamp-4">{pricingData?.publicOfferVerbose}</div>
+      ) : (
+        '-'
+      ),
+    },
+    
   ];
 };

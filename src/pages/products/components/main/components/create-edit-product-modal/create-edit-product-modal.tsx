@@ -1,13 +1,25 @@
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useProductsContext } from '@pages/products/context';
-import { ChoppTextWithTooltip, CustomModal } from '@shared/components';
+import { CustomModal } from '@shared/components';
 import { useNotificationContext, useSuperDispatch, FETCH_STATUS, Product } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
-import { Alert, Form, Input, InputNumber, Typography, Upload, Image, Select, Space } from 'antd';
+import {
+  Alert,
+  Form,
+  Input,
+  InputNumber,
+  Typography,
+  Upload,
+  Image,
+  Select,
+  Space,
+  UploadFile,
+} from 'antd';
 import { z } from 'zod';
 import {
   useBeforeUpload,
@@ -85,7 +97,7 @@ export const CreateEditProductModal = ({
     setUploadImageError,
     handleChange,
     handlePreview,
-  } = useImage({ product, reset, isOpened: open });
+  } = useImage({ beforeUpload });
 
   const submitCreateProduct = (data: CreateProductFormType) => {
     if (!fileList.length) {
@@ -109,6 +121,41 @@ export const CreateEditProductModal = ({
       });
     }
   };
+
+  useEffect(() => {
+    if (open && mode === 'edit' && product) {
+      // 1️⃣ заполняем текстовые поля
+      console.log({
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        categoryId: product.category.id,
+      });
+      reset({
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        categoryId: product.category.id,
+      });
+
+      // 2️⃣ заполняем изображения
+      const imgList: UploadFile[] = product.images.map((img) => ({
+        uid: img.id, // важно: uid = id, чтобы отличать старые
+        name: img.path,
+        status: 'done',
+        url: import.meta.env.VITE_BASE_URL_FILES + img.path,
+      }));
+      setFileList(imgList);
+      setUploadImageError(null);
+    }
+
+    if (!open) {
+      // При закрытии модалки очищаем форму и изображения
+      reset();
+      setFileList([]);
+      setUploadImageError(null);
+    }
+  }, [open, mode, product, reset, setFileList, setUploadImageError]);
 
   const submitUpdateProduct = (data: CreateProductFormType) => {
     const allImagesIds = new Set(fileList.map((item) => item.uid));

@@ -10,6 +10,7 @@ import { Button, Card, Descriptions, Space, Spin, Typography } from 'antd';
 import { WorkingHoursForm } from './components';
 
 const { Title } = Typography;
+const SHOP_TZ = import.meta.env.VITE_BASE_SHOP_TZ;
 
 export const WorkingHoursSettings = () => {
   const { t } = useTranslation();
@@ -42,10 +43,13 @@ export const WorkingHoursSettings = () => {
                 <Descriptions bordered>
                   <Descriptions.Item
                     label={
-                      <ChoppTextWithTooltip
-                        title={t('SETTINGS_PAGE.TIME_SETTINGS.INFO')}
-                        tooltipText={t('SETTINGS_PAGE.TIME_SETTINGS.TOOLTIP')}
-                      />
+                      <>
+                        <ChoppTextWithTooltip
+                          title={t('SETTINGS_PAGE.TIME_SETTINGS.INFO')}
+                          tooltipText={t('SETTINGS_PAGE.TIME_SETTINGS.TOOLTIP')}
+                        />
+                        <span className="ml-2 text-xs text-gray-400">({SHOP_TZ})</span>
+                      </>
                     }>
                     {clientAppConfigData?.openTime} - {clientAppConfigData?.closeTime}
                   </Descriptions.Item>

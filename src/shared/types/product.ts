@@ -10,7 +10,6 @@ export type Product = {
   images: ProductImage[];
   category: Category;
   state: PRODUCT_STATE;
-  categoryId: number;
   imagesOrder: number[];
   createdAt: string;
   updatedAt: string;

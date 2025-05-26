@@ -13,5 +13,9 @@ export const useCreateBasicInfoFormSchema = () => {
       .string()
       .min(1, { message: t('ERRORS.REQUIRED') })
       .nullish(),
+    phoneNumber: z
+      .string()
+      .regex(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, { message: t('ERRORS.PHONE_INVALID_FORMAT') })
+      .optional(),
   });
 };

@@ -52,7 +52,8 @@
     "IMAGE_INVALID_FORMAT": "Принимаемый формат изображения {{format}}",
     "IMAGE_TOO_BIG": "Объем изображения не должен превышать {{mb}}MB",
     "CATEGORY_NAME_NOT_THE_SAME": "Название категории не совпадает с выбранной: \"{{categoryTitle}}\"",
-    "PRODUCT_ID_IS_REQUIRED": "Недоступен ID товара"
+    "PRODUCT_ID_IS_REQUIRED": "Недоступен ID товара",
+    "PHONE_INVALID_FORMAT": "Неверный формат телефона. Введите номер в формате: +7 (XXX) XXX-XX-XX"
   },
   "NAME": "Имя",
   "FULL_NAME": "ФИО",
@@ -194,10 +195,12 @@
     "DELIVERY_PRICE_TOOLTIP": "Если заказ превышает эту сумму, то доставка бесплатная.",
     "DELIVERY_AND_PAYMENT_VERBOSE": "Доставка и оплата",
     "DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Доставка и оплата\"",
-    "PUBLIC_OFFER_VERBOSE": "Публичаня оферта",
-    "PUBLIC_OFFER_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Публичаня оферта\"",
+    "PUBLIC_OFFER_VERBOSE": "Публичная оферта",
+    "PUBLIC_OFFER_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Публичная оферта\"",
     "DESCRIPTION_VERBOSE": "О нас",
-    "DESCRIPTION_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"О нас\""
+    "DESCRIPTION_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"О нас\"",
+    "PHONE_NUMBER_VERBOSE": "Номер телефона",
+    "PHONE_NUMBER_VERBOSE_TOOLTIP": "Этот текст будет указан на странице \"Номер телефона\""
   },
   "CHATS_CONTEXT": {
     "EMPTY_CHAT": "Здесь пока ничего нет...",

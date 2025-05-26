@@ -8,4 +8,5 @@ export type ClientAppConfig = {
   deliveryAndPaymentsVerbose?: string;
   publicOfferVerbose?: string;
   description?: string;
+  phoneNumber?: string;
 };

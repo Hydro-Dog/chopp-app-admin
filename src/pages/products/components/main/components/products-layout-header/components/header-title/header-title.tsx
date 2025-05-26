@@ -4,7 +4,7 @@ import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
 import { useProductsContext } from '@pages/products/context';
 import { PRODUCT_STATE } from '@shared/enum';
 import { RootState } from '@store/index';
-import { Flex, Typography } from 'antd';
+import { Flex, Typography, Tooltip } from 'antd';
 import { t } from 'i18next';
 
 const { Title } = Typography;
@@ -30,12 +30,21 @@ export const HeaderTitle = () => {
     <>
       <ShopOutlined className="text-xl" />
       <Flex align="center" gap={10}>
-        <Title className="!m-0" level={4}>
+        <Title className="!m-0 whitespace-nowrap" level={4}>
           {t('PRODUCTS')}
         </Title>
-        <Title level={4} className="!m-0" type="secondary">
-          {categoryTitle?.title}
-        </Title>
+        <Tooltip
+          placement="bottom"
+          title={categoryTitle?.title}
+          color="grey"
+          className="cursor-pointer ">
+          <Title
+            level={4}
+            className="!m-0 whitespace-nowrap overflow-hidden text-ellipsis lg:max-w-80 md:max-w-48 sm:max-w-20 "
+            type="secondary">
+            {categoryTitle?.title}
+          </Title>
+        </Tooltip>
       </Flex>
     </>
   );

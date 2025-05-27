@@ -22,8 +22,8 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
           </Tooltip>
         </Space>
       ),
-      children: pricingData?.deliveryAndPaymentsVerbose ? (
-        <div className="line-clamp-4">{pricingData?.deliveryAndPaymentsVerbose}</div>
+      children: basicInfoData?.deliveryAndPaymentsVerbose ? (
+        <div className="line-clamp-4">{basicInfoData?.deliveryAndPaymentsVerbose}</div>
       ) : (
         '-'
       ),
@@ -73,8 +73,8 @@ export const useGetDescriptionItems = (): DescriptionsProps['items'] => {
           </Tooltip>
         </Space>
       ),
-      children: pricingData?.publicOfferVerbose ? (
-        <div className="line-clamp-4">{pricingData?.publicOfferVerbose}</div>
+      children: basicInfoData?.publicOfferVerbose ? (
+        <div className="line-clamp-4">{basicInfoData?.publicOfferVerbose}</div>
       ) : (
         '-'
       ),

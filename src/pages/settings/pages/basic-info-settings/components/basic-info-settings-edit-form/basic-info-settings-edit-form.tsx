@@ -12,6 +12,7 @@ import { RootState } from '@store/store';
 import { Tooltip, Form, Space, Button, Input } from 'antd';
 import { z } from 'zod';
 import { useCreateBasicInfoFormSchema as useBasicInfoFormSchema } from './hooks/use-basic-info-form-schema';
+import { ChoppPhoneInput } from '@shared/components';
 
 const { Item } = Form;
 
@@ -50,14 +51,15 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
       reset({
         publicOfferVerbose: clientAppConfigData.publicOfferVerbose,
         description: clientAppConfigData.description,
+        phoneNumber: clientAppConfigData.phoneNumber,
         deliveryAndPaymentsVerbose: clientAppConfigData.deliveryAndPaymentsVerbose,
       });
     }
   }, [clientAppConfigData, reset]);
 
-  const onSubmit: SubmitHandler<BasicInfoFormType> = (pricingData) => {
+  const onSubmit: SubmitHandler<BasicInfoFormType> = (basicInfoData) => {
     superDispatch({
-      action: postClientAppConfig(pricingData),
+      action: postClientAppConfig(basicInfoData),
       thenHandler: onCancel,
       catchHandler: (error) => {
         showErrorNotification({
@@ -119,6 +121,31 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
               {...field}
               rows={9}
               placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
+            />
+          )}
+        />
+      </Item>
+      <Item
+        className="!m-0"
+        help={errors.phoneNumber?.message}
+        validateStatus={errors.phoneNumber && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.PHONE_NUMBER_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.PHONE_NUMBER_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="phoneNumber"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <ChoppPhoneInput
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              errors={errors.phoneNumber}
             />
           )}
         />

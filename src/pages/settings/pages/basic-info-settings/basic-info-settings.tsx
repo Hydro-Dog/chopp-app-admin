@@ -13,9 +13,9 @@ export const BasicInfoSettingsPage = () => {
 
   return (
     <TitlePage breadcrumbs title={t('SETTINGS_PAGE.BASIC_INFO_SETTINGS.TITLE')}>
-      <div className="h-full pb-10">
+      <div className=" pb-10">
         <Card className="h-full">
-          <Title level={4}>{t('DELIVERY')}</Title>
+          {/* <Title level={4}>{t('SETTINGS_PAGE.BASIC_INFO_SETTINGS.TITLE')}</Title> */}
           <div>
             {isEditing ? (
               <BasicInfoSettingsEditForm toggle={toggle} />

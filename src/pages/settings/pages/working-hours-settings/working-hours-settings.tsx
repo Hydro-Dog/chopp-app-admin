@@ -35,7 +35,7 @@ export const WorkingHoursSettings = () => {
   return (
     <TitlePage breadcrumbs title={t('SETTINGS')}>
       <Card>
-        <Title level={4}>{t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}</Title>
+        {/* <Title level={4}>{t('SETTINGS_PAGE.TIME_SETTINGS.TITLE')}</Title> */}
         <div className="flex flex-col gap-5">
           {isEditNode === false ? (
             <div>

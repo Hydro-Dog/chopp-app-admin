@@ -41,6 +41,8 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
     resolver: zodResolver(basicInfoFormSchema),
     defaultValues: {
       publicOfferVerbose: '',
+      description: '',
+      deliveryAndPaymentsVerbose: '',
     },
   });
 
@@ -50,6 +52,7 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
         publicOfferVerbose: clientAppConfigData.publicOfferVerbose,
         description: clientAppConfigData.description,
         phoneNumber: clientAppConfigData.phoneNumber,
+        deliveryAndPaymentsVerbose: clientAppConfigData.deliveryAndPaymentsVerbose,
       });
     }
   }, [clientAppConfigData, reset]);
@@ -75,24 +78,24 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
     <Form layout="vertical" className="flex flex-col gap-4">
       <Item
         className="!m-0"
-        help={errors.publicOfferVerbose?.message}
-        validateStatus={errors.publicOfferVerbose && 'error'}
+        help={errors.deliveryAndPaymentsVerbose?.message}
+        validateStatus={errors.deliveryAndPaymentsVerbose && 'error'}
         label={
           <Space size={4}>
-            {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
-            <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+            {t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.DELIVERY_AND_PAYMENT_VERBOSE_TOOLTIP')}>
               <InfoCircleOutlined />
             </Tooltip>
           </Space>
         }>
         <Controller
-          name="publicOfferVerbose"
+          name="deliveryAndPaymentsVerbose"
           control={control}
           render={({ field }) => (
             <Input.TextArea
               {...field}
               rows={9}
-              placeholder={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}
+              placeholder={t('PRICING_PAGE.DESCRIPTION_VERBOSE_TOOLTIP')}
             />
           )}
         />
@@ -143,6 +146,31 @@ export const BasicInfoSettingsEditForm = ({ toggle }: Props) => {
               onChange={onChange}
               value={value}
               errors={errors.phoneNumber}
+            />
+          )}
+        />
+      </Item>
+
+      <Item
+        className="!m-0"
+        help={errors.publicOfferVerbose?.message}
+        validateStatus={errors.publicOfferVerbose && 'error'}
+        label={
+          <Space size={4}>
+            {t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE')}
+            <Tooltip title={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Space>
+        }>
+        <Controller
+          name="publicOfferVerbose"
+          control={control}
+          render={({ field }) => (
+            <Input.TextArea
+              {...field}
+              rows={9}
+              placeholder={t('PRICING_PAGE.PUBLIC_OFFER_VERBOSE_TOOLTIP')}
             />
           )}
         />

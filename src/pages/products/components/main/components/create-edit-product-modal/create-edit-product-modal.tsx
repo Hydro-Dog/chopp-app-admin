@@ -6,7 +6,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useProductsContext } from '@pages/products/context';
 import { CustomModal } from '@shared/components';
-import { useNotificationContext, useSuperDispatch, FETCH_STATUS, Product } from '@shared/index';
+import { useNotificationContext, useSuperDispatch, FETCH_STATUS, Product, sortByOrder } from '@shared/index';
 import { createProduct, RootState, updateProduct } from '@store/index';
 import {
   Alert,
@@ -279,9 +279,10 @@ export const CreateEditProductModal = ({
                     loading={fetchCategoriesStatus === FETCH_STATUS.LOADING}
                     value={field.value || ''}
                     onChange={(val) => field.onChange(val || 0)}
-                    options={[...(categories || [])]
-                      ?.sort((a, b) => a.order - b.order)
-                      .map((item) => ({ value: item.id, label: item.title }))}
+                    options={sortByOrder([...(categories || [])]).map((item) => ({
+                      value: item.id,
+                      label: item.title,
+                    }))}
                   />
                 </div>
               )}

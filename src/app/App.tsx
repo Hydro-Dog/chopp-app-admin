@@ -23,10 +23,11 @@ import HttpBackend from 'i18next-http-backend';
 import { router } from './router/router';
 import 'dayjs/locale/ru';
 
-import './index.css';
-import { useAxiosInterceptors } from '@store/middleware';
-import { useNewOrderNotification } from './hooks';
 import { Wrapper } from './components/wrapper/wrapper';
+
+import './index.css';
+import translationEn from '../locales/en/translation.json';
+import translationRu from '../locales/ru/translation.json';
 
 dayjs.extend(utc); // активация плагина
 dayjs.locale('ru'); // установка локали
@@ -36,18 +37,16 @@ i18n
   .use(HttpBackend)
   .use(LanguageDetector)
   .init({
-    fallbackLng: 'en',
-    debug: false, //вывод отладочной информации в консоль
-    ns: ['translation', 'phrases'], // Добавляем namespaces
-    defaultNS: 'translation',
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    fallbackLng: 'ru',
+    debug: false,
+    resources: {
+      ru: { translation: translationRu },
+      en: { translation: translationEn },
     },
     interpolation: {
       escapeValue: false,
     },
   });
-
 export const App = () => {
   const { theme } = useTheme();
 

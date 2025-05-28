@@ -8,7 +8,7 @@ export const sortProductImages = ({
   imagesOrder?: number[];
 }) => {
   // Создаем новый массив, где элементы соответствуют порядку в imagesOrder
-  const sortedImages = imagesOrder.map((id) => images.find((image) => image.id === id));
+  const sortedImages = imagesOrder?.map((id) => images.find((image) => image.id === id));
 
   return sortedImages;
 };

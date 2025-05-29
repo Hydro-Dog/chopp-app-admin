@@ -1,16 +1,5 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import {
-  AnalyticsPage,
-  SignInPage,
-  UsersPage,
-  RegisterPage,
-  ChatsPage,
-  OrdersPage,
-  UserPage,
-  ProductsPage,
-  SettingsPage,
-} from '@pages/index';
-
+import { SignInPage, OrdersPage, ProductsPage, SettingsPage } from '@pages/index';
 import { OrdersProvider } from '@pages/orders/context';
 import { PaymentsPage } from '@pages/payments';
 import { PaymentsProvider } from '@pages/payments/context';
@@ -130,6 +119,6 @@ export const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <Navigate to={ROUTES.ORDERS} replace />,
+    element: <Navigate to={ROUTES.ROOT} replace />,
   },
 ]);

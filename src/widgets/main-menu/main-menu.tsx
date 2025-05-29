@@ -52,7 +52,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.PRODUCTS,
       icon: selectedMenuKeys.includes(ROUTES.PRODUCTS) ? <ShopFilled /> : <ShopOutlined />,
-      label: <Link href={ROUTES.PRODUCTS}>{t('PRODUCTS')}</Link>,
+      label: <Link href={`/${ROUTES.PRODUCTS}`}>{t('PRODUCTS')}</Link>,
     },
     {
       key: '',
@@ -62,7 +62,7 @@ export const MainMenuWidget = ({ children }: PropsWithChildren<Record<never, any
     {
       key: ROUTES.PAYMENTS,
       icon: selectedMenuKeys.includes(ROUTES.PAYMENTS) ? <BankFilled /> : <BankOutlined />,
-      label: <Link href={ROUTES.PAYMENTS}>{t('PAYMENTS')}</Link>,
+      label: <Link href={`/${ROUTES.PAYMENTS}`}>{t('PAYMENTS')}</Link>,
     },
     {
       key: ROUTES.SETTINGS,

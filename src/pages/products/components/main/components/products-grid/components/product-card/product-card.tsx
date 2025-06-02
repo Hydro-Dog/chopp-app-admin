@@ -5,11 +5,11 @@ import { useSuperDispatch } from '@shared/hooks';
 import { PRODUCT_GRID_VIEW_MODE, PRODUCT_STATE, updateListItemById } from '@shared/index';
 import { PaginationResponse, Product } from '@shared/types';
 import { fetchProducts, updateProductVisibility, UpdateProductVisibilityDTO } from '@store/slices';
-import { Skeleton, Tooltip, Typography } from 'antd';
+import { Tooltip, Typography } from 'antd';
 import { Card } from 'antd';
 
-import { useGetCardActions } from '../../hooks';
 import { sortProductImages } from '../../../../../../../../shared/utils/sort-product-images';
+import { useGetCardActions } from '../../hooks';
 
 const { Text } = Typography;
 const { Meta } = Card;
@@ -119,6 +119,9 @@ export const ProductCard = ({
       }
       actions={getActions(item)}>
       <Meta description={<div className="line-clamp-2 h-10">{item.description}</div>} />
+      <div className="flex justify-between items-center mt-2">
+        <Text className="font-semibold">{item.price}₽</Text>
+      </div>
     </Card>
   );
 };

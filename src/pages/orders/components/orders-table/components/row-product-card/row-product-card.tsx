@@ -1,10 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { Tooltip, Typography, Descriptions } from 'antd';
-import { PhoneOutlined, HomeOutlined, UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { ChoppTag, formatPhoneNumber, Order } from '@shared/index';
+import {
+  PhoneOutlined,
+  HomeOutlined,
+  UserOutlined,
+  ShoppingCartOutlined,
+  CarOutlined,
+  RocketTwoTone,
+} from '@ant-design/icons';
+import { ChoppTag, formatPhoneNumber, Order, useThemeToken } from '@shared/index';
 import { sortProductImages } from '@shared/utils/sort-product-images';
 
 const { Text } = Typography;
+
+const deliveryProductId = import.meta.env.VITE_DELIVERY_PRODUCT_ID;
 
 type Props = {
   record: Order;
@@ -12,6 +21,7 @@ type Props = {
 
 export const RowProductCard = ({ record }: Props) => {
   const { t } = useTranslation();
+  const themeToken = useThemeToken();
 
   return (
     <div className="flex flex-col gap-4 p-2">
@@ -46,7 +56,8 @@ export const RowProductCard = ({ record }: Props) => {
       {/* 🖼️ Карточки товаров */}
       <div className="flex flex-wrap gap-4">
         {record.items.map((item) => {
-          const imagePath = sortProductImages(item.product)?.[0]?.path;
+          const isDelivery = item.product.id === deliveryProductId;
+          const imagePath = !isDelivery ? sortProductImages(item.product)?.[0]?.path : null;
 
           return (
             <div
@@ -60,8 +71,22 @@ export const RowProductCard = ({ record }: Props) => {
                   alt={item.product.title}
                   className="w-full aspect-square object-cover rounded-xl mb-2"
                 />
+              ) : isDelivery ? (
+                <div
+                  className="w-full aspect-square rounded-xl mb-2 flex items-center justify-center text-3xl text-blue-500"
+                  style={{
+                    background: themeToken.colorFillAlter,
+                    color: themeToken.colorTextQuaternary,
+                  }}>
+                  <RocketTwoTone rotate={45} />
+                </div>
               ) : (
-                <div className="w-full aspect-square bg-gray-100 rounded-xl mb-2 flex items-center justify-center text-xs text-gray-400">
+                <div
+                  className="w-full aspect-square rounded-xl mb-2 flex items-center justify-center text-xs text-gray-400"
+                  style={{
+                    background: themeToken.colorFillAlter,
+                    color: themeToken.colorTextQuaternary,
+                  }}>
                   {t('NO_IMAGE')}
                 </div>
               )}

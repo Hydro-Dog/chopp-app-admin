@@ -7,6 +7,7 @@ import {
   ShoppingCartOutlined,
   CarOutlined,
   RocketTwoTone,
+  TruckOutlined,
 } from '@ant-design/icons';
 import { ChoppTag, formatPhoneNumber, Order, useThemeToken } from '@shared/index';
 import { sortProductImages } from '@shared/utils/sort-product-images';
@@ -78,7 +79,7 @@ export const RowProductCard = ({ record }: Props) => {
                     background: themeToken.colorFillAlter,
                     color: themeToken.colorTextQuaternary,
                   }}>
-                  <RocketTwoTone rotate={45} />
+                  <TruckOutlined />
                 </div>
               ) : (
                 <div

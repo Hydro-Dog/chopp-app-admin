@@ -8,6 +8,7 @@ import {
   CarOutlined,
   RocketTwoTone,
   TruckOutlined,
+  CommentOutlined,
 } from '@ant-design/icons';
 import { ChoppTag, formatPhoneNumber, Order, useThemeToken } from '@shared/index';
 import { sortProductImages } from '@shared/utils/sort-product-images';
@@ -51,6 +52,14 @@ export const RowProductCard = ({ record }: Props) => {
             </>
           }>
           {record.address || '-'}
+        </Descriptions.Item>
+        <Descriptions.Item
+          label={
+            <>
+              <CommentOutlined /> {t('COMMENT')}
+            </>
+          }>
+          {record.comment || '-'}
         </Descriptions.Item>
       </Descriptions>
 

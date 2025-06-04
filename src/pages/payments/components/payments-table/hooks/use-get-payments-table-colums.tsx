@@ -6,6 +6,7 @@ import { Checkbox, Dropdown, Space, Typography } from 'antd';
 import { useGetActionItems } from './use-get-action-items';
 import { ACTION_MENU_ITEMS } from '../enums';
 import { ActionValue } from '../types';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -18,6 +19,12 @@ export const useGetPaymentsTableColumns = ({ onActionClick }: Args) => {
   const { actionItems } = useGetActionItems();
 
   const columns = [
+    {
+      title: t('CREATED_AT'),
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => dayjs(text).format('DD.MM.YYYY HH:mm'),
+    },
     {
       title: (
         <ChoppTextWithTooltip

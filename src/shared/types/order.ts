@@ -27,4 +27,5 @@ export type Order = {
   name: string;
   phoneNumber: string;
   address: string;
+  comment: string;
 };

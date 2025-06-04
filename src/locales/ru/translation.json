@@ -310,7 +310,7 @@
 
   "REFUNDABLE": "Можно вернуть",
 
-  "REFUNDED_AMOUNT": "Возвращённая сумма",
+  "REFUNDED_AMOUNT": "Сумма, возврата",
   "REFUNDED_AMOUNT_VERBOSE": "Cумма, возвращенная покупателю",
   "REFUNDED_CURRENCY": "Валюта возврата",
   "REFUNDED_VALUE": "Сумма возврата",
